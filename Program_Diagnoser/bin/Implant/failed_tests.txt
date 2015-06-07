@@ -1,0 +1,7 @@
+org.apache.commons.math3.optim.nonlinear.scalar.MultiStartMultivariateOptimizerTest.testRosenbrock
+org.apache.commons.math3.optim.nonlinear.scalar.MultiStartMultivariateOptimizerTest.testCircleFitting
+org.apache.commons.math3.random.CorrelatedRandomVectorGeneratorTest.testSampleWithZeroCovariance
+org.apache.commons.math3.stat.correlation.StorelessCovarianceTest.testSymmetry
+org.apache.commons.math3.stat.correlation.StorelessCovarianceTest.testSwissFertilityByRow
+org.apache.commons.math3.stat.correlation.StorelessCovarianceTest.testLonglyByRow
+org.apache.commons.math3.stat.ranking.NaturalRankingTest.testNaNsRemovedTiesSequential

@@ -1,0 +1,4 @@
+[inst2][true] + com.mycompany.app.AppTest.testApp3
+[inst2][false] + com.mycompany.app.App.f
+[inst2][false] + com.mycompany.app.App.g
+[inst2][false] + com.mycompany.app.App.g

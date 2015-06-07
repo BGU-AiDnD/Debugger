@@ -1,0 +1,50 @@
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building my-app 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:2.5:resources (default-resources) @ my-app ---
+[debug] execute contextualize
+[WARNING] Using platform encoding (Cp1255 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory C:\Users\Amir-pc\Documents\GitHub\backkup\my-app\src\main\resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.3.2:compile (default-compile) @ my-app ---
+[WARNING] File encoding has not been set, using platform encoding Cp1255, i.e. build is platform dependent!
+[INFO] Compiling 1 source file to C:\Users\Amir-pc\Documents\GitHub\backkup\my-app\target\classes
+[INFO] 
+[INFO] --- maven-resources-plugin:2.5:testResources (default-testResources) @ my-app ---
+[debug] execute contextualize
+[WARNING] Using platform encoding (Cp1255 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory C:\Users\Amir-pc\Documents\GitHub\backkup\my-app\src\test\resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.3.2:testCompile (default-testCompile) @ my-app ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.10:test (default-test) @ my-app ---
+[INFO] Surefire report directory: C:\Users\Amir-pc\Documents\GitHub\backkup\my-app\target\surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running com.mycompany.app.AppTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.209 sec
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] 
+[INFO] --- maven-jar-plugin:2.3.2:jar (default-jar) @ my-app ---
+[INFO] Building jar: C:\Users\Amir-pc\Documents\GitHub\backkup\my-app\target\my-app-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] --- maven-install-plugin:2.3.1:install (default-install) @ my-app ---
+[INFO] Installing C:\Users\Amir-pc\Documents\GitHub\backkup\my-app\target\my-app-1.0-SNAPSHOT.jar to C:\Users\Amir-pc\.m2\repository\com\mycompany\app\my-app\1.0-SNAPSHOT\my-app-1.0-SNAPSHOT.jar
+[INFO] Installing C:\Users\Amir-pc\Documents\GitHub\backkup\my-app\pom.xml to C:\Users\Amir-pc\.m2\repository\com\mycompany\app\my-app\1.0-SNAPSHOT\my-app-1.0-SNAPSHOT.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 32.018s
+[INFO] Finished at: Mon Aug 18 12:27:03 IDT 2014
+[INFO] Final Memory: 9M/64M
+[INFO] ------------------------------------------------------------------------
