@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+ !_____________________________________________________________________________
+ !
+ !   All CheckStyle checks, with defaults explicitly stated.
+ !
+ !   Can be used as a starting point for custom rule sets.
+ !_____________________________________________________________________________
+ !-->
+<!DOCTYPE module PUBLIC
+          "-//Puppy Crawl//DTD Check Configuration 1.1//EN"
+          "http://www.puppycrawl.com/dtds/configuration_1_1.dtd">
+
+<module name="Checker">
+
+
+    <module name="TreeWalker">
+
+        <!-- Checks for method name naming conventions. !-->
+        <!-- See http://checkstyle.sf.net/config_naming.html !-->
+
+        <!-- Checks for long methods and constructors. !-->
+        <!-- See http://checkstyle.sf.net/config_sizes.html !-->
+        <module name="MethodLength">
+            <property name="max"        value="0"/>
+            <property name="countEmpty" value="true"/>
+            <property name="tokens"     value="METHOD_DEF, CTOR_DEF"/>
+        </module>
+
+
+    </module>
+
+</module>

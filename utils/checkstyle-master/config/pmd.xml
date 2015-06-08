@@ -1,0 +1,215 @@
+<?xml version="1.0"?>
+<ruleset name="PMD ruleset for Checkstyle"
+        xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0
+         http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+  <description>
+    PMD ruleset for Checkstyle
+  </description>
+  <rule ref="rulesets/java/basic.xml"/>
+  <rule ref="rulesets/java/braces.xml"/>
+  <rule ref="rulesets/java/clone.xml"/>
+  <rule ref="rulesets/java/codesize.xml">
+    <!-- till #954 -->
+    <exclude name="CyclomaticComplexity"/>
+    <exclude name="ModifiedCyclomaticComplexity"/>
+    <exclude name="StdCyclomaticComplexity"/>
+    <!-- till #953 -->
+    <exclude name="NPathComplexity"/>
+  </rule>
+  <rule ref="rulesets/java/codesize.xml/TooManyMethods">
+    <properties>
+      <property name="maxmethods" value="20"/>
+    </properties>
+  </rule>
+  <rule ref="rulesets/java/codesize.xml/ExcessiveClassLength">
+    <properties>
+      <!-- *TokenTypes are special classes that a big due to a lot of description comments -->
+      <!-- JavadocMethodCheck is deprecated class, till it is redone to use JavadocAst -->
+      <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration[@Image='JavadocTokenTypes' or @Image='TokenTypes' or @Image='JavadocMethodCheck']"/>
+    </properties>
+  </rule>
+  <rule ref="rulesets/java/codesize.xml/ExcessiveMethodLength">
+    <properties>
+      <!-- JavadocMethodCheck is deprecated class, till it is redone to use JavadocAst -->
+      <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration[@Image='JavadocMethodCheck']"/>
+    </properties>
+  </rule>
+
+  <rule ref="rulesets/java/comments.xml">
+    <!-- <exclude name="CommentRequired"/> -->
+    <!-- we use class comments as source for xdoc files, so content is big and that is by design -->
+    <exclude name="CommentSize"/>
+  </rule>
+  <rule ref="rulesets/java/comments.xml/CommentRequired">
+    <properties>
+      <!-- *TokenTypes are special class, comments are as trailing comments -->
+      <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration[@Image='JavadocTokenTypes'] | //Annotation/MarkerAnnotation//Name[@Image='Override']"/>
+    </properties>
+  </rule>
+  <rule ref="rulesets/java/comments.xml/CommentSize">
+    <properties>
+      <!-- we use class comments as source for xdoc files, so content is big and that is by design -->
+      <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration | //PackageDeclaration | //ClassOrInterfaceDeclaration[@Image='JavadocTagInfo'] | //ClassOrInterfaceDeclaration[@Image='SeverityLevel'] | //ClassOrInterfaceDeclaration[@Image='LeftCurlyOption'] | //ClassOrInterfaceDeclaration[@Image='RightCurlyOption'] | //ClassOrInterfaceDeclaration[@Image='ImportOrderOption']"/>
+      <property name="maxLines" value="8"/>
+      <property name="maxLineLength" value="100"/>
+    </properties>
+  </rule>
+
+  <rule ref="rulesets/java/controversial.xml">
+    <!-- calling super() is completely pointless, no matter if class inherits anything or not; it is meaningful only if you do not call implicit constructor of base class -->
+    <exclude name="CallSuperInConstructor"/>
+    <!-- We reuse Check instances between java files, we need to clear state of class in beginTree() methods -->
+    <exclude name="NullAssignment"/>
+    <!-- it is possible only in functional languages and fanatically-pristine code, without additional option that are done at ReturnCountExtendedCheck it is not good rule -->
+    <exclude name="OnlyOneReturn"/>
+    <!-- opposite to UnnecessaryConstructor -->
+    <exclude name="AtLeastOneConstructor"/>
+    <!-- deprecated by PMD -->
+    <exclude name="BooleanInversion"/>
+    <!-- till #957 -->
+    <exclude name="DefaultPackage"/>
+    <!-- that rule is too buggy, too much false positives-->
+    <exclude name="DataflowAnomalyAnalysis"/>
+    <!-- turning local variables to fields create design problems and extend scope of variable -->
+    <exclude name="AvoidFinalLocalVariable"/>
+    <!-- conflicts with names that does not mean in/out -->
+    <exclude name="AvoidPrefixingMethodParameters"/>
+    <!-- that is not practical, no options to allow some magic numbers, we will use our implementation -->
+    <exclude name="AvoidLiteralsInIfCondition"/>
+    <!-- Checkstyle is not thread safe -->
+    <exclude name="UseConcurrentHashMap"/>
+  </rule>
+  <rule ref="rulesets/java/controversial.xml/AvoidUsingShortType">
+    <properties>
+      <!-- that class integrates checkstyle and antlr that is why it has a lot of imports -->
+      <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration[@Image='AutomaticBean']"/>
+    </properties>
+  </rule>
+  <rule ref="rulesets/java/coupling.xml">
+    <!-- produce too much violations, suppressed till we figure out how useful that metrics-->
+    <exclude name="LawOfDemeter"/>
+    <!-- this rule is for managing import, we have special Check for that -->
+    <exclude name="LoosePackageCoupling"/>
+  </rule>
+  <rule ref="rulesets/java/coupling.xml/ExcessiveImports">
+    <properties>
+      <!-- TreeWalker integrates Checkstyle and antlr and CheckstyleAntTask integrates Checkstyle with Ant -->
+      <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration[@Image='TreeWalker' or @Image='CheckstyleAntTask']"/>
+    </properties>
+  </rule>
+  <rule ref="rulesets/java/coupling.xml/CouplingBetweenObjects">
+    <properties>
+      <!-- I do not see any problem , looks like false positive -->
+      <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration[@Image='HandlerFactory']"/>
+    </properties>
+  </rule>
+
+  <rule ref="rulesets/java/design.xml">
+    <!-- this produce false positives on gui.Main -->
+    <exclude name="UseUtilityClass"/>
+    <!-- till #974-->
+    <exclude name="ConfusingTernary"/>
+    <!-- extra final modifier does not make code more secure in that cases-->
+    <exclude name="ImmutableField"/>
+    <!-- this rule does not have any option, unreasonable to use -->
+    <exclude name="MissingBreakInSwitch"/>
+    <!-- we need compare by ref as Tree structure is immutable, we can easily rely on refs -->
+    <exclude name="CompareObjectsWithEquals"/>
+    <!-- till #995 -->
+    <exclude name="UncommentedEmptyMethod"/>
+    <!-- till #996 -->
+    <exclude name="PreserveStackTrace"/>
+    <!-- till #997 -->
+    <exclude name="EmptyMethodInAbstractClassShouldBeAbstract"/>
+    <!-- we will use our own declaration order logic -->
+    <exclude name="FieldDeclarationsShouldBeAtStartOfClass"/>
+    <!-- too much alarms of Checks, we will never move logic out of Check, each Check is independed logic contianer -->
+    <exclude name="GodClass"/>
+  </rule>
+  <rule ref="rulesets/java/design.xml/AvoidDeeplyNestedIfStmts">
+    <properties>
+      <!-- default is 3 but we try to use single point of exit from method and that require extra IFs -->
+      <property name="problemDepth" value="4"/>
+    </properties>
+  </rule>
+  <rule ref="rulesets/java/design.xml/SwitchDensity">
+    <properties>
+      <!-- till #973 -->
+      <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration[@Image='DeclarationOrderCheck']"/>
+    </properties>
+  </rule>
+
+  <rule ref="rulesets/java/empty.xml"/>
+  <rule ref="rulesets/java/finalizers.xml"/>
+  <rule ref="rulesets/java/imports.xml"/>
+  <rule ref="rulesets/java/javabeans.xml">
+    <!-- too many false-positives -->
+    <exclude name="BeanMembersShouldSerialize"/>
+  </rule>
+  <rule ref="rulesets/java/junit.xml"/>
+  <rule ref="rulesets/java/logging-jakarta-commons.xml"/>
+
+  <rule ref="rulesets/java/logging-java.xml"/>
+  <rule ref="rulesets/java/logging-java.xml/SystemPrintln">
+    <properties>
+      <!-- it is ok to use println in CLI class -->
+      <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration[@Image='Main']"/>
+    </properties>
+  </rule>
+
+  <rule ref="rulesets/java/migrating.xml"/>
+  <rule ref="rulesets/java/naming.xml">
+    <!-- till #983 -->
+    <exclude name="AbstractNaming"/>
+    <!-- till #985 -->
+    <exclude name="ShortVariable"/>
+  </rule>
+  <rule ref="rulesets/java/naming.xml/LongVariable">
+    <properties>
+      <!-- nothing bad in long and descriptive variable names if only they fit line, but still keep it reasonable -->
+      <property name="minimum" value="45"/>
+    </properties>
+  </rule>
+  <rule ref="rulesets/java/naming.xml/ShortClassName">
+    <properties>
+      <!-- Main is good name for class containing main method, Tag as inner class name is also fine -->
+      <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration[@Image='Main' or @Image='Tag']"/>
+    </properties>
+  </rule>
+  <rule ref="rulesets/java/optimizations.xml">
+    <!--produces more false-positives than real problems-->
+    <exclude name="AvoidInstantiatingObjectsInLoops"/>
+    <!--pollutes code with modifiers-->
+    <exclude name="LocalVariableCouldBeFinal"/>
+    <!--pollutes code with modifiers-->
+    <exclude name="MethodArgumentCouldBeFinal"/>
+    <!--not configurable, decreases readability-->
+    <exclude name="UseStringBufferForStringAppends"/>
+  </rule>
+  <rule ref="rulesets/java/strictexception.xml">
+    <!-- till #959 -->
+    <exclude name="AvoidCatchingGenericException"/>
+    <!-- till #961 -->
+    <exclude name="AvoidThrowingRawExceptionTypes"/>
+  </rule>
+  <rule ref="rulesets/java/strictexception.xml/ExceptionAsFlowControl">
+    <properties>
+      <!-- till #1159 -->
+      <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration[@Image='PackageObjectFactory']"/>
+    </properties>
+  </rule>
+  <rule ref="rulesets/java/strictexception.xml/AvoidCatchingThrowable">
+    <properties>
+      <!-- log name of problematic file and do not crash completely (bug 694111) -->
+      <property name="violationSuppressXPath" value="//ClassOrInterfaceDeclaration[@Image='TreeWalker']//MethodDeclarator/@Image='processFiltered'"/>
+    </properties>
+  </rule>
+
+  <rule ref="rulesets/java/strings.xml"/>
+  <rule ref="rulesets/java/sunsecure.xml"/>
+  <rule ref="rulesets/java/typeresolution.xml"/>
+  <rule ref="rulesets/java/unnecessary.xml"/>
+  <rule ref="rulesets/java/unusedcode.xml"/>
+</ruleset>
