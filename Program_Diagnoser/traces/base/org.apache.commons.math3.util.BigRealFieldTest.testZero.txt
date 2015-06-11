@@ -1,0 +1,3 @@
+BigRealField.getInstance
+BigRealField.getZero
+BigReal.equals

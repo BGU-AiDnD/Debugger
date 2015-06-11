@@ -1,0 +1,11 @@
+Variance.getN
+AbstractStorelessUnivariateStatistic.incrementAll
+AbstractUnivariateStatistic.test
+SecondMoment.increment
+FirstMoment.getN
+FirstMoment.increment
+Variance.clear
+Variance.getResult
+Variance.increment
+FirstMoment.clear
+SecondMoment.clear

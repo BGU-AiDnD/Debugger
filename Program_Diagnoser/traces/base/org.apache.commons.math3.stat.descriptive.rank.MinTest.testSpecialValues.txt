@@ -1,0 +1,5 @@
+Min.increment
+AbstractUnivariateStatistic.test
+AbstractStorelessUnivariateStatistic.evaluate
+Min.getResult
+Min.evaluate

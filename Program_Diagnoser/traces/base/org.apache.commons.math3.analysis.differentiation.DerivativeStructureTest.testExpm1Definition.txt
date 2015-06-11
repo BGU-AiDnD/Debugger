@@ -1,0 +1,17 @@
+DSCompiler.subtract
+FastMath.expm1
+DSCompiler.checkCompatibility
+DerivativeStructure.getField
+DSCompiler.getPartialDerivativeIndex
+FastMath.exp
+DSCompiler.getOrder
+DSCompiler.exp
+DerivativeStructure.exp
+DSCompiler.expm1
+DerivativeStructure.subtract
+DerivativeStructure.getPartialDerivative
+DSCompiler.getCompiler
+DerivativeStructure.expm1
+DSCompiler.getFreeParameters
+DSCompiler.getSize
+DSCompiler.compose

@@ -1,0 +1,9 @@
+StatisticalSummaryValues.getStandardDeviation
+StatisticalSummaryValues.getN
+StatisticalSummaryValues.getSum
+StatisticalSummaryValues.getMean
+StatisticalSummaryValues.getVariance
+StatisticalSummaryValues.toString
+StatisticalSummaryValues.getMin
+FastMath.sqrt
+StatisticalSummaryValues.getMax

@@ -1,0 +1,14 @@
+MathUtils.checkNotNull
+FastMath.cosQ
+DividedDifferenceInterpolator.computeDividedDifference
+FastMath.sinQ
+PolynomialFunctionLagrangeForm.verifyInterpolationArray
+PolynomialFunctionNewtonForm.value
+FastMath.polySine
+DividedDifferenceInterpolator.interpolate
+PolynomialFunctionNewtonForm.verifyInputArray
+FastMath.sin
+FastMath.polyCosine
+PolynomialFunctionNewtonForm.evaluate
+Sin.value
+MathArrays.checkOrder

@@ -1,0 +1,13 @@
+ThirdMoment.clear
+FirstMoment.getN
+MathUtils.hash
+Precision.equals
+AbstractStorelessUnivariateStatistic.hashCode
+SecondMoment.increment
+Precision.equalsIncludingNaN
+FirstMoment.increment
+AbstractStorelessUnivariateStatistic.equals
+FirstMoment.clear
+ThirdMoment.increment
+SecondMoment.clear
+ThirdMoment.getResult

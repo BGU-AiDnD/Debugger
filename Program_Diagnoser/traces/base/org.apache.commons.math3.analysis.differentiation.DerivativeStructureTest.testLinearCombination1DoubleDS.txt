@@ -1,0 +1,16 @@
+DerivativeStructure.getValue
+DSCompiler.checkCompatibility
+DerivativeStructure.linearCombination
+DerivativeStructure.getField
+DSCompiler.getPartialDerivativeIndex
+DSCompiler.getOrder
+DerivativeStructure.add
+DerivativeStructure.multiply
+DerivativeStructure.getAllDerivatives
+DerivativeStructure.getPartialDerivative
+DSCompiler.add
+DerivativeStructure.getOrder
+DSCompiler.getCompiler
+DSCompiler.getFreeParameters
+DSCompiler.getSize
+DerivativeStructure.getFreeParameters

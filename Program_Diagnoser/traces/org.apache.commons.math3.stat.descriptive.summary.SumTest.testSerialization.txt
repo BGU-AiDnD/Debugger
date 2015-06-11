@@ -1,0 +1,9 @@
+AbstractStorelessUnivariateStatistic.hashCode
+Sum.getResult
+Precision.equalsIncludingNaN
+AbstractStorelessUnivariateStatistic.equals
+Sum.getN
+Sum.increment
+MathUtils.hash
+Precision.equals
+Sum.clear

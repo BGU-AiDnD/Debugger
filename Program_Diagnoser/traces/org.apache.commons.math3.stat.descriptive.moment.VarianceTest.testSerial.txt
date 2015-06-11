@@ -1,0 +1,6 @@
+Variance.getN
+Precision.equalsIncludingNaN
+FirstMoment.getN
+AbstractStorelessUnivariateStatistic.equals
+Variance.getResult
+Precision.equals

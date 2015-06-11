@@ -1,0 +1,3 @@
+AbstractUnivariateStatistic.test
+AbstractStorelessUnivariateStatistic.evaluate
+SumOfSquares.evaluate

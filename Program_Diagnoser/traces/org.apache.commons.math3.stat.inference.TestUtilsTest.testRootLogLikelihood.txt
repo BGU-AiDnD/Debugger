@@ -1,0 +1,3 @@
+MathArrays.checkNonNegative
+TestUtils.rootLogLikelihoodRatio
+FastMath.sqrt

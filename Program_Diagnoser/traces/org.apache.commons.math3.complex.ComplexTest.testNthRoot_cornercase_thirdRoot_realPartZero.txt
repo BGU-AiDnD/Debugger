@@ -1,0 +1,12 @@
+Complex.abs
+FastMath.atan2
+FastMath.cosQ
+FastMath.sinQ
+FastMath.polySine
+FastMath.exp
+FastMath.cos
+FastMath.pow
+FastMath.sin
+FastMath.polyCosine
+FastMath.sqrt
+FastMath.log

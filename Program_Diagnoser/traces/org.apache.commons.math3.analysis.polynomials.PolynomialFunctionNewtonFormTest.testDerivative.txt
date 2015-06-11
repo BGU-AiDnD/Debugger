@@ -1,0 +1,17 @@
+MathUtils.checkNotNull
+DerivativeStructure.getValue
+DSCompiler.checkCompatibility
+DSCompiler.getPartialDerivativeIndex
+DSCompiler.getOrder
+DerivativeStructure.add
+DerivativeStructure.multiply
+DerivativeStructure.subtract
+PolynomialFunctionNewtonForm.value
+DerivativeStructure.getPartialDerivative
+PolynomialFunctionNewtonForm.verifyInputArray
+DerivativeStructure.getOrder
+DSCompiler.getCompiler
+DSCompiler.getFreeParameters
+DSCompiler.getSize
+DerivativeStructure.getFreeParameters
+DSCompiler.multiply

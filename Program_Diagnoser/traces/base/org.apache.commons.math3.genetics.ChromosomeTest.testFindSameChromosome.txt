@@ -1,0 +1,5 @@
+Chromosome.findSameChromosome
+Chromosome.getFitness
+ListPopulation.iterator
+ListPopulation.getChromosomes
+Chromosome.searchForFitnessUpdate

@@ -1,0 +1,10 @@
+FirstMoment.getResult
+FirstMoment.copy
+MathUtils.checkNotNull
+AbstractUnivariateStatistic.test
+AbstractStorelessUnivariateStatistic.incrementAll
+AbstractUnivariateStatistic.getDataRef
+AbstractStorelessUnivariateStatistic.evaluate
+FirstMoment.increment
+AbstractUnivariateStatistic.setData
+FirstMoment.clear

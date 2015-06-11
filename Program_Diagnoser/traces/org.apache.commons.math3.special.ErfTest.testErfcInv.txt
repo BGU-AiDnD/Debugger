@@ -1,0 +1,12 @@
+Erf.erfc
+ContinuedFraction.evaluate
+FastMath.exp
+Erf.erfInv
+FastMath.log1p
+Gamma.regularizedGammaP
+Gamma.regularizedGammaQ
+Precision.equals
+Gamma.logGamma
+FastMath.sqrt
+FastMath.log
+Erf.erfcInv

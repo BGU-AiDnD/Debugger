@@ -1,0 +1,6 @@
+AbstractUnivariateStatistic.test
+ExceptionContext.addMessage
+AbstractStorelessUnivariateStatistic.evaluate
+SumOfSquares.evaluate
+StatUtils.sumSq
+ArgUtils.flatten

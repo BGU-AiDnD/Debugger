@@ -1,0 +1,9 @@
+RandomDataGenerator.nextLong
+Precision.equalsIncludingNaN
+RandomDataGenerator.getRandomGenerator
+NaturalRanking.rank
+NaturalRanking.restoreNaNs
+NaturalRanking.resolveTie
+NaturalRanking.getNanPositions
+Precision.equals
+JDKRandomGenerator.setSeed

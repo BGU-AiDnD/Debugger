@@ -1,0 +1,4 @@
+EuclideanDoublePoint.getPoint
+EuclideanDoublePoint.distanceFrom
+MathArrays.distance
+FastMath.sqrt

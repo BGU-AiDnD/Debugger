@@ -1,0 +1,10 @@
+MathUtils.checkNotNull
+CompositeFormat.parseNextCharacter
+CompositeFormat.parseAndIgnoreWhitespace
+CompositeFormat.parseFixedstring
+Array2DRowRealMatrix.copyIn
+RealMatrixFormat.parse
+CompositeFormat.parseNumber
+Array2DRowRealMatrix.getColumnDimension
+MatrixUtils.createRealMatrix
+Array2DRowRealMatrix.setSubMatrix

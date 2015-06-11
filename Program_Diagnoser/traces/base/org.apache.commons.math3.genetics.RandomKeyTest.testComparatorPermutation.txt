@@ -1,0 +1,8 @@
+RandomKey.inducedPermutation
+RandomKey.baseSequence
+RandomKey.decode
+AbstractListChromosome.getLength
+RandomKey.comparatorPermutation
+RandomKey.decodeGeneric
+RandomKey.checkValidity
+AbstractListChromosome.getRepresentation

@@ -1,0 +1,5 @@
+CompositeFormat.parseNextCharacter
+CompositeFormat.parseAndIgnoreWhitespace
+CompositeFormat.parseFixedstring
+RealMatrixFormat.parse
+CompositeFormat.parseNumber

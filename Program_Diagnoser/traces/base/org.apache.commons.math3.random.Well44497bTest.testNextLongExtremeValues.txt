@@ -1,0 +1,2 @@
+BitsStreamGenerator.clear
+AbstractWell.setSeed

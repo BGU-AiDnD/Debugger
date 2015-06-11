@@ -1,0 +1,3 @@
+Frequency.incrementValue
+Frequency.equals
+Frequency.addValue

@@ -1,0 +1,14 @@
+GTest.g
+FastMath.exp
+FastMath.log1p
+ChiSquaredDistribution.cumulativeProbability
+FastMath.log
+GammaDistribution.cumulativeProbability
+MathArrays.checkPositive
+MathArrays.checkNonNegative
+FastMath.pow
+Gamma.regularizedGammaP
+BitsStreamGenerator.clear
+AbstractWell.setSeed
+FastMath.sqrt
+Gamma.logGamma

@@ -1,0 +1,8 @@
+OpenIntToDoubleHashMap.iterator
+OpenIntToDoubleHashMap.findInsertionIndex
+OpenMapRealVector.toArray
+OpenIntToDoubleHashMap.put
+OpenIntToDoubleHashMap.computeCapacity
+OpenIntToDoubleHashMap.shouldGrowTable
+OpenMapRealVector.isDefaultValue
+OpenIntToDoubleHashMap.hashOf

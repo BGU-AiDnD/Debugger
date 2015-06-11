@@ -1,0 +1,12 @@
+DerivativeStructure.getValue
+DerivativeStructure.getPartialDerivative
+DSCompiler.getPartialDerivativeIndex
+DSCompiler.getOrder
+DerivativeStructure.getOrder
+DSCompiler.getCompiler
+DerivativeStructure.compose
+DSCompiler.getFreeParameters
+DSCompiler.getSize
+Logit.value
+FastMath.log
+DSCompiler.compose

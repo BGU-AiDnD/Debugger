@@ -1,0 +1,7 @@
+FastMath.sinQ
+FastMath.cosQ
+FastMath.polySine
+FunctionUtils.sample
+FastMath.sin
+FastMath.polyCosine
+Sin.value

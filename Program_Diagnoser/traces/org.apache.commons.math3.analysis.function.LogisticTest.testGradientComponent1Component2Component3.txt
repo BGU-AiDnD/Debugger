@@ -1,0 +1,4 @@
+FastMath.exp
+FastMath.pow
+Logistic.value
+FastMath.log

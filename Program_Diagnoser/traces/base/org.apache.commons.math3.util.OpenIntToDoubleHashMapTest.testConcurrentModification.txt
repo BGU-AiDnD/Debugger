@@ -1,0 +1,9 @@
+OpenIntToDoubleHashMap.iterator
+OpenIntToDoubleHashMap.findInsertionIndex
+OpenIntToDoubleHashMap.put
+OpenIntToDoubleHashMap.computeCapacity
+OpenIntToDoubleHashMap.probe
+OpenIntToDoubleHashMap.shouldGrowTable
+OpenIntToDoubleHashMap.growTable
+OpenIntToDoubleHashMap.perturb
+OpenIntToDoubleHashMap.hashOf

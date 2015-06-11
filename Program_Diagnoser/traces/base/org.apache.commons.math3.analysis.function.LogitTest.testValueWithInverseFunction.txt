@@ -1,0 +1,16 @@
+BitsStreamGenerator.nextDouble
+DerivativeStructure.getValue
+FastMath.exp
+DSCompiler.getOrder
+DerivativeStructure.compose
+Well1024a.next
+Logit.value
+FastMath.log
+Sigmoid.value
+FunctionUtils.compose
+DerivativeStructure.getOrder
+DSCompiler.getCompiler
+BitsStreamGenerator.clear
+DSCompiler.getSize
+AbstractWell.setSeed
+DSCompiler.compose

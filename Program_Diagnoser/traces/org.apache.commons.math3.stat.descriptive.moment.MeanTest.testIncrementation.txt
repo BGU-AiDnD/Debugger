@@ -1,0 +1,9 @@
+AbstractStorelessUnivariateStatistic.incrementAll
+AbstractUnivariateStatistic.test
+Mean.increment
+FirstMoment.getN
+FirstMoment.increment
+Mean.getN
+Mean.getResult
+FirstMoment.clear
+Mean.clear

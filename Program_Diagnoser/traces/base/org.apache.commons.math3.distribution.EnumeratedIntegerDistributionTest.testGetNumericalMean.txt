@@ -1,0 +1,4 @@
+EnumeratedDistribution.getPmf
+EnumeratedIntegerDistribution.getNumericalMean
+Pair.getValue
+Pair.getKey

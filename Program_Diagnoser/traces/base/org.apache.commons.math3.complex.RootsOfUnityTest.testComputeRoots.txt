@@ -1,0 +1,11 @@
+RootsOfUnity.isCounterClockWise
+RootsOfUnity.getNumberOfRoots
+FastMath.cosQ
+FastMath.sinQ
+RootsOfUnity.getImaginary
+FastMath.polySine
+FastMath.cos
+FastMath.sin
+RootsOfUnity.getReal
+FastMath.polyCosine
+RootsOfUnity.computeRoots

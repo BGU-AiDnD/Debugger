@@ -1,0 +1,4 @@
+Quaternion.getNorm
+Quaternion.normalize
+Precision.equals
+FastMath.sqrt

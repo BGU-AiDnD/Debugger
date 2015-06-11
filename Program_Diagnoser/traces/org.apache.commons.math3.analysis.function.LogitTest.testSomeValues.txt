@@ -1,0 +1,2 @@
+Logit.value
+FastMath.log

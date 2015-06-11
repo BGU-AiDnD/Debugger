@@ -1,0 +1,7 @@
+Vector3D.getNorm
+Vector3D.crossProduct
+Vector3D.getX
+Vector3D.getY
+Vector3D.getZ
+FastMath.sqrt
+Vector3D.distance

@@ -1,0 +1,3 @@
+Incrementor.setMaximalCount
+Incrementor.getMaximalCount
+Incrementor.getCount

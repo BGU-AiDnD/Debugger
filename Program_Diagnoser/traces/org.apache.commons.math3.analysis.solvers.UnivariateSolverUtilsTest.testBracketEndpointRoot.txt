@@ -1,0 +1,9 @@
+UnivariateSolverUtils.verifyInterval
+FastMath.sinQ
+FastMath.cosQ
+FastMath.polySine
+UnivariateSolverUtils.verifySequence
+FastMath.sin
+FastMath.polyCosine
+UnivariateSolverUtils.bracket
+Sin.value

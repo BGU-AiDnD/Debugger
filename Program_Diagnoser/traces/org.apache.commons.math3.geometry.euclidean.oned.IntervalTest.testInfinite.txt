@@ -1,0 +1,7 @@
+FastMath.exp
+Interval.getSup
+FastMath.pow
+Interval.getSize
+Interval.getInf
+Interval.checkPoint
+FastMath.log

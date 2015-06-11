@@ -1,0 +1,5 @@
+Frequency.getCount
+Frequency.getSumFreq
+Frequency.getCumFreq
+Frequency.getCumPct
+Frequency.getPct

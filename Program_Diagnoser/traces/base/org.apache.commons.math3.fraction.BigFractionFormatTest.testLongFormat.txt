@@ -1,0 +1,10 @@
+AbstractFormat.format
+AbstractFormat.getNumeratorFormat
+AbstractFormat.getDenominatorFormat
+BigFractionFormat.getProperInstance
+BigFraction.getDenominator
+ProperBigFractionFormat.setWholeFormat
+BigFractionFormat.getImproperInstance
+BigFraction.getNumerator
+AbstractFormat.getDefaultNumberFormat
+BigFractionFormat.format

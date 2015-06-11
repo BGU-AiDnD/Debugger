@@ -1,0 +1,15 @@
+Vector2D.getY
+Vector2D.distance
+FastMath.cosQ
+Vector2D.getX
+FastMath.atan
+FastMath.cos
+Segment.distance
+FastMath.atan2
+FastMath.sinQ
+FastMath.doubleHighPart
+FastMath.polySine
+FastMath.sin
+FastMath.polyCosine
+FastMath.sqrt
+Line.reset

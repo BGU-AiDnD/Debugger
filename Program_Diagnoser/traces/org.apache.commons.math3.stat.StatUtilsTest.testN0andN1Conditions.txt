@@ -1,0 +1,10 @@
+AbstractUnivariateStatistic.test
+StatUtils.variance
+Mean.evaluate
+AbstractStorelessUnivariateStatistic.evaluate
+StatUtils.mean
+Sum.evaluate
+Variance.clear
+FirstMoment.clear
+Variance.evaluate
+SecondMoment.clear

@@ -1,0 +1,4 @@
+AbstractUnivariateStatistic.test
+AbstractStorelessUnivariateStatistic.evaluate
+SumOfLogs.evaluate
+FastMath.log

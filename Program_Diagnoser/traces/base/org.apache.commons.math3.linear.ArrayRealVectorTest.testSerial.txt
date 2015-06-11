@@ -1,0 +1,4 @@
+ArrayRealVector.isNaN
+ArrayRealVector.getDimension
+ArrayRealVector.equals
+ArrayRealVector.getEntry

@@ -1,0 +1,9 @@
+Min.increment
+Min.getN
+AbstractStorelessUnivariateStatistic.hashCode
+Min.clear
+Precision.equalsIncludingNaN
+Min.getResult
+AbstractStorelessUnivariateStatistic.equals
+MathUtils.hash
+Precision.equals

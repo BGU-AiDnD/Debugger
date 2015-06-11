@@ -1,0 +1,6 @@
+RandomKey.baseSequence
+RandomKey.decode
+AbstractListChromosome.getLength
+RandomKey.decodeGeneric
+RandomKey.checkValidity
+AbstractListChromosome.getRepresentation

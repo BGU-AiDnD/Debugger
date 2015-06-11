@@ -1,0 +1,6 @@
+BaseRuleFactory.getRuleInternal
+BaseRuleFactory.convertToDouble
+Pair.getFirst
+Pair.getSecond
+BaseRuleFactory.getRule
+BaseRuleFactory.addRule

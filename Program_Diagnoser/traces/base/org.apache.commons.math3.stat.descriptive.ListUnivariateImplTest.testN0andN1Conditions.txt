@@ -1,0 +1,14 @@
+DescriptiveStatistics.getStandardDeviation
+AbstractUnivariateStatistic.test
+Mean.evaluate
+DescriptiveStatistics.getMean
+DescriptiveStatistics.getWindowSize
+Sum.evaluate
+DescriptiveStatistics.getVariance
+Variance.clear
+DefaultTransformer.transform
+Variance.evaluate
+Percentile.setQuantile
+ResizableDoubleArray.checkContractExpand
+FirstMoment.clear
+SecondMoment.clear

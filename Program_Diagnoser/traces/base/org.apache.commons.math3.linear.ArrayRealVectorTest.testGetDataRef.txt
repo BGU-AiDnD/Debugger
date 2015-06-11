@@ -1,0 +1,2 @@
+ArrayRealVector.getDataRef
+ArrayRealVector.getEntry

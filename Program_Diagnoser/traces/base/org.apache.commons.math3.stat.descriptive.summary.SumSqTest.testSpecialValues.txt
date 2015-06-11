@@ -1,0 +1,2 @@
+SumOfSquares.getResult
+SumOfSquares.increment

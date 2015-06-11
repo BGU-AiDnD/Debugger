@@ -1,0 +1,3 @@
+FastHadamardTransformer.transform
+TransformUtils.scaleArray
+FastHadamardTransformer.fht

@@ -1,0 +1,3 @@
+BigReal.negate
+BigReal.add
+BigReal.equals

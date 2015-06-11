@@ -1,0 +1,5 @@
+BlockRealMatrix.toBlocksLayout
+BlockRealMatrix.blockWidth
+BlockRealMatrix.operate
+BlockRealMatrix.blockHeight
+BlockRealMatrix.getRowDimension

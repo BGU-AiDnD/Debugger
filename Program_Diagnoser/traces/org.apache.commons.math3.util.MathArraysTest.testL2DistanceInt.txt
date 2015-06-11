@@ -1,0 +1,3 @@
+MathArrays.distance
+Precision.equals
+FastMath.sqrt

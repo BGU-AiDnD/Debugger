@@ -1,0 +1,11 @@
+StatisticalSummaryValues.equals
+StatisticalSummaryValues.getN
+Precision.equalsIncludingNaN
+StatisticalSummaryValues.hashCode
+StatisticalSummaryValues.getSum
+StatisticalSummaryValues.getMean
+StatisticalSummaryValues.getVariance
+MathUtils.hash
+Precision.equals
+StatisticalSummaryValues.getMin
+StatisticalSummaryValues.getMax

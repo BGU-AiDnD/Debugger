@@ -1,0 +1,5 @@
+ArrayRealVector.checkVectorDimensions
+ArrayRealVector.add
+RealVector.iterator
+RealVector.checkIndex
+ArrayRealVector.getEntry

@@ -1,0 +1,13 @@
+BlockRealMatrix.multiply
+BlockRealMatrix.blockWidth
+BlockRealMatrix.getColumnDimension
+BlockRealMatrix.subtract
+BlockRealMatrix.blockHeight
+BlockRealMatrix.toBlocksLayout
+ExceptionContext.addMessage
+BlockRealMatrix.getNorm
+MatrixUtils.checkMultiplicationCompatible
+BlockRealMatrix.createBlocksLayout
+MatrixUtils.checkSubtractionCompatible
+ArgUtils.flatten
+BlockRealMatrix.getRowDimension

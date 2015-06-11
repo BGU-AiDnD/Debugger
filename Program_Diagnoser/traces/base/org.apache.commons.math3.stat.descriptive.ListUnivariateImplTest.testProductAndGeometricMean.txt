@@ -1,0 +1,12 @@
+AbstractUnivariateStatistic.test
+Percentile.setQuantile
+ResizableDoubleArray.getNumElements
+DescriptiveStatistics.setWindowSize
+DescriptiveStatistics.getWindowSize
+FastMath.exp
+DescriptiveStatistics.getGeometricMean
+ResizableDoubleArray.checkContractExpand
+DefaultTransformer.transform
+SumOfLogs.evaluate
+GeometricMean.evaluate
+FastMath.log

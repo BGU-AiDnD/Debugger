@@ -1,0 +1,11 @@
+Line.intersection
+Line.distance
+Line.contains
+Vector3D.getNorm
+Vector3D.getNormSq
+Vector3D.dotProduct
+Line.closestPoint
+Vector3D.subtract
+FastMath.sqrt
+Vector3D.distance
+Line.reset

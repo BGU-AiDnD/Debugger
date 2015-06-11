@@ -1,0 +1,3 @@
+AbstractUnivariateStatistic.test
+AbstractStorelessUnivariateStatistic.evaluate
+Sum.evaluate

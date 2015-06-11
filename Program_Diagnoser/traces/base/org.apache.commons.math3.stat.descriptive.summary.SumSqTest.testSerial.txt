@@ -1,0 +1,5 @@
+SumOfSquares.getResult
+Precision.equalsIncludingNaN
+AbstractStorelessUnivariateStatistic.equals
+SumOfSquares.getN
+Precision.equals

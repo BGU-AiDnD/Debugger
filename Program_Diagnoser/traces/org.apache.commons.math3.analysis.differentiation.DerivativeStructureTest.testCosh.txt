@@ -1,0 +1,10 @@
+DerivativeStructure.cosh
+FastMath.expm1
+FastMath.exp
+DSCompiler.cosh
+DSCompiler.getCompiler
+FastMath.cosh
+DerivativeStructure.getReal
+DSCompiler.getSize
+FastMath.sinh
+DSCompiler.compose

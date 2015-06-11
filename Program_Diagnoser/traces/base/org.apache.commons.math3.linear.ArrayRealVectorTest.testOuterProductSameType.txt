@@ -1,0 +1,9 @@
+MatrixUtils.checkMatrixIndex
+Array2DRowRealMatrix.setEntry
+Array2DRowRealMatrix.getRowDimension
+MatrixUtils.checkColumnIndex
+MatrixUtils.checkRowIndex
+Array2DRowRealMatrix.getEntry
+Array2DRowRealMatrix.getColumnDimension
+ArrayRealVector.outerProduct
+MatrixUtils.createRealMatrix

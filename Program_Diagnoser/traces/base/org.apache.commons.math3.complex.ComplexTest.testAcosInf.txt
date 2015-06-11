@@ -1,0 +1,4 @@
+MathUtils.checkNotNull
+Complex.abs
+Complex.add
+FastMath.sqrt

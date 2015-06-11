@@ -1,0 +1,17 @@
+ContinuedFraction.evaluate
+TTest.pairedT
+FastMath.exp
+StatUtils.varianceDifference
+Precision.equals
+Beta.regularizedBeta
+FastMath.log
+TTest.pairedTTest
+StatUtils.meanDifference
+TDistribution.cumulativeProbability
+BitsStreamGenerator.clear
+FastMath.sqrt
+AbstractWell.setSeed
+TestUtils.pairedTTest
+Beta.logBeta
+TestUtils.pairedT
+StatUtils.sumDifference

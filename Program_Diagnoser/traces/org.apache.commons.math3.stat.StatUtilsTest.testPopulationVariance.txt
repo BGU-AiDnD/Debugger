@@ -1,0 +1,11 @@
+AbstractUnivariateStatistic.test
+StatUtils.variance
+ExceptionContext.addMessage
+Mean.evaluate
+Sum.evaluate
+Variance.clear
+ArgUtils.flatten
+FirstMoment.clear
+Variance.evaluate
+SecondMoment.clear
+StatUtils.populationVariance

@@ -1,0 +1,13 @@
+ResizableDoubleArray.addElementRolling
+ResizableDoubleArray.getNumElements
+DescriptiveStatistics.getN
+ResizableDoubleArray.contract
+DescriptiveStatistics.setWindowSize
+DescriptiveStatistics.addValue
+ResizableDoubleArray.clear
+ResizableDoubleArray.expand
+DescriptiveStatistics.clear
+Percentile.setQuantile
+ResizableDoubleArray.shouldContract
+ResizableDoubleArray.checkContractExpand
+ResizableDoubleArray.addElement

@@ -1,0 +1,16 @@
+OpenIntToFieldHashMap.containsKey
+OpenIntToFieldHashMap.put
+OpenIntToFieldHashMap.get
+OpenIntToFieldHashMap.perturb
+OpenIntToFieldHashMap.remove
+FractionField.getZero
+OpenIntToFieldHashMap.probe
+OpenIntToFieldHashMap.size
+OpenIntToFieldHashMap.findInsertionIndex
+OpenIntToFieldHashMap.hashOf
+OpenIntToFieldHashMap.doRemove
+OpenIntToFieldHashMap.buildArray
+FractionField.getRuntimeClass
+Fraction.equals
+OpenIntToFieldHashMap.computeCapacity
+OpenIntToFieldHashMap.shouldGrowTable

@@ -1,0 +1,7 @@
+Add.value
+RealVector.iterator
+RealVector.checkIndex
+RealVector.mapToSelf
+RealVector.mapSubtractToSelf
+RealVector.mapAddToSelf
+FunctionUtils.fix2ndArgument

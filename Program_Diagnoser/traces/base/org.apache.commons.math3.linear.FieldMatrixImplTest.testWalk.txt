@@ -1,0 +1,17 @@
+DefaultFieldMatrixChangingVisitor.end
+Array2DRowFieldMatrix.getRowDimension
+FractionField.getInstance
+Array2DRowFieldMatrix.walkInRowOrder
+AbstractFieldMatrix.checkColumnIndex
+FractionField.getZero
+AbstractFieldMatrix.walkInOptimizedOrder
+Array2DRowFieldMatrix.getColumnDimension
+DefaultFieldMatrixPreservingVisitor.end
+FractionField.getRuntimeClass
+AbstractFieldMatrix.checkRowIndex
+DefaultFieldMatrixPreservingVisitor.start
+Fraction.equals
+DefaultFieldMatrixChangingVisitor.start
+AbstractFieldMatrix.checkSubMatrixIndex
+Array2DRowFieldMatrix.getEntry
+Array2DRowFieldMatrix.walkInColumnOrder

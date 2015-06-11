@@ -1,0 +1,2 @@
+SimpleRegression.addData
+SimpleRegression.getSumSquaredErrors

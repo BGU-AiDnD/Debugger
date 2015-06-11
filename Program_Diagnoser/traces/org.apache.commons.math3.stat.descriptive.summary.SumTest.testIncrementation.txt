@@ -1,0 +1,6 @@
+AbstractStorelessUnivariateStatistic.incrementAll
+AbstractUnivariateStatistic.test
+Sum.getResult
+Sum.increment
+Sum.getN
+Sum.clear

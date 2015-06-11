@@ -1,0 +1,3 @@
+AbstractUnivariateStatistic.test
+SemiVariance.evaluate
+SemiVariance.setVarianceDirection

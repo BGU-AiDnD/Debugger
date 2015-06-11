@@ -1,0 +1,7 @@
+MathUtils.checkNotNull
+PolynomialFunction.differentiate
+PolynomialFunction.polynomialDerivative
+PolynomialFunction.derivative
+PolynomialFunction.evaluate
+PolynomialFunction.value
+PolynomialFunction.degree

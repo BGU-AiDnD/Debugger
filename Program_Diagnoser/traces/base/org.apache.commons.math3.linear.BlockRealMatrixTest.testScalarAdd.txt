@@ -1,0 +1,10 @@
+BlockRealMatrix.toBlocksLayout
+BlockRealMatrix.scalarAdd
+BlockRealMatrix.getNorm
+BlockRealMatrix.blockWidth
+BlockRealMatrix.getColumnDimension
+BlockRealMatrix.subtract
+BlockRealMatrix.blockHeight
+BlockRealMatrix.createBlocksLayout
+MatrixUtils.checkSubtractionCompatible
+BlockRealMatrix.getRowDimension

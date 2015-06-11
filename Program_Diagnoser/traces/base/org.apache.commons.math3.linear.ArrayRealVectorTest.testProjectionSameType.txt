@@ -1,0 +1,8 @@
+ArrayRealVector.dotProduct
+ArrayRealVector.checkVectorDimensions
+ArrayRealVector.mapMultiplyToSelf
+ArrayRealVector.copy
+RealVector.mapMultiply
+ArrayRealVector.getDimension
+RealVector.projection
+ArrayRealVector.getEntry

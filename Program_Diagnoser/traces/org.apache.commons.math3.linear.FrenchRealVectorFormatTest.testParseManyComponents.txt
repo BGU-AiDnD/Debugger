@@ -1,0 +1,6 @@
+CompositeFormat.parseNextCharacter
+CompositeFormat.parseAndIgnoreWhitespace
+CompositeFormat.parseFixedstring
+ArrayRealVector.getDimension
+CompositeFormat.parseNumber
+RealVectorFormat.parse

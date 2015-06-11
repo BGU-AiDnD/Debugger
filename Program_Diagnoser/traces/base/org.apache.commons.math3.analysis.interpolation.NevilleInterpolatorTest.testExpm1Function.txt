@@ -1,0 +1,8 @@
+PolynomialFunctionLagrangeForm.value
+FastMath.expm1
+PolynomialFunctionLagrangeForm.verifyInterpolationArray
+FastMath.exp
+PolynomialFunctionLagrangeForm.evaluateInternal
+Expm1.value
+NevilleInterpolator.interpolate
+MathArrays.checkOrder

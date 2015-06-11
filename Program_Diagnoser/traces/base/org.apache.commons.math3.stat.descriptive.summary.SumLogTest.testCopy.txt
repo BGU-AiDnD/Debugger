@@ -1,0 +1,8 @@
+MathUtils.checkNotNull
+AbstractUnivariateStatistic.test
+AbstractUnivariateStatistic.getDataRef
+AbstractStorelessUnivariateStatistic.evaluate
+AbstractUnivariateStatistic.setData
+SumOfLogs.evaluate
+FastMath.log
+SumOfLogs.copy

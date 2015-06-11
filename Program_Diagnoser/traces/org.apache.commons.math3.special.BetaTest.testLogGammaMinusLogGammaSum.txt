@@ -1,0 +1,4 @@
+Beta.logGammaMinusLogGammaSum
+FastMath.log1p
+Beta.deltaMinusDeltaSum
+FastMath.log

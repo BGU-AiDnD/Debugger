@@ -1,0 +1,17 @@
+MatrixUtils.checkMatrixIndex
+VectorialMean.increment
+Array2DRowRealMatrix.getRowDimension
+CorrelatedRandomVectorGenerator.nextVector
+VectorialCovariance.getResult
+Array2DRowRealMatrix.getEntry
+GaussianRandomGenerator.nextNormalizedDouble
+VectorialMean.getResult
+Mean.increment
+Array2DRowRealMatrix.setEntry
+MatrixUtils.checkColumnIndex
+FirstMoment.increment
+MatrixUtils.checkRowIndex
+Mean.getResult
+VectorialCovariance.increment
+Array2DRowRealMatrix.getColumnDimension
+MatrixUtils.createRealMatrix

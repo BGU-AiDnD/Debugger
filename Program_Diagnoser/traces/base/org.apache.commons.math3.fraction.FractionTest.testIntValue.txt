@@ -1,0 +1,2 @@
+Fraction.doubleValue
+Fraction.intValue

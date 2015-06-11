@@ -1,0 +1,8 @@
+RealVector.checkVectorDimensions
+ExceptionContext.addMessage
+RealVector.set
+RealVector.dotProduct
+RealVector.iterator
+RealVector.checkIndex
+RealVector.projection
+ArgUtils.flatten

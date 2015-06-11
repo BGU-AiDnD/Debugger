@@ -1,0 +1,2 @@
+FiniteDifferencesDifferentiator.getNbPoints
+FiniteDifferencesDifferentiator.getStepSize

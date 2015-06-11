@@ -1,0 +1,11 @@
+PolynomialFunctionLagrangeForm.value
+FastMath.sinQ
+FastMath.cosQ
+PolynomialFunctionLagrangeForm.verifyInterpolationArray
+FastMath.polySine
+PolynomialFunctionLagrangeForm.evaluateInternal
+FastMath.sin
+NevilleInterpolator.interpolate
+FastMath.polyCosine
+Sin.value
+MathArrays.checkOrder

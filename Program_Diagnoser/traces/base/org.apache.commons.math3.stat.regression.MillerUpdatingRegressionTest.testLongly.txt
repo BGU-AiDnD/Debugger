@@ -1,0 +1,17 @@
+MillerUpdatingRegression.ss
+MillerUpdatingRegression.singcheck
+RegressionResults.getParameterEstimates
+RegressionResults.getAdjustedRSquared
+Precision.equals
+MillerUpdatingRegression.tolset
+MillerUpdatingRegression.inverse
+RegressionResults.getRSquared
+MillerUpdatingRegression.cov
+Precision.equalsIncludingNaN
+MillerUpdatingRegression.smartAdd
+RegressionResults.getVcvElement
+RegressionResults.getStdErrorOfEstimates
+MillerUpdatingRegression.addObservation
+MillerUpdatingRegression.regcf
+FastMath.sqrt
+MillerUpdatingRegression.include

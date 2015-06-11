@@ -1,0 +1,6 @@
+BetaDistribution.getNumericalVariance
+BetaDistribution.getAlpha
+BitsStreamGenerator.clear
+AbstractWell.setSeed
+BetaDistribution.getNumericalMean
+BetaDistribution.getBeta

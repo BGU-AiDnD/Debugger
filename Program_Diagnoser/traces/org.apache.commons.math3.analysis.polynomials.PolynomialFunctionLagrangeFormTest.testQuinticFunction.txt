@@ -1,0 +1,9 @@
+PolynomialFunctionLagrangeForm.degree
+PolynomialFunctionLagrangeForm.getCoefficients
+PolynomialFunctionLagrangeForm.value
+PolynomialFunctionLagrangeForm.computeCoefficients
+PolynomialFunctionLagrangeForm.verifyInterpolationArray
+Pair.getValue
+Pair.getKey
+PolynomialFunctionLagrangeForm.evaluateInternal
+MathArrays.checkOrder

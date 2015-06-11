@@ -1,0 +1,5 @@
+BlockRealMatrix.toBlocksLayout
+BlockRealMatrix.blockWidth
+BlockRealMatrix.blockHeight
+FastMath.sqrt
+BlockRealMatrix.getFrobeniusNorm

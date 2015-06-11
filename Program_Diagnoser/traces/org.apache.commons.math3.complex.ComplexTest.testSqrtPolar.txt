@@ -1,0 +1,9 @@
+Complex.abs
+FastMath.cosQ
+FastMath.sinQ
+FastMath.polySine
+ComplexUtils.polar2Complex
+FastMath.cos
+FastMath.sin
+FastMath.polyCosine
+FastMath.sqrt

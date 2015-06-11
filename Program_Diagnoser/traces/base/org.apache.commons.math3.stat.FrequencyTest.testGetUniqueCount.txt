@@ -1,0 +1,3 @@
+Frequency.incrementValue
+Frequency.addValue
+Frequency.getUniqueCount

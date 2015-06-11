@@ -1,0 +1,15 @@
+OpenIntToDoubleHashMap.containsKey
+RealVector.getLInfDistance
+OpenIntToDoubleHashMap.shouldGrowTable
+OpenMapRealVector.isDefaultValue
+OpenIntToDoubleHashMap.get
+RealVector.checkVectorDimensions
+OpenIntToDoubleHashMap.findInsertionIndex
+RealVector.iterator
+OpenIntToDoubleHashMap.put
+OpenIntToDoubleHashMap.computeCapacity
+RealVector.checkIndex
+OpenMapRealVector.getEntry
+OpenMapRealVector.getLInfDistance
+OpenIntToDoubleHashMap.hashOf
+OpenMapRealVector.getDimension

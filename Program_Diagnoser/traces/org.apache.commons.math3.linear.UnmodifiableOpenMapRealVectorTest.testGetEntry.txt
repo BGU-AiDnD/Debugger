@@ -1,0 +1,14 @@
+OpenIntToDoubleHashMap.containsKey
+OpenIntToDoubleHashMap.shouldGrowTable
+OpenIntToDoubleHashMap.growTable
+OpenMapRealVector.isDefaultValue
+OpenIntToDoubleHashMap.get
+RealVector.unmodifiableRealVector
+OpenIntToDoubleHashMap.findInsertionIndex
+OpenMapRealVector.setEntry
+OpenIntToDoubleHashMap.put
+OpenIntToDoubleHashMap.computeCapacity
+RealVector.checkIndex
+OpenMapRealVector.getEntry
+OpenMapRealVector.getDimension
+OpenIntToDoubleHashMap.hashOf

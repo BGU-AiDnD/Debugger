@@ -1,0 +1,7 @@
+ExceptionContext.addMessage
+NonMonotonicSequenceException.getIndex
+NonMonotonicSequenceException.getPrevious
+NonMonotonicSequenceException.getStrict
+MathIllegalNumberException.getArgument
+ArgUtils.flatten
+NonMonotonicSequenceException.getDirection

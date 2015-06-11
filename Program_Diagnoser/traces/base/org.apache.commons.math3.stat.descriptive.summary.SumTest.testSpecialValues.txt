@@ -1,0 +1,2 @@
+Sum.getResult
+Sum.increment

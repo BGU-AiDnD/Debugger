@@ -1,0 +1,4 @@
+RealVector.checkVectorDimensions
+RealVector.iterator
+RealVector.checkIndex
+RealVector.getL1Distance

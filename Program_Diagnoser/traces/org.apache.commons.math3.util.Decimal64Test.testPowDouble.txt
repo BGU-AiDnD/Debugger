@@ -1,0 +1,5 @@
+Decimal64.getReal
+FastMath.exp
+FastMath.pow
+Decimal64.pow
+FastMath.log

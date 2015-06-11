@@ -1,0 +1,10 @@
+MathUtils.checkNotNull
+PolynomialFunction.getCoefficients
+Precision.equalsIncludingNaN
+PolynomialFunction.evaluate
+PolynomialSplineFunction.getPolynomials
+SplineInterpolator.interpolate
+PolynomialSplineFunction.value
+Precision.equals
+MathArrays.checkOrder
+PolynomialFunction.value

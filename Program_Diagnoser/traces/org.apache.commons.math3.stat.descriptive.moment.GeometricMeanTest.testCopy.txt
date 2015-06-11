@@ -1,0 +1,11 @@
+MathUtils.checkNotNull
+AbstractUnivariateStatistic.test
+GeometricMean.copy
+AbstractUnivariateStatistic.getDataRef
+AbstractStorelessUnivariateStatistic.evaluate
+FastMath.exp
+AbstractUnivariateStatistic.setData
+SumOfLogs.evaluate
+GeometricMean.evaluate
+FastMath.log
+SumOfLogs.copy

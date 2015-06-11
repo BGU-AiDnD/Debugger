@@ -1,0 +1,4 @@
+EnumeratedDistribution.getPmf
+EnumeratedRealDistribution.cumulativeProbability
+Pair.getValue
+Pair.getKey

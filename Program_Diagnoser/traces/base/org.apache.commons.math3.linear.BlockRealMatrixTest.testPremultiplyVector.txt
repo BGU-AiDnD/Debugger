@@ -1,0 +1,7 @@
+BlockRealMatrix.toBlocksLayout
+ExceptionContext.addMessage
+BlockRealMatrix.blockWidth
+BlockRealMatrix.blockHeight
+BlockRealMatrix.preMultiply
+ArrayRealVector.toArray
+ArgUtils.flatten

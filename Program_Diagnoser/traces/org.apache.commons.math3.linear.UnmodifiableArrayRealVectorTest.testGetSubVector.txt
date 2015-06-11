@@ -1,0 +1,5 @@
+RealVector.unmodifiableRealVector
+ArrayRealVector.setEntry
+ArrayRealVector.getDimension
+ArrayRealVector.getSubVector
+ArrayRealVector.getEntry

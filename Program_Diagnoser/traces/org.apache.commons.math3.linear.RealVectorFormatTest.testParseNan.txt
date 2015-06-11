@@ -1,0 +1,8 @@
+CompositeFormat.parseNextCharacter
+ArrayRealVector.isNaN
+CompositeFormat.parseAndIgnoreWhitespace
+CompositeFormat.parseFixedstring
+ArrayRealVector.getDimension
+CompositeFormat.parseNumber
+RealVectorFormat.parse
+ArrayRealVector.equals

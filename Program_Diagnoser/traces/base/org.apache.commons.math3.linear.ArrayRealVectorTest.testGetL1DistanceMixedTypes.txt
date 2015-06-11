@@ -1,0 +1,3 @@
+ArrayRealVector.checkVectorDimensions
+RealVector.checkIndex
+ArrayRealVector.getL1Distance

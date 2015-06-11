@@ -1,0 +1,7 @@
+AbstractUnivariateStatistic.test
+Mean.evaluate
+Sum.evaluate
+Variance.clear
+FirstMoment.clear
+Variance.evaluate
+SecondMoment.clear

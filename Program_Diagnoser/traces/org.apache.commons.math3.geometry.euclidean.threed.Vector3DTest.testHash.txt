@@ -1,0 +1,3 @@
+Vector3D.hashCode
+MathUtils.hash
+Vector3D.isNaN

@@ -1,0 +1,6 @@
+ArrayRealVector.mapDivideToSelf
+ArrayRealVector.getDimension
+RealVector.unitize
+FastMath.sqrt
+ArrayRealVector.getNorm
+ArrayRealVector.getEntry

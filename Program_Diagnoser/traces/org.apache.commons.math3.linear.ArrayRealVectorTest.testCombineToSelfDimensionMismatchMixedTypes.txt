@@ -1,0 +1,4 @@
+ArrayRealVector.checkVectorDimensions
+ArrayRealVector.combineToSelf
+ExceptionContext.addMessage
+ArgUtils.flatten

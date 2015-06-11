@@ -1,0 +1,13 @@
+Max.increment
+AbstractUnivariateStatistic.test
+MathUtils.checkNotNull
+FastMath.random
+Max.getResult
+Max.copy
+Precision.equals
+AbstractStorelessUnivariateStatistic.incrementAll
+AbstractUnivariateStatistic.getDataRef
+Precision.equalsIncludingNaN
+Max.getN
+AbstractStorelessUnivariateStatistic.equals
+AbstractUnivariateStatistic.setData

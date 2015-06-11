@@ -1,0 +1,6 @@
+Power.value
+FastMath.exp
+GaussIntegrator.getNumberOfPoints
+FastMath.pow
+FastMath.log
+GaussIntegrator.integrate

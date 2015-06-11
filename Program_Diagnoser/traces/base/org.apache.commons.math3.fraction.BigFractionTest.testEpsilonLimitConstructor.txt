@@ -1,0 +1,2 @@
+BigFraction.getDenominatorAsInt
+BigFraction.getNumeratorAsInt

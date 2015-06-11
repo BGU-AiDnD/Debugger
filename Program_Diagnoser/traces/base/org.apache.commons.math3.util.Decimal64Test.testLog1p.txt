@@ -1,0 +1,4 @@
+Decimal64.getReal
+Decimal64.log1p
+FastMath.log1p
+FastMath.log

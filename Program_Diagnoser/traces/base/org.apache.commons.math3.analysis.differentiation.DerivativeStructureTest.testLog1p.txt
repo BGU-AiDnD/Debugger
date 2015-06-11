@@ -1,0 +1,8 @@
+DerivativeStructure.log1p
+FastMath.log1p
+DSCompiler.getCompiler
+DerivativeStructure.getReal
+DSCompiler.getSize
+DSCompiler.log1p
+FastMath.log
+DSCompiler.compose

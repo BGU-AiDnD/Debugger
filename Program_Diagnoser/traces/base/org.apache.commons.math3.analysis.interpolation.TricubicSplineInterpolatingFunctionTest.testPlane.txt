@@ -1,0 +1,4 @@
+TricubicSplineInterpolatingFunction.searchIndex
+TricubicSplineInterpolatingFunction.value
+TricubicSplineInterpolatingFunction.computeSplineCoefficients
+MathArrays.checkOrder

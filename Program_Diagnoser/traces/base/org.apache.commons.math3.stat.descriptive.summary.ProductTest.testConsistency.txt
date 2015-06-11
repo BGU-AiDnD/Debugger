@@ -1,0 +1,7 @@
+AbstractStorelessUnivariateStatistic.incrementAll
+AbstractUnivariateStatistic.test
+AbstractStorelessUnivariateStatistic.evaluate
+Product.evaluate
+Product.clear
+Product.getResult
+Product.increment

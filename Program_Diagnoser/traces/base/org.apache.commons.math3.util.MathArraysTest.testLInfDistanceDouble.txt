@@ -1,0 +1,2 @@
+Precision.equals
+MathArrays.distanceInf

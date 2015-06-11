@@ -1,0 +1,11 @@
+DSCompiler.convertIndex
+DSCompiler.getPartialDerivativeOrders
+DSCompiler.compileSizes
+DSCompiler.compileLowerIndirection
+DSCompiler.getPartialDerivativeIndex
+DSCompiler.compileDerivativesIndirection
+DSCompiler.compileCompositionIndirection
+DSCompiler.getCompiler
+DSCompiler.getFreeParameters
+DSCompiler.compileMultiplicationIndirection
+DSCompiler.getSize

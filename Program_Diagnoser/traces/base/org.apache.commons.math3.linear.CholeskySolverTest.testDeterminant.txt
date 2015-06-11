@@ -1,0 +1,11 @@
+MathUtils.checkNotNull
+AbstractRealMatrix.isSquare
+Array2DRowRealMatrix.getRowDimension
+CholeskyDecomposition.getDeterminant
+Array2DRowRealMatrix.copyIn
+Array2DRowRealMatrix.getColumnDimension
+MatrixUtils.createRealMatrix
+Array2DRowRealMatrix.copyOut
+Array2DRowRealMatrix.setSubMatrix
+FastMath.sqrt
+Array2DRowRealMatrix.getData

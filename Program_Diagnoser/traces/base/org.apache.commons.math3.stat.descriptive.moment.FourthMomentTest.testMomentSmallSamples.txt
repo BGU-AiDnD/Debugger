@@ -1,0 +1,5 @@
+FourthMoment.increment
+SecondMoment.increment
+FirstMoment.increment
+FourthMoment.getResult
+ThirdMoment.increment

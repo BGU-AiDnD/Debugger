@@ -1,0 +1,9 @@
+Frequency.incrementValue
+Frequency.getCount
+Frequency.getSumFreq
+Frequency.toString
+Frequency.getCumFreq
+Frequency.addValue
+Frequency.getCumPct
+Frequency.getPct
+Frequency.valuesIterator

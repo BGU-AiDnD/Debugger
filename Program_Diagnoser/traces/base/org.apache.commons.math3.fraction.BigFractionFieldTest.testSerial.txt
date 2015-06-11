@@ -1,0 +1,2 @@
+BigFractionField.getInstance
+BigFractionField.readResolve

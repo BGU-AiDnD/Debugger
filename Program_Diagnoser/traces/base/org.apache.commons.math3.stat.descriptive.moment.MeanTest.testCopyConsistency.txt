@@ -1,0 +1,16 @@
+AbstractUnivariateStatistic.test
+MathUtils.checkNotNull
+FirstMoment.copy
+FastMath.random
+FirstMoment.getN
+Mean.copy
+Precision.equals
+AbstractStorelessUnivariateStatistic.incrementAll
+Mean.increment
+AbstractUnivariateStatistic.getDataRef
+Precision.equalsIncludingNaN
+FirstMoment.increment
+Mean.getN
+AbstractStorelessUnivariateStatistic.equals
+Mean.getResult
+AbstractUnivariateStatistic.setData

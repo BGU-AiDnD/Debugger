@@ -1,0 +1,10 @@
+DerivativeStructure.rootN
+FastMath.exp
+DSCompiler.rootN
+FastMath.pow
+DSCompiler.getCompiler
+DerivativeStructure.getReal
+DSCompiler.getSize
+FastMath.sqrt
+FastMath.log
+DSCompiler.compose

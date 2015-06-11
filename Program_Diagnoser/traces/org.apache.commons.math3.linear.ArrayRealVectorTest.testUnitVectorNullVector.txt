@@ -1,0 +1,5 @@
+ExceptionContext.addMessage
+RealVector.unitVector
+ArrayRealVector.getNorm
+FastMath.sqrt
+ArgUtils.flatten

@@ -1,0 +1,4 @@
+FastMath.exp
+FastMath.pow
+FastMath.log
+Gamma.digamma

@@ -1,0 +1,4 @@
+ArrayRealVector.checkVectorDimensions
+ArrayRealVector.getDistance
+RealVector.checkIndex
+FastMath.sqrt

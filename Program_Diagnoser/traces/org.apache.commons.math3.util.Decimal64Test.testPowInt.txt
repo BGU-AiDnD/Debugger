@@ -1,0 +1,3 @@
+Decimal64.getReal
+FastMath.pow
+Decimal64.pow

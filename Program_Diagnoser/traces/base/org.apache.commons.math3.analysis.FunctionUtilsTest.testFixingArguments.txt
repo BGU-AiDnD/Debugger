@@ -1,0 +1,8 @@
+Power.value
+Multiply.value
+FunctionUtils.fix1stArgument
+FastMath.exp
+FastMath.pow
+FunctionUtils.fix2ndArgument
+Pow.value
+FastMath.log

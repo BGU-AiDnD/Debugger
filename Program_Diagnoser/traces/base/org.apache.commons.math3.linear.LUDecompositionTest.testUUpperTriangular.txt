@@ -1,0 +1,15 @@
+MathUtils.checkNotNull
+MatrixUtils.checkMatrixIndex
+AbstractRealMatrix.isSquare
+Array2DRowRealMatrix.getRowDimension
+Array2DRowRealMatrix.getEntry
+Array2DRowRealMatrix.copyOut
+Array2DRowRealMatrix.setSubMatrix
+Array2DRowRealMatrix.setEntry
+MatrixUtils.checkColumnIndex
+MatrixUtils.checkRowIndex
+Array2DRowRealMatrix.copyIn
+Array2DRowRealMatrix.getColumnDimension
+MatrixUtils.createRealMatrix
+LUDecomposition.getU
+Array2DRowRealMatrix.getData

@@ -1,0 +1,17 @@
+DSCompiler.subtract
+DSCompiler.checkCompatibility
+DSCompiler.getPartialDerivativeIndex
+DerivativeStructure.add
+DerivativeStructure.multiply
+DerivativeStructure.getReal
+FieldVector3D.distanceSq
+DerivativeStructure.subtract
+DerivativeStructure.getPartialDerivative
+DSCompiler.add
+Vector3D.getX
+Vector3D.getY
+DSCompiler.getCompiler
+Vector3D.getZ
+DSCompiler.getFreeParameters
+DSCompiler.getSize
+DSCompiler.multiply

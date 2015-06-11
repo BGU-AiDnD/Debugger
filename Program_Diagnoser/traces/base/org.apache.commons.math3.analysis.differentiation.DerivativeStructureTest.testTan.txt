@@ -1,0 +1,10 @@
+FastMath.tan
+DSCompiler.tan
+FastMath.polySine
+DerivativeStructure.tan
+DSCompiler.getCompiler
+FastMath.polyCosine
+DerivativeStructure.getReal
+DSCompiler.getSize
+FastMath.tanQ
+DSCompiler.compose

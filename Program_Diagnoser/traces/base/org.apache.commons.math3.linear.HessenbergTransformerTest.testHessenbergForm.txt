@@ -1,0 +1,17 @@
+MathUtils.checkNotNull
+MatrixUtils.checkMatrixIndex
+HessenbergTransformer.transform
+AbstractRealMatrix.isSquare
+Array2DRowRealMatrix.getRowDimension
+Array2DRowRealMatrix.getEntry
+Array2DRowRealMatrix.copyOut
+Precision.equals
+Array2DRowRealMatrix.setSubMatrix
+MatrixUtils.checkColumnIndex
+HessenbergTransformer.getH
+MatrixUtils.checkRowIndex
+Array2DRowRealMatrix.copyIn
+Array2DRowRealMatrix.getColumnDimension
+MatrixUtils.createRealMatrix
+FastMath.sqrt
+Array2DRowRealMatrix.getData

@@ -1,0 +1,11 @@
+Dfp.getRadixDigits
+Dfp.round
+FastMath.exp
+DfpField.getRoundingMode
+FastMath.cosh
+DfpField.split
+MersenneTwister.setSeed
+BitsStreamGenerator.clear
+FastMath.sinh
+DfpField.getRadixDigits
+DfpField.setIEEEFlagsBits

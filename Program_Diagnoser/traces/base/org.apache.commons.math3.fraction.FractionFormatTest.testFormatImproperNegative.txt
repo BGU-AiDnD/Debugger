@@ -1,0 +1,11 @@
+FractionFormat.getImproperInstance
+AbstractFormat.getNumeratorFormat
+AbstractFormat.getDenominatorFormat
+Fraction.getNumerator
+ProperFractionFormat.setWholeFormat
+FractionFormat.format
+FractionFormat.getProperInstance
+ProperFractionFormat.format
+ProperFractionFormat.getWholeFormat
+AbstractFormat.getDefaultNumberFormat
+Fraction.getDenominator

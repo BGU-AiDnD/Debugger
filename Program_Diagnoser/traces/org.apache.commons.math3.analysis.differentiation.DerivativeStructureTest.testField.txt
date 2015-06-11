@@ -1,0 +1,10 @@
+DerivativeStructure.getValue
+DerivativeStructure.getPartialDerivative
+DerivativeStructure.getField
+DSCompiler.getPartialDerivativeIndex
+DSCompiler.getOrder
+DerivativeStructure.getOrder
+DSCompiler.getCompiler
+DSCompiler.getFreeParameters
+DSCompiler.getSize
+DerivativeStructure.getFreeParameters

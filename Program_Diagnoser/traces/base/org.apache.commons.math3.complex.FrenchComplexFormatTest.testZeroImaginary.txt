@@ -1,0 +1,3 @@
+ComplexFormat.getRealFormat
+CompositeFormat.formatDouble
+ComplexFormat.format

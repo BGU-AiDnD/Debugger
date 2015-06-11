@@ -1,0 +1,4 @@
+ExceptionContext.addMessage
+ArrayRealVector.getDimension
+ArgUtils.flatten
+ArrayRealVector.getEntry

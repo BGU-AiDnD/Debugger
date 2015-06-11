@@ -1,0 +1,3 @@
+FastMath.atan2
+FastMath.doubleHighPart
+FastMath.atan

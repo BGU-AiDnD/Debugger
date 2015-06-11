@@ -1,0 +1,8 @@
+VectorFormat.parseCoordinates
+CompositeFormat.parseNextCharacter
+CompositeFormat.parseAndIgnoreWhitespace
+CompositeFormat.parseFixedstring
+CompositeFormat.parseNumber
+Vector3DFormat.parse
+Vector3D.equals
+Vector3D.isNaN

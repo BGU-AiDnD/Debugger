@@ -1,0 +1,11 @@
+Vector3D.getNorm
+ExceptionContext.addMessage
+FastMath.doubleHighPart
+FastMath.atan
+Vector3D.crossProduct
+Vector3D.dotProduct
+Vector3D.angle
+FastMath.sqrt
+ArgUtils.flatten
+FastMath.asin
+FastMath.acos

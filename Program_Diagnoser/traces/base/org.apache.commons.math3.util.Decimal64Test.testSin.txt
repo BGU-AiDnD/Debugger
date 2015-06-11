@@ -1,0 +1,6 @@
+FastMath.sinQ
+Decimal64.getReal
+FastMath.polySine
+FastMath.sin
+Decimal64.sin
+FastMath.polyCosine

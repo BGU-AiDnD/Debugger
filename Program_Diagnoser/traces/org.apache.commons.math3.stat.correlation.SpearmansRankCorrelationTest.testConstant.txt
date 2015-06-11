@@ -1,0 +1,14 @@
+SimpleRegression.getSlope
+NaturalRanking.getNanStrategy
+PearsonsCorrelation.correlation
+NaturalRanking.resolveTie
+SimpleRegression.getR
+SimpleRegression.getTotalSumSquares
+NaturalRanking.fill
+NaturalRanking.rank
+SimpleRegression.addData
+SimpleRegression.getSumSquaredErrors
+SpearmansCorrelation.correlation
+NaturalRanking.getNanPositions
+FastMath.sqrt
+SimpleRegression.getRSquare

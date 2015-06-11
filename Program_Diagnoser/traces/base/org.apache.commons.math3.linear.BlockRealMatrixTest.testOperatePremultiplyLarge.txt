@@ -1,0 +1,12 @@
+MatrixUtils.checkMatrixIndex
+BlockRealMatrix.multiply
+MatrixUtils.checkColumnIndex
+BlockRealMatrix.getColumnDimension
+BlockRealMatrix.blockWidth
+MatrixUtils.checkRowIndex
+BlockRealMatrix.setEntry
+BlockRealMatrix.preMultiply
+MatrixUtils.checkMultiplicationCompatible
+BlockRealMatrix.createBlocksLayout
+BlockRealMatrix.getRowDimension
+BlockRealMatrix.getRow

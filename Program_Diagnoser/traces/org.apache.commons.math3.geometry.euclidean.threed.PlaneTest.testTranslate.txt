@@ -1,0 +1,15 @@
+Vector3D.getNorm
+Vector3D.crossProduct
+Vector3D.dotProduct
+Plane.setNormal
+Plane.contains
+Plane.getNormal
+Plane.getOffset
+Plane.getV
+Plane.getU
+Vector3D.add
+Plane.setFrame
+Plane.translate
+Vector3D.orthogonal
+Vector3D.subtract
+FastMath.sqrt

@@ -1,0 +1,5 @@
+Precision.equalsIncludingNaN
+Max.getN
+AbstractStorelessUnivariateStatistic.equals
+Max.getResult
+Precision.equals

@@ -1,0 +1,10 @@
+MathUtils.checkNotNull
+MatrixUtils.checkMatrixIndex
+AbstractRealMatrix.equals
+Array2DRowRealMatrix.getRowDimension
+MatrixUtils.checkColumnIndex
+Array2DRowRealMatrix.getEntry
+MatrixUtils.checkRowIndex
+Array2DRowRealMatrix.copyIn
+Array2DRowRealMatrix.getColumnDimension
+Array2DRowRealMatrix.setSubMatrix

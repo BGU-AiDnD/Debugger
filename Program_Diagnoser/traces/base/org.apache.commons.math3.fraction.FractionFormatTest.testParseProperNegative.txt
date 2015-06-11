@@ -1,0 +1,17 @@
+MathUtils.copySign
+AbstractFormat.parseNextCharacter
+AbstractFormat.getNumeratorFormat
+AbstractFormat.getDenominatorFormat
+MathIllegalStateException.getContext
+Fraction.getNumerator
+ProperFractionFormat.setWholeFormat
+FractionFormat.parse
+AbstractFormat.parseAndIgnoreWhitespace
+ProperFractionFormat.parse
+FractionFormat.getProperInstance
+ProperFractionFormat.getWholeFormat
+AbstractFormat.getDefaultNumberFormat
+Fraction.getDenominator
+FractionFormat.getImproperInstance
+ExceptionContext.addMessage
+ArgUtils.flatten

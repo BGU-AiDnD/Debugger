@@ -1,0 +1,9 @@
+SumOfSquares.getResult
+AbstractStorelessUnivariateStatistic.hashCode
+Precision.equalsIncludingNaN
+AbstractStorelessUnivariateStatistic.equals
+SumOfSquares.getN
+MathUtils.hash
+Precision.equals
+SumOfSquares.clear
+SumOfSquares.increment

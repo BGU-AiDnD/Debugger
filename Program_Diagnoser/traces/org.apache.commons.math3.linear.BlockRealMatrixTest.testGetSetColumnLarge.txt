@@ -1,0 +1,11 @@
+MatrixUtils.checkMatrixIndex
+BlockRealMatrix.getEntry
+MatrixUtils.checkColumnIndex
+BlockRealMatrix.getColumnDimension
+BlockRealMatrix.blockWidth
+MatrixUtils.checkRowIndex
+BlockRealMatrix.setColumn
+BlockRealMatrix.blockHeight
+BlockRealMatrix.createBlocksLayout
+BlockRealMatrix.getColumn
+BlockRealMatrix.getRowDimension

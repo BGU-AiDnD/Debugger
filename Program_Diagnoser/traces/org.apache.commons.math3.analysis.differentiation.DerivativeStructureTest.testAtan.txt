@@ -1,0 +1,7 @@
+DerivativeStructure.atan
+FastMath.atan
+DSCompiler.atan
+DSCompiler.getCompiler
+DerivativeStructure.getReal
+DSCompiler.getSize
+DSCompiler.compose

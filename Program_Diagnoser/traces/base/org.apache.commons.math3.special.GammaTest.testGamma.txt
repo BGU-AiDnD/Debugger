@@ -1,0 +1,3 @@
+FastMath.exp
+FastMath.pow
+FastMath.log

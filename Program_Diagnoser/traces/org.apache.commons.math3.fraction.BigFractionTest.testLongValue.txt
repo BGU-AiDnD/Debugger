@@ -1,0 +1,2 @@
+MathUtils.checkNotNull
+BigFraction.longValue

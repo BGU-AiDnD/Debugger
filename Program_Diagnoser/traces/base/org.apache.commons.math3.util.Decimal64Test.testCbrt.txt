@@ -1,0 +1,2 @@
+Decimal64.cbrt
+Decimal64.getReal

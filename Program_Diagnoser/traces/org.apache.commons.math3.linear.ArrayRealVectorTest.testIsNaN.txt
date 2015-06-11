@@ -1,0 +1,2 @@
+ArrayRealVector.isNaN
+ArrayRealVector.setEntry

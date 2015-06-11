@@ -1,0 +1,7 @@
+PolynomialFunction.getCoefficients
+PolynomialSplineFunction.getN
+ExceptionContext.addMessage
+PolynomialSplineFunction.getPolynomials
+PolynomialSplineFunction.getKnots
+ArgUtils.flatten
+MathArrays.checkOrder

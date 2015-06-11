@@ -1,0 +1,6 @@
+MathUtils.checkNotNull
+PolynomialsUtils.createHermitePolynomial
+PolynomialFunction.toString
+PolynomialsUtils.buildPolynomial
+FastMath.sqrt
+BigFraction.doubleValue

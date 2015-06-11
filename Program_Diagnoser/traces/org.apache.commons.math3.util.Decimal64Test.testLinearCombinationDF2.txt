@@ -1,0 +1,10 @@
+Decimal64.getField
+Decimal64Field.getRuntimeClass
+BitsStreamGenerator.nextDouble
+Decimal64Field.getInstance
+Decimal64.linearCombination
+Decimal64.getReal
+Decimal64Field.getZero
+BitsStreamGenerator.clear
+AbstractWell.setSeed
+Well1024a.next

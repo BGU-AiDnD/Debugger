@@ -1,0 +1,7 @@
+DerivativeStructure.pow
+FastMath.pow
+DSCompiler.getCompiler
+DerivativeStructure.getReal
+DSCompiler.getSize
+DSCompiler.pow
+DSCompiler.compose

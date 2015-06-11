@@ -1,0 +1,2 @@
+Vector3D.equals
+Vector3D.isNaN

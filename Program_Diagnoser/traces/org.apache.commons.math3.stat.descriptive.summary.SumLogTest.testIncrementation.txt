@@ -1,0 +1,7 @@
+SumOfLogs.increment
+AbstractStorelessUnivariateStatistic.incrementAll
+AbstractUnivariateStatistic.test
+SumOfLogs.getResult
+SumOfLogs.getN
+FastMath.log
+SumOfLogs.clear

@@ -1,0 +1,6 @@
+AbstractUnivariateStatistic.test
+SemiVariance.evaluate
+Mean.evaluate
+AbstractUnivariateStatistic.evaluate
+Sum.evaluate
+SemiVariance.setVarianceDirection

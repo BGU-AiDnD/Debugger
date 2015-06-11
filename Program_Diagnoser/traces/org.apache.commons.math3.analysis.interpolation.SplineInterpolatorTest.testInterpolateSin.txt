@@ -1,0 +1,14 @@
+MathUtils.checkNotNull
+PolynomialSplineFunction.getPolynomials
+Precision.equals
+PolynomialFunction.value
+PolynomialFunction.differentiate
+PolynomialFunction.getCoefficients
+PolynomialFunction.polynomialDerivative
+PolynomialFunction.derivative
+Precision.equalsIncludingNaN
+PolynomialFunction.evaluate
+SplineInterpolator.interpolate
+PolynomialSplineFunction.value
+FastMath.sqrt
+MathArrays.checkOrder

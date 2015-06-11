@@ -1,0 +1,5 @@
+MathUtils.checkNotNull
+PolynomialFunction.getCoefficients
+PolynomialFunction.subtract
+PolynomialFunction.toString
+PolynomialFunction.degree

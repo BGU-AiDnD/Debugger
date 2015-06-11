@@ -1,0 +1,3 @@
+FastMath.expm1
+Decimal64.getReal
+Decimal64.expm1

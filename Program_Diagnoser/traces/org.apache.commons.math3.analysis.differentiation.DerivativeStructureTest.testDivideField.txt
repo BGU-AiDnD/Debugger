@@ -1,0 +1,10 @@
+DerivativeStructure.divide
+DSCompiler.checkCompatibility
+DSCompiler.getCompiler
+FastMath.pow
+DerivativeStructure.getReal
+DSCompiler.getSize
+DSCompiler.divide
+DSCompiler.pow
+DSCompiler.multiply
+DSCompiler.compose

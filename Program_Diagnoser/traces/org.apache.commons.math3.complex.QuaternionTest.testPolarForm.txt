@@ -1,0 +1,13 @@
+FastMath.atan
+Rotation.getAxis
+Rotation.getAngle
+Quaternion.normalize
+Precision.equals
+FastMath.asin
+Quaternion.getNorm
+FastMath.doubleHighPart
+Vector3D.getX
+Vector3D.getY
+Vector3D.getZ
+FastMath.sqrt
+FastMath.acos

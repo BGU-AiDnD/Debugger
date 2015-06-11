@@ -1,0 +1,13 @@
+MathUtils.checkNotNull
+Array2DRowRealMatrix.getRowDimension
+ArrayRealVector.getDataRef
+Precision.equals
+ArrayRealVector.toArray
+Array2DRowRealMatrix.setSubMatrix
+Array2DRowRealMatrix.operate
+ExceptionContext.addMessage
+Precision.equalsIncludingNaN
+Array2DRowRealMatrix.copyIn
+Array2DRowRealMatrix.getColumnDimension
+AbstractRealMatrix.operate
+ArgUtils.flatten

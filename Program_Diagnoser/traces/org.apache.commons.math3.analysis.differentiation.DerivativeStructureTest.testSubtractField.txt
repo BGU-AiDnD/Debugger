@@ -1,0 +1,6 @@
+DSCompiler.subtract
+DerivativeStructure.subtract
+DSCompiler.checkCompatibility
+DSCompiler.getCompiler
+DerivativeStructure.getReal
+DSCompiler.getSize

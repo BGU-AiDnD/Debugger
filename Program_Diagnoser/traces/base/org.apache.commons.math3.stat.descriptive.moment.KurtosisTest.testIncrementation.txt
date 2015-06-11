@@ -1,0 +1,16 @@
+AbstractUnivariateStatistic.test
+Kurtosis.clear
+Kurtosis.increment
+FourthMoment.clear
+ThirdMoment.clear
+FirstMoment.getN
+Kurtosis.getN
+Kurtosis.getResult
+AbstractStorelessUnivariateStatistic.incrementAll
+FourthMoment.increment
+SecondMoment.increment
+FirstMoment.increment
+FourthMoment.getResult
+ThirdMoment.increment
+FirstMoment.clear
+SecondMoment.clear

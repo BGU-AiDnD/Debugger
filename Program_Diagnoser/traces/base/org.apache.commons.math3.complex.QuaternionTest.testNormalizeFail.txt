@@ -1,0 +1,5 @@
+Quaternion.getNorm
+ExceptionContext.addMessage
+Quaternion.normalize
+FastMath.sqrt
+ArgUtils.flatten

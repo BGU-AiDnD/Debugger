@@ -1,0 +1,11 @@
+OpenIntToDoubleHashMap.findInsertionIndex
+OpenIntToDoubleHashMap.containsKey
+OpenIntToDoubleHashMap.put
+OpenIntToDoubleHashMap.computeCapacity
+RealVector.checkIndex
+OpenIntToDoubleHashMap.shouldGrowTable
+OpenMapRealVector.getEntry
+OpenMapRealVector.isDefaultValue
+OpenIntToDoubleHashMap.get
+OpenIntToDoubleHashMap.hashOf
+OpenMapRealVector.getDimension

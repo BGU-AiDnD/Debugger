@@ -1,0 +1,15 @@
+MatrixUtils.checkMatrixIndex
+BlockRealMatrix.copy
+AbstractRealMatrix.hashCode
+AbstractRealMatrix.equals
+BlockRealMatrix.blockWidth
+BlockRealMatrix.getColumnDimension
+MathUtils.hash
+BlockRealMatrix.blockHeight
+BlockRealMatrix.toBlocksLayout
+BlockRealMatrix.transpose
+BlockRealMatrix.getEntry
+MatrixUtils.checkColumnIndex
+MatrixUtils.checkRowIndex
+BlockRealMatrix.createBlocksLayout
+BlockRealMatrix.getRowDimension

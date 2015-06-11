@@ -1,0 +1,6 @@
+ArrayRealVector.dotProduct
+ArrayRealVector.checkVectorDimensions
+ExceptionContext.addMessage
+ArrayRealVector.set
+RealVector.projection
+ArgUtils.flatten

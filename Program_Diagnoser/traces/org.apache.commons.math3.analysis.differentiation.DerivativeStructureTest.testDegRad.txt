@@ -1,0 +1,11 @@
+DSCompiler.subtract
+DerivativeStructure.subtract
+DerivativeStructure.getPartialDerivative
+FastMath.doubleHighPart
+DSCompiler.checkCompatibility
+DSCompiler.getPartialDerivativeIndex
+DerivativeStructure.toRadians
+DSCompiler.getCompiler
+DSCompiler.getFreeParameters
+DSCompiler.getSize
+DerivativeStructure.toDegrees

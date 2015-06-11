@@ -1,0 +1,12 @@
+BlockRealMatrix.getRowVector
+BlockRealMatrix.toBlocksLayout
+ExceptionContext.addMessage
+ArrayRealVector.isNaN
+BlockRealMatrix.blockWidth
+MatrixUtils.checkRowIndex
+ArrayRealVector.getDimension
+BlockRealMatrix.blockHeight
+ArgUtils.flatten
+BlockRealMatrix.getRowDimension
+ArrayRealVector.equals
+ArrayRealVector.getEntry

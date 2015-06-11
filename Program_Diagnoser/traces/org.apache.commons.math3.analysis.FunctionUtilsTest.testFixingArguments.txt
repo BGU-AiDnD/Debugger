@@ -1,0 +1,12 @@
+Power.value
+Multiply.value
+FunctionUtils.fix1stArgument
+FastMath.exp
+FastMathLiteralArrays.loadExpIntA
+FastMathLiteralArrays.loadExpFracB
+FastMathLiteralArrays.loadExpIntB
+FastMath.pow
+FastMathLiteralArrays.loadExpFracA
+FunctionUtils.fix2ndArgument
+Pow.value
+FastMath.log

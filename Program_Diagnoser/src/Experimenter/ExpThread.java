@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ForkJoinTask;
+import java.util.Arrays;
 
 import Diagnoser.Diagnosis;
 import Diagnoser.Dynamic_Spectrum;
@@ -371,7 +372,7 @@ public class ExpThread extends ForkJoinTask<Object>{
 			print_result(iterator.next().toString());
 	}
 	
-	
+		
 	/*********************************************************
 	 * Precision calculation for a single diagnosis.
 	 * @param diagnosis - Diagnosis.
@@ -384,13 +385,16 @@ public class ExpThread extends ForkJoinTask<Object>{
 		int[] diag = diagnosis.get_diag();
 		int TP = 0;
 		int FP = 0;
-		
+
 		//process
 		for(int i=0; i < diag.length; i++)
 			if (OrderAssist.binarySearch(has_bugs, diag[i])) //bug-list is assumed to be sorted!!
 				TP++;
 			else FP++;
 		
+		
+		//System.out.println(Arrays.toString(diag)+" "+Arrays.toString(has_bugs)+" TP "+TP+" FP "+FP);
+
 		//wrap
 		result = (double)TP / (TP + FP);
 		return result;
@@ -475,7 +479,8 @@ public class ExpThread extends ForkJoinTask<Object>{
 		while(iterator.hasNext()){
 			current_diag = iterator.next();
 			
-			precisions[i] = current_diag.get_prob()*precision(current_diag, has_bugs);
+			double precisionDiag = precision(current_diag, has_bugs);
+			precisions[i] = current_diag.get_prob()*precisionDiag;
 			i++;
 		}//end while
 		
@@ -523,11 +528,14 @@ public class ExpThread extends ForkJoinTask<Object>{
 			b++;
 		}
 		
+		
+		has_bugs = get_bugged_comps();
+		System.out.println(Arrays.toString(has_bugs));
 		//process
 		int i = 0;
 		while(iterator.hasNext()){
 			current_diag = iterator.next();
-			recalls[i] = recall(current_diag, has_bugs);
+			recalls[i] = current_diag.get_prob()*recall(current_diag, has_bugs);
 			i++;
 		}//end while
 		
@@ -535,7 +543,7 @@ public class ExpThread extends ForkJoinTask<Object>{
 		for(int d=0; d < recalls.length; d++)
 			result += recalls[d];
 		
-		result /= recalls.length;	
+		//result /= recalls.length;	
 		
 		//wrap
 		return result;
@@ -589,6 +597,7 @@ public class ExpThread extends ForkJoinTask<Object>{
 		LinkedList<Diagnosis> list_diags=new LinkedList<Diagnosis>(diags);
 		
 		//calculate factors
+		System.out.println(Arrays.deepToString(list_diags.toArray()));
 		double precision 		= precision(list_diags);
 		double recall 			= recall(list_diags);
 		double best_diag_prob 	= TDP.current_state.get_best_diag().get_prob();

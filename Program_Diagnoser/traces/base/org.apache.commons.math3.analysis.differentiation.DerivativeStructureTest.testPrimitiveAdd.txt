@@ -1,0 +1,14 @@
+DerivativeStructure.getValue
+DSCompiler.compileSizes
+DSCompiler.compileLowerIndirection
+DSCompiler.getPartialDerivativeIndex
+DSCompiler.compileCompositionIndirection
+DerivativeStructure.add
+DSCompiler.convertIndex
+DerivativeStructure.getPartialDerivative
+DSCompiler.compileDerivativesIndirection
+DSCompiler.getCompiler
+DSCompiler.compileMultiplicationIndirection
+DSCompiler.getFreeParameters
+DSCompiler.getSize
+DerivativeStructure.getFreeParameters

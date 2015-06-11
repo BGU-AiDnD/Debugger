@@ -1,0 +1,4 @@
+RealVector.getNorm
+RealVector.iterator
+RealVector.checkIndex
+FastMath.sqrt

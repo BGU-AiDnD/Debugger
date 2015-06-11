@@ -1,0 +1,4 @@
+Vector3D.add
+Vector3D.getX
+Vector3D.getY
+Vector3D.getZ

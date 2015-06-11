@@ -1,0 +1,10 @@
+PolynomialFunction.add
+MathUtils.checkNotNull
+PolynomialFunction.differentiate
+PolynomialFunction.multiply
+PolynomialFunction.getCoefficients
+PolynomialFunction.polynomialDerivative
+PolynomialsUtils.createChebyshevPolynomial
+PolynomialsUtils.buildPolynomial
+FastMath.sqrt
+BigFraction.doubleValue

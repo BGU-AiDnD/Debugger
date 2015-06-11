@@ -1,0 +1,2 @@
+ArrayRealVector.getLInfDistance
+ArrayRealVector.checkVectorDimensions

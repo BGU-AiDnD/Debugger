@@ -1,0 +1,13 @@
+AbstractUnivariateStatistic.test
+MathUtils.checkNotNull
+FastMath.random
+Sum.increment
+Sum.getN
+Sum.copy
+Precision.equals
+AbstractStorelessUnivariateStatistic.incrementAll
+Sum.getResult
+AbstractUnivariateStatistic.getDataRef
+Precision.equalsIncludingNaN
+AbstractStorelessUnivariateStatistic.equals
+AbstractUnivariateStatistic.setData

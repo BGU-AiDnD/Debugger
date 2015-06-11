@@ -1,0 +1,17 @@
+Vector3D.getNorm
+FastMath.cosQ
+FastMath.atan
+Vector3D.dotProduct
+FastMath.cos
+Vector3D.scalarMultiply
+Vector3D.add
+FastMath.sinQ
+FastMath.polySine
+FastMath.doubleHighPart
+Vector3D.orthogonal
+FastMath.sin
+FastMath.polyCosine
+Vector3D.angle
+Vector3D.normalize
+FastMath.sqrt
+FastMath.acos

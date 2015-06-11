@@ -1,0 +1,17 @@
+OpenIntToDoubleHashMap.containsKey
+OpenIntToDoubleHashMap.remove
+OpenMapRealMatrix.getColumnDimension
+OpenIntToDoubleHashMap.shouldGrowTable
+OpenIntToDoubleHashMap.get
+AbstractRealMatrix.getNorm
+OpenIntToDoubleHashMap.findInsertionIndex
+OpenMapRealMatrix.getEntry
+OpenMapRealMatrix.getRowDimension
+OpenMapRealMatrix.setEntry
+MatrixUtils.checkColumnIndex
+OpenIntToDoubleHashMap.put
+OpenIntToDoubleHashMap.computeCapacity
+MatrixUtils.checkRowIndex
+AbstractRealMatrix.walkInColumnOrder
+OpenMapRealMatrix.computeKey
+OpenIntToDoubleHashMap.hashOf

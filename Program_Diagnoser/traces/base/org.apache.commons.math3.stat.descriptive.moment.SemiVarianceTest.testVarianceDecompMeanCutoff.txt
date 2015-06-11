@@ -1,0 +1,11 @@
+AbstractUnivariateStatistic.test
+StatUtils.variance
+SemiVariance.evaluate
+Mean.evaluate
+Sum.evaluate
+AbstractUnivariateStatistic.evaluate
+Variance.clear
+SemiVariance.setVarianceDirection
+FirstMoment.clear
+Variance.evaluate
+SecondMoment.clear

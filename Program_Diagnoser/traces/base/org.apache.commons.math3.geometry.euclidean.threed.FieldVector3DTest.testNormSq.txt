@@ -1,0 +1,12 @@
+DerivativeStructure.getPartialDerivative
+DSCompiler.checkCompatibility
+DSCompiler.add
+DSCompiler.getPartialDerivativeIndex
+FieldVector3D.getNormSq
+DerivativeStructure.add
+DSCompiler.getCompiler
+DerivativeStructure.multiply
+DerivativeStructure.getReal
+DSCompiler.getFreeParameters
+DSCompiler.getSize
+DSCompiler.multiply

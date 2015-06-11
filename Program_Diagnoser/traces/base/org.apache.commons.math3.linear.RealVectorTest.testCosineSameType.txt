@@ -1,0 +1,7 @@
+RealVector.checkVectorDimensions
+RealVector.getNorm
+RealVector.dotProduct
+RealVector.iterator
+RealVector.checkIndex
+RealVector.cosine
+FastMath.sqrt

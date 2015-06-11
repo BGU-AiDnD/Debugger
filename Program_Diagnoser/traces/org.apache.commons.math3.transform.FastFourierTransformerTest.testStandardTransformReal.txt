@@ -1,0 +1,12 @@
+FastMath.cosQ
+FastMath.sinQ
+FastMath.polySine
+FastFourierTransformer.normalizeTransformedData
+FastMath.cos
+FastFourierTransformer.transformInPlace
+TransformUtils.createComplexArray
+FastMath.sin
+FastFourierTransformer.bitReversalShuffle2
+FastMath.polyCosine
+FastMath.sqrt
+FastFourierTransformer.transform

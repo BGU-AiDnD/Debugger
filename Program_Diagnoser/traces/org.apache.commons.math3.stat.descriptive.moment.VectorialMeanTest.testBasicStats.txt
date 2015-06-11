@@ -1,0 +1,8 @@
+VectorialMean.increment
+Mean.increment
+VectorialMean.getN
+FirstMoment.getN
+FirstMoment.increment
+Mean.getN
+Mean.getResult
+VectorialMean.getResult

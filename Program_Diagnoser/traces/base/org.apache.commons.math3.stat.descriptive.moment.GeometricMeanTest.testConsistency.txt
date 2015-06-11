@@ -1,0 +1,14 @@
+AbstractUnivariateStatistic.test
+GeometricMean.clear
+FastMath.exp
+SumOfLogs.evaluate
+GeometricMean.evaluate
+FastMath.log
+SumOfLogs.clear
+AbstractStorelessUnivariateStatistic.incrementAll
+SumOfLogs.increment
+SumOfLogs.getResult
+AbstractStorelessUnivariateStatistic.evaluate
+SumOfLogs.getN
+GeometricMean.getResult
+GeometricMean.increment

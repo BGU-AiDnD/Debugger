@@ -1,0 +1,3 @@
+MathUtils.checkNotNull
+Complex.abs
+FastMath.sqrt

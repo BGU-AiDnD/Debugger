@@ -1,0 +1,5 @@
+FastMath.exp
+FastMath.pow
+FastMath.sqrt
+Logistic.value
+FastMath.log

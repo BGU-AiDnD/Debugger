@@ -1,0 +1,2 @@
+FastMath.exp
+FastMath.sqrt

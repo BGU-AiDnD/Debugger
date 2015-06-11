@@ -1,0 +1,8 @@
+AbstractListChromosome.getLength
+BinaryChromosome.checkValidity
+GeneticAlgorithm.getRandomGenerator
+NPointCrossover.crossover
+NPointCrossover.mate
+AbstractListChromosome.getRepresentation
+ChromosomePair.getFirst
+ChromosomePair.getSecond

@@ -1,0 +1,11 @@
+DerivativeStructure.getValue
+DerivativeStructure.getPartialDerivative
+DSCompiler.checkCompatibility
+DerivativeStructure.getExponent
+DerivativeStructure.abs
+DSCompiler.getPartialDerivativeIndex
+DSCompiler.getCompiler
+DSCompiler.getFreeParameters
+DSCompiler.getSize
+DerivativeStructure.negate
+DerivativeStructure.hypot

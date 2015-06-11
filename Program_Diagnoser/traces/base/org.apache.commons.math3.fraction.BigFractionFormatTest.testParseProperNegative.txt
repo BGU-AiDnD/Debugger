@@ -1,0 +1,15 @@
+BigFractionFormat.parseNextBigInteger
+MathUtils.checkNotNull
+AbstractFormat.parseNextCharacter
+ProperBigFractionFormat.parse
+MathIllegalStateException.getContext
+BigFractionFormat.getProperInstance
+ProperBigFractionFormat.setWholeFormat
+BigFractionFormat.getImproperInstance
+AbstractFormat.parseAndIgnoreWhitespace
+AbstractFormat.getDefaultNumberFormat
+ExceptionContext.addMessage
+BigFraction.getDenominatorAsInt
+BigFraction.getNumeratorAsInt
+BigFractionFormat.parse
+ArgUtils.flatten

@@ -1,0 +1,7 @@
+OrderedCrossover.mate
+AbstractListChromosome.getLength
+GeneticAlgorithm.getRandomGenerator
+OrderedCrossover.crossover
+AbstractListChromosome.getRepresentation
+ChromosomePair.getFirst
+ChromosomePair.getSecond

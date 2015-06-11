@@ -1,0 +1,9 @@
+RealVector.checkVectorDimensions
+RealVector.getNorm
+ExceptionContext.addMessage
+RealVector.dotProduct
+RealVector.iterator
+RealVector.checkIndex
+RealVector.cosine
+FastMath.sqrt
+ArgUtils.flatten

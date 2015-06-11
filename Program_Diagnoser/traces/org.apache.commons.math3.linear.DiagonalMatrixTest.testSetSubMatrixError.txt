@@ -1,0 +1,11 @@
+MathUtils.checkNotNull
+DiagonalMatrix.getRowDimension
+ExceptionContext.addMessage
+DiagonalMatrix.getColumnDimension
+MatrixUtils.checkColumnIndex
+MatrixUtils.checkRowIndex
+AbstractRealMatrix.setSubMatrix
+DiagonalMatrix.ensureZero
+Precision.equals
+ArgUtils.flatten
+DiagonalMatrix.setEntry

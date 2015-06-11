@@ -1,0 +1,7 @@
+ExceptionContext.addMessage
+DSCompiler.getOrder
+DerivativeStructure.getOrder
+DSCompiler.getCompiler
+DerivativeStructure.compose
+DSCompiler.getSize
+ArgUtils.flatten

@@ -1,0 +1,12 @@
+MathUtils.checkNotNull
+BaseAbstractUnivariateSolver.solve
+BaseAbstractUnivariateSolver.setup
+Incrementor.setMaximalCount
+BaseAbstractUnivariateSolver.getMin
+BaseSecantSolver.solve
+BaseAbstractUnivariateSolver.getMax
+BaseSecantSolver.doSolve
+Incrementor.incrementCount
+Incrementor.resetCount
+BaseAbstractUnivariateSolver.computeObjectiveValue
+BaseAbstractUnivariateSolver.incrementEvaluationCount

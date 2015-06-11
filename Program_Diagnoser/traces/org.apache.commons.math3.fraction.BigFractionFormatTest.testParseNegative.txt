@@ -1,0 +1,12 @@
+BigFractionFormat.parseNextBigInteger
+MathUtils.checkNotNull
+AbstractFormat.parseNextCharacter
+ProperBigFractionFormat.parse
+BigFraction.getDenominatorAsInt
+BigFractionFormat.getProperInstance
+BigFraction.getNumeratorAsInt
+ProperBigFractionFormat.setWholeFormat
+BigFractionFormat.getImproperInstance
+BigFractionFormat.parse
+AbstractFormat.parseAndIgnoreWhitespace
+AbstractFormat.getDefaultNumberFormat

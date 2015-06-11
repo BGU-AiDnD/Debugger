@@ -1,0 +1,2 @@
+Beta.sumDeltaMinusDeltaSum
+Beta.deltaMinusDeltaSum

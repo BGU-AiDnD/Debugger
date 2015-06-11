@@ -1,0 +1,9 @@
+DerivativeStructure.getValue
+DerivativeStructure.getPartialDerivative
+DSCompiler.getPartialDerivativeIndex
+DSCompiler.getOrder
+DSCompiler.getCompiler
+DSCompiler.getFreeParameters
+DSCompiler.getSize
+DerivativeStructure.signum
+FastMath.signum

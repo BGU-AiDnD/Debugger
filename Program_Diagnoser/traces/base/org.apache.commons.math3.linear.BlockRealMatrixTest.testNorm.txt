@@ -1,0 +1,4 @@
+BlockRealMatrix.toBlocksLayout
+BlockRealMatrix.getNorm
+BlockRealMatrix.blockWidth
+BlockRealMatrix.blockHeight

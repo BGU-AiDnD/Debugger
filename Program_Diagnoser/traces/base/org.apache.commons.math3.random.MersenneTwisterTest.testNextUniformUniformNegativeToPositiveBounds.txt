@@ -1,0 +1,2 @@
+MersenneTwister.setSeed
+BitsStreamGenerator.clear

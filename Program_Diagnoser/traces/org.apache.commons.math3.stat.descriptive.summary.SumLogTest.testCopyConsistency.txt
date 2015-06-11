@@ -1,0 +1,14 @@
+AbstractUnivariateStatistic.test
+MathUtils.checkNotNull
+FastMath.random
+Precision.equals
+FastMath.log
+AbstractStorelessUnivariateStatistic.incrementAll
+SumOfLogs.increment
+SumOfLogs.getResult
+AbstractUnivariateStatistic.getDataRef
+Precision.equalsIncludingNaN
+AbstractStorelessUnivariateStatistic.equals
+SumOfLogs.getN
+AbstractUnivariateStatistic.setData
+SumOfLogs.copy

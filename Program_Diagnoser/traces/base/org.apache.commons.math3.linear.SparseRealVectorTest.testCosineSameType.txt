@@ -1,0 +1,17 @@
+RealVector.getNorm
+OpenIntToDoubleHashMap.containsKey
+RealVector.dotProduct
+OpenIntToDoubleHashMap.shouldGrowTable
+RealVector.cosine
+OpenMapRealVector.isDefaultValue
+OpenIntToDoubleHashMap.get
+RealVector.checkVectorDimensions
+OpenIntToDoubleHashMap.findInsertionIndex
+RealVector.iterator
+OpenIntToDoubleHashMap.put
+OpenIntToDoubleHashMap.computeCapacity
+RealVector.checkIndex
+OpenMapRealVector.getEntry
+FastMath.sqrt
+OpenIntToDoubleHashMap.hashOf
+OpenMapRealVector.getDimension

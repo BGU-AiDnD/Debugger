@@ -1,0 +1,3 @@
+ArrayRealVector.setEntry
+ArrayRealVector.getDimension
+ArrayRealVector.getEntry

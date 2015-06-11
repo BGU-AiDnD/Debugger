@@ -1,0 +1,14 @@
+FastMath.exp
+ChiSquareTest.chiSquareDataSetsComparison
+FastMath.log1p
+ChiSquaredDistribution.cumulativeProbability
+FastMath.log
+GammaDistribution.cumulativeProbability
+MathArrays.checkNonNegative
+ChiSquareTest.chiSquareTestDataSetsComparison
+FastMath.pow
+Gamma.regularizedGammaP
+BitsStreamGenerator.clear
+AbstractWell.setSeed
+FastMath.sqrt
+Gamma.logGamma

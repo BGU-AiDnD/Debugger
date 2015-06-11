@@ -1,0 +1,10 @@
+StatUtils.geometricMean
+AbstractUnivariateStatistic.test
+ExceptionContext.addMessage
+AbstractStorelessUnivariateStatistic.evaluate
+FastMath.exp
+StatUtils.sumLog
+SumOfLogs.evaluate
+ArgUtils.flatten
+GeometricMean.evaluate
+FastMath.log

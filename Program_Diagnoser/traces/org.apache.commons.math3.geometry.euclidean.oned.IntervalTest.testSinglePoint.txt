@@ -1,0 +1,2 @@
+Interval.getSize
+Interval.getBarycenter

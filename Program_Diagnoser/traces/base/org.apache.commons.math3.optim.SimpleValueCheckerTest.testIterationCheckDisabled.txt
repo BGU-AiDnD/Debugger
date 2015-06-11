@@ -1,0 +1,4 @@
+AbstractConvergenceChecker.getRelativeThreshold
+Pair.getValue
+SimpleValueChecker.converged
+AbstractConvergenceChecker.getAbsoluteThreshold

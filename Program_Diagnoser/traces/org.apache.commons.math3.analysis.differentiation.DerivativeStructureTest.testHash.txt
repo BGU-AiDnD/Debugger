@@ -1,0 +1,8 @@
+DSCompiler.getOrder
+DerivativeStructure.getOrder
+MathUtils.hash
+DSCompiler.getCompiler
+DSCompiler.getFreeParameters
+DSCompiler.getSize
+DerivativeStructure.getFreeParameters
+DerivativeStructure.hashCode

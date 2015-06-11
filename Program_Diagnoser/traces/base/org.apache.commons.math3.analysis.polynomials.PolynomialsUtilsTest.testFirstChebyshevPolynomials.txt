@@ -1,0 +1,12 @@
+BigFraction.subtract
+MathUtils.checkNotNull
+BigFraction.equals
+BigFraction.multiply
+BigFraction.reduce
+PolynomialsUtils.createChebyshevPolynomial
+PolynomialFunction.toString
+PolynomialsUtils.buildPolynomial
+FastMath.sqrt
+BigFraction.add
+PolynomialsUtils.computeUpToDegree
+BigFraction.doubleValue

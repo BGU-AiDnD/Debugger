@@ -1,0 +1,3 @@
+TransformerMap.equals
+TransformerMap.putTransformer
+DefaultTransformer.equals

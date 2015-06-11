@@ -1,0 +1,12 @@
+DerivativeStructure.sin
+FastMath.sinQ
+FastMath.cosQ
+FastMath.polySine
+FastMath.cos
+FastMath.sin
+DSCompiler.getCompiler
+FastMath.polyCosine
+DerivativeStructure.getReal
+DSCompiler.getSize
+DSCompiler.sin
+DSCompiler.compose

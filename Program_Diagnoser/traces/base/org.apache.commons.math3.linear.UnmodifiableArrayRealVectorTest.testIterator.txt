@@ -1,0 +1,8 @@
+RealVector.unmodifiableRealVector
+ExceptionContext.addMessage
+RealVector.iterator
+ArrayRealVector.copy
+ArrayRealVector.setEntry
+ArrayRealVector.getDimension
+ArgUtils.flatten
+ArrayRealVector.getEntry

@@ -1,0 +1,10 @@
+BlockRealMatrix.toBlocksLayout
+ExceptionContext.addMessage
+MatrixUtils.checkColumnIndex
+BlockRealMatrix.blockWidth
+BlockRealMatrix.getColumnDimension
+BlockRealMatrix.setColumn
+BlockRealMatrix.blockHeight
+BlockRealMatrix.getColumn
+ArgUtils.flatten
+BlockRealMatrix.getRowDimension

@@ -1,0 +1,8 @@
+LoessInterpolator.checkAllFiniteReal
+MathUtils.checkFinite
+LoessInterpolator.nextNonzero
+LoessInterpolator.tricube
+LoessInterpolator.smooth
+FastMath.sqrt
+LoessInterpolator.updateBandwidthInterval
+MathArrays.checkOrder

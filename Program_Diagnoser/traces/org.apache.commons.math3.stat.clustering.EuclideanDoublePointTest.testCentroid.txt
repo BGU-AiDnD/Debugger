@@ -1,0 +1,2 @@
+EuclideanDoublePoint.getPoint
+EuclideanDoublePoint.centroidOf

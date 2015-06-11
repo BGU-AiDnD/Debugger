@@ -1,0 +1,12 @@
+MathUtils.checkNotNull
+FirstMoment.copy
+AbstractUnivariateStatistic.test
+Skewness.evaluate
+Mean.evaluate
+AbstractUnivariateStatistic.getDataRef
+AbstractStorelessUnivariateStatistic.evaluate
+SecondMoment.copy
+Sum.evaluate
+AbstractUnivariateStatistic.setData
+ThirdMoment.copy
+FastMath.sqrt

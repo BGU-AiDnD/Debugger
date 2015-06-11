@@ -1,0 +1,5 @@
+Covariance.covariance
+AbstractUnivariateStatistic.test
+Mean.evaluate
+AbstractStorelessUnivariateStatistic.evaluate
+Sum.evaluate

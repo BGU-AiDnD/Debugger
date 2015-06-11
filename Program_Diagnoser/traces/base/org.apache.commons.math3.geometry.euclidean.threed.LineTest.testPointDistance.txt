@@ -1,0 +1,7 @@
+Line.distance
+Vector3D.getNorm
+Vector3D.getNormSq
+Vector3D.dotProduct
+Vector3D.subtract
+FastMath.sqrt
+Line.reset

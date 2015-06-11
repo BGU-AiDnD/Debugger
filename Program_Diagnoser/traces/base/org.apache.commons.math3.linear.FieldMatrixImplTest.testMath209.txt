@@ -1,0 +1,13 @@
+MathUtils.checkNotNull
+Array2DRowFieldMatrix.getRowDimension
+Array2DRowFieldMatrix.operate
+FractionField.getInstance
+Fraction.add
+ArithmeticUtils.addAndCheck
+FractionField.getZero
+AbstractFieldMatrix.extractField
+AbstractFieldMatrix.getField
+Fraction.addSub
+Array2DRowFieldMatrix.getColumnDimension
+FractionField.getRuntimeClass
+Fraction.equals

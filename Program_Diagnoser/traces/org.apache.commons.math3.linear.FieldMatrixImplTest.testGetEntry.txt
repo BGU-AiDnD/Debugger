@@ -1,0 +1,15 @@
+Array2DRowFieldMatrix.getRowDimension
+FractionField.getInstance
+AbstractFieldMatrix.checkColumnIndex
+Array2DRowFieldMatrix.setSubMatrix
+Array2DRowFieldMatrix.copyIn
+FractionField.getZero
+ExceptionContext.addMessage
+AbstractFieldMatrix.extractField
+AbstractFieldMatrix.getField
+Array2DRowFieldMatrix.getColumnDimension
+FractionField.getRuntimeClass
+AbstractFieldMatrix.checkRowIndex
+Fraction.equals
+ArgUtils.flatten
+Array2DRowFieldMatrix.getEntry

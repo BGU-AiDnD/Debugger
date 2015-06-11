@@ -1,0 +1,4 @@
+Erf.erfInv
+FastMath.sqrt
+Erf.erfcInv
+FastMath.log

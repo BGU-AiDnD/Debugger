@@ -1,0 +1,7 @@
+FastMath.cosQ
+FastMath.sinQ
+Decimal64.getReal
+FastMath.polySine
+FastMath.cos
+FastMath.polyCosine
+Decimal64.cos

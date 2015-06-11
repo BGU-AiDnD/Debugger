@@ -1,0 +1,14 @@
+RealVector.getNorm
+OpenIntToDoubleHashMap.containsKey
+OpenMapRealVector.isDefaultValue
+OpenIntToDoubleHashMap.get
+ExceptionContext.addMessage
+RealVector.iterator
+OpenIntToDoubleHashMap.computeCapacity
+RealVector.checkIndex
+OpenMapRealVector.unitize
+OpenMapRealVector.getEntry
+FastMath.sqrt
+ArgUtils.flatten
+OpenMapRealVector.getDimension
+OpenIntToDoubleHashMap.hashOf

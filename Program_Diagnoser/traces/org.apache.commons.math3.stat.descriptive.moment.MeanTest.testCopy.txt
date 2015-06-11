@@ -1,0 +1,9 @@
+MathUtils.checkNotNull
+FirstMoment.copy
+AbstractUnivariateStatistic.test
+Mean.evaluate
+AbstractUnivariateStatistic.getDataRef
+AbstractStorelessUnivariateStatistic.evaluate
+Sum.evaluate
+Mean.copy
+AbstractUnivariateStatistic.setData

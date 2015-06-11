@@ -1,0 +1,13 @@
+Variance.copy
+MathUtils.checkNotNull
+FirstMoment.copy
+AbstractUnivariateStatistic.test
+Mean.evaluate
+SecondMoment.copy
+Sum.evaluate
+Variance.clear
+Variance.evaluate
+AbstractUnivariateStatistic.getDataRef
+AbstractUnivariateStatistic.setData
+FirstMoment.clear
+SecondMoment.clear

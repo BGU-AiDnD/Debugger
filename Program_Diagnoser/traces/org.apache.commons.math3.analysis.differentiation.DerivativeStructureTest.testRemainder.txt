@@ -1,0 +1,11 @@
+DSCompiler.subtract
+DerivativeStructure.subtract
+DSCompiler.remainder
+DerivativeStructure.getPartialDerivative
+DSCompiler.checkCompatibility
+DSCompiler.getPartialDerivativeIndex
+DSCompiler.getCompiler
+DerivativeStructure.remainder
+DerivativeStructure.multiply
+DSCompiler.getFreeParameters
+DSCompiler.getSize

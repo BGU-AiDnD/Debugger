@@ -1,0 +1,14 @@
+Variance.getN
+FirstMoment.getN
+MathUtils.hash
+Variance.clear
+Precision.equals
+AbstractStorelessUnivariateStatistic.hashCode
+SecondMoment.increment
+Precision.equalsIncludingNaN
+FirstMoment.increment
+AbstractStorelessUnivariateStatistic.equals
+Variance.getResult
+Variance.increment
+FirstMoment.clear
+SecondMoment.clear

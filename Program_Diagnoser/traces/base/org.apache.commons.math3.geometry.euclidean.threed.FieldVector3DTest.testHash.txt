@@ -1,0 +1,11 @@
+DSCompiler.getOrder
+FieldVector3D.hashCode
+FieldVector3D.isNaN
+DerivativeStructure.getOrder
+MathUtils.hash
+DSCompiler.getCompiler
+DerivativeStructure.getReal
+DSCompiler.getFreeParameters
+DSCompiler.getSize
+DerivativeStructure.getFreeParameters
+DerivativeStructure.hashCode

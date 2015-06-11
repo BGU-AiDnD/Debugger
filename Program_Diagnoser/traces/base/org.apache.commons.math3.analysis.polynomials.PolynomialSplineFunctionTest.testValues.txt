@@ -1,0 +1,11 @@
+PolynomialFunction.differentiate
+MathUtils.checkNotNull
+PolynomialFunction.polynomialDerivative
+ExceptionContext.addMessage
+PolynomialFunction.evaluate
+PolynomialSplineFunction.polynomialSplineDerivative
+PolynomialSplineFunction.value
+ArgUtils.flatten
+PolynomialSplineFunction.derivative
+MathArrays.checkOrder
+PolynomialFunction.value

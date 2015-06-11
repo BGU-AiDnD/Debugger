@@ -1,0 +1,8 @@
+MathUtils.checkNotNull
+ExceptionContext.addMessage
+BigFraction.multiply
+BigFraction.getDenominatorAsInt
+BigFraction.divide
+BigFraction.getNumeratorAsInt
+ArgUtils.flatten
+BigFraction.reciprocal

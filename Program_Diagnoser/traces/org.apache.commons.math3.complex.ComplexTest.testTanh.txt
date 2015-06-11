@@ -1,0 +1,9 @@
+FastMath.sinQ
+FastMath.cosQ
+FastMath.polySine
+FastMath.exp
+FastMath.cos
+FastMath.sin
+FastMath.cosh
+FastMath.polyCosine
+FastMath.sinh

@@ -1,0 +1,16 @@
+Incrementor.setMaximalCount
+BrentOptimizer.doOptimize
+UnivariatePointValuePair.getValue
+Precision.equals
+Incrementor.resetCount
+BaseAbstractUnivariateOptimizer.getMax
+BrentOptimizer.best
+BaseAbstractUnivariateOptimizer.getConvergenceChecker
+UnivariatePointValuePair.getPoint
+BaseAbstractUnivariateOptimizer.optimize
+Incrementor.incrementCount
+BaseAbstractUnivariateOptimizer.computeObjectiveValue
+BaseAbstractUnivariateOptimizer.getMin
+FastMath.sqrt
+BaseAbstractUnivariateOptimizer.getStartValue
+BaseAbstractUnivariateOptimizer.getGoalType

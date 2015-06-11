@@ -1,0 +1,14 @@
+ArrayRealVector.dotProduct
+ArrayRealVector.checkVectorDimensions
+RealVector.dotProduct
+ArrayRealVector.getDimension
+RealVector.checkVectorDimensions
+Multiply.value
+RealVector.iterator
+RealVector.mapMultiply
+RealVector.checkIndex
+RealVector.mapToSelf
+FunctionUtils.fix2ndArgument
+RealVector.projection
+ArrayRealVector.getEntry
+RealVector.mapMultiplyToSelf

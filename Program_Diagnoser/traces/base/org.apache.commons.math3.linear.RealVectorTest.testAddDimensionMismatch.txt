@@ -1,0 +1,4 @@
+RealVector.checkVectorDimensions
+ExceptionContext.addMessage
+RealVector.add
+ArgUtils.flatten

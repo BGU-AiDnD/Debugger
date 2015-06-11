@@ -1,0 +1,7 @@
+Well19937c.next
+BitsStreamGenerator.nextDouble
+Pair.getValue
+Pair.getKey
+EnumeratedDistribution.sample
+BitsStreamGenerator.clear
+AbstractWell.setSeed

@@ -1,0 +1,16 @@
+MathUtils.checkNotNull
+PolynomialsUtils.createHermitePolynomial
+BigFraction.equals
+BigFraction.multiply
+PolynomialsUtils.buildPolynomial
+BigFraction.add
+PolynomialFunction.add
+BigFraction.subtract
+PolynomialFunction.differentiate
+PolynomialFunction.multiply
+PolynomialFunction.getCoefficients
+PolynomialFunction.polynomialDerivative
+BigFraction.reduce
+FastMath.sqrt
+BigFraction.doubleValue
+PolynomialsUtils.computeUpToDegree

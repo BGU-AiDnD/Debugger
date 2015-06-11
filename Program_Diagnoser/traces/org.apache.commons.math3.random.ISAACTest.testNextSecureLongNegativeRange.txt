@@ -1,0 +1,8 @@
+ISAACRandom.setState
+ISAACRandom.isaac3
+ISAACRandom.setSeed
+ISAACRandom.isaac2
+ISAACRandom.initState
+ISAACRandom.shuffle
+BitsStreamGenerator.clear
+ISAACRandom.isaac

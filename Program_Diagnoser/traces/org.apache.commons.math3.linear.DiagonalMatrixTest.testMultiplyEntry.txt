@@ -1,0 +1,8 @@
+MathUtils.checkNotNull
+DiagonalMatrix.getRowDimension
+MatrixUtils.checkMatrixIndex
+DiagonalMatrix.getColumnDimension
+MatrixUtils.checkColumnIndex
+DiagonalMatrix.multiplyEntry
+MatrixUtils.checkRowIndex
+DiagonalMatrix.getEntry

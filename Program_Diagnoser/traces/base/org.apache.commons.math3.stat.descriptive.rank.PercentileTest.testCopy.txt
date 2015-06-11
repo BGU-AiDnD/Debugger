@@ -1,0 +1,13 @@
+MathUtils.checkNotNull
+AbstractUnivariateStatistic.test
+Percentile.medianOf3
+Percentile.setData
+Percentile.partition
+AbstractUnivariateStatistic.evaluate
+Percentile.copy
+Percentile.evaluate
+Percentile.setQuantile
+AbstractUnivariateStatistic.getDataRef
+Percentile.insertionSort
+AbstractUnivariateStatistic.setData
+Percentile.select

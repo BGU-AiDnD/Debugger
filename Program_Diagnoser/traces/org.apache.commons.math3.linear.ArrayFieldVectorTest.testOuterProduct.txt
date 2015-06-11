@@ -1,0 +1,12 @@
+MathUtils.checkNotNull
+FractionField.getZero
+Array2DRowFieldMatrix.getRowDimension
+Array2DRowFieldMatrix.getColumnDimension
+FractionField.getInstance
+Fraction.doubleValue
+FractionField.getRuntimeClass
+AbstractFieldMatrix.checkRowIndex
+AbstractFieldMatrix.checkColumnIndex
+Array2DRowFieldMatrix.setEntry
+ArrayFieldVector.outerProduct
+Array2DRowFieldMatrix.getEntry

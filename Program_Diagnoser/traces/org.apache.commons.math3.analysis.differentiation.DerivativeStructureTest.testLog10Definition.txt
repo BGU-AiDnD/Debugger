@@ -1,0 +1,16 @@
+DSCompiler.subtract
+DerivativeStructure.log10
+DerivativeStructure.divide
+DSCompiler.checkCompatibility
+DSCompiler.getPartialDerivativeIndex
+FastMath.log10
+DSCompiler.log10
+FastMath.log
+DSCompiler.log
+DerivativeStructure.subtract
+DerivativeStructure.log
+DerivativeStructure.getPartialDerivative
+DSCompiler.getCompiler
+DSCompiler.getFreeParameters
+DSCompiler.getSize
+DSCompiler.compose

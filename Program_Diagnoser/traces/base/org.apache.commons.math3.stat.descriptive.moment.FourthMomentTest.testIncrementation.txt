@@ -1,0 +1,12 @@
+AbstractStorelessUnivariateStatistic.incrementAll
+AbstractUnivariateStatistic.test
+FourthMoment.increment
+SecondMoment.increment
+FourthMoment.clear
+ThirdMoment.clear
+FirstMoment.getN
+FirstMoment.increment
+FourthMoment.getResult
+ThirdMoment.increment
+FirstMoment.clear
+SecondMoment.clear

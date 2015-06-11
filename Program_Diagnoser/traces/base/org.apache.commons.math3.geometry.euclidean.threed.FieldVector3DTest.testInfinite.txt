@@ -1,0 +1,5 @@
+FieldVector3D.isInfinite
+FieldVector3D.isNaN
+DSCompiler.getCompiler
+DerivativeStructure.getReal
+DSCompiler.getSize

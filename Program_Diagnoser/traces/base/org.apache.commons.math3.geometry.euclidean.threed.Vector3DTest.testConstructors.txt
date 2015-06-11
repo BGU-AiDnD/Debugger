@@ -1,0 +1,10 @@
+FastMath.cosQ
+FastMath.sinQ
+FastMath.polySine
+Vector3D.getX
+FastMath.cos
+Vector3D.getY
+FastMath.sin
+Vector3D.getZ
+FastMath.polyCosine
+FastMath.sqrt

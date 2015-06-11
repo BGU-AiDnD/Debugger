@@ -1,0 +1,12 @@
+FastMath.atan2
+Vector3D.getDelta
+Vector3D.getNorm
+Vector3D.getAlpha
+FastMath.sinQ
+FastMath.doubleHighPart
+FastMath.atan
+FastMath.polySine
+FastMath.sin
+FastMath.polyCosine
+FastMath.sqrt
+FastMath.asin

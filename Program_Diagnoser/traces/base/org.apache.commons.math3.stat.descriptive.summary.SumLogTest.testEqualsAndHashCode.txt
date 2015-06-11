@@ -1,0 +1,10 @@
+SumOfLogs.increment
+AbstractStorelessUnivariateStatistic.hashCode
+SumOfLogs.getResult
+Precision.equalsIncludingNaN
+AbstractStorelessUnivariateStatistic.equals
+MathUtils.hash
+SumOfLogs.getN
+Precision.equals
+FastMath.log
+SumOfLogs.clear

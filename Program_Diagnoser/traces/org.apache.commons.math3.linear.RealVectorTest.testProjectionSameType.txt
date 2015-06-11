@@ -1,0 +1,10 @@
+RealVector.checkVectorDimensions
+Multiply.value
+RealVector.dotProduct
+RealVector.iterator
+RealVector.mapMultiply
+RealVector.checkIndex
+RealVector.mapToSelf
+FunctionUtils.fix2ndArgument
+RealVector.projection
+RealVector.mapMultiplyToSelf

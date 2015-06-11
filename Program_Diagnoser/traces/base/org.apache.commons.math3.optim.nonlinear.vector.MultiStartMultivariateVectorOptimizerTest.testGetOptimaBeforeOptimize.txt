@@ -1,0 +1,4 @@
+MultiStartMultivariateVectorOptimizer.getOptima
+BaseOptimizer.getConvergenceChecker
+MultivariateVectorOptimizer.getTarget
+MultiStartMultivariateVectorOptimizer.getPairComparator

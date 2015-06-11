@@ -1,0 +1,9 @@
+RealVector.getNorm
+Divide.value
+RealVector.iterator
+RealVector.checkIndex
+RealVector.mapToSelf
+RealVector.unitize
+FunctionUtils.fix2ndArgument
+FastMath.sqrt
+RealVector.mapDivideToSelf

@@ -1,0 +1,5 @@
+ExceptionContext.addMessage
+VectorialCovariance.increment
+DimensionMismatchException.getDimension
+MathIllegalNumberException.getArgument
+ArgUtils.flatten

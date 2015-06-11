@@ -1,0 +1,5 @@
+Decimal64.getReal
+FastMath.atan
+Decimal64.asin
+FastMath.sqrt
+FastMath.asin

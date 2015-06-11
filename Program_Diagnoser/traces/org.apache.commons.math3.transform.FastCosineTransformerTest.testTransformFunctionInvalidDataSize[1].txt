@@ -1,0 +1,12 @@
+ExceptionContext.addMessage
+FastCosineTransformer.transform
+FastMath.sinQ
+FastMath.cosQ
+FastMath.polySine
+Sinc.value
+FunctionUtils.sample
+FastMath.sin
+FastMath.polyCosine
+FastCosineTransformer.fct
+FastMath.sqrt
+ArgUtils.flatten

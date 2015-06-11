@@ -1,0 +1,17 @@
+Rotation.applyTo
+Vector3D.getNorm
+Vector3D.crossProduct
+Vector3D.dotProduct
+Rotation.getAngle
+MathUtils.normalizeAngle
+Vector3D.scalarMultiply
+ExceptionContext.addMessage
+Vector3D.getX
+Vector3D.getY
+Vector3D.getZ
+Vector3D.orthogonal
+Vector3D.subtract
+FastMath.sqrt
+ArgUtils.flatten
+Vector3D.negate
+FastMath.acos

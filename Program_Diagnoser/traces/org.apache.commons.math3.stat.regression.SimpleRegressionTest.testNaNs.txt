@@ -1,0 +1,13 @@
+SimpleRegression.getSlope
+SimpleRegression.getRegressionSumSquares
+SimpleRegression.getR
+SimpleRegression.getSlopeStdErr
+SimpleRegression.getTotalSumSquares
+SimpleRegression.getMeanSquareError
+SimpleRegression.predict
+SimpleRegression.addData
+SimpleRegression.getSumSquaredErrors
+SimpleRegression.getInterceptStdErr
+SimpleRegression.getIntercept
+FastMath.sqrt
+SimpleRegression.getRSquare

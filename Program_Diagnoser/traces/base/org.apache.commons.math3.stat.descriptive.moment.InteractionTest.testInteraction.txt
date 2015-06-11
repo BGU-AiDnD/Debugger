@@ -1,0 +1,11 @@
+Skewness.getResult
+FourthMoment.increment
+SecondMoment.increment
+FirstMoment.getN
+FirstMoment.increment
+Mean.getResult
+Kurtosis.getResult
+FourthMoment.getResult
+Variance.getResult
+ThirdMoment.increment
+FastMath.sqrt

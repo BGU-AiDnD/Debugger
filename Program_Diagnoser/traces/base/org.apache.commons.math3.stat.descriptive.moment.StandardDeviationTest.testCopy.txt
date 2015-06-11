@@ -1,0 +1,16 @@
+MathUtils.checkNotNull
+Variance.copy
+FirstMoment.copy
+AbstractUnivariateStatistic.test
+Mean.evaluate
+SecondMoment.copy
+Sum.evaluate
+Variance.clear
+StandardDeviation.copy
+Variance.evaluate
+AbstractUnivariateStatistic.getDataRef
+AbstractUnivariateStatistic.setData
+StandardDeviation.evaluate
+FirstMoment.clear
+FastMath.sqrt
+SecondMoment.clear

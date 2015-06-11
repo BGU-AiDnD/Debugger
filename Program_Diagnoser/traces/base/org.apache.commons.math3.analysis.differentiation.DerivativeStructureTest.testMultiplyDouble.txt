@@ -1,0 +1,4 @@
+DSCompiler.getCompiler
+DerivativeStructure.multiply
+DerivativeStructure.getReal
+DSCompiler.getSize

@@ -1,0 +1,4 @@
+PointVectorValuePair.getValue
+Pair.getValue
+Pair.getKey
+PointVectorValuePair.writeReplace

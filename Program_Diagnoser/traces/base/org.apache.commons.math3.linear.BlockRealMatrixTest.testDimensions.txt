@@ -1,0 +1,6 @@
+BlockRealMatrix.toBlocksLayout
+AbstractRealMatrix.isSquare
+BlockRealMatrix.blockWidth
+BlockRealMatrix.getColumnDimension
+BlockRealMatrix.blockHeight
+BlockRealMatrix.getRowDimension

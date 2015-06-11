@@ -1,0 +1,16 @@
+Vector3D.getNorm
+FastMath.atan
+Vector3D.crossProduct
+Vector3D.dotProduct
+Plane.setNormal
+Plane.getNormal
+FastMath.asin
+Vector3D.add
+Plane.setFrame
+FastMath.doubleHighPart
+Vector3D.orthogonal
+Vector3D.subtract
+Plane.isSimilarTo
+Vector3D.angle
+FastMath.sqrt
+FastMath.acos

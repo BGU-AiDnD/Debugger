@@ -1,0 +1,2 @@
+MathArrays.checkNonNegative
+FastMath.sqrt

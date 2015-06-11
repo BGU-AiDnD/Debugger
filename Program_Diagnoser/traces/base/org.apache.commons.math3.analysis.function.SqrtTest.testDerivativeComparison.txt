@@ -1,0 +1,11 @@
+DerivativeStructure.rootN
+DerivativeStructure.getPartialDerivative
+DSCompiler.getPartialDerivativeIndex
+DerivativeStructure.sqrt
+DSCompiler.rootN
+DSCompiler.getCompiler
+Sqrt.value
+DSCompiler.getFreeParameters
+DSCompiler.getSize
+FastMath.sqrt
+DSCompiler.compose

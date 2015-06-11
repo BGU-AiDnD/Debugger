@@ -1,0 +1,12 @@
+AbstractUnivariateStatistic.test
+StatUtils.variance
+Percentile.setQuantile
+Mean.evaluate
+AbstractStorelessUnivariateStatistic.evaluate
+StatUtils.mean
+Sum.evaluate
+Variance.clear
+FirstMoment.clear
+Variance.evaluate
+SecondMoment.clear
+GaussianRandomGenerator.nextNormalizedDouble

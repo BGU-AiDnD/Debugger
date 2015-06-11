@@ -1,0 +1,14 @@
+BigFractionFormat.parseNextBigInteger
+MathUtils.checkNotNull
+AbstractFormat.parseNextCharacter
+BigFraction.equals
+ProperBigFractionFormat.parse
+BigFractionFormat.getProperInstance
+BigFraction.bigDecimalValue
+ProperBigFractionFormat.setWholeFormat
+BigFractionFormat.getImproperInstance
+AbstractFormat.parseAndIgnoreWhitespace
+AbstractFormat.getDefaultNumberFormat
+BigFraction.reduce
+BigFractionFormat.parse
+BigFraction.doubleValue

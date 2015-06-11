@@ -1,0 +1,8 @@
+UniformCrossover.mate
+UniformCrossover.crossover
+AbstractListChromosome.getLength
+BinaryChromosome.checkValidity
+GeneticAlgorithm.getRandomGenerator
+AbstractListChromosome.getRepresentation
+ChromosomePair.getFirst
+ChromosomePair.getSecond

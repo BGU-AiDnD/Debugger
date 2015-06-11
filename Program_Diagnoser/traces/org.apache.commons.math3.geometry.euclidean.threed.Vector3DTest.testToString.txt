@@ -1,0 +1,9 @@
+Vector3D.toString
+CompositeFormat.formatDouble
+Vector3DFormat.getInstance
+Vector3DFormat.format
+Vector3D.getX
+Vector3D.getY
+Vector3D.getZ
+VectorFormat.format
+CompositeFormat.getDefaultNumberFormat

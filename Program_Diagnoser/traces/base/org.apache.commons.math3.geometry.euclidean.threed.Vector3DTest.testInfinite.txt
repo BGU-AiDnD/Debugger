@@ -1,0 +1,2 @@
+Vector3D.isInfinite
+Vector3D.isNaN

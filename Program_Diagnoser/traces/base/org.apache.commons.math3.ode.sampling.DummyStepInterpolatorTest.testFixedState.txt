@@ -1,0 +1,8 @@
+AbstractStepInterpolator.getInterpolatedState
+EquationsMapper.extractEquationData
+EquationsMapper.getDimension
+AbstractStepInterpolator.storeTime
+AbstractStepInterpolator.setInterpolatedTime
+AbstractStepInterpolator.allocateInterpolatedArrays
+AbstractStepInterpolator.shift
+AbstractStepInterpolator.evaluateCompleteInterpolatedState

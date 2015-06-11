@@ -1,0 +1,13 @@
+BlockFieldMatrix.getRowDimension
+BlockFieldMatrix.toBlocksLayout
+FractionField.getInstance
+AbstractFieldMatrix.checkColumnIndex
+BlockFieldMatrix.blockHeight
+FractionField.getZero
+AbstractFieldMatrix.extractField
+AbstractFieldMatrix.toString
+FractionField.getRuntimeClass
+AbstractFieldMatrix.checkRowIndex
+BlockFieldMatrix.blockWidth
+BlockFieldMatrix.getColumnDimension
+BlockFieldMatrix.getEntry

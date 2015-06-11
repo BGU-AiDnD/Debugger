@@ -1,0 +1,2 @@
+SimpleRegression.removeData
+SimpleRegression.getN

@@ -1,0 +1,9 @@
+MathUtils.checkNotNull
+Array2DRowRealMatrix.add
+Array2DRowRealMatrix.getRowDimension
+Array2DRowRealMatrix.copyIn
+Array2DRowRealMatrix.getColumnDimension
+MatrixUtils.checkAdditionCompatible
+Array2DRowRealMatrix.copyOut
+Array2DRowRealMatrix.setSubMatrix
+Array2DRowRealMatrix.getData

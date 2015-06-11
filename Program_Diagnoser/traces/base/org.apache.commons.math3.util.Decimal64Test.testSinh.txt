@@ -1,0 +1,5 @@
+FastMath.expm1
+Decimal64.getReal
+FastMath.exp
+Decimal64.sinh
+FastMath.sinh

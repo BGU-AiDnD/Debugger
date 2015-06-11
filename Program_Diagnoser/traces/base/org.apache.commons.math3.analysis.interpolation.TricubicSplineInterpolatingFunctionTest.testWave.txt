@@ -1,0 +1,10 @@
+TricubicSplineInterpolatingFunction.searchIndex
+FastMath.sinQ
+FastMath.cosQ
+FastMath.polySine
+TricubicSplineInterpolatingFunction.value
+FastMath.cos
+FastMath.sin
+FastMath.polyCosine
+TricubicSplineInterpolatingFunction.computeSplineCoefficients
+MathArrays.checkOrder

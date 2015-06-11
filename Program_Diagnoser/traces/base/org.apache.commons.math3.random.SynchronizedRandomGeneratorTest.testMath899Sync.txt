@@ -1,0 +1,14 @@
+BitsStreamGenerator.nextDouble
+FastMath.cosQ
+BitsStreamGenerator.nextGaussian
+FastMath.cos
+MersenneTwister.setSeed
+FastMath.log
+MersenneTwister.next
+SynchronizedRandomGenerator.nextGaussian
+FastMath.sinQ
+FastMath.polySine
+FastMath.sin
+FastMath.polyCosine
+BitsStreamGenerator.clear
+FastMath.sqrt

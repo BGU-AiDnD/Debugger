@@ -1,0 +1,16 @@
+MathUtils.checkNotNull
+PolynomialSplineFunction.polynomialSplineDerivative
+BicubicSplineInterpolator.interpolate
+BicubicSplineInterpolatingFunction.computeSplineCoefficients
+PolynomialFunction.value
+PolynomialFunction.differentiate
+PolynomialFunction.polynomialDerivative
+BicubicSplineInterpolator.nextIndex
+BicubicSplineInterpolator.previousIndex
+ExceptionContext.addMessage
+PolynomialFunction.evaluate
+SplineInterpolator.interpolate
+PolynomialSplineFunction.value
+ArgUtils.flatten
+PolynomialSplineFunction.derivative
+MathArrays.checkOrder

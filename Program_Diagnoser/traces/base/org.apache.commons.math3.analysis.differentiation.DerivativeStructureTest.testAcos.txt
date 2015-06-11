@@ -1,0 +1,10 @@
+DSCompiler.acos
+FastMath.doubleHighPart
+FastMath.atan
+DerivativeStructure.acos
+DSCompiler.getCompiler
+DerivativeStructure.getReal
+DSCompiler.getSize
+FastMath.sqrt
+FastMath.acos
+DSCompiler.compose

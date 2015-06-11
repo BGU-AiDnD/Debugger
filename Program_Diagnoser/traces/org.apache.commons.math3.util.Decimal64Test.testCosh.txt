@@ -1,0 +1,4 @@
+Decimal64.cosh
+Decimal64.getReal
+FastMath.exp
+FastMath.cosh

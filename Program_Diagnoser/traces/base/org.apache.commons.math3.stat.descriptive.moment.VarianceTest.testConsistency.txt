@@ -1,0 +1,12 @@
+AbstractStorelessUnivariateStatistic.incrementAll
+AbstractUnivariateStatistic.test
+SecondMoment.increment
+Mean.evaluate
+FirstMoment.increment
+Sum.evaluate
+Variance.clear
+Variance.getResult
+Variance.increment
+FirstMoment.clear
+Variance.evaluate
+SecondMoment.clear

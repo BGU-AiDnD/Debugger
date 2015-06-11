@@ -1,0 +1,17 @@
+AbstractUnivariateStatistic.test
+StatUtils.variance
+Mean.evaluate
+StatUtils.mean
+Sum.evaluate
+SumOfSquares.evaluate
+Variance.clear
+Variance.evaluate
+StatUtils.min
+Min.evaluate
+StatUtils.sum
+AbstractStorelessUnivariateStatistic.evaluate
+Max.evaluate
+StatUtils.max
+StatUtils.sumSq
+FirstMoment.clear
+SecondMoment.clear

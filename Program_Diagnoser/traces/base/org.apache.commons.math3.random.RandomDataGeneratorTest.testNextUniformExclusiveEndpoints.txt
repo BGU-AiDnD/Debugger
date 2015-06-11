@@ -1,0 +1,4 @@
+Well19937c.next
+BitsStreamGenerator.nextDouble
+RandomDataGenerator.nextUniform
+RandomDataGenerator.getRandomGenerator

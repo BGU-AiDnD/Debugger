@@ -1,0 +1,2 @@
+MathArrays.isMonotonic
+MathArrays.checkOrder

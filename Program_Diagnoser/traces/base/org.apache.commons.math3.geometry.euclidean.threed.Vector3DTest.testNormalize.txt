@@ -1,0 +1,6 @@
+Vector3D.scalarMultiply
+Vector3D.getNorm
+ExceptionContext.addMessage
+Vector3D.normalize
+FastMath.sqrt
+ArgUtils.flatten

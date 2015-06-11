@@ -1,0 +1,7 @@
+SecondMoment.increment
+StandardDeviation.increment
+StandardDeviation.getResult
+FirstMoment.increment
+Variance.getResult
+FastMath.sqrt
+Variance.increment

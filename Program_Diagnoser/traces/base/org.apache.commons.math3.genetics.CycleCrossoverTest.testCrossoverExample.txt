@@ -1,0 +1,6 @@
+CycleCrossover.crossover
+AbstractListChromosome.getLength
+CycleCrossover.mate
+AbstractListChromosome.getRepresentation
+ChromosomePair.getFirst
+ChromosomePair.getSecond

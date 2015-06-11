@@ -1,0 +1,3 @@
+AbstractUnivariateStatistic.test
+Mean.evaluate
+Sum.evaluate

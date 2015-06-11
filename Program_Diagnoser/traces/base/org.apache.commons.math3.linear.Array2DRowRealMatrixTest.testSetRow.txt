@@ -1,0 +1,14 @@
+MathUtils.checkNotNull
+MatrixUtils.checkMatrixIndex
+Array2DRowRealMatrix.getRowDimension
+AbstractRealMatrix.setRow
+Array2DRowRealMatrix.getEntry
+Array2DRowRealMatrix.setSubMatrix
+Array2DRowRealMatrix.setEntry
+ExceptionContext.addMessage
+MatrixUtils.checkColumnIndex
+MatrixUtils.checkRowIndex
+Array2DRowRealMatrix.copyIn
+AbstractRealMatrix.getRow
+Array2DRowRealMatrix.getColumnDimension
+ArgUtils.flatten

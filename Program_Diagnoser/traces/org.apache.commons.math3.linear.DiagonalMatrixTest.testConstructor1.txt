@@ -1,0 +1,2 @@
+DiagonalMatrix.getRowDimension
+DiagonalMatrix.getColumnDimension

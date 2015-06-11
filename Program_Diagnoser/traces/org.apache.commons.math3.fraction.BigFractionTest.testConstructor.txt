@@ -1,0 +1,9 @@
+BigFraction.getDenominatorAsLong
+MathUtils.checkNotNull
+ExceptionContext.addMessage
+BigFraction.getDenominatorAsInt
+MathIllegalStateException.getContext
+BigFraction.getNumeratorAsInt
+BigFraction.getNumeratorAsLong
+ArgUtils.flatten
+BigFraction.doubleValue

@@ -1,0 +1,6 @@
+BinaryChromosome.randomBinaryRepresentation
+BinaryChromosome.checkValidity
+GeneticAlgorithm.getRandomGenerator
+ListPopulation.addChromosomes
+ListPopulation.iterator
+ListPopulation.getChromosomes

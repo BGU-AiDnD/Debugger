@@ -1,0 +1,14 @@
+AbstractRealMatrix.isSquare
+OpenIntToDoubleHashMap.containsKey
+OpenIntToDoubleHashMap.remove
+OpenMapRealMatrix.getColumnDimension
+OpenIntToDoubleHashMap.shouldGrowTable
+OpenIntToDoubleHashMap.findInsertionIndex
+OpenMapRealMatrix.getRowDimension
+OpenMapRealMatrix.setEntry
+MatrixUtils.checkColumnIndex
+OpenIntToDoubleHashMap.put
+OpenIntToDoubleHashMap.computeCapacity
+MatrixUtils.checkRowIndex
+OpenMapRealMatrix.computeKey
+OpenIntToDoubleHashMap.hashOf

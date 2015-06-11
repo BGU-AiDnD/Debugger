@@ -1,0 +1,5 @@
+AbstractUnivariateStatistic.test
+Product.evaluate
+FastMath.exp
+FastMath.pow
+FastMath.log

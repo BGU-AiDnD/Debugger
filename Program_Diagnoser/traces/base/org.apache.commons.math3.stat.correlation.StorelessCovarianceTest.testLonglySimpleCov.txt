@@ -1,0 +1,2 @@
+StorelessBivariateCovariance.increment
+StorelessBivariateCovariance.getResult

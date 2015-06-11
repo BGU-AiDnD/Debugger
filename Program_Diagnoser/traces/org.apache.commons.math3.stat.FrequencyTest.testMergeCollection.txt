@@ -1,0 +1,7 @@
+Frequency.incrementValue
+Frequency.getCount
+MathUtils.checkNotNull
+Frequency.addValue
+Frequency.getUniqueCount
+Frequency.entrySetIterator
+Frequency.merge

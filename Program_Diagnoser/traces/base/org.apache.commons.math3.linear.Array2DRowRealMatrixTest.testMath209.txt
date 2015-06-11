@@ -1,0 +1,3 @@
+Array2DRowRealMatrix.operate
+Array2DRowRealMatrix.getRowDimension
+Array2DRowRealMatrix.getColumnDimension

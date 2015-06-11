@@ -1,0 +1,10 @@
+MathUtils.checkNotNull
+SingularValueDecomposition.getSingularValues
+Array2DRowRealMatrix.getRowDimension
+Array2DRowRealMatrix.copyIn
+Array2DRowRealMatrix.getColumnDimension
+Array2DRowRealMatrix.copyOut
+MatrixUtils.createRealMatrix
+FastMath.sqrt
+Array2DRowRealMatrix.setSubMatrix
+Array2DRowRealMatrix.getData

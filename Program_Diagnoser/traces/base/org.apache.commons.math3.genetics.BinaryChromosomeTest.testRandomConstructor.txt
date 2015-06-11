@@ -1,0 +1,3 @@
+BinaryChromosome.randomBinaryRepresentation
+BinaryChromosome.checkValidity
+GeneticAlgorithm.getRandomGenerator

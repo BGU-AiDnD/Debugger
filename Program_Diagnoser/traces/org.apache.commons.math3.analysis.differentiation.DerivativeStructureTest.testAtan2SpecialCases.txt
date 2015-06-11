@@ -1,0 +1,17 @@
+DerivativeStructure.getValue
+DSCompiler.atan2
+DSCompiler.checkCompatibility
+FastMath.atan
+DSCompiler.atan
+DSCompiler.rootN
+DSCompiler.divide
+DSCompiler.pow
+FastMath.atan2
+DSCompiler.add
+DSCompiler.getCompiler
+DerivativeStructure.atan2
+FastMath.pow
+DSCompiler.getSize
+DSCompiler.multiply
+FastMath.sqrt
+DSCompiler.compose

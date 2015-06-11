@@ -1,0 +1,13 @@
+Well19937c.next
+RandomDataGenerator.shuffle
+RandomDataGenerator.nextSample
+RandomDataGenerator.nextPermutation
+BitsStreamGenerator.nextInt
+RandomDataGenerator.nextInt
+MathArrays.checkPositive
+ExceptionContext.addMessage
+MathArrays.checkNonNegative
+RandomDataGenerator.getRandomGenerator
+ChiSquareTest.chiSquare
+RandomDataGenerator.getNatural
+ArgUtils.flatten

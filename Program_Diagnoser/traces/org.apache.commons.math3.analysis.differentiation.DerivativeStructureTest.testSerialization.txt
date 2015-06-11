@@ -1,0 +1,9 @@
+DerivativeStructure.writeReplace
+DerivativeStructure.getPartialDerivative
+DSCompiler.getPartialDerivativeIndex
+DSCompiler.getOrder
+DerivativeStructure.getOrder
+DSCompiler.getCompiler
+DSCompiler.getFreeParameters
+DSCompiler.getSize
+DerivativeStructure.getFreeParameters

@@ -1,0 +1,4 @@
+ExceptionContext.addMessage
+RealVector.addToEntry
+RealVector.checkIndex
+ArgUtils.flatten

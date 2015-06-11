@@ -1,0 +1,7 @@
+ResizableDoubleArray.checkContractExpand
+FastMath.pow
+BitsStreamGenerator.clear
+ResizableDoubleArray.addElement
+AbstractWell.setSeed
+FastMath.log
+ResizableDoubleArray.getElements

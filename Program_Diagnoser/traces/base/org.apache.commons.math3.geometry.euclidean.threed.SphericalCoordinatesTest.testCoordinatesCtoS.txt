@@ -1,0 +1,9 @@
+FastMath.atan2
+Vector3D.getNorm
+Vector3D.getAlpha
+SphericalCoordinates.getR
+SphericalCoordinates.getTheta
+Vector3D.getZ
+SphericalCoordinates.getPhi
+FastMath.sqrt
+FastMath.acos

@@ -1,0 +1,2 @@
+Decimal64.equals
+Decimal64.reciprocal

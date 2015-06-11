@@ -1,0 +1,7 @@
+AbstractStorelessUnivariateStatistic.incrementAll
+AbstractUnivariateStatistic.test
+Sum.getResult
+AbstractStorelessUnivariateStatistic.evaluate
+Sum.increment
+Sum.evaluate
+Sum.clear

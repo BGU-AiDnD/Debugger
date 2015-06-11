@@ -1,0 +1,3 @@
+ArrayRealVector.checkVectorDimensions
+ArrayRealVector.subtract
+ArrayRealVector.getEntry

@@ -1,0 +1,3 @@
+ArrayRealVector.mapDivideToSelf
+ArrayRealVector.getDimension
+ArrayRealVector.getEntry

@@ -1,0 +1,2 @@
+Chromosome.getFitness
+Chromosome.compareTo

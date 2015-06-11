@@ -1,0 +1,12 @@
+AbstractUnivariateStatistic.test
+StatUtils.variance
+Mean.evaluate
+AbstractStorelessUnivariateStatistic.evaluate
+StatUtils.mean
+Sum.evaluate
+UniformRandomGenerator.nextNormalizedDouble
+Variance.clear
+FastMath.sqrt
+FirstMoment.clear
+Variance.evaluate
+SecondMoment.clear

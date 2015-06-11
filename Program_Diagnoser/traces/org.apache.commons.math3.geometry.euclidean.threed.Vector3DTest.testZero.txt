@@ -1,0 +1,3 @@
+Vector3D.getNorm
+Vector3D.getZero
+FastMath.sqrt

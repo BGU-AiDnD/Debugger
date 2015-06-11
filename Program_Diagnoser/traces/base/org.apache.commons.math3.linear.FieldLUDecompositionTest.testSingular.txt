@@ -1,0 +1,17 @@
+Fraction.reciprocal
+Fraction.subtract
+AbstractFieldMatrix.isSquare
+Array2DRowFieldMatrix.getRowDimension
+FractionField.getInstance
+Array2DRowFieldMatrix.setSubMatrix
+Array2DRowFieldMatrix.copyIn
+Fraction.negate
+FractionField.getZero
+FieldLUDecomposition.getSolver
+AbstractFieldMatrix.getField
+Array2DRowFieldMatrix.getData
+Array2DRowFieldMatrix.copyOut
+Fraction.addSub
+Array2DRowFieldMatrix.getColumnDimension
+FractionField.getRuntimeClass
+Fraction.equals

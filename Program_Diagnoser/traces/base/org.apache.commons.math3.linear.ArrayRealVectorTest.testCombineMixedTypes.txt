@@ -1,0 +1,7 @@
+ArrayRealVector.checkVectorDimensions
+ArrayRealVector.combineToSelf
+ArrayRealVector.copy
+RealVector.checkIndex
+ArrayRealVector.getDimension
+ArrayRealVector.combine
+ArrayRealVector.getEntry

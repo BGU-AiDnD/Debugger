@@ -1,0 +1,6 @@
+Max.increment
+AbstractStorelessUnivariateStatistic.incrementAll
+AbstractUnivariateStatistic.test
+Max.clear
+Max.getN
+Max.getResult

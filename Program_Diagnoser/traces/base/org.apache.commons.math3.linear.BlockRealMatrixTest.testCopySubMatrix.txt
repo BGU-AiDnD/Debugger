@@ -1,0 +1,16 @@
+MatrixUtils.checkMatrixIndex
+AbstractRealMatrix.equals
+BlockRealMatrix.blockWidth
+BlockRealMatrix.getColumnDimension
+BlockRealMatrix.blockHeight
+DefaultRealMatrixPreservingVisitor.end
+BlockRealMatrix.walkInOptimizedOrder
+BlockRealMatrix.toBlocksLayout
+BlockRealMatrix.getEntry
+ExceptionContext.addMessage
+AbstractRealMatrix.copySubMatrix
+MatrixUtils.checkColumnIndex
+MatrixUtils.checkSubMatrixIndex
+MatrixUtils.checkRowIndex
+ArgUtils.flatten
+BlockRealMatrix.getRowDimension

@@ -1,0 +1,9 @@
+RandomAdaptor.setSeed
+RandomAdaptor.nextFloat
+RandomAdaptor.nextGaussian
+RandomAdaptor.createAdaptor
+RandomAdaptor.nextLong
+RandomAdaptor.nextBytes
+RandomAdaptor.nextBoolean
+RandomAdaptor.nextInt
+RandomAdaptor.nextDouble

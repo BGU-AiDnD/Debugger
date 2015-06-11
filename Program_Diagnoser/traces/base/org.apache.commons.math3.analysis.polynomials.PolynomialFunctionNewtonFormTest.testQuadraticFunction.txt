@@ -1,0 +1,7 @@
+MathUtils.checkNotNull
+PolynomialFunctionNewtonForm.value
+PolynomialFunctionNewtonForm.verifyInputArray
+PolynomialFunctionNewtonForm.degree
+PolynomialFunctionNewtonForm.getCoefficients
+PolynomialFunctionNewtonForm.evaluate
+PolynomialFunctionNewtonForm.computeCoefficients

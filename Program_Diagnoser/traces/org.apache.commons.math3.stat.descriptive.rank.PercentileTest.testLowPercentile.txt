@@ -1,0 +1,7 @@
+AbstractUnivariateStatistic.test
+Percentile.evaluate
+Percentile.setQuantile
+AbstractUnivariateStatistic.getDataRef
+AbstractUnivariateStatistic.evaluate
+Percentile.insertionSort
+Percentile.select

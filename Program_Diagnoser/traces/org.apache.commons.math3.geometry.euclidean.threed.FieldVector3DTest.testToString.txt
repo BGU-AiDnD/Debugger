@@ -1,0 +1,13 @@
+Vector3DFormat.getInstance
+DerivativeStructure.getReal
+VectorFormat.format
+CompositeFormat.getDefaultNumberFormat
+CompositeFormat.formatDouble
+FieldVector3D.toString
+FieldVector3D.toVector3D
+Vector3DFormat.format
+Vector3D.getX
+Vector3D.getY
+DSCompiler.getCompiler
+Vector3D.getZ
+DSCompiler.getSize

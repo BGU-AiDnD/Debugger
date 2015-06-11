@@ -1,0 +1,14 @@
+AbstractUnivariateStatistic.test
+ThirdMoment.clear
+FirstMoment.getN
+Skewness.getResult
+AbstractStorelessUnivariateStatistic.incrementAll
+SecondMoment.increment
+Skewness.increment
+FirstMoment.increment
+Skewness.clear
+ThirdMoment.increment
+FastMath.sqrt
+FirstMoment.clear
+SecondMoment.clear
+Skewness.getN

@@ -1,0 +1,3 @@
+Quaternion.getNorm
+Quaternion.normalize
+FastMath.sqrt
