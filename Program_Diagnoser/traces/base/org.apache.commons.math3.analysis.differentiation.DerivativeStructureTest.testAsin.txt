@@ -1,9 +1,0 @@
-DSCompiler.asin
-FastMath.atan
-DerivativeStructure.asin
-DSCompiler.getCompiler
-DerivativeStructure.getReal
-DSCompiler.getSize
-FastMath.sqrt
-FastMath.asin
-DSCompiler.compose

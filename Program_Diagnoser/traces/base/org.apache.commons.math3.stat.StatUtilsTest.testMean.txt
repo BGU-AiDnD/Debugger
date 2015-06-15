@@ -1,6 +1,0 @@
-AbstractUnivariateStatistic.test
-ExceptionContext.addMessage
-Mean.evaluate
-StatUtils.mean
-Sum.evaluate
-ArgUtils.flatten

@@ -1,6 +1,0 @@
-MathUtils.checkNotNull
-PolynomialFunction.getCoefficients
-ArithmeticUtils.binomialCoefficient
-PolynomialsUtils.shift
-FastMath.pow
-PolynomialFunction.toString

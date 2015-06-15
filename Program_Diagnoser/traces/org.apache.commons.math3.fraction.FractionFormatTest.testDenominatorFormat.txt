@@ -1,6 +1,0 @@
-FractionFormat.getImproperInstance
-AbstractFormat.getDenominatorFormat
-ProperFractionFormat.setWholeFormat
-FractionFormat.getProperInstance
-AbstractFormat.getDefaultNumberFormat
-AbstractFormat.setDenominatorFormat

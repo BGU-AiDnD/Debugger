@@ -1,2 +1,0 @@
-BigRealField.getInstance
-BigRealField.readResolve

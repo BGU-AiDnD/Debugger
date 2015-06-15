@@ -1,5 +1,0 @@
-ArrayRealVector.mapAddToSelf
-ArrayRealVector.copy
-ArrayRealVector.getDimension
-RealVector.mapAdd
-ArrayRealVector.getEntry

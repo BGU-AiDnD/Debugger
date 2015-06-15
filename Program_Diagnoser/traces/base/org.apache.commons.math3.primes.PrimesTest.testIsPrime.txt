@@ -1,2 +1,0 @@
-SmallPrimes.millerRabinPrimeTest
-Primes.isPrime

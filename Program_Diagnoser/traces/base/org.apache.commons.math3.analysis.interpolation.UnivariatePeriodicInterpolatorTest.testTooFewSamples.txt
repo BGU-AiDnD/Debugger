@@ -1,3 +1,0 @@
-UnivariatePeriodicInterpolator.interpolate
-ExceptionContext.addMessage
-ArgUtils.flatten

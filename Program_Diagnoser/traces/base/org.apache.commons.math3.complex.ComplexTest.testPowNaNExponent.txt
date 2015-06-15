@@ -1,7 +1,0 @@
-MathUtils.checkNotNull
-Complex.abs
-FastMath.atan2
-FastMath.doubleHighPart
-FastMath.atan
-FastMath.sqrt
-FastMath.log

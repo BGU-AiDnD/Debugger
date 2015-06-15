@@ -1,9 +1,0 @@
-FastMath.cosQ
-FastMath.sinQ
-FastMath.polySine
-SphericalCoordinates.getCartesian
-FastMath.cos
-FastMath.sin
-FastMath.polyCosine
-FastMath.sqrt
-Vector3D.distance

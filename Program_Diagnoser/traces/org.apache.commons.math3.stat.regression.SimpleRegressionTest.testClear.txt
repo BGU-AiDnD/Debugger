@@ -1,6 +1,0 @@
-SimpleRegression.clear
-SimpleRegression.addData
-SimpleRegression.getSumSquaredErrors
-SimpleRegression.getTotalSumSquares
-SimpleRegression.getN
-SimpleRegression.getRSquare

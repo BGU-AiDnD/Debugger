@@ -1,5 +1,0 @@
-RealVector.checkIndices
-ArrayRealVector.getDimension
-ArrayRealVector.walkInOptimizedOrder
-ArrayRealVector.walkInDefaultOrder
-ArrayRealVector.getEntry

@@ -1,5 +1,0 @@
-FastMath.sinQ
-FastMath.polySine
-FastMath.cos
-FastMath.polyCosine
-HarmonicOscillator.value

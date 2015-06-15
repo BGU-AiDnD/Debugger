@@ -1,9 +1,0 @@
-AbstractUnivariateStatistic.test
-Mean.evaluate
-Sum.evaluate
-Variance.clear
-StandardDeviation.evaluate
-FirstMoment.clear
-FastMath.sqrt
-Variance.evaluate
-SecondMoment.clear

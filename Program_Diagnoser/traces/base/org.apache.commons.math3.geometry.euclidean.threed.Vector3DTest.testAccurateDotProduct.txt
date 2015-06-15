@@ -1,4 +1,0 @@
-Vector3D.getX
-Vector3D.dotProduct
-Vector3D.getY
-Vector3D.getZ

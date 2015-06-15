@@ -1,8 +1,0 @@
-DerivativeStructure.getValue
-DerivativeStructure.getPartialDerivative
-FastMath.doubleHighPart
-DSCompiler.getPartialDerivativeIndex
-DerivativeStructure.toRadians
-DSCompiler.getCompiler
-DSCompiler.getFreeParameters
-DSCompiler.getSize

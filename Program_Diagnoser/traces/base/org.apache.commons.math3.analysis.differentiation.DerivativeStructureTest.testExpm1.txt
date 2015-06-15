@@ -1,8 +1,0 @@
-DSCompiler.expm1
-FastMath.expm1
-FastMath.exp
-DSCompiler.getCompiler
-DerivativeStructure.expm1
-DerivativeStructure.getReal
-DSCompiler.getSize
-DSCompiler.compose

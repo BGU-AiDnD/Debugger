@@ -1,1 +1,0 @@
-ArithmeticUtils.binomialCoefficient

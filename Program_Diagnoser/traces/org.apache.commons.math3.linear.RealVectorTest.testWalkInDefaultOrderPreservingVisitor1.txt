@@ -1,2 +1,0 @@
-RealVector.checkIndex
-RealVector.walkInDefaultOrder

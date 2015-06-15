@@ -1,6 +1,0 @@
-Min.increment
-AbstractStorelessUnivariateStatistic.incrementAll
-AbstractUnivariateStatistic.test
-Min.getN
-Min.clear
-Min.getResult

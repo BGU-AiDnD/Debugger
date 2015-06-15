@@ -1,3 +1,0 @@
-EnumeratedDistribution.probability
-EnumeratedRealDistribution.probability
-EnumeratedRealDistribution.density

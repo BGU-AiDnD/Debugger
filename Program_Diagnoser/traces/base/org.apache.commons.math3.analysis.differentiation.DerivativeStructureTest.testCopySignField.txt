@@ -1,5 +1,0 @@
-DSCompiler.getCompiler
-DerivativeStructure.getReal
-DSCompiler.getSize
-DerivativeStructure.negate
-DerivativeStructure.copySign

@@ -1,5 +1,0 @@
-Fraction.reciprocal
-ExceptionContext.addMessage
-Fraction.getNumerator
-ArgUtils.flatten
-Fraction.getDenominator

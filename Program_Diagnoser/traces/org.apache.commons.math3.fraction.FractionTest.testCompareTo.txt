@@ -1,2 +1,0 @@
-Fraction.doubleValue
-Fraction.compareTo

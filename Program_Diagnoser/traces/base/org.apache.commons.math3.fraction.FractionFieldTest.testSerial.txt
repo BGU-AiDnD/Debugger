@@ -1,2 +1,0 @@
-FractionField.readResolve
-FractionField.getInstance

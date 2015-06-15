@@ -1,3 +1,0 @@
-ArrayRealVector.checkVectorDimensions
-ArrayRealVector.add
-ArrayRealVector.getEntry

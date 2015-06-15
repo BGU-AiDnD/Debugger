@@ -1,6 +1,0 @@
-Decimal64.tan
-FastMath.tan
-Decimal64.getReal
-FastMath.polySine
-FastMath.polyCosine
-FastMath.tanQ

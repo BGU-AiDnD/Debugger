@@ -1,5 +1,0 @@
-RealVector.checkVectorDimensions
-ExceptionContext.addMessage
-RealVector.combine
-RealVector.combineToSelf
-ArgUtils.flatten

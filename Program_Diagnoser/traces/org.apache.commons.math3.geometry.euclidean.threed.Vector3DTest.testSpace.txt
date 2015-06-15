@@ -1,7 +1,0 @@
-Euclidean3D.getSubSpace
-Euclidean2D.getInstance
-Euclidean2D.getDimension
-Vector3D.getSpace
-Euclidean3D.getInstance
-Euclidean3D.getDimension
-Euclidean3D.readResolve

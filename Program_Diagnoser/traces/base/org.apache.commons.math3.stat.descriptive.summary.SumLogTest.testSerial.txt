@@ -1,5 +1,0 @@
-SumOfLogs.getResult
-Precision.equalsIncludingNaN
-AbstractStorelessUnivariateStatistic.equals
-SumOfLogs.getN
-Precision.equals

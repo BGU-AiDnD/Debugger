@@ -1,2 +1,0 @@
-ElitisticListPopulation.setElitismRate
-ElitisticListPopulation.getElitismRate

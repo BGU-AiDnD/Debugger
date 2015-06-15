@@ -1,6 +1,0 @@
-SumOfSquares.getResult
-AbstractStorelessUnivariateStatistic.incrementAll
-AbstractUnivariateStatistic.test
-SumOfSquares.getN
-SumOfSquares.clear
-SumOfSquares.increment

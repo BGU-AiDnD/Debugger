@@ -1,9 +1,0 @@
-Power.value
-Minus.value
-Inverse.value
-FunctionUtils.compose
-Constant.value
-Identity.value
-FastMath.exp
-FastMath.pow
-FastMath.log

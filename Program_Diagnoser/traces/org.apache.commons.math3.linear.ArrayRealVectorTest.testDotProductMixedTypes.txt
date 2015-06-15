@@ -1,6 +1,0 @@
-ArrayRealVector.dotProduct
-ArrayRealVector.checkVectorDimensions
-RealVector.dotProduct
-RealVector.checkIndex
-ArrayRealVector.getDimension
-ArrayRealVector.getEntry

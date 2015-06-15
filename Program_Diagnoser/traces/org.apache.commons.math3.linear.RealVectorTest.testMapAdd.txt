@@ -1,7 +1,0 @@
-Add.value
-RealVector.iterator
-RealVector.checkIndex
-RealVector.mapToSelf
-RealVector.mapAdd
-RealVector.mapAddToSelf
-FunctionUtils.fix2ndArgument

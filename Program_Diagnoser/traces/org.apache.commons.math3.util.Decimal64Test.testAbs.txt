@@ -1,2 +1,0 @@
-Decimal64.abs
-Decimal64.getReal

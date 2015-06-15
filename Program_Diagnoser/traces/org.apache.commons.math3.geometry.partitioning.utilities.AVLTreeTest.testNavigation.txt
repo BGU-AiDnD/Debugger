@@ -1,3 +1,0 @@
-AVLTree.insert
-AVLTree.getSmallest
-AVLTree.getLargest

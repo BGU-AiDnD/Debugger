@@ -1,5 +1,0 @@
-BitsStreamGenerator.nextDouble
-Vector3D.dotProduct
-BitsStreamGenerator.clear
-AbstractWell.setSeed
-Well1024a.next

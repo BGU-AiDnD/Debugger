@@ -1,4 +1,0 @@
-EnumeratedDistribution.getPmf
-Pair.getValue
-Pair.getKey
-EnumeratedIntegerDistribution.getSupportUpperBound

@@ -1,2 +1,0 @@
-MathUtils.checkNotNull
-PolynomialFunction.toString

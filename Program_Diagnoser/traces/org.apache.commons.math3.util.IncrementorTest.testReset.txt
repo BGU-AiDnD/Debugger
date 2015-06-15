@@ -1,4 +1,0 @@
-Incrementor.setMaximalCount
-Incrementor.getCount
-Incrementor.incrementCount
-Incrementor.resetCount

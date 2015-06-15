@@ -1,7 +1,0 @@
-MathUtils.checkNotNull
-BigFraction.equals
-BigFraction.multiply
-BigFraction.reduce
-BigFraction.getDenominator
-BigFraction.getNumerator
-BigFraction.reciprocal

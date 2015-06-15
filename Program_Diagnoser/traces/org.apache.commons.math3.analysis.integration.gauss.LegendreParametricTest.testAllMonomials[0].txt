@@ -1,4 +1,0 @@
-Power.value
-GaussIntegrator.getNumberOfPoints
-FastMath.pow
-GaussIntegrator.integrate

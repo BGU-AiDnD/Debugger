@@ -1,3 +1,0 @@
-ArithmeticUtils.addAndCheck
-ArithmeticUtils.binomialCoefficient
-FastMath.log

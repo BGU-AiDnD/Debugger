@@ -1,5 +1,0 @@
-DiagonalMatrix.getRowDimension
-ExceptionContext.addMessage
-MatrixUtils.checkRowIndex
-ArgUtils.flatten
-DiagonalMatrix.setEntry

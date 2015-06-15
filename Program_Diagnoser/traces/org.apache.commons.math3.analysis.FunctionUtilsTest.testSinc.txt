@@ -1,9 +1,0 @@
-Divide.value
-FastMath.sinQ
-FastMath.polySine
-Identity.value
-Sinc.value
-FastMath.sin
-FastMath.polyCosine
-FunctionUtils.combine
-Sin.value

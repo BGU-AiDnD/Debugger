@@ -1,6 +1,0 @@
-Multiply.value
-Add.value
-Identity.value
-Max.value
-Min.value
-FunctionUtils.collector

@@ -1,3 +1,0 @@
-Complex.abs
-FastMath.atan2
-FastMath.log

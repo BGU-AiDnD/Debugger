@@ -1,6 +1,0 @@
-MillerUpdatingRegression.smartAdd
-MillerUpdatingRegression.addObservation
-MillerUpdatingRegression.clear
-MillerUpdatingRegression.include
-MillerUpdatingRegression.getN
-MillerUpdatingRegression.addObservations

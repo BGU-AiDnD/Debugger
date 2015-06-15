@@ -1,9 +1,0 @@
-MathUtils.checkNotNull
-Array2DRowRealMatrix.getRowDimension
-Array2DRowRealMatrix.copyIn
-Array2DRowRealMatrix.walkInRowOrder
-Array2DRowRealMatrix.getColumnDimension
-AbstractRealMatrix.getFrobeniusNorm
-Array2DRowRealMatrix.setSubMatrix
-FastMath.sqrt
-AbstractRealMatrix.walkInOptimizedOrder

@@ -1,4 +1,0 @@
-Precision.equalsIncludingNaN
-NaturalRanking.rank
-NaturalRanking.getNanPositions
-Precision.equals

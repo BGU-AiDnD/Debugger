@@ -1,2 +1,0 @@
-BigReal.multiply
-BigReal.doubleValue

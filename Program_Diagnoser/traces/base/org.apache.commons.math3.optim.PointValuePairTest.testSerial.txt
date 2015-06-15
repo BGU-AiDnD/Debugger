@@ -1,3 +1,0 @@
-PointValuePair.writeReplace
-Pair.getValue
-Pair.getKey

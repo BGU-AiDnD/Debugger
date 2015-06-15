@@ -1,4 +1,0 @@
-Pair.getFirst
-Pair.getValue
-Pair.getKey
-Pair.getSecond

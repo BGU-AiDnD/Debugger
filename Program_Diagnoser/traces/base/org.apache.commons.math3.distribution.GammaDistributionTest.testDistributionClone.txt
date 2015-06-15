@@ -1,6 +1,0 @@
-FastMath.exp
-FastMath.pow
-BitsStreamGenerator.clear
-AbstractWell.setSeed
-FastMath.sqrt
-FastMath.log

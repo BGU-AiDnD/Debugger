@@ -1,5 +1,0 @@
-Sum.getResult
-Precision.equalsIncludingNaN
-AbstractStorelessUnivariateStatistic.equals
-Sum.getN
-Precision.equals

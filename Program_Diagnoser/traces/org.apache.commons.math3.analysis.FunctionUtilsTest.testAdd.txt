@@ -1,6 +1,0 @@
-Minus.value
-Inverse.value
-Constant.value
-FunctionUtils.compose
-Identity.value
-FunctionUtils.add

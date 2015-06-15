@@ -1,9 +1,0 @@
-DerivativeStructure.getValue
-DerivativeStructure.getPartialDerivative
-DSCompiler.checkCompatibility
-DSCompiler.getPartialDerivativeIndex
-DSCompiler.getCompiler
-DerivativeStructure.multiply
-DSCompiler.getFreeParameters
-DSCompiler.getSize
-DSCompiler.multiply

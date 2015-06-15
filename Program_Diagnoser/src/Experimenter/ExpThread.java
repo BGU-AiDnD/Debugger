@@ -1,6 +1,5 @@
 package Experimenter;
 
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -19,7 +18,6 @@ import java.util.Arrays;
 
 import Diagnoser.Diagnosis;
 import Diagnoser.Dynamic_Spectrum;
-import Implant.TestsRunner;
 import Infrastrcture.OrderAssist;
 import Parsing.FilesAssist;
 import Parsing.TraceToCode;
@@ -80,8 +78,7 @@ public class ExpThread extends ForkJoinTask<Object>{
 		pool = ei.get_pool();
 		
 		//upload components conversion table
-		File conv_table_file = new File(FilesAssist.get_instances_path() + "/conv_comp_table.csv");
-		testsCoder.load_conversion_table(conv_table_file);
+		testsCoder.load_conversion_table();
 		TDP_Run.testsCoder = this.testsCoder;
 		TDP_Run.set_comps_num(testsCoder.get_comps_num());
 		
@@ -115,22 +112,6 @@ public class ExpThread extends ForkJoinTask<Object>{
 		
 		//dump components conversion table
 		testsCoder.saveConvTable();
-		
-		if (TDP_Run.bug_simulation_mode == TDP_Run.bug_sim_mode.RANDOMIZE_NEW){
-			////generate random bugs and decide tests results (run tests!)
-			//simulate bugs
-			randomize_bugs();
-			System.out.println("Bugs were randomized.");
-			
-			//run tests
-			System.out.println("\nRun tests to collect traces...");
-			try {
-				TestsRunner.run_from_remote();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			System.out.println("Done!");	
-		}// bug simulation
 		
 		//update global vars
 		get_bugged_comps();

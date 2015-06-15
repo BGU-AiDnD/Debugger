@@ -1,8 +1,0 @@
-DerivativeStructure.rootN
-DerivativeStructure.sqrt
-DSCompiler.rootN
-DSCompiler.getCompiler
-DerivativeStructure.getReal
-DSCompiler.getSize
-FastMath.sqrt
-DSCompiler.compose

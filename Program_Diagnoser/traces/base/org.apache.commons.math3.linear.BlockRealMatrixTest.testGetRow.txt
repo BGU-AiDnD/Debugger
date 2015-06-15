@@ -1,8 +1,0 @@
-BlockRealMatrix.toBlocksLayout
-ExceptionContext.addMessage
-BlockRealMatrix.blockWidth
-MatrixUtils.checkRowIndex
-BlockRealMatrix.blockHeight
-ArgUtils.flatten
-BlockRealMatrix.getRow
-BlockRealMatrix.getRowDimension

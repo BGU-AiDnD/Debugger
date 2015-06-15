@@ -1,2 +1,0 @@
-MathArrays.checkNonNegative
-FastMath.sqrt

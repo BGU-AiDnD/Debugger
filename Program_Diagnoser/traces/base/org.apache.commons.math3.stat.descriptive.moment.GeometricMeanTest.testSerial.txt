@@ -1,6 +1,0 @@
-Precision.equalsIncludingNaN
-AbstractStorelessUnivariateStatistic.equals
-SumOfLogs.getN
-GeometricMean.getN
-GeometricMean.getResult
-Precision.equals

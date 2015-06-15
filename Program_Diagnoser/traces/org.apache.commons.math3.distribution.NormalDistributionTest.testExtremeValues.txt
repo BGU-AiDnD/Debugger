@@ -1,3 +1,0 @@
-BitsStreamGenerator.clear
-FastMath.sqrt
-AbstractWell.setSeed

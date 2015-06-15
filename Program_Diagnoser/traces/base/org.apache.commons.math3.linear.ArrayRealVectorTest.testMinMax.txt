@@ -1,7 +1,0 @@
-RealVector.getMaxValue
-RealVector.iterator
-RealVector.getMaxIndex
-ArrayRealVector.getDimension
-RealVector.getMinIndex
-RealVector.getMinValue
-ArrayRealVector.getEntry

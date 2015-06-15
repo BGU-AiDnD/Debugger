@@ -1,3 +1,0 @@
-Vector3D.distance1
-Vector3D.getNorm1
-Vector3D.subtract

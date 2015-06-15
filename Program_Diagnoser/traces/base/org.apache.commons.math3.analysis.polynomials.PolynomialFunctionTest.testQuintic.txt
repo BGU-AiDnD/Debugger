@@ -1,4 +1,0 @@
-MathUtils.checkNotNull
-PolynomialFunction.evaluate
-PolynomialFunction.value
-PolynomialFunction.degree

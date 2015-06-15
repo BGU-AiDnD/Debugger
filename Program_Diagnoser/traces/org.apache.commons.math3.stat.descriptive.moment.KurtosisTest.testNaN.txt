@@ -1,7 +1,0 @@
-Kurtosis.increment
-FourthMoment.increment
-SecondMoment.increment
-FirstMoment.getN
-FirstMoment.increment
-Kurtosis.getResult
-ThirdMoment.increment

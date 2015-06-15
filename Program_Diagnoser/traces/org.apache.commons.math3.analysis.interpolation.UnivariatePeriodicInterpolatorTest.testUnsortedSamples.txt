@@ -1,4 +1,0 @@
-UnivariatePeriodicInterpolator.interpolate
-ExceptionContext.addMessage
-ArgUtils.flatten
-MathArrays.checkOrder

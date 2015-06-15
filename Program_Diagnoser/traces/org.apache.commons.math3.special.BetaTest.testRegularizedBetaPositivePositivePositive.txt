@@ -1,9 +1,0 @@
-ContinuedFraction.evaluate
-FastMath.exp
-FastMath.log1p
-Beta.logGammaSum
-Precision.equals
-Beta.regularizedBeta
-Gamma.logGamma
-FastMath.log
-Beta.logBeta

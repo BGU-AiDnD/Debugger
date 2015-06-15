@@ -1,6 +1,0 @@
-MathUtils.checkNotNull
-AbstractRealMatrix.isSquare
-Array2DRowRealMatrix.getRowDimension
-Array2DRowRealMatrix.copyIn
-Array2DRowRealMatrix.getColumnDimension
-Array2DRowRealMatrix.setSubMatrix

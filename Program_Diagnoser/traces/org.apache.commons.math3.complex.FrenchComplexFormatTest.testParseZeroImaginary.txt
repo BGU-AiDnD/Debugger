@@ -1,5 +1,0 @@
-ComplexFormat.getRealFormat
-ComplexFormat.parse
-CompositeFormat.parseNextCharacter
-CompositeFormat.parseAndIgnoreWhitespace
-CompositeFormat.parseNumber

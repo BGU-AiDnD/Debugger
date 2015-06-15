@@ -1,6 +1,0 @@
-AbstractUnivariateStatistic.test
-Skewness.evaluate
-Mean.evaluate
-AbstractStorelessUnivariateStatistic.evaluate
-Sum.evaluate
-FastMath.sqrt

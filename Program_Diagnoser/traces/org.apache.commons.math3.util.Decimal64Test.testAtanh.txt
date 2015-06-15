@@ -1,4 +1,0 @@
-FastMath.atanh
-Decimal64.getReal
-Decimal64.atanh
-FastMath.log

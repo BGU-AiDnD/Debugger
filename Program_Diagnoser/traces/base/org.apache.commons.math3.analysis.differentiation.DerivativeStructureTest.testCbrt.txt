@@ -1,7 +1,0 @@
-DerivativeStructure.cbrt
-DerivativeStructure.rootN
-DSCompiler.rootN
-DSCompiler.getCompiler
-DerivativeStructure.getReal
-DSCompiler.getSize
-DSCompiler.compose

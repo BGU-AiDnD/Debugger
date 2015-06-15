@@ -1,8 +1,0 @@
-MathUtils.checkNotNull
-Complex.abs
-FastMath.atan2
-FastMath.exp
-FastMath.cos
-FastMath.sin
-FastMath.sqrt
-FastMath.log

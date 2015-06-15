@@ -1,2 +1,0 @@
-Chromosome.getFitness
-Chromosome.compareTo

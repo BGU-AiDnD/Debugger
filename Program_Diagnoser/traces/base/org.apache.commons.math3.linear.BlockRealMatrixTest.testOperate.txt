@@ -1,9 +1,0 @@
-BlockRealMatrix.toBlocksLayout
-ExceptionContext.addMessage
-ArrayRealVector.getDataRef
-BlockRealMatrix.blockWidth
-BlockRealMatrix.operate
-BlockRealMatrix.blockHeight
-AbstractRealMatrix.operate
-ArrayRealVector.toArray
-ArgUtils.flatten

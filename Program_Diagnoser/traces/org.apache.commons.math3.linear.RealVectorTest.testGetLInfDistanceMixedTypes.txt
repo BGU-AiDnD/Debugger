@@ -1,4 +1,0 @@
-RealVector.checkVectorDimensions
-RealVector.iterator
-RealVector.getLInfDistance
-RealVector.checkIndex

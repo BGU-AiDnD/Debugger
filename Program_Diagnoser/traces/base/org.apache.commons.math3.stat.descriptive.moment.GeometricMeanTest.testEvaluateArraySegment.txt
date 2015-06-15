@@ -1,6 +1,0 @@
-AbstractUnivariateStatistic.test
-AbstractStorelessUnivariateStatistic.evaluate
-FastMath.exp
-SumOfLogs.evaluate
-GeometricMean.evaluate
-FastMath.log

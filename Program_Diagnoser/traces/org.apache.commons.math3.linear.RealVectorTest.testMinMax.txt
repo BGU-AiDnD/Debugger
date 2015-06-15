@@ -1,6 +1,0 @@
-RealVector.getMaxValue
-RealVector.iterator
-RealVector.getMaxIndex
-RealVector.checkIndex
-RealVector.getMinIndex
-RealVector.getMinValue

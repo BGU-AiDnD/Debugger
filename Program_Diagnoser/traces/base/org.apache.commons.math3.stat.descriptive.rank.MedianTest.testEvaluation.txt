@@ -1,9 +1,0 @@
-AbstractUnivariateStatistic.test
-Percentile.medianOf3
-Percentile.evaluate
-Percentile.setQuantile
-AbstractUnivariateStatistic.getDataRef
-Percentile.partition
-AbstractUnivariateStatistic.evaluate
-Percentile.insertionSort
-Percentile.select

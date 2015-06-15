@@ -1,5 +1,0 @@
-VectorialMean.increment
-Mean.increment
-FirstMoment.increment
-Mean.getResult
-VectorialMean.getResult

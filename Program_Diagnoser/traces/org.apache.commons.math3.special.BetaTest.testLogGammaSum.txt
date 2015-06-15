@@ -1,3 +1,0 @@
-FastMath.log1p
-Beta.logGammaSum
-FastMath.log

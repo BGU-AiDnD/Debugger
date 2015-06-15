@@ -1,2 +1,0 @@
-Decimal64.getReal
-Decimal64.floor

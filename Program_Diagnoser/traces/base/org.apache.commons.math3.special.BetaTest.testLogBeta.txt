@@ -1,8 +1,0 @@
-Beta.logGammaMinusLogGammaSum
-FastMath.log1p
-Beta.sumDeltaMinusDeltaSum
-Beta.deltaMinusDeltaSum
-Beta.logGammaSum
-Gamma.logGamma
-Beta.logBeta
-FastMath.log

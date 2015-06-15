@@ -1,5 +1,0 @@
-PointVectorValuePair.getValueRef
-AbstractConvergenceChecker.getRelativeThreshold
-Pair.getValue
-SimpleVectorValueChecker.converged
-AbstractConvergenceChecker.getAbsoluteThreshold

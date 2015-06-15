@@ -1,6 +1,0 @@
-DerivativeStructure.getField
-DSCompiler.getOrder
-DSCompiler.getCompiler
-DSCompiler.getFreeParameters
-DerivativeStructure.getReal
-DSCompiler.getSize

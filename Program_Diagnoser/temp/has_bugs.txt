@@ -1,4 +1,0 @@
-ExpandableStatefulODE.getPrimaryState
-FieldRotation.applyInverseTo
-BetaDistribution.getSupportUpperBound
-SimpleRegression.getSignificance

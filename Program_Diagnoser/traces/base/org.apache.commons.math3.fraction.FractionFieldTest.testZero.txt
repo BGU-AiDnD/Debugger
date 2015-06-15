@@ -1,3 +1,0 @@
-FractionField.getZero
-FractionField.getInstance
-Fraction.equals

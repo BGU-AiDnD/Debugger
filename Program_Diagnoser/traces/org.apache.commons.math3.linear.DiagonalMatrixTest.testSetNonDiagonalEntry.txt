@@ -1,5 +1,0 @@
-ExceptionContext.addMessage
-DiagonalMatrix.ensureZero
-Precision.equals
-ArgUtils.flatten
-DiagonalMatrix.setEntry

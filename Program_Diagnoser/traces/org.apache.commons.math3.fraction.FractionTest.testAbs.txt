@@ -1,4 +1,0 @@
-Fraction.negate
-Fraction.getNumerator
-Fraction.abs
-Fraction.getDenominator

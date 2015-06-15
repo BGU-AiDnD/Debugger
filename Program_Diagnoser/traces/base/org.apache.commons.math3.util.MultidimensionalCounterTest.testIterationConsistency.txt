@@ -1,3 +1,0 @@
-MultidimensionalCounter.next
-MultidimensionalCounter.getCount
-MultidimensionalCounter.hasNext

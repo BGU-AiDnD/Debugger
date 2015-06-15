@@ -1,7 +1,0 @@
-Fraction.subtract
-Fraction.negate
-ExceptionContext.addMessage
-Fraction.addSub
-Fraction.getNumerator
-ArgUtils.flatten
-Fraction.getDenominator

@@ -1,7 +1,0 @@
-ExceptionContext.addMessage
-DerivativeStructure.getPartialDerivative
-DSCompiler.getPartialDerivativeIndex
-DSCompiler.getCompiler
-DSCompiler.getFreeParameters
-DSCompiler.getSize
-ArgUtils.flatten

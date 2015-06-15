@@ -1,5 +1,0 @@
-UnitSphereRandomVectorGenerator.nextVector
-FastMath.doubleHighPart
-FastMath.atan
-FastMath.sqrt
-FastMath.acos

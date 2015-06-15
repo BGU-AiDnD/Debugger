@@ -1,2 +1,0 @@
-Sigmoid.value
-FastMath.exp

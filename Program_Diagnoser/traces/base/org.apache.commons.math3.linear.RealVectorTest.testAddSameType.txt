@@ -1,4 +1,0 @@
-RealVector.checkVectorDimensions
-RealVector.add
-RealVector.iterator
-RealVector.checkIndex

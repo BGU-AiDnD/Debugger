@@ -1,3 +1,0 @@
-MathUtils.checkNotNull
-PolynomialFunction.evaluate
-PolynomialFunction.value

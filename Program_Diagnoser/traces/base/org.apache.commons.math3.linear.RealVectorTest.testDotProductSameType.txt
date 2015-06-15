@@ -1,3 +1,0 @@
-RealVector.checkVectorDimensions
-RealVector.dotProduct
-RealVector.checkIndex

@@ -1,4 +1,0 @@
-EuclideanIntegerPoint.getPoint
-MathArrays.distance
-EuclideanIntegerPoint.distanceFrom
-FastMath.sqrt

@@ -1,9 +1,0 @@
-FirstMoment.getResult
-AbstractStorelessUnivariateStatistic.hashCode
-Precision.equalsIncludingNaN
-FirstMoment.getN
-FirstMoment.increment
-AbstractStorelessUnivariateStatistic.equals
-MathUtils.hash
-Precision.equals
-FirstMoment.clear

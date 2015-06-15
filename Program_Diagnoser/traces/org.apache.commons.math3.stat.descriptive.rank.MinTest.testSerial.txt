@@ -1,5 +1,0 @@
-Min.getN
-Precision.equalsIncludingNaN
-Min.getResult
-AbstractStorelessUnivariateStatistic.equals
-Precision.equals

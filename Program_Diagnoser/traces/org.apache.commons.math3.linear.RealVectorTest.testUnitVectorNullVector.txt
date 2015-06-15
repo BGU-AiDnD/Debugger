@@ -1,7 +1,0 @@
-RealVector.getNorm
-ExceptionContext.addMessage
-RealVector.iterator
-RealVector.unitVector
-RealVector.checkIndex
-FastMath.sqrt
-ArgUtils.flatten

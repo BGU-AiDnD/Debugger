@@ -1,5 +1,0 @@
-Decimal64.getField
-Decimal64Field.getInstance
-Decimal64.getReal
-Decimal64Field.getOne
-Decimal64Field.getZero

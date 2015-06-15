@@ -1,3 +1,0 @@
-Chromosome.getFitness
-ListPopulation.getFittestChromosome
-Chromosome.compareTo

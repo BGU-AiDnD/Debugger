@@ -1,4 +1,0 @@
-AbstractListChromosome.getLength
-BinaryChromosome.checkValidity
-BinaryChromosome.isSame
-AbstractListChromosome.getRepresentation

@@ -1,2 +1,0 @@
-FastMath.log1p
-FastMath.log

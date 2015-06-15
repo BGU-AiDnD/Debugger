@@ -1,3 +1,0 @@
-Decimal64.getReal
-FastMath.sqrt
-Decimal64.hypot

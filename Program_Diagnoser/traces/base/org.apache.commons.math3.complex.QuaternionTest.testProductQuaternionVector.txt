@@ -1,8 +1,0 @@
-Quaternion.multiply
-Vector3D.scalarMultiply
-Vector3D.add
-Vector3D.getNorm
-Vector3D.crossProduct
-Vector3D.dotProduct
-Vector3D.subtract
-FastMath.sqrt

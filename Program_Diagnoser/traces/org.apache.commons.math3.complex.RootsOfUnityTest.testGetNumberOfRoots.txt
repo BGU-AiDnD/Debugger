@@ -1,8 +1,0 @@
-RootsOfUnity.getNumberOfRoots
-FastMath.cosQ
-FastMath.sinQ
-FastMath.polySine
-FastMath.cos
-FastMath.sin
-FastMath.polyCosine
-RootsOfUnity.computeRoots

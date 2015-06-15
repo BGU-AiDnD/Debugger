@@ -1,2 +1,0 @@
-StepFunction.value
-MathArrays.checkOrder

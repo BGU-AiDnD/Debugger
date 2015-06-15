@@ -1,3 +1,0 @@
-MathUtils.checkNotNull
-BigFraction.equals
-BigFraction.reduce

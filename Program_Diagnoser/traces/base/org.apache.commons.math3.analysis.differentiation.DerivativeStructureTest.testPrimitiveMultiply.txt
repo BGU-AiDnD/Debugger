@@ -1,8 +1,0 @@
-DerivativeStructure.getValue
-DerivativeStructure.getPartialDerivative
-DSCompiler.getPartialDerivativeIndex
-DSCompiler.getCompiler
-DerivativeStructure.multiply
-DSCompiler.getFreeParameters
-DSCompiler.getSize
-DerivativeStructure.getFreeParameters

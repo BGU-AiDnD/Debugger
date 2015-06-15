@@ -1,7 +1,0 @@
-Multiply.value
-RealVector.iterator
-RealVector.mapMultiply
-RealVector.checkIndex
-RealVector.mapToSelf
-FunctionUtils.fix2ndArgument
-RealVector.mapMultiplyToSelf

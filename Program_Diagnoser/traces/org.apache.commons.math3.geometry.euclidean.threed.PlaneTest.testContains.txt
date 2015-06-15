@@ -1,9 +1,0 @@
-Vector3D.getNorm
-Plane.setFrame
-Vector3D.crossProduct
-Vector3D.dotProduct
-Vector3D.orthogonal
-Plane.setNormal
-Plane.contains
-FastMath.sqrt
-Plane.getOffset

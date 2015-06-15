@@ -1,4 +1,0 @@
-DiagonalMatrix.getRowDimension
-DiagonalMatrix.getData
-MatrixUtils.checkRowIndex
-DiagonalMatrix.setEntry

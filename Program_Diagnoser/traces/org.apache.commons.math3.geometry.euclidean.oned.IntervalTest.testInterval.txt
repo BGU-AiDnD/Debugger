@@ -1,5 +1,0 @@
-Interval.getSup
-Interval.getSize
-Interval.getBarycenter
-Interval.getInf
-Interval.checkPoint

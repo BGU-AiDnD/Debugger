@@ -1,4 +1,0 @@
-SumOfLogs.increment
-SumOfLogs.getResult
-FastMath.log
-SumOfLogs.clear

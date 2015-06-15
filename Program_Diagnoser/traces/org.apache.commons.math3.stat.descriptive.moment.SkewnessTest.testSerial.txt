@@ -1,6 +1,0 @@
-Skewness.getResult
-Precision.equalsIncludingNaN
-FirstMoment.getN
-AbstractStorelessUnivariateStatistic.equals
-Precision.equals
-Skewness.getN

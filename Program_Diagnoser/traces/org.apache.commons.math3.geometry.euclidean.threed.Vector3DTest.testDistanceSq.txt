@@ -1,3 +1,0 @@
-Vector3D.distanceSq
-FastMath.sqrt
-Vector3D.distance

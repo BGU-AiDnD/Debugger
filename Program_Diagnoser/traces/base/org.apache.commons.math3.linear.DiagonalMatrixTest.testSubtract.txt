@@ -1,9 +1,0 @@
-MathUtils.checkNotNull
-DiagonalMatrix.getRowDimension
-MatrixUtils.checkMatrixIndex
-DiagonalMatrix.getColumnDimension
-MatrixUtils.checkColumnIndex
-DiagonalMatrix.subtract
-MatrixUtils.checkRowIndex
-DiagonalMatrix.getEntry
-MatrixUtils.checkSubtractionCompatible

@@ -1,3 +1,0 @@
-RealVector.set
-RealVector.iterator
-RealVector.checkIndex

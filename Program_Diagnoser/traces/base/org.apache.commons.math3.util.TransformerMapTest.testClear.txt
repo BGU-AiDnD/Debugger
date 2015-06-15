@@ -1,3 +1,0 @@
-TransformerMap.containsClass
-TransformerMap.putTransformer
-TransformerMap.clear

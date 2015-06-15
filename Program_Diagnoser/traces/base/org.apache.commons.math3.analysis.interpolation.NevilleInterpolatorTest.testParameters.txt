@@ -1,7 +1,0 @@
-ExceptionContext.addMessage
-PolynomialFunctionLagrangeForm.verifyInterpolationArray
-Pair.getValue
-Pair.getKey
-NevilleInterpolator.interpolate
-ArgUtils.flatten
-MathArrays.checkOrder

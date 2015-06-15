@@ -1,6 +1,0 @@
-NaturalRanking.fill
-NaturalRanking.recodeNaNs
-Precision.equalsIncludingNaN
-NaturalRanking.rank
-NaturalRanking.resolveTie
-Precision.equals

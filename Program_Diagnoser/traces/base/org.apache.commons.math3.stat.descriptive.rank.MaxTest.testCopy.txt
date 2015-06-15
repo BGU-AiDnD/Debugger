@@ -1,7 +1,0 @@
-MathUtils.checkNotNull
-AbstractUnivariateStatistic.test
-AbstractUnivariateStatistic.getDataRef
-AbstractStorelessUnivariateStatistic.evaluate
-Max.evaluate
-AbstractUnivariateStatistic.setData
-Max.copy

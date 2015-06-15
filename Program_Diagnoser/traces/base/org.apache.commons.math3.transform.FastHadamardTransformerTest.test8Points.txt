@@ -1,4 +1,0 @@
-FastHadamardTransformer.transform
-TransformUtils.scaleArray
-FastHadamardTransformer.fht
-Precision.equals

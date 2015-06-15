@@ -1,7 +1,0 @@
-ComplexFormat.getImaginaryCharacter
-ComplexFormat.getRealFormat
-CompositeFormat.formatDouble
-ComplexFormat.getImaginaryFormat
-ComplexFormat.format
-ComplexFormat.formatImaginary
-CompositeFormat.getDefaultNumberFormat

@@ -1,4 +1,0 @@
-BitsStreamGenerator.nextDouble
-BitsStreamGenerator.clear
-AbstractWell.setSeed
-Well1024a.next

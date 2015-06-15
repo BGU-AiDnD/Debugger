@@ -1,8 +1,0 @@
-MathUtils.checkNotNull
-PolynomialFunction.getCoefficients
-PolynomialsUtils.createJacobiPolynomial
-PolynomialFunction.subtract
-PolynomialsUtils.createLegendrePolynomial
-PolynomialsUtils.buildPolynomial
-FastMath.sqrt
-BigFraction.doubleValue

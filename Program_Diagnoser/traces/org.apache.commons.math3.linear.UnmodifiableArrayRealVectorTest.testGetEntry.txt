@@ -1,3 +1,0 @@
-RealVector.unmodifiableRealVector
-ArrayRealVector.setEntry
-ArrayRealVector.getEntry

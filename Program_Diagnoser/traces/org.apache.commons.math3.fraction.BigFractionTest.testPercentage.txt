@@ -1,4 +1,0 @@
-MathUtils.checkNotNull
-BigFraction.multiply
-BigFraction.percentageValue
-BigFraction.doubleValue

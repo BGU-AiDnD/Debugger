@@ -1,6 +1,0 @@
-BigReal.getScale
-BigReal.subtract
-BigReal.multiply
-FastMath.pow
-BigReal.reciprocal
-BigReal.doubleValue

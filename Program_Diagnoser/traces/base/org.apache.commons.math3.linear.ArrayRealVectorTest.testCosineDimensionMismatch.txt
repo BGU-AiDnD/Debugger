@@ -1,7 +1,0 @@
-ArrayRealVector.dotProduct
-ArrayRealVector.checkVectorDimensions
-ExceptionContext.addMessage
-RealVector.cosine
-ArrayRealVector.getNorm
-FastMath.sqrt
-ArgUtils.flatten

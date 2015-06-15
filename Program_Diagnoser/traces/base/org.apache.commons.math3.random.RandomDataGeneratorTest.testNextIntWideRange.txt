@@ -1,4 +1,0 @@
-Well19937c.next
-BitsStreamGenerator.nextInt
-RandomDataGenerator.nextInt
-RandomDataGenerator.getRandomGenerator

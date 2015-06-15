@@ -1,48 +1,13 @@
 package GUI;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
 
 import Experimenter.TDP_Run;
 import Parsing.FilesAssist;
-import Parsing.Method_Parser;
-
-import javax.swing.AbstractButton;
-import javax.swing.ImageIcon;
-import javax.swing.JTabbedPane;
-import javax.swing.JRadioButton;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.FileSystems;
-import java.util.Enumeration;
-import java.awt.Font;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JList;
-import javax.swing.AbstractListModel;
-import javax.swing.ListSelectionModel;
-import javax.swing.border.LineBorder;
-import javax.swing.JScrollPane;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.JTextField;
 
 
-public class BenchMark extends JFrame {
+public class BenchMark {
 
-	private static final long serialVersionUID = -8872598972919543293L;
 	
 
 	/**

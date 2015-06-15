@@ -1,7 +1,0 @@
-MathUtils.checkNotNull
-AbstractUnivariateStatistic.test
-Min.copy
-AbstractUnivariateStatistic.getDataRef
-AbstractStorelessUnivariateStatistic.evaluate
-AbstractUnivariateStatistic.setData
-Min.evaluate

@@ -1,7 +1,0 @@
-AbstractUnivariateStatistic.test
-ExceptionContext.addMessage
-SemiVariance.evaluate
-Mean.evaluate
-AbstractUnivariateStatistic.evaluate
-SemiVariance.setVarianceDirection
-ArgUtils.flatten

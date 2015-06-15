@@ -1,6 +1,0 @@
-FirstMoment.getResult
-AbstractStorelessUnivariateStatistic.incrementAll
-AbstractUnivariateStatistic.test
-FirstMoment.getN
-FirstMoment.increment
-FirstMoment.clear

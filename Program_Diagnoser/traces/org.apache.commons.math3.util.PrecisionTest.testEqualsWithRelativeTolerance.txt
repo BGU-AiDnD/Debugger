@@ -1,2 +1,0 @@
-Precision.equalsWithRelativeTolerance
-Precision.equals

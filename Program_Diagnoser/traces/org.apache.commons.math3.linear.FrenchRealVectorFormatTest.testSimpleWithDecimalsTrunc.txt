@@ -1,4 +1,0 @@
-CompositeFormat.formatDouble
-RealVectorFormat.format
-ArrayRealVector.getDimension
-ArrayRealVector.getEntry

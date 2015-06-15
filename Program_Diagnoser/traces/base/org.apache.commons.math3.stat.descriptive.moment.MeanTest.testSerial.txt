@@ -1,6 +1,0 @@
-Precision.equalsIncludingNaN
-FirstMoment.getN
-Mean.getN
-AbstractStorelessUnivariateStatistic.equals
-Mean.getResult
-Precision.equals

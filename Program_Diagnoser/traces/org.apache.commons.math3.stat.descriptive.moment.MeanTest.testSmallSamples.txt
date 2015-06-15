@@ -1,3 +1,0 @@
-Mean.increment
-FirstMoment.increment
-Mean.getResult

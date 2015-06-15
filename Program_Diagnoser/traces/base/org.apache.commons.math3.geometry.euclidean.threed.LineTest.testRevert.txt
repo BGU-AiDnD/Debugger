@@ -1,9 +1,0 @@
-Line.getDirection
-Vector3D.getNormSq
-Vector3D.dotProduct
-Vector3D.toArray
-Vector3D.subtract
-FastMath.sqrt
-Line.revert
-Line.reset
-Vector3D.negate

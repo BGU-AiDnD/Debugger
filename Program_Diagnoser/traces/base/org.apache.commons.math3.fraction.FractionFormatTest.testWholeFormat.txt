@@ -1,5 +1,0 @@
-FractionFormat.getImproperInstance
-ProperFractionFormat.setWholeFormat
-FractionFormat.getProperInstance
-ProperFractionFormat.getWholeFormat
-AbstractFormat.getDefaultNumberFormat

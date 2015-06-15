@@ -1,4 +1,0 @@
-ArrayRealVector.append
-RealVector.checkIndex
-ArrayRealVector.getDimension
-ArrayRealVector.getEntry

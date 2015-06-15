@@ -1,7 +1,0 @@
-PolynomialFunctionLagrangeForm.degree
-PolynomialFunctionLagrangeForm.getCoefficients
-PolynomialFunctionLagrangeForm.value
-PolynomialFunctionLagrangeForm.computeCoefficients
-PolynomialFunctionLagrangeForm.verifyInterpolationArray
-PolynomialFunctionLagrangeForm.evaluateInternal
-MathArrays.checkOrder

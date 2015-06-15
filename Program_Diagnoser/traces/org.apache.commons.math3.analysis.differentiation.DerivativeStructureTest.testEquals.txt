@@ -1,8 +1,0 @@
-DSCompiler.getOrder
-DerivativeStructure.getOrder
-DSCompiler.getCompiler
-DSCompiler.getFreeParameters
-DSCompiler.getSize
-DerivativeStructure.equals
-Precision.equals
-DerivativeStructure.getFreeParameters

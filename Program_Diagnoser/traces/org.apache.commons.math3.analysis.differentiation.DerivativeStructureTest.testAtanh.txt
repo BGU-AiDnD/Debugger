@@ -1,8 +1,0 @@
-FastMath.atanh
-DSCompiler.getCompiler
-DerivativeStructure.getReal
-DSCompiler.getSize
-DerivativeStructure.atanh
-FastMath.log
-DSCompiler.atanh
-DSCompiler.compose

@@ -1,2 +1,0 @@
-Incrementor.getMaximalCount
-Incrementor.getCount

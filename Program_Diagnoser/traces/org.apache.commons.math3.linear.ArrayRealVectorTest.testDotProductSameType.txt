@@ -1,2 +1,0 @@
-ArrayRealVector.dotProduct
-ArrayRealVector.checkVectorDimensions

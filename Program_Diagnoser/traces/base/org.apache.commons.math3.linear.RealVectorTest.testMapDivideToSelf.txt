@@ -1,6 +1,0 @@
-Divide.value
-RealVector.iterator
-RealVector.checkIndex
-RealVector.mapToSelf
-FunctionUtils.fix2ndArgument
-RealVector.mapDivideToSelf

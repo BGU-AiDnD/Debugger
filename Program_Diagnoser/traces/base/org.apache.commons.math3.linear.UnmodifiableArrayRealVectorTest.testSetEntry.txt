@@ -1,4 +1,0 @@
-RealVector.unmodifiableRealVector
-ExceptionContext.addMessage
-ArrayRealVector.setEntry
-ArgUtils.flatten

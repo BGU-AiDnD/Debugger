@@ -1,7 +1,0 @@
-DerivativeStructure.getPartialDerivative
-DerivativeStructure.abs
-DSCompiler.getPartialDerivativeIndex
-DSCompiler.getCompiler
-DSCompiler.getFreeParameters
-DSCompiler.getSize
-DerivativeStructure.negate

@@ -1,3 +1,0 @@
-DerivativeStructure.getValue
-DSCompiler.getCompiler
-DSCompiler.getSize

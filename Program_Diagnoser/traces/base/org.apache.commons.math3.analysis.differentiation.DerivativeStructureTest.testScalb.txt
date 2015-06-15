@@ -1,4 +1,0 @@
-DerivativeStructure.scalb
-DSCompiler.getCompiler
-DerivativeStructure.getReal
-DSCompiler.getSize

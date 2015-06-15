@@ -1,8 +1,0 @@
-TransformUtils.createRealImaginaryArray
-FastFourierTransformer.normalizeTransformedData
-TransformUtils.scaleArray
-FastFourierTransformer.transformInPlace
-TransformUtils.createComplexArray
-FastFourierTransformer.mdfft
-FastMath.sqrt
-FastFourierTransformer.transform

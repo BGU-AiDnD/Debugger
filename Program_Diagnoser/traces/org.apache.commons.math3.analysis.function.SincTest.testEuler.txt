@@ -1,7 +1,0 @@
-FastMath.sinQ
-FastMath.cosQ
-FastMath.polySine
-Sinc.value
-FastMath.cos
-FastMath.sin
-FastMath.polyCosine

@@ -1,8 +1,0 @@
-FieldVector3D.getZ
-FieldVector3D.getX
-FieldVector3D.getY
-DSCompiler.getCompiler
-DerivativeStructure.multiply
-DerivativeStructure.getReal
-DSCompiler.getSize
-FieldVector3D.scalarMultiply

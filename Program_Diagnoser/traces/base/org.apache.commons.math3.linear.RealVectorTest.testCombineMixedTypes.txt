@@ -1,4 +1,0 @@
-RealVector.checkVectorDimensions
-RealVector.combine
-RealVector.combineToSelf
-RealVector.checkIndex

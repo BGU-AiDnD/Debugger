@@ -1,4 +1,0 @@
-ArrayRealVector.getLInfDistance
-ArrayRealVector.checkVectorDimensions
-ExceptionContext.addMessage
-ArgUtils.flatten

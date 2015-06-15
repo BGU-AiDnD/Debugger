@@ -1,6 +1,0 @@
-AbstractStorelessUnivariateStatistic.incrementAll
-AbstractUnivariateStatistic.test
-Product.clear
-Product.getResult
-Product.getN
-Product.increment

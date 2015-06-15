@@ -1,2 +1,0 @@
-ArrayRealVector.walkInDefaultOrder
-ArrayRealVector.getEntry

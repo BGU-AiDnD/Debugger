@@ -1,5 +1,0 @@
-Decimal64.atan2
-FastMath.atan2
-Decimal64.getReal
-FastMath.doubleHighPart
-FastMath.atan

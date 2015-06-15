@@ -1,5 +1,0 @@
-Skewness.getResult
-SecondMoment.increment
-Skewness.increment
-FirstMoment.increment
-ThirdMoment.increment

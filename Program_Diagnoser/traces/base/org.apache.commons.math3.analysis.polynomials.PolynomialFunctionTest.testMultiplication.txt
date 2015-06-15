@@ -1,3 +1,0 @@
-MathUtils.checkNotNull
-PolynomialFunction.multiply
-PolynomialFunction.toString

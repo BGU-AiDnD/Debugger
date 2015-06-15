@@ -1,9 +1,0 @@
-SumOfLogs.increment
-GeometricMean.clear
-SumOfLogs.getResult
-FastMath.exp
-SumOfLogs.getN
-GeometricMean.getResult
-GeometricMean.increment
-FastMath.log
-SumOfLogs.clear

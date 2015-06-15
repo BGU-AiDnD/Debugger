@@ -277,15 +277,19 @@ public class TraceToCode {
 		scanner.close();
 	}
 	
+	public void load_conversion_table() {
+		//initialize
+		conversion_table.clear();
+		
+		for(int i=0;i<9000;i++){
+			conversion_table.put(""+i,i);
+		}
+	}
+	
 	
 	/***************************************
 	 * Stores a conversion table in a file.
 	 ***************************************/
-	public void store_conversion_table(File file) throws IOException{
-		PrintWriter writer = new PrintWriter(new FileWriter(file, false));
-		for(String key : conversion_table.keySet()){
-			writer.println(conversion_table.get(key).intValue()+","+key);
-		}
-		writer.close();
+	public void store_conversion_table(){
 	}
 }

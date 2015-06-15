@@ -1,4 +1,0 @@
-ExceptionContext.addMessage
-SimpleRegression.addData
-SimpleRegression.regress
-ArgUtils.flatten

@@ -1,6 +1,0 @@
-FirstMoment.getN
-Precision.equalsIncludingNaN
-Kurtosis.getN
-AbstractStorelessUnivariateStatistic.equals
-Kurtosis.getResult
-Precision.equals

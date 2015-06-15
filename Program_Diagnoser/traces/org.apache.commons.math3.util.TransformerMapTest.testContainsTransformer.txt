@@ -1,2 +1,0 @@
-TransformerMap.containsTransformer
-TransformerMap.putTransformer

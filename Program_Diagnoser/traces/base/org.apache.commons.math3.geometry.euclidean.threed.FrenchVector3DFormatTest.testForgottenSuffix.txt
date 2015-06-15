@@ -1,7 +1,0 @@
-VectorFormat.parseCoordinates
-CompositeFormat.parseNextCharacter
-CompositeFormat.parseAndIgnoreWhitespace
-CompositeFormat.parseFixedstring
-CompositeFormat.parseNumber
-Vector3DFormat.parse
-CompositeFormat.getDefaultNumberFormat

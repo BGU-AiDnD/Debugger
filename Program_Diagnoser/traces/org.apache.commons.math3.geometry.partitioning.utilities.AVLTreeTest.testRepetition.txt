@@ -1,5 +1,0 @@
-AVLTree.insert
-AVLTree.getNotLarger
-AVLTree.getNotSmaller
-AVLTree.size
-AVLTree.getSmallest

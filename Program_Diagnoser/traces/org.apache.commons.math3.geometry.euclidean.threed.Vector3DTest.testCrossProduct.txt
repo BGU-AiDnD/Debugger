@@ -1,8 +1,0 @@
-BitsStreamGenerator.nextDouble
-Vector3D.getNorm
-Vector3D.crossProduct
-BitsStreamGenerator.clear
-AbstractWell.setSeed
-Well1024a.next
-FastMath.sqrt
-Vector3D.distance

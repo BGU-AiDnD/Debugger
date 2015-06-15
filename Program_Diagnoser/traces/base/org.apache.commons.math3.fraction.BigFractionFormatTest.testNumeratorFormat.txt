@@ -1,6 +1,0 @@
-AbstractFormat.setNumeratorFormat
-AbstractFormat.getNumeratorFormat
-BigFractionFormat.getProperInstance
-ProperBigFractionFormat.setWholeFormat
-BigFractionFormat.getImproperInstance
-AbstractFormat.getDefaultNumberFormat

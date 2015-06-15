@@ -1,2 +1,0 @@
-EuclideanIntegerPoint.centroidOf
-EuclideanIntegerPoint.getPoint

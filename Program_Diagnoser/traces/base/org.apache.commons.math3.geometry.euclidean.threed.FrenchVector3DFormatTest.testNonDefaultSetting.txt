@@ -1,6 +1,0 @@
-CompositeFormat.formatDouble
-Vector3DFormat.format
-Vector3D.getX
-Vector3D.getY
-Vector3D.getZ
-VectorFormat.format

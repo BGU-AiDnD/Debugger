@@ -1,2 +1,0 @@
-RealVector.sparseIterator
-RealVector.checkIndex

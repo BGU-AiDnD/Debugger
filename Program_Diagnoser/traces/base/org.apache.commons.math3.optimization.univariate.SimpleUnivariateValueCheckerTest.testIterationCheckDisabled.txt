@@ -1,4 +1,0 @@
-AbstractConvergenceChecker.getRelativeThreshold
-UnivariatePointValuePair.getValue
-AbstractConvergenceChecker.getAbsoluteThreshold
-SimpleUnivariateValueChecker.converged

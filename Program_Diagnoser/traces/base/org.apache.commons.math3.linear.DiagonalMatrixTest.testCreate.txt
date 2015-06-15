@@ -1,4 +1,0 @@
-MathUtils.checkNotNull
-DiagonalMatrix.getRowDimension
-DiagonalMatrix.getColumnDimension
-DiagonalMatrix.createMatrix

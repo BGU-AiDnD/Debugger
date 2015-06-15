@@ -1,9 +1,0 @@
-DerivativeStructure.acosh
-FastMath.acosh
-DSCompiler.getCompiler
-DerivativeStructure.getReal
-DSCompiler.getSize
-FastMath.sqrt
-DSCompiler.acosh
-FastMath.log
-DSCompiler.compose

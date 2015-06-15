@@ -1,5 +1,0 @@
-ArithmeticUtils.addAndCheck
-ArithmeticUtils.binomialCoefficient
-ExceptionContext.addMessage
-ArgUtils.flatten
-FastMath.log

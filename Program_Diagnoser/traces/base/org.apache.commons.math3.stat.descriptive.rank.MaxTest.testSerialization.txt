@@ -1,9 +1,0 @@
-Max.increment
-AbstractStorelessUnivariateStatistic.hashCode
-Max.clear
-Precision.equalsIncludingNaN
-Max.getN
-AbstractStorelessUnivariateStatistic.equals
-MathUtils.hash
-Max.getResult
-Precision.equals

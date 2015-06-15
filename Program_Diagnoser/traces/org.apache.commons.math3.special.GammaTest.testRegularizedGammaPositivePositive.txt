@@ -1,6 +1,0 @@
-FastMath.exp
-Gamma.regularizedGammaP
-FastMath.log1p
-Gamma.regularizedGammaQ
-Gamma.logGamma
-FastMath.log

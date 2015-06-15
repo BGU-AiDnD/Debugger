@@ -1,5 +1,0 @@
-CompositeFormat.parseNextCharacter
-CompositeFormat.parseAndIgnoreWhitespace
-CompositeFormat.parseFixedstring
-RealVectorFormat.parse
-CompositeFormat.getDefaultNumberFormat

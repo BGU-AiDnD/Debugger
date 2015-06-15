@@ -1,2 +1,0 @@
-ValueServer.setMode
-ValueServer.setValuesFileURL

@@ -1,2 +1,0 @@
-EnumeratedDistribution.probability
-EnumeratedIntegerDistribution.probability

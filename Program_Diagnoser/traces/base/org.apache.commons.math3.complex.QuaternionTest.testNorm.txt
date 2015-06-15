@@ -1,4 +1,0 @@
-Quaternion.multiply
-Quaternion.getNorm
-FastMath.sqrt
-Quaternion.getConjugate

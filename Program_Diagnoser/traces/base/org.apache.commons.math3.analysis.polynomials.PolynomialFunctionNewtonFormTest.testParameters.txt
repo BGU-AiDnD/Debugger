@@ -1,4 +1,0 @@
-MathUtils.checkNotNull
-ExceptionContext.addMessage
-PolynomialFunctionNewtonForm.verifyInputArray
-ArgUtils.flatten

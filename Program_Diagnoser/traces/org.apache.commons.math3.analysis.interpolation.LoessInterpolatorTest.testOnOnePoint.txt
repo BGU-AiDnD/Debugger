@@ -1,4 +1,0 @@
-LoessInterpolator.checkAllFiniteReal
-MathUtils.checkFinite
-LoessInterpolator.smooth
-MathArrays.checkOrder

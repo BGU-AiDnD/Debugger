@@ -1,7 +1,0 @@
-RealVector.checkVectorDimensions
-ExceptionContext.addMessage
-RealVector.dotProduct
-OpenIntToDoubleHashMap.computeCapacity
-OpenMapRealVector.isDefaultValue
-ArgUtils.flatten
-OpenMapRealVector.getDimension

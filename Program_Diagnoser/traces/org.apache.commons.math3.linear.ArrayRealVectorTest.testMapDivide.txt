@@ -1,5 +1,0 @@
-ArrayRealVector.mapDivideToSelf
-RealVector.mapDivide
-ArrayRealVector.copy
-ArrayRealVector.getDimension
-ArrayRealVector.getEntry

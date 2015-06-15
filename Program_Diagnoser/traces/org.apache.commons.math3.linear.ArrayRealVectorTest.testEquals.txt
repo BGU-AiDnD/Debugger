@@ -1,6 +1,0 @@
-ArrayRealVector.copy
-ArrayRealVector.isNaN
-ArrayRealVector.getDimension
-ArrayRealVector.getSubVector
-ArrayRealVector.equals
-ArrayRealVector.getEntry

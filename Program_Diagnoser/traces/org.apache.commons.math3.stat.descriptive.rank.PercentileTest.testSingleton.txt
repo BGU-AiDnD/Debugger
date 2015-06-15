@@ -1,4 +1,0 @@
-AbstractUnivariateStatistic.test
-Percentile.evaluate
-Percentile.setQuantile
-AbstractUnivariateStatistic.evaluate

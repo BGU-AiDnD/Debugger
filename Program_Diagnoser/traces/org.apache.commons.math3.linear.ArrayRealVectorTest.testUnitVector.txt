@@ -1,8 +1,0 @@
-ArrayRealVector.mapDivideToSelf
-RealVector.mapDivide
-ArrayRealVector.copy
-RealVector.unitVector
-ArrayRealVector.getDimension
-FastMath.sqrt
-ArrayRealVector.getNorm
-ArrayRealVector.getEntry

@@ -1,9 +1,0 @@
-ListPopulation.addChromosome
-Chromosome.getFitness
-ListPopulation.getPopulationSize
-ElitisticListPopulation.setElitismRate
-ListPopulation.getChromosomeList
-Chromosome.compareTo
-ListPopulation.getPopulationLimit
-ElitisticListPopulation.nextGeneration
-ElitisticListPopulation.getElitismRate

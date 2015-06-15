@@ -1,6 +1,0 @@
-RealVector.checkVectorDimensions
-ExceptionContext.addMessage
-RealVector.dotProduct
-RealVector.checkIndex
-RealVector.projection
-ArgUtils.flatten

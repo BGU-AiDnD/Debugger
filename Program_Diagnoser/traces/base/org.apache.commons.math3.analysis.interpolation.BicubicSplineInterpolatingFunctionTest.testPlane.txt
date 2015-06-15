@@ -1,5 +1,0 @@
-BicubicSplineInterpolatingFunction.value
-BicubicSplineInterpolatingFunction.apply
-BicubicSplineInterpolatingFunction.searchIndex
-BicubicSplineInterpolatingFunction.computeSplineCoefficients
-MathArrays.checkOrder

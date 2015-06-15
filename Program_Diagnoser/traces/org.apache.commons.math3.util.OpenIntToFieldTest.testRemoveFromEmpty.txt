@@ -1,8 +1,0 @@
-OpenIntToFieldHashMap.remove
-OpenIntToFieldHashMap.containsKey
-FractionField.getZero
-OpenIntToFieldHashMap.hashOf
-OpenIntToFieldHashMap.buildArray
-FractionField.getRuntimeClass
-Fraction.equals
-OpenIntToFieldHashMap.computeCapacity

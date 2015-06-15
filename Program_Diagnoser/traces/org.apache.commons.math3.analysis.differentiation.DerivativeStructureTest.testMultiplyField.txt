@@ -1,6 +1,0 @@
-DSCompiler.checkCompatibility
-DSCompiler.getCompiler
-DerivativeStructure.multiply
-DerivativeStructure.getReal
-DSCompiler.getSize
-DSCompiler.multiply

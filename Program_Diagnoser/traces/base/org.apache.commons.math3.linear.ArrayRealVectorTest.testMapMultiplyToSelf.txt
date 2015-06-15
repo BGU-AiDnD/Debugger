@@ -1,3 +1,0 @@
-ArrayRealVector.mapMultiplyToSelf
-ArrayRealVector.getDimension
-ArrayRealVector.getEntry

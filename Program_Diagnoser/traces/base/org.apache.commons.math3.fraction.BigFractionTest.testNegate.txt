@@ -1,4 +1,0 @@
-MathUtils.checkNotNull
-BigFraction.getDenominatorAsInt
-BigFraction.getNumeratorAsInt
-BigFraction.negate

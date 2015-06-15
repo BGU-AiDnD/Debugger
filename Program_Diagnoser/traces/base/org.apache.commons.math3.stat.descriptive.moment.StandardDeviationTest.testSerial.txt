@@ -1,9 +1,0 @@
-Variance.getN
-Precision.equalsIncludingNaN
-FirstMoment.getN
-StandardDeviation.getN
-StandardDeviation.getResult
-AbstractStorelessUnivariateStatistic.equals
-Variance.getResult
-Precision.equals
-FastMath.sqrt

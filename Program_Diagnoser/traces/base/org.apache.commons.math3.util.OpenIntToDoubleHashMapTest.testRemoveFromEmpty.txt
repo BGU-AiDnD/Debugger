@@ -1,4 +1,0 @@
-OpenIntToDoubleHashMap.containsKey
-OpenIntToDoubleHashMap.remove
-OpenIntToDoubleHashMap.computeCapacity
-OpenIntToDoubleHashMap.hashOf

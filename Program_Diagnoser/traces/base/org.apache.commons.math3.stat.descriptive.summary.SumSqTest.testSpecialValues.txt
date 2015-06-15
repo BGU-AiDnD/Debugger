@@ -1,2 +1,0 @@
-SumOfSquares.getResult
-SumOfSquares.increment

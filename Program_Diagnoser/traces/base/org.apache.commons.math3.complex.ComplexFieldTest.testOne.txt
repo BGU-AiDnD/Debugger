@@ -1,2 +1,0 @@
-ComplexField.getOne
-ComplexField.getInstance

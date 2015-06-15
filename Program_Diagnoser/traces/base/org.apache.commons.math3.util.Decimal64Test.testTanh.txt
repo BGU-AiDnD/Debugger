@@ -1,5 +1,0 @@
-FastMath.expm1
-Decimal64.getReal
-FastMath.tanh
-FastMath.exp
-Decimal64.tanh

@@ -1,8 +1,0 @@
-SimpleRegression.getSlope
-SimpleRegression.addData
-SimpleRegression.getSumSquaredErrors
-SimpleRegression.getR
-FastMath.sqrt
-SimpleRegression.getTotalSumSquares
-SimpleRegression.getN
-SimpleRegression.getRSquare

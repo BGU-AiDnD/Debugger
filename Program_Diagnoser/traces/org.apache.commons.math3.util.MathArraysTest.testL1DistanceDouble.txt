@@ -1,2 +1,0 @@
-MathArrays.distance1
-Precision.equals

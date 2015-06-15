@@ -1,5 +1,0 @@
-Fraction.negate
-ExceptionContext.addMessage
-Fraction.getNumerator
-ArgUtils.flatten
-Fraction.getDenominator

@@ -1,3 +1,0 @@
-SecondMoment.increment
-FirstMoment.increment
-SecondMoment.getResult

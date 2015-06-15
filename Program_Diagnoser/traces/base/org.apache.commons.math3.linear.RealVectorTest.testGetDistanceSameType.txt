@@ -1,5 +1,0 @@
-RealVector.checkVectorDimensions
-RealVector.iterator
-RealVector.getDistance
-RealVector.checkIndex
-FastMath.sqrt

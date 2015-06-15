@@ -1,6 +1,0 @@
-Decimal64.getReal
-FastMath.doubleHighPart
-FastMath.atan
-Decimal64.acos
-FastMath.sqrt
-FastMath.acos

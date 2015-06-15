@@ -1,9 +1,0 @@
-DerivativeStructure.tanh
-FastMath.expm1
-FastMath.tanh
-FastMath.exp
-DSCompiler.tanh
-DSCompiler.getCompiler
-DerivativeStructure.getReal
-DSCompiler.getSize
-DSCompiler.compose

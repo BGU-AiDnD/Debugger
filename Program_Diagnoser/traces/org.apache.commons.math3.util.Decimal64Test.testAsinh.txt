@@ -1,5 +1,0 @@
-Decimal64.asinh
-Decimal64.getReal
-FastMath.asinh
-FastMath.sqrt
-FastMath.log

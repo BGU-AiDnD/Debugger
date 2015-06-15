@@ -1,2 +1,0 @@
-Decimal64.add
-Decimal64.equals

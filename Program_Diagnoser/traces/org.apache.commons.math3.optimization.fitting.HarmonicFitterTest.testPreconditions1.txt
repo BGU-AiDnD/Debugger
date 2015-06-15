@@ -1,4 +1,0 @@
-HarmonicFitter.fit
-ExceptionContext.addMessage
-CurveFitter.getObservations
-ArgUtils.flatten

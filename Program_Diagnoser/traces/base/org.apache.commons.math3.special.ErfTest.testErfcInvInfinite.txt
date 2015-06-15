@@ -1,3 +1,0 @@
-Erf.erfInv
-Erf.erfcInv
-FastMath.log

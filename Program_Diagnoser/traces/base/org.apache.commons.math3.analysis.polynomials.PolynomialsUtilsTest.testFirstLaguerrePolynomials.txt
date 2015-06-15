@@ -1,7 +1,0 @@
-MathUtils.checkNotNull
-PolynomialFunction.multiply
-PolynomialFunction.toString
-PolynomialsUtils.createLaguerrePolynomial
-PolynomialsUtils.buildPolynomial
-FastMath.sqrt
-BigFraction.doubleValue

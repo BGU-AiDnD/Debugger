@@ -1,9 +1,0 @@
-MathUtils.checkNotNull
-FastMath.cosQ
-FastMath.sinQ
-FastMath.polySine
-ComplexUtils.polar2Complex
-FastMath.exp
-FastMath.cos
-FastMath.sin
-FastMath.polyCosine

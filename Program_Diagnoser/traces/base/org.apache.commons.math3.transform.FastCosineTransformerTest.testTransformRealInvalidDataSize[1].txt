@@ -1,5 +1,0 @@
-ExceptionContext.addMessage
-FastCosineTransformer.transform
-FastCosineTransformer.fct
-FastMath.sqrt
-ArgUtils.flatten

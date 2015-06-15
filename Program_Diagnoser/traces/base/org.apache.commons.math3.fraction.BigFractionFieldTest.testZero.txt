@@ -1,3 +1,0 @@
-BigFraction.equals
-BigFractionField.getInstance
-BigFractionField.getZero

@@ -1,4 +1,0 @@
-RealVector.checkVectorDimensions
-ExceptionContext.addMessage
-RealVector.getL1Distance
-ArgUtils.flatten

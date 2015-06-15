@@ -1,5 +1,0 @@
-ArrayRealVector.dotProduct
-ArrayRealVector.checkVectorDimensions
-RealVector.cosine
-FastMath.sqrt
-ArrayRealVector.getNorm

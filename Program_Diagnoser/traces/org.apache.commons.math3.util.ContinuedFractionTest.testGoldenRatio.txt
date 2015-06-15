@@ -1,2 +1,0 @@
-ContinuedFraction.evaluate
-Precision.equals

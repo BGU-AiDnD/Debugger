@@ -1,5 +1,0 @@
-Max.increment
-AbstractUnivariateStatistic.test
-AbstractStorelessUnivariateStatistic.evaluate
-Max.evaluate
-Max.getResult

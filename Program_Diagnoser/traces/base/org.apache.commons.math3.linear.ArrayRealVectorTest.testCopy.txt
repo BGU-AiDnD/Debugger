@@ -1,3 +1,0 @@
-ArrayRealVector.copy
-ArrayRealVector.getDimension
-ArrayRealVector.getEntry

@@ -1,2 +1,0 @@
-BigReal.hashCode
-BigReal.equals
