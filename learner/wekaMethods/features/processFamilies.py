@@ -1,7 +1,7 @@
 __author__ = 'amir'
 
-from weka.articles import *
-#from weka.articles import sqlToAttributes
+from wekaMethods.articles import *
+#from wekaMethods.articles import sqlToAttributes
 simple_features=[1,2,3,4,5,6,7,8,9,10,21,26,27,28,29,30,31,32,33,34,35,36,37]
 simpleArticles_features=[1,2,3,4,5,6,7,8,9,10,21,26,27,28]
 simpleAdded_features=[29,30,31,32,33,34,35,36,37]

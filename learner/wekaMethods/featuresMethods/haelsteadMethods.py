@@ -1,6 +1,6 @@
 __author__ = 'amir'
 
-from weka.articles import *
+from wekaMethods.articles import *
 #from articles import sqlToAttributes
 
 class haelsteadMethods:

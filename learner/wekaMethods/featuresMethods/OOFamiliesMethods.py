@@ -1,8 +1,8 @@
 __author__ = 'amir'
 
-from weka.articles import *
+from wekaMethods.articles import *
 import networkx
-#from weka.articles import sqlToAttributes
+#from wekaMethods.articles import sqlToAttributes
 from collections import Counter
 import numpy
 import igraph

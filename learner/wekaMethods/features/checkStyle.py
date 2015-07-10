@@ -1,7 +1,7 @@
 __author__ = 'amir'
 
-from weka.articles import *
-#from weka.articles import sqlToAttributes
+from wekaMethods.articles import *
+#from wekaMethods.articles import sqlToAttributes
 best_features=[7,15,19,1,23,16,63,22,30,6,2,31,54,62,4,55,27,11,17,26,67,10,35,47,51,24,20,8,48,34,59,66,49,58,52,32]
 class checkStyle:
     def get_attributesOLD(self):

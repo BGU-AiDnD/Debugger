@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-import sys
+import sys.argv
 import os
 import git
 import subprocess
@@ -482,16 +482,16 @@ def wrapperLearner(confFile,globalConfFile):
 
     vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
     LocalGitPath=os.path.join(workingDir,"repo")
-    #versionsCreate(gitPath, vers, versPath,LocalGitPath)
+    versionsCreate(gitPath, vers, versPath,LocalGitPath)
     mkOneDir(LocalGitPath)
 
-    #featuresExtract(vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
+    featuresExtract(vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
     logfile.write("after featuresExtract "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
 
     MethodsParsed=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"CheckStyle.txt")
     changeFile=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"Ins_dels.txt")
-    #wekaMethods.buildDB.buildOneTimeCommits(versPath,dbadd,bugsPath,False,-1,vers,"repo",MethodsParsed,changeFile,logfile,dates)
+    wekaMethods.buildDB.buildOneTimeCommits(versPath,dbadd,bugsPath,False,-1,vers,"repo",MethodsParsed,changeFile,logfile,dates)
     logfile.write("after buildDB "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
 
@@ -563,37 +563,6 @@ def wrapper(confFile):
 
 
 if __name__ == '__main__':
-    """
-    verPath="C:\\projs\\cdt6Working\\vers\\CDT_8_1_0"
-    path="C:\\projs\\cdt6Working\\vers\\CDT_8_1_0"
-    pathRepo="C:\\projs\\cdt6Working\\vers\\CDT_8_1_0\\repo"
-    run_commands = ["dir", "/b", "/s", "*.java"]
-    #print " ".join(run_commands)
-    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=pathRepo)
-    (out, err) = proc.communicate()
-    open(os.path.join(path,"javaFiles.txt"),"wb").writelines([out ])
-
-    run_commands = ["javadoc", "-doclet", "com.github.markusbernhardt.xmldoclet.XmlDoclet","-docletpath", "..\\..\\xml-doclet-1.0.4-jar-with-dependencies.jar", "-private","-d",".\Jdoc","@JdocFunc.txt"]
-    outPath=verPath+"\\Jdoc\\javadoc.xml"
-    err=""
-    #print run_commands
-    #print " ".join(run_commands)
-    bads=[]
-    i=0
-    while (not os.path.exists(outPath)):
-        bads=bads+OO_features_error_analyze(err)
-        #print bads
-        open(os.path.join(verPath,"JdocFunc.txt"),"wb").writelines([x for x in open(os.path.join(verPath,"javaFiles.txt"),"r").readlines() if x.replace("\n","") not in bads ])
-        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,cwd=verPath)
-        (out, err) = proc.communicate()
-        open(os.path.join(verPath,"Err_"+str(i)+".txt"),"wb").write(err)
-        print i
-        i=i+1
-
-    exit()
-
-    """
-
     #sourceMonitorEXE="C:\Program Files (x86)\SourceMonitor\SourceMonitor.exe"
     #SourceMonitorXml("C:\projs\\ant13Working","ANT_171",sourceMonitorEXE)
 

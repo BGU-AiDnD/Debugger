@@ -2,8 +2,8 @@ __author__ = 'Amir-pc'
 
 import arff
 
-from weka.buildDB import *
-from weka.commentedCodeDetector import *
+from wekaMethods.buildDB import *
+from wekaMethods.commentedCodeDetector import *
 import features.process as process
 import features.haelstead as haelstead
 import features.OO as OO

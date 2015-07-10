@@ -1,7 +1,7 @@
 __author__ = 'amir'
 
-from weka.articles import *
-#from weka.articles import sqlToAttributes
+from wekaMethods.articles import *
+#from wekaMethods.articles import sqlToAttributes
 
 class processMethods:
     def get_attributes(self):

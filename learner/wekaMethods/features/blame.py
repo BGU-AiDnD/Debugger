@@ -1,7 +1,7 @@
 __author__ = 'amir'
 
-from weka.articles import *
-#from weka.articles import sqlToAttributes
+from wekaMethods.articles import *
+#from wekaMethods.articles import sqlToAttributes
 best_features=[1,3,5,6,7,8,12,14,15,17,21,22,23,27,32,34,36,37,43,44,45,47,49,50,52,56,57,58,62,64,67,69,71,72,78,88]
 
 class blame:
