@@ -9,7 +9,7 @@ import sqlite3
 import shutil
 import results
 import winsound
-import weka.wekaAccuracy
+import wekaMethods.wekaAccuracy
 
 
 def optimize(inds_bef, mat, priors):
