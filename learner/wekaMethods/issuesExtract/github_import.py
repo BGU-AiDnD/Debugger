@@ -37,7 +37,7 @@ def issueAnalyze(issue,product,component):
     return [Id,Product,Component,Assigned_To,Status,Resolution,Reporter,Last_Modified,Version,Milestone,Hardware,OS,Priority,Severity,Summary,Keywords,Submit_Date,Blocks,Depends_On,Duplicate_Of,CC]
 
 
-def BugzillaIssues(url,owner,repo,outFile):
+def GithubIssues(url,owner,repo,outFile):
     gh=github3.GitHub()
     lines=[["ID","Product","Component","Assigned To","Status","Resolution","Reporter","Last Modified","Version","Milestone","Hardware","OS","Priority","Severity","Summary","Keywords","Submit Date","Blocks","Depends On","Duplicate Of","CC"]]
     allIssues= gh.iter_repo_issues(owner,repo)
@@ -50,8 +50,7 @@ def BugzillaIssues(url,owner,repo,outFile):
     writer.writerows(lines)
     f.close()
 
-
-
+"""
 
 gh=github3.GitHub()
 issues= gh.iter_repo_issues("PyGithub","PyGithub",state="all")
@@ -73,3 +72,4 @@ if issue.is_closed():
     issue.reopen()
 
 issue.edit('New issue title', issue.body + '\n------\n**Update:** Text to append')
+"""

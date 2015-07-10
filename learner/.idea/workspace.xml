@@ -23,6 +23,18 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
+      <file leaf-file-name="wrapper.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/wrapper.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.34285715" vertical-offset="9486" max-vertical-offset="10098">
+              <caret line="570" column="45" selection-start-line="570" selection-start-column="45" selection-end-line="570" selection-end-column="45" />
+              <folding>
+                <element signature="e#41#51#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="wekaAccuracy.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wekaMethods/wekaAccuracy.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -46,18 +58,28 @@
       <file leaf-file-name="analyzeComms.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wekaMethods/features/analyzeComms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6409">
-              <caret line="2" column="16" selection-start-line="2" selection-start-column="16" selection-end-line="2" selection-end-column="16" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="17" max-vertical-offset="6409">
+              <caret line="3" column="16" selection-start-line="3" selection-start-column="16" selection-end-line="3" selection-end-column="16" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="analyzeLast.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="analyzeLast.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wekaMethods/features/analyzeLast.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.13568774" vertical-offset="29" max-vertical-offset="6511">
+            <state vertical-scroll-proportion="-1.2807018" vertical-offset="29" max-vertical-offset="6511">
               <caret line="6" column="29" selection-start-line="6" selection-start-column="29" selection-end-line="6" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="github_import.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/github_import.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="476" max-vertical-offset="1309">
+              <caret line="39" column="33" selection-start-line="39" selection-start-column="33" selection-end-line="39" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -73,7 +95,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/weka/issuesExtract/jira-import.py" />
         <option value="$PROJECT_DIR$/weka/articles.py" />
         <option value="$PROJECT_DIR$/weka/wrapper.py" />
         <option value="$PROJECT_DIR$/Agent/experiments.py" />
@@ -102,7 +123,6 @@
         <option value="C:/Python27/Lib/site-packages/github3/issues/issue.py" />
         <option value="C:/Python27/Lib/site-packages/github3/github.py" />
         <option value="$PROJECT_DIR$/wekaMethods/wrapper.py" />
-        <option value="$PROJECT_DIR$/wekaMethods/issuesExtract/github-import.py" />
         <option value="$PROJECT_DIR$/arff_use.py" />
         <option value="$PROJECT_DIR$/jdb.txt" />
         <option value="$PROJECT_DIR$/Agent/reportsAppend.py" />
@@ -121,9 +141,11 @@
         <option value="$PROJECT_DIR$/wekaMethods/blameParse.py" />
         <option value="$PROJECT_DIR$/All_One_create.py" />
         <option value="C:/Python27/Lib/site-packages/arff.py" />
-        <option value="$PROJECT_DIR$/wrapper.py" />
         <option value="$PROJECT_DIR$/wekaMethods/articles.py" />
         <option value="$PROJECT_DIR$/wekaMethods/features/analyzeComms.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/features/analyzeLast.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/issuesExtract/github-import.py" />
+        <option value="$PROJECT_DIR$/wrapper.py" />
       </list>
     </option>
   </component>
@@ -220,42 +242,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="wekaMethods" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="featuresMethods" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eclipse" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="learner" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wekaMethods" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="features" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eclipse" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="learner" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="diffAnalyze" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -322,25 +308,7 @@
       <recent name="E:\Dropbo\Dropbox\עבודה\eclipse\eclipse code\weka" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.wrapper">
-    <configuration default="false" name="blameParse" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/weka" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="eclipse" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/weka/blameParse.py" />
-      <option name="PARAMETERS" value="" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Python.github-import">
     <configuration default="false" name="bugs_testsDBMethods" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -408,6 +376,24 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="eclipse" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/report.py" />
+      <option name="PARAMETERS" value="" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="github-import" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/wekaMethods/issuesExtract" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="eclipse" />
+      <option name="SCRIPT_NAME" value="C:\Repo\Debugger\learner\wekaMethods\issuesExtract\github_import.py" />
       <option name="PARAMETERS" value="" />
       <RunnerSettings RunnerId="PythonRunner" />
       <ConfigurationWrapper RunnerId="PythonRunner" />
@@ -535,19 +521,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.blameParse" />
-      <item index="1" class="java.lang.String" itemvalue="Python.bugs_testsDBMethods" />
-      <item index="2" class="java.lang.String" itemvalue="Python.wrapper" />
-      <item index="3" class="java.lang.String" itemvalue="Python.blameParse (1)" />
-      <item index="4" class="java.lang.String" itemvalue="Python.report" />
+      <item index="0" class="java.lang.String" itemvalue="Python.bugs_testsDBMethods" />
+      <item index="1" class="java.lang.String" itemvalue="Python.wrapper" />
+      <item index="2" class="java.lang.String" itemvalue="Python.blameParse (1)" />
+      <item index="3" class="java.lang.String" itemvalue="Python.report" />
+      <item index="4" class="java.lang.String" itemvalue="Python.github-import" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.wrapper" />
-        <item index="1" class="java.lang.String" itemvalue="Python.report" />
-        <item index="2" class="java.lang.String" itemvalue="Python.blameParse (1)" />
-        <item index="3" class="java.lang.String" itemvalue="Python.bugs_testsDBMethods" />
-        <item index="4" class="java.lang.String" itemvalue="Python.blameParse" />
+        <item index="0" class="java.lang.String" itemvalue="Python.github-import" />
+        <item index="1" class="java.lang.String" itemvalue="Python.wrapper" />
+        <item index="2" class="java.lang.String" itemvalue="Python.report" />
+        <item index="3" class="java.lang.String" itemvalue="Python.blameParse (1)" />
+        <item index="4" class="java.lang.String" itemvalue="Python.bugs_testsDBMethods" />
       </list>
     </recent_temporary>
   </component>
@@ -575,7 +561,7 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3923221" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16947566" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30974844" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2893082" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -599,10 +585,10 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24963397" sideWeight="0.6914378" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26207906" sideWeight="0.7224959" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30974844" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26207906" sideWeight="0.7224959" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2893082" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -718,7 +704,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/jira-import.py">
+    <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/jira_import.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.06257669" vertical-offset="0" max-vertical-offset="1496">
           <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
@@ -732,7 +718,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/gh-issues-import.py">
+    <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/gh_issues_import.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="6954" max-vertical-offset="7769">
           <caret line="182" column="61" selection-start-line="182" selection-start-column="61" selection-end-line="182" selection-end-column="61" />
@@ -753,7 +739,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/bugzilla-import.py">
+    <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/bugzilla_import.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.9842995" vertical-offset="1643" max-vertical-offset="2499">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -785,13 +771,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="203.85715" vertical-offset="6643" max-vertical-offset="7684">
           <caret line="55" column="12" selection-start-line="55" selection-start-column="8" selection-end-line="55" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/github-import.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.72883433" vertical-offset="562" max-vertical-offset="1377">
-          <caret line="68" column="6" selection-start-line="68" selection-start-column="6" selection-end-line="68" selection-end-column="6" />
         </state>
       </provider>
     </entry>
@@ -958,16 +937,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wrapper.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="6270" max-vertical-offset="10064">
-          <caret line="387" column="25" selection-start-line="387" selection-start-column="25" selection-end-line="387" selection-end-column="25" />
-          <folding>
-            <element signature="e#41#56#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wekaMethods/wekaAccuracy.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1666" max-vertical-offset="2261">
@@ -986,17 +955,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/wekaMethods/features/analyzeComms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6409">
-          <caret line="2" column="16" selection-start-line="2" selection-start-column="16" selection-end-line="2" selection-end-column="16" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="17" max-vertical-offset="6409">
+          <caret line="3" column="16" selection-start-line="3" selection-start-column="16" selection-end-line="3" selection-end-column="16" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wekaMethods/features/analyzeLast.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.13568774" vertical-offset="29" max-vertical-offset="6511">
+        <state vertical-scroll-proportion="-1.2807018" vertical-offset="29" max-vertical-offset="6511">
           <caret line="6" column="29" selection-start-line="6" selection-start-column="29" selection-end-line="6" selection-end-column="29" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/github_import.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="476" max-vertical-offset="1309">
+          <caret line="39" column="33" selection-start-line="39" selection-start-column="33" selection-end-line="39" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wrapper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.34285715" vertical-offset="9486" max-vertical-offset="10098">
+          <caret line="570" column="45" selection-start-line="570" selection-start-column="45" selection-end-line="570" selection-end-column="45" />
+          <folding>
+            <element signature="e#41#51#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

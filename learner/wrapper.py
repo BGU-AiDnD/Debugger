@@ -14,6 +14,7 @@ import shutil
 import csv
 import wekaMethods.patchsBuild
 import wekaMethods.wekaAccuracy
+import wekaMethods.issuesExtract.github_import
 import Agent.bugs_testsDBMethods
 import Agent.experimentsMethods
 import report
@@ -566,14 +567,15 @@ if __name__ == '__main__':
     #sourceMonitorEXE="C:\Program Files (x86)\SourceMonitor\SourceMonitor.exe"
     #SourceMonitorXml("C:\projs\\ant13Working","ANT_171",sourceMonitorEXE)
 
+    #gitInfoToCsv("C:\projs\jersey","C:\projs\jersey\\vers.csv")
+    wekaMethods.issuesExtract.github_import()
+    #wrapperLearner("C:\projs\\antConf.txt","C:\Repo\Debugger\\globalConf.txt")
 
     #Extract_OO_features("C:\\projs\\JavaDocTry",[""])
-    wrapperLearner("C:\projs\\antConf.txt","C:\Repo\Debugger\\globalConf.txt")
     #wrapperLearner("C:\projs\\cdtConf.txt")
     #wrapper("C:\projs\\cdtConf.txt","C:\projs\\cdtBugs.csv")
     #wrapper("C:\projs\\GriConf.txt","C:\projs\\GrizzBugs.csv")
     #wrapper("C:\projs\\jerseyConf.txt","C:\projs\\jerseyBugs.csv")
-    #gitInfoToCsv("C:\projs\jersey","C:\projs\jersey\\vers.csv")
     #wrapper("C:\projs\\poiConf.txt","C:\projs\\poiBugs.csv")
     #wrapper("C:\projs\\karafConf.txt","karafBugs.csv")
     #Mkdirs("C:\projs\\karafW",["s"])
