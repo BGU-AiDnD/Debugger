@@ -8,6 +8,7 @@ import checkStyle
 
 
 # git format-patch --root origin
+#git format-patch --root -o patch --function-context --unified=9000
 path="C:\GitHub\\try\org.eclipse.cdt\\patchReg\\"
 path="C:\\tomcat\code\\try\\tomcat8\\patchReg\\"
 

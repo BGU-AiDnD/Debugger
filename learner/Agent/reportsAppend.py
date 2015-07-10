@@ -48,9 +48,3 @@ def testsClasses(doc):
     for i in range(len(tests)):
         outs.append(tests[i].attributes["classname"].value)
     return outs
-
-
-
-reportsAppend("C:\\GitHub\\agent\\reports","C:\\GitHub\\agent\\reports\\all.xml")
-#print xmlReadTest("C:\\GitHub\\agent\\reports\\all.xml")
-#print testsClasses("C:\\GitHub\\agent\\reports\\all.xml")

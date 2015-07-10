@@ -99,7 +99,6 @@ def diagsToCompsProbs(files, bugged,DiagFile,thresholdPorbs):
                 dict[comp]=dict[comp]+p
             else:
                 dict[comp]=p
-
     pr=0.0
     dg=[]
     dict2={}
@@ -153,6 +152,21 @@ def aucCheck(DiagFile,bug_f,thresholdPorbs):
     auc =diagsToCompsProbs(files, bugged,DiagFile,thresholdPorbs)
     return auc
 
+def wastedCheck(DiagFile,bug_f):
+    BugsIds, bugged, pack, testsCount, files = readBugFile(bug_f)
+    buggedComps=[ttt for ttt in files if ttt in bugged]
+    diags,probs=get_diag(DiagFile)
+    baseDiag=set()
+    tp=0
+    for d in diags:
+        for comp in d:
+            baseDiag.add(comp)
+        tp = len([i1 for i1 in baseDiag if i1 in buggedComps])
+        if tp==len(buggedComps):
+            break
+    return len(baseDiag)-tp
+
+
 def ExperimentsAuc(outputFile,output2File,baseDir, thresholdPorbs,weka,experiments):
     dirI = baseDir+"out\\"
     #bugsDir = baseDir+"Opt\\"
@@ -164,13 +178,13 @@ def ExperimentsAuc(outputFile,output2File,baseDir, thresholdPorbs,weka,experimen
         output2=output2+[["algorithm","index","auc" ]]
         files=["weka","uniform"]
         for f in files:
-            recall_avg=0
-            accA_count=0
+            recall_avg=0.0
+            accA_count=0.0
             precision_avg=0
             accB_count=0
             tests_avg=0.0
-            files_avg=0
-            bugged_avg=0
+            files_avg=0.0
+            bugged_avg=0.0
             for k in range(experiments):
                 file =  f+"_" + str(k)
                 rowToAdd=[f,k]
@@ -198,11 +212,12 @@ def ExperimentsAuc(outputFile,output2File,baseDir, thresholdPorbs,weka,experimen
                 if ( i <= j):
                     break
                 pValid = j / 10.0
-                auc_avg=0
+                auc_avg=0.0
+                wasted_avg=0.0
                 accA_count=0.0
                 tests_avg=0.0
-                files_avg=0
-                bugged_avg=0
+                files_avg=0.0
+                bugged_avg=0.0
                 for k in range(experiments):
                     file = str(pBug) + "_" + str(pValid) + "_" + str(k)
                     rowToAdd=[pBug,pValid,k]
@@ -211,6 +226,8 @@ def ExperimentsAuc(outputFile,output2File,baseDir, thresholdPorbs,weka,experimen
                         continue
                     DiagFile = baseDir+"\\out\\DIFG_check_"+ file + ".csv.csv"
                     auc = aucCheck(DiagFile, bug_f, thresholdPorbs)
+                    wasted=wastedCheck(DiagFile, bug_f)
+                    wasted_avg=wasted_avg+wasted
                     auc_avg=auc_avg+auc
                     accA_count=accA_count+1
                     output2=output2+[rowToAdd]
@@ -362,8 +379,8 @@ def resultsMultyWekaAndSanity(outputFile,output2File,baseDir, thresholdPorbs,exp
     bugsDir = baseDir+ "bugs_Files\\"
     output=[]
     output2=[]
-    output=output+[["algorithm","pBug","pValid","times","precision_avg","recall_avg","auc_avg","tests_avg","files_avg","bugged_avg" ]]
-    output2=output2+[["algorithm","pBug","pValid","times","index","precision","recall","auc","tests","files","bugged","bugsIDS","pack" ]]
+    output=output+[["algorithm","pBug","pValid","times","precision_avg","recall_avg","auc_avg","wasted_avg","tests_avg","files_avg","bugged_avg" ]]
+    output2=output2+[["algorithm","pBug","pValid","times","index","precision","recall","auc","wasted","tests","files","bugged","bugsIDS","pack" ]]
     for t in range(len(timesArr)):
         times=timesArr[t]
         filePre=str(times)+"_"
@@ -373,6 +390,8 @@ def resultsMultyWekaAndSanity(outputFile,output2File,baseDir, thresholdPorbs,exp
             accA_count=0.0
             auc_count=0.0
             auc_avg=0.0
+            wasted_count=0.0
+            wasted_avg=0.0
             precision_avg=0.0
             accB_count=0.0
             tests_avg=0.0
@@ -392,26 +411,32 @@ def resultsMultyWekaAndSanity(outputFile,output2File,baseDir, thresholdPorbs,exp
                 auc = aucCheck(DiagFile, bug_f, thresholdPorbs)
                 auc_avg=auc_avg+auc
                 auc_count=auc_count+1
-                output2=output2+[rowToAdd[:7]+[auc]+rowToAdd[7:]]
+                wasted=wastedCheck(DiagFile, bug_f)
+                wasted_avg=wasted_avg+wasted
+                wasted_count=wasted_count+1
+                output2=output2+[rowToAdd[:7]+[auc]+[wasted]+rowToAdd[7:]]
             recall_avg=recall_avg/accA_count
             auc_avg=auc_avg/auc_count
+            wasted_avg=wasted_avg/wasted_count
             precision_avg=precision_avg/accB_count
             tests_avg=tests_avg/experiments
             files_avg=files_avg/experiments
             bugged_avg=bugged_avg/experiments
-            output=output+[[name,0,0,times,precision_avg,recall_avg,auc_avg,tests_avg,files_avg,bugged_avg]]
+            output=output+[[name,0,0,times,precision_avg,recall_avg,auc_avg,wasted_avg,tests_avg,files_avg,bugged_avg]]
         pBug = 0.6
         for j in range(3):  # pValid < pBug
             pValid = j / 10.0
-            recall_avg=0
-            accA_count=0
-            auc_count=0
+            recall_avg=0.0
+            accA_count=0.0
+            auc_count=0.0
             auc_avg=0.0
-            precision_avg=0
-            accB_count=0
+            wasted_count=0.0
+            wasted_avg=0.0
+            precision_avg=0.0
+            accB_count=0.0
             tests_avg=0.0
-            files_avg=0
-            bugged_avg=0
+            files_avg=0.0
+            bugged_avg=0.0
             for k in range(experiments):
                 file =filePre+ str(pBug) + "_" + str(pValid) + "_" + str(k)
                 rowToAdd=["Sanity", pBug,pValid,times,k]
@@ -425,14 +450,19 @@ def resultsMultyWekaAndSanity(outputFile,output2File,baseDir, thresholdPorbs,exp
                 auc = aucCheck(DiagFile, bug_f, thresholdPorbs)
                 auc_avg=auc_avg+auc
                 auc_count=auc_count+1
-                output2=output2+[rowToAdd[:5]+[auc]+rowToAdd[5:]]
+                wasted=wastedCheck(DiagFile, bug_f)
+                wasted_avg=wasted_avg+wasted
+                wasted_count=wasted_count+1
+
+                output2=output2+[rowToAdd[:5]+[auc]+[wasted]+rowToAdd[5:]]
             recall_avg=recall_avg/accA_count
             auc_avg=auc_avg/auc_count
+            wasted_avg=wasted_avg/wasted_count
             precision_avg=precision_avg/accB_count
             tests_avg=tests_avg/experiments
             files_avg=files_avg/experiments
             bugged_avg=bugged_avg/experiments
-            output=output+[[pValid,pBug,pValid,times,precision_avg,recall_avg,auc_avg,tests_avg,files_avg,bugged_avg]]
+            output=output+[[pValid,pBug,pValid,times,precision_avg,recall_avg,auc_avg,wasted_avg,tests_avg,files_avg,bugged_avg]]
     with open(outputFile, 'wb') as f:
         writer = csv.writer(f)
         writer.writerows(output)
@@ -542,7 +572,7 @@ def planner_recordes( outputFile,medoutputFile,instancesPath,experiments,retCode
         writer.writerows(med_lines)
 
 def planner_resultsMultyWekaAndSanity( outputFile,medoutputFile,instancesPath,experiments,retCode,weka,timesArr,wekaAnsArr):
-    bugsDir = instancesPath+ "bugs_Files\\"
+    bugsDir = instancesPath+ "\\bugs_Files\\"
     out_lines=[]#[["pBug","pValid","precision","recall","steps","initials","tests"]]
     #out_lines=[["pBug","pValid","precision","recall","steps","initials","tests"]]
     out_lines=out_lines+[["algorithm","pBug","pValid","times","precision_avg","recall_avg","steps","tests_avg","files_avg","bugged_avg","initials","tests" ]]
@@ -582,9 +612,12 @@ if __name__ == "__main__":
 
     #print aucCheck("C:\\GitHub\\agent\\learner\\exWekaLOWER\\out\\DIFG_check_uniform_1.csv.csv","C:\\GitHub\\agent\\learner\\exWekaLOWER\\bugs_Files\\1.txt",1)
     #print aucCheck("C:\\GitHub\\agent\\learner\\exWekaLOWER\\out\\DIFG_check_weka_1.csv.csv","C:\\GitHub\\agent\\learner\\exWekaLOWER\\bugs_Files\\1.txt",1)
-
-    accA_count, accB_count,precision_avg,recall_avg,tests_avg,files_avg,bugged_avg=one_file_res("C:\GitHub\\all-all\\out\DIFG_check_25_uniform_0.csv.csv", 0.0, 0.0, "C:\GitHub\\all-all\\bugs_Files\\25_0.txt", 0.0, 0.0, 0.0, 0.0, 0.0, ['uniform', 0, 0, 25, 0], 1)
-    print accA_count, accB_count,precision_avg,recall_avg,tests_avg,files_avg,bugged_avg
+#def one_file_res(DiagFile, accA_count, accB_count, bug_f, precision_avg, recall_avg,tests_avg,files_avg,bugged_avg, rowToAdd, thresholdPorbs):
+    accA_count, accB_count,precision_avg,recall_avg,tests_avg,files_avg,bugged_avg=one_file_res("C:\GitHub\experiments\plannerDebug\plannerRecords\DIFG_check_25_0.6_0.0_0.csv.csv", 0.0, 0.0, "C:\GitHub\experiments\plannerDebug\\25_0.txt", 0.0, 0.0, 0.0, 0.0, 0.0, ['uniform', 0, 0, 25, 0], 1)
+    print precision_avg,recall_avg
+    accA_count, accB_count,precision_avg,recall_avg,tests_avg,files_avg,bugged_avg=one_file_res("C:\GitHub\experiments\plannerDebug\plannerRecords\\25_0.6_0.0_1.txt0_AllDiags.csv.csv", 0.0, 0.0, "C:\GitHub\experiments\plannerDebug\\25_0.txt", 0.0, 0.0, 0.0, 0.0, 0.0, ['uniform', 0, 0, 25, 0], 1)
+    print precision_avg,recall_avg
+    exit()
 
     d="C:\GitHub\\all-all"
     numOfExperiments=50

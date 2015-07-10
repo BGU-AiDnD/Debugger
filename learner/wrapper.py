@@ -1,0 +1,618 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
+import sys
+import os
+import git
+import subprocess
+import datetime
+import wekaMethods.buildDB
+import wekaMethods.commsSpaces
+import unittest
+import wekaMethods.articles
+import shutil
+import csv
+import wekaMethods.patchsBuild
+import wekaMethods.wekaAccuracy
+import Agent.bugs_testsDBMethods
+import Agent.experimentsMethods
+import report
+import All_One_create
+
+"""
+resources :
+git
+windows
+xml-doclet-1.0.4-jar-with-dependencies.jar
+checkStyle5.7
+"""
+
+"""
+workingDir=C:\projs\antWorking
+git=C:\projs\antC
+vers=(ANT_13_B2,ANT_13_MAIN_MERGE4,ANT_MAIN_13_MERGE4)
+"""
+def globalConfig(confFile):
+    lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
+    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar="","","","","","",""
+    RemoveBat=""
+    for x in lines:
+        if x.startswith("docletPath"):
+            v=x.split("=")[1]
+            docletPath=v
+        if x.startswith("sourceMonitorEXE"):
+            v=x.split("=")[1]
+            sourceMonitorEXE=v
+        if x.startswith("checkStyle57"):
+            v=x.split("=")[1]
+            checkStyle57=v
+        if x.startswith("checkStyle68"):
+            v=x.split("=")[1]
+            checkStyle68=v
+        if x.startswith("allchecks"):
+            v=x.split("=")[1]
+            allchecks=v
+        if x.startswith("methodsNamesXML"):
+            v=x.split("=")[1]
+            methodsNamesXML=v
+        if x.startswith("wekaJar"):
+            v=x.split("=")[1]
+            wekaJar=v
+        if x.startswith("RemoveBat"):
+            v=x.split("=")[1]
+            RemoveBat=v
+    return docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat
+
+
+
+def configure(confFile):
+    lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
+    vers, gitPath,bugs, workingDir="","","",""
+    for x in lines:
+        if x.startswith("workingDir"):
+            v=x.split("=")[1]
+            workingDir=v
+        if x.startswith("git"):
+            v=x.split("=")[1]
+            gitPath=v
+        if x.startswith("bugs"):
+            v=x.split("=")[1]
+            bugs=v
+        if x.startswith("vers"):
+            v=x.split("=")[1]
+            v=v.split("(")[1]
+            v=v.split(")")[0]
+            vers=v.split(",")
+    docletPath="C:\projs\\xml-doclet-1.0.4-jar-with-dependencies.jar"
+    sourceMonitorEXE="C:\Program Files (x86)\SourceMonitor\SourceMonitor.exe"
+    checkStyle57,checkStyle68,allchecks,methodsNamesXML="C:\projs\\checkstyle-5.7-all.jar","C:\projs\checkstyle-6.8-SNAPSHOT-all.jar","C:\projs\\allChecks.xml","C:\projs\methodNameLines.xml"
+    return [v.lstrip() for v in vers], gitPath,bugs, workingDir#,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML
+
+def configureExperiments(confFile):
+    lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
+    vers, gitPath,bugs, workingDir="","","",""
+    for x in lines:
+        if x.startswith("workingDir"):
+            v=x.split("=")[1]
+            workingDir=v
+        if x.startswith("git"):
+            v=x.split("=")[1]
+            gitPath=v
+        if x.startswith("bugs"):
+            v=x.split("=")[1]
+            bugs=v
+        if x.startswith("vers"):
+            v=x.split("=")[1]
+            v=v.split("(")[1]
+            v=v.split(")")[0]
+            vers=v.split(",")
+    return [v.lstrip() for v in vers], gitPath,bugs, workingDir
+
+def mkOneDir(dir):
+    if not os.path.isdir(dir):
+            os.mkdir(dir)
+
+def Mkdirs(workingDir,vers):
+    mkOneDir(workingDir)
+    #shutil.copyfile("C:\projs\\xml-doclet-1.0.4-jar-with-dependencies.jar", workingDir + "\\xml-doclet-1.0.4-jar-with-dependencies.jar")
+    #shutil.copyfile("C:\projs\\allChecks.xml", workingDir + "\\allChecks.xml")
+    #shutil.copyfile("C:\projs\\checkstyle-5.7-all.jar", workingDir + "\\checkstyle-5.7-all.jar")
+
+    versPath=os.path.join(workingDir,"vers")
+    mkOneDir(versPath)
+    experiments=os.path.join(workingDir,"experiments")
+    mkOneDir(experiments)
+    ver=os.path.join(versPath,"checkAll")
+    mkOneDir(ver)
+    ver=os.path.join(versPath,"checkAllMethodsData")
+    mkOneDir(ver)
+    dbadd=os.path.join(workingDir,"dbAdd")
+    mkOneDir(dbadd)
+    testedVer=os.path.join(workingDir,"testedVer")
+    mkOneDir(testedVer)
+    weka=os.path.join(workingDir,"weka")
+    mkOneDir(weka)
+
+
+    for v in vers:
+        ver=os.path.join(versPath,v)
+        mkOneDir(ver)
+        blame=os.path.join(ver,"blame")
+        mkOneDir(blame)
+        Jdoc2=os.path.join(ver,"Jdoc2")
+        mkOneDir(Jdoc2)
+    return versPath, dbadd
+
+def CopyDirs(gitPath, versPath,vers):
+    for x in vers:
+        path=os.path.join(versPath,x)+"\\"
+        path=os.path.join(path,"repo")#+"\\"
+        coptSt = "xcopy " + gitPath + " " + path + " /C /e /i /h"
+        if not os.path.exists(path):
+            shutil.copytree(gitPath, path)
+
+
+def GitRevert(versPath,vers):
+    for x in vers:
+        path=os.path.join(versPath,x)
+        path=os.path.join(path,"repo")+"\\"
+        run_commands = ["git", "reset", "-q", x]
+        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
+        (out, err) = proc.communicate()
+
+        run_commands = ["git", "revert",  x]
+        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
+        (out, err) = proc.communicate()
+
+        run_commands = ["git", "cherry-pick",  x]
+        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
+        (out, err) = proc.communicate()
+
+        run_commands = ["git", "clean","-f","-d",  x]
+        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
+        (out, err) = proc.communicate()
+
+def OO_features_error_analyze(err):
+    # get all corrupted java files in err
+    lines=err.split("\n")
+    wantedLines=[]
+    i=0
+    for l in lines:
+        if "symbol:   variable " in l:
+            wantedLines.append(lines[i-3])
+        i=i+1
+    knownP=["static import only from classes and interfaces","unmappable character for encoding"]
+    knownP=[""]
+    dontMatter=["does not exist","cannot find symbol"]
+    wantedLines=wantedLines+[x for x in lines if ".java:" in x]
+    lines=wantedLines
+    for d in dontMatter:
+        lines=[x for x in lines if d not   in x]
+    ans=[]
+    for p in knownP:
+        ans=ans+[x.split(".java")[0]+".java" for x in lines if p in x]
+    return ans
+
+
+
+def Extract_OO_features_OLD(versPath,vers,docletPath="C:\projs\\xml-doclet-1.0.4-jar-with-dependencies.jar"):
+    for x in vers:
+        verPath=os.path.join(versPath,x)
+        command = """c: & cd """ + verPath + " & for /R .\\repo %f in (*.java) do (call javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath "+docletPath+" -filename %~nxf.xml -private -d .\Jdoc2 %f) "
+        #open(os.path.join(verPath,"JdocFunc.txt"),"wt").writelines([x for x in open(os.path.join(verPath,"javaFiles.txt"),"r").readlines() if not "Bad.java" in x ])
+        #command = """c: & cd """ + verPath + " & javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath ..\..\\xml-doclet-1.0.4-jar-with-dependencies.jar  -private -d .\Jdoc2 @JdocFunc.txt"
+        os.system(command)
+# GENERATE Jdoc
+
+
+
+def Extract_OO_features(versPath,vers,docletPath="..\..\\xml-doclet-1.0.4-jar-with-dependencies.jar"):
+    for x in vers:
+        verPath=os.path.join(versPath,x)
+        outPath=os.path.join(verPath,"Jdoc")
+        outPath=os.path.join(outPath,"javadoc.xml")
+        err=""
+        #command = """c: & cd """ + verPath + " & for /R .\\repo %f in (*.java) do (call javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath ..\..\\xml-doclet-1.0.4-jar-with-dependencies.jar -filename %~nxf.xml -private -d .\Jdoc2 %f) "
+        #command = """c: & cd """ + verPath + " & javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath "+docletPath+"  -private -d .\Jdoc2 @JdocFunc.txt"
+        open(os.path.join(verPath,"JdocFunc.txt"),"wt").writelines([x for x in open(os.path.join(verPath,"javaFiles.txt"),"r").readlines()])
+        run_commands = ["javadoc", "-doclet", "com.github.markusbernhardt.xmldoclet.XmlDoclet","-docletpath ", docletPath, "-private","-d",".\Jdoc","@JdocFunc.txt"]
+        bads=[]
+        if (not os.path.exists(outPath)):
+            bads=bads+OO_features_error_analyze(err)
+            open(os.path.join(verPath,"JdocFunc.txt"),"wb").writelines([x for x in open(os.path.join(verPath,"javaFiles.txt"),"r").readlines() if x not in bads ])
+            proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,cwd=verPath)
+            (out, err) = proc.communicate()
+            bads=bads+OO_features_error_analyze(err)
+            open(os.path.join(verPath,"JdocFunc.txt"),"wb").writelines([x for x in open(os.path.join(verPath,"javaFiles.txt"),"r").readlines() if x not in bads ])
+            proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,cwd=verPath)
+            (out, err) = proc.communicate()
+# GENERATE Jdoc
+
+
+
+def SourceMonitorXml(workingDir,ver,sourceMonitorEXE):
+    bat="\""+sourceMonitorEXE+"\" /C sourceMonitor.xml "
+    versParh=os.path.join(workingDir,"vers")
+    verDir=os.path.join(versParh,ver)
+    verREPO=os.path.join(verDir,"repo")
+    verP=os.path.join(verDir,ver)
+    xml="""
+    <!--?xml version="1.0" encoding="UTF-8" ?-->
+<sourcemonitor_commands>
+
+   <write_log>true</write_log>
+
+   <command>
+       <project_file>verP.smp</project_file>
+       <project_language>Java</project_language>
+       <file_extensions>*.java</file_extensions>
+       <source_directory>verREPO</source_directory>
+       <include_subdirectories>true</include_subdirectories>
+       <checkpoint_name>Baseline</checkpoint_name>
+
+       <export>
+           <export_file>verP.csv</export_file>
+           <export_type>3 (Export project details in CSV)</export_type>
+           <export_option>1 (do not use any of the options set in the Options dialog)</export_option>
+       </export>
+   </command>
+
+   <command>
+       <project_file>verP.smp</project_file>
+       <project_language>Java</project_language>
+       <file_extensions>*.java</file_extensions>
+       <source_directory>verREPO</source_directory>
+       <include_subdirectories>true</include_subdirectories>
+       <checkpoint_name>Baseline</checkpoint_name>
+       <export>
+           <export_file>verP_methods.csv</export_file>
+           <export_type>6 (Export method metrics in CSV)</export_type>
+           <export_option>1 (do not use any of the options set in the Options dialog)</export_option>
+       </export>
+   </command>
+
+</sourcemonitor_commands>"""
+    xml=xml.replace("verREPO",verREPO)
+    xml=xml.replace("verP",verP)
+    xmlPath=os.path.join(verDir,"sourceMonitor.xml")
+    f=open(xmlPath,"wb")
+    f.write(xml)
+    f.close()
+    run_commands = [sourceMonitorEXE, "/C", "sourceMonitor.xml"]
+    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=verDir)
+    (out, err) = proc.communicate()
+
+
+
+
+def blameExecute(  path, pathRepo,ver ):
+    blameWrite=" & dir /b /s *.java > ..\\javaFiles.txt"
+    doBlame="for /F   %f in (../blame.txt) do (git blame --show-stats --score-debug -p --line-porcelain -l  "+ver+"  %f > ..\\blame\%~nxf)"
+    blame_write = "c: & cd " + pathRepo + blameWrite
+    run_commands = ["dir", "/b", "/s", "*.java"]
+    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=pathRepo)
+    (out, err) = proc.communicate()
+    open(os.path.join(path,"javaFiles.txt"),"wb").writelines([out ])
+    blameO3 = os.path.join(path, "javaFiles.txt")
+    blameO1 = os.path.join(path, "blame.txt")
+    open(blameO1, "wb").write("".join([x.replace(pathRepo + "\\", "") for x in open(blameO3, "r")]))
+    blame = """c: & cd """ + pathRepo + " & " + doBlame
+    os.system(blame)
+
+
+def Extract_complexity_features(versPath,vers,workingDir,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML):
+    for x in vers:
+        path=os.path.join(versPath,x)
+        pathRepo=os.path.join(path,"repo")
+        run_commands = ["java", "-jar", checkStyle68, "-c", methodsNamesXML,"javaFile","-o","vers/checkAllMethodsData/"+x+".txt",pathRepo]
+        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=workingDir)
+        (out, err) = proc.communicate()
+
+        checkStyle="c: & cd "+workingDir+ " &  java -jar "+checkStyle57+" -c allChecks.xml -r "+pathRepo+" -f xml -o vers/checkAll/"+x+".xml "
+        run_commands = ["java", "-jar", checkStyle57, "-c", allchecks,"-r",pathRepo,"-f","xml","-o","vers/checkAll/"+x+".xml"]
+        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=workingDir)
+        (out, err) = proc.communicate()
+
+        blameExecute(path, pathRepo,x)
+        SourceMonitorXml(workingDir,x,sourceMonitorEXE)
+
+
+
+def GitVersInfo(basicPath,repoPath,vers):
+    #repoPath="C:\\tomcat\\code\\tomcat8\\"
+    r=git.Repo(repoPath)
+    #vers=["TOMCAT_8_0_4", "TOMCAT_8_0_5", "TOMCAT_8_0_6", "TOMCAT_8_0_7", "TOMCAT_8_0_8", "TOMCAT_8_0_9"]
+    if vers==[]:
+        wanted=[ x.commit for x in r.tags ]
+        vers=r.tags
+    else:
+        wanted=[ x.commit for x in r.tags if x.name in vers]
+    commits=[int("".join(list(x.hexsha)[:7]),16) for x in wanted]
+    dates=[datetime.datetime.fromtimestamp(x.committed_date).strftime('%Y-%m-%d %H:%M:%S') for x in wanted]
+    paths=[os.path.join(basicPath, os.path.join(n, "repo")) for n in vers]
+    return vers,paths,dates,commits
+
+
+# blame
+#checkStyle
+
+def featuresExtract(vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML):
+    #Extract_complexity_features(versPath, vers, workingDir,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
+    logfile.write("after Extract_complexity_features "+ str(datetime.datetime.now())+"\n")
+    logfile.flush()
+
+    Extract_OO_features_OLD(versPath, vers,docletPath)
+    logfile.write("after Extract_OO_features "+ str(datetime.datetime.now())+"\n")
+    logfile.flush()
+
+    wekaMethods.commsSpaces.create(vers, os.path.join(workingDir, "vers"))
+    logfile.write("after commsSpaces "+ str(datetime.datetime.now())+"\n")
+    logfile.flush()
+
+    wekaMethods.patchsBuild.do_all(LocalGitPath)
+
+
+
+def versionsCreate(gitPath, vers, versPath,LocalGitPath):
+    CopyDirs(gitPath, versPath, vers)
+    GitRevert(versPath, vers)
+    if not os.path.exists(LocalGitPath):
+        shutil.copytree(gitPath, LocalGitPath)
+
+
+
+def gitInfoToCsv(gitPath,outFile):
+        #repoPath="C:\\tomcat\\code\\tomcat8\\"
+    r=git.Repo(gitPath)
+    #vers=["TOMCAT_8_0_4", "TOMCAT_8_0_5", "TOMCAT_8_0_6", "TOMCAT_8_0_7", "TOMCAT_8_0_8", "TOMCAT_8_0_9"]
+    wanted=[ x.commit for x in r.tags ]
+    vers=r.tags
+    dates=[datetime.datetime.fromtimestamp(x.committed_date).strftime('%Y-%m-%d %H:%M:%S') for x in wanted]
+    lines=[["ver","date"]]
+    for v,d in zip(vers,dates):
+        lines.append([v,d])
+    f=open(outFile,"wb")
+    writer=csv.writer(f)
+    writer.writerows(lines)
+    f.close()
+
+
+
+def BuildWekaModel(weka,training,testing,namesCsv,outCsv,name,wekaJar):
+    algorithm="weka.classifiers.bayes.NaiveBayes"
+    #os.system("c: & cd "+weka +" & java -Xmx2024m  -cp \"C:\\Program Files\\Weka-3-7\\weka.jar\" weka.Run " +algorithm+ " -x 10 -d .\\model.model -t "+training+" > training"+name+".txt")
+    os.system("c: & cd "+weka +" & java -Xmx2024m  -cp "+wekaJar+" weka.Run " +algorithm+ " -x 10 -d .\\model.model -t "+training+" > training"+name+".txt")
+    os.system("c: & cd "+weka +" & java -Xmx2024m  -cp "+wekaJar+" weka.Run " +algorithm+ " -l .\\model.model -T "+testing+" -classifications \"weka.classifiers.evaluation.output.prediction.CSV -file testing"+name+".csv\" ")
+    os.system("c: & cd "+weka +" & java -Xmx2024m  -cp "+wekaJar+" weka.Run " +algorithm+ " -l .\\model.model -T "+testing+" > testing"+name+".txt ")
+    wekaCsv=os.path.join(weka,"testing"+name+".csv")
+    wekaMethods.wekaAccuracy.priorsCreation(namesCsv,wekaCsv,outCsv,"")
+
+    m=0
+
+
+def testing(repoPath,antOrPom):
+    shutil.copyfile("C:\GitHub\\agent\my-app\\agent.jar", repoPath + "\\agent.jar")
+    if antOrPom=="ant":
+        ant = "c: & cd " + repoPath + "  & ant test -keep-going -Dhalt.on.test.failure=\"false\" -Dtest.junit.vmargs=\"-javaagent:agent.jar\""
+        #ant = "c: & cd " + repoPath + "  & ant test -keep-going -Dhalt.on.test.failure=\"false\" -Dpoi.test.locale =\"-Duser.language=en -Duser.country=US -javaagent:agent.jar\""
+        print ant
+        os.system(ant)
+    if antOrPom=="pom":
+        runMvn = "c: & cd " + repoPath + "  & mvn clean install -Dmaven.test.failure.ignore=true -DargLine=\"-javaagent:agent.jar\""
+        print runMvn
+        exit()
+        os.system(runMvn)
+
+
+    #adjust agent
+    #check mvn or ant
+    #run tests
+
+
+def ExcelReport(csvData,excel,sheet):
+    shutil.copyfile("C:\projs\\"+sheet+".xlsx", excel)
+    os.system("java -jar ExcelChanger.jar "+excel+" "+csvData+" "+sheet)
+
+
+def createBuildMLModels(workingDir,gitPath,weka,vers,dbadd,wekaJar,RemoveBat):
+    for buggedType in ["All","Most"]:
+        Bpath=os.path.join(workingDir,buggedType)
+        mkOneDir(Bpath)
+        FilesPath=os.path.join(buggedType,"Files")
+        methodsPath=os.path.join(buggedType,"Files")
+        trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacks(FilesPath,gitPath,weka,vers,buggedType,dbadd)
+        outCsv=os.path.join(weka,buggedType+"_out_files.csv")
+        BuildWekaModel(weka,trainingFile,testingFile,NamesFile,outCsv,"files_"+buggedType,wekaJar)
+        All_One_create.allFamilies(FilesPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
+        trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacksMethods(methodsPath,gitPath,weka,vers,buggedType,dbadd)
+        outCsv=os.path.join(weka,buggedType+"_out_methods.csv")
+        BuildWekaModel(weka,trainingFile,testingFile,NamesFile,outCsv,"methods_"+buggedType,wekaJar)
+        All_One_create.allFamilies(methodsPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
+
+
+def filesExperiments(workingDir,weka,packsPath):
+    for buggedType in ["All","Most"]:
+        outPath = os.path.join(workingDir, "experiments\\files" + buggedType)
+        outCsv=os.path.join(weka,buggedType+"_out_files.csv")
+        print "experimnt on wrapper"
+        Agent.experimentsMethods.RunExperiments(os.path.join(workingDir,"testsBugsMethods.db"), outPath,packsPath,outCsv,"File",buggedType)
+        #ExcelReport(os.path.join(outPath,"barinelOptA.csv"),os.path.join(outPath,"barinel.xlsx"),"barinel")
+        #ExcelReport(os.path.join(outPath,"plannerResall.csv"),os.path.join(outPath,"planner.xlsx"),"planner")
+    #create weka allfiles
+    #create weka most modified
+    #buildModels
+    #packs file
+    #run experiments allFiles
+    #run experiments modified
+
+
+
+def methodsExperiments(workingDir,weka,packsPath):
+    for buggedType in ["All","Most"]:
+        outPath = os.path.join(workingDir, "experiments\\methods" + buggedType)
+        outCsv=os.path.join(weka,buggedType+"_out_methods.csv")
+        Agent.experimentsMethods.RunExperiments(os.path.join(workingDir,"testsBugsMethods.db"), outPath,packsPath,outCsv,"method",buggedType)
+        #ExcelReport(os.path.join(outPath,"barinelOptA.csv"),os.path.join(outPath,"barinel.xlsx"),"barinel")
+        #ExcelReport(os.path.join(outPath,"plannerResall.csv"),os.path.join(outPath,"planner.xlsx"),"planner")
+
+def testVerConfig(workingDir,ver,antOrPom,startDate,endDate):
+    testedVer=os.path.join(workingDir,"testedVer")
+    testedVer=os.path.join(testedVer,"repo")
+    tested=os.path.join(workingDir,"vers")
+    tested=os.path.join(tested,ver)
+    tested=os.path.join(tested,"repo")
+    if not os.path.exists(testedVer):
+        shutil.copytree(tested, testedVer)
+    testing(testedVer,antOrPom)
+    Agent.bugs_testsDBMethods.basicBuild(workingDir,ver,startDate,endDate)
+
+
+def clean(versPath,LocalGitPath):
+    shutil.rmtree(versPath, ignore_errors=True)
+    shutil.rmtree(LocalGitPath, ignore_errors=True)
+
+
+def wrapperLearner(confFile,globalConfFile):
+    vers, gitPath,bugsPath, workingDir =configure(confFile)
+    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat =globalConfig(globalConfFile)
+    versPath, dbadd=Mkdirs(workingDir,vers)
+    logfile=open(os.path.join(workingDir,"timeLog.txt"),"wb")
+    logfile.write("start "+ str(datetime.datetime.now())+"\n")
+    logfile.flush()
+
+    vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
+    LocalGitPath=os.path.join(workingDir,"repo")
+    #versionsCreate(gitPath, vers, versPath,LocalGitPath)
+    mkOneDir(LocalGitPath)
+
+    #featuresExtract(vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
+    logfile.write("after featuresExtract "+ str(datetime.datetime.now())+"\n")
+    logfile.flush()
+
+    MethodsParsed=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"CheckStyle.txt")
+    changeFile=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"Ins_dels.txt")
+    #wekaMethods.buildDB.buildOneTimeCommits(versPath,dbadd,bugsPath,False,-1,vers,"repo",MethodsParsed,changeFile,logfile,dates)
+    logfile.write("after buildDB "+ str(datetime.datetime.now())+"\n")
+    logfile.flush()
+
+    weka=os.path.join(workingDir,"weka")
+    createBuildMLModels(workingDir,gitPath,weka,vers,dbadd,wekaJar,RemoveBat)
+
+    #allOne types
+
+
+    #clean(versPath,LocalGitPath)
+
+def wrapperExperiments(confFile):
+    vers, gitPath,bugsPath, workingDir,docletPath=configure(confFile)
+    weka=os.path.join(workingDir,"weka")
+    vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
+    testDb=Agent.bugs_testsDBMethods.basicBuild(workingDir,vers[-2],dates[-2],dates[-1])
+    packsPath = os.path.join(workingDir, "packs.txt")
+    Agent.experimentsMethods.packFileCreate(testDb,1,-1, packsPath)
+    filesExperiments(workingDir,weka,packsPath)
+    methodsExperiments(workingDir,weka,packsPath)
+
+
+def wrapper(confFile):
+    vers, gitPath,bugsPath, workingDir =configure(confFile)
+    versPath, dbadd=Mkdirs(workingDir,vers)
+    logfile=open(os.path.join(workingDir,"timeLog.txt"),"wb")
+    logfile.write("start "+ str(datetime.datetime.now())+"\n")
+    logfile.flush()
+
+    vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
+    LocalGitPath=os.path.join(workingDir,"repo")
+    versionsCreate(gitPath, vers, versPath,LocalGitPath)
+    mkOneDir(LocalGitPath)
+
+    featuresExtract(vers, versPath, workingDir,LocalGitPath,logfile)
+    logfile.write("after featuresExtract "+ str(datetime.datetime.now())+"\n")
+    logfile.flush()
+
+
+    MethodsParsed=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"CheckStyle.txt")
+    changeFile=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"Ins_dels.txt")
+    wekaMethods.buildDB.buildOneTimeCommits(versPath,dbadd,bugsPath,False,-1,vers,"repo",MethodsParsed,changeFile,logfile,dates)
+    logfile.write("after buildDB "+ str(datetime.datetime.now())+"\n")
+    logfile.flush()
+
+
+    testVerConfig(workingDir,vers[-2],"ant",dates[-2],dates[-1])
+    logfile.write("after testVerConfig "+ str(datetime.datetime.now())+"\n")
+    logfile.flush()
+
+    testDb = os.path.join( workingDir , "testsBugsMethods.db")
+    packsPath = os.path.join(workingDir, "packs.txt")
+    Agent.experimentsMethods.packFileCreate(testDb,1,-1, packsPath)
+
+    weka=os.path.join(workingDir,"weka")
+    createBuildMLModels(workingDir,gitPath,weka,vers,dbadd)
+    filesExperiments(workingDir,weka,packsPath)
+    logfile.write("after filesExperiments "+ str(datetime.datetime.now())+"\n")
+    logfile.flush()
+    exit()
+    methodsExperiments(workingDir,weka,packsPath)
+    logfile.write("after methodsExperiments "+ str(datetime.datetime.now())+"\n")
+    logfile.flush()
+
+    logfile.close()
+    clean(versPath,LocalGitPath)
+
+
+
+
+if __name__ == '__main__':
+    """
+    verPath="C:\\projs\\cdt6Working\\vers\\CDT_8_1_0"
+    path="C:\\projs\\cdt6Working\\vers\\CDT_8_1_0"
+    pathRepo="C:\\projs\\cdt6Working\\vers\\CDT_8_1_0\\repo"
+    run_commands = ["dir", "/b", "/s", "*.java"]
+    #print " ".join(run_commands)
+    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=pathRepo)
+    (out, err) = proc.communicate()
+    open(os.path.join(path,"javaFiles.txt"),"wb").writelines([out ])
+
+    run_commands = ["javadoc", "-doclet", "com.github.markusbernhardt.xmldoclet.XmlDoclet","-docletpath", "..\\..\\xml-doclet-1.0.4-jar-with-dependencies.jar", "-private","-d",".\Jdoc","@JdocFunc.txt"]
+    outPath=verPath+"\\Jdoc\\javadoc.xml"
+    err=""
+    #print run_commands
+    #print " ".join(run_commands)
+    bads=[]
+    i=0
+    while (not os.path.exists(outPath)):
+        bads=bads+OO_features_error_analyze(err)
+        #print bads
+        open(os.path.join(verPath,"JdocFunc.txt"),"wb").writelines([x for x in open(os.path.join(verPath,"javaFiles.txt"),"r").readlines() if x.replace("\n","") not in bads ])
+        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,cwd=verPath)
+        (out, err) = proc.communicate()
+        open(os.path.join(verPath,"Err_"+str(i)+".txt"),"wb").write(err)
+        print i
+        i=i+1
+
+    exit()
+
+    """
+
+    #sourceMonitorEXE="C:\Program Files (x86)\SourceMonitor\SourceMonitor.exe"
+    #SourceMonitorXml("C:\projs\\ant13Working","ANT_171",sourceMonitorEXE)
+
+
+    #Extract_OO_features("C:\\projs\\JavaDocTry",[""])
+    wrapperLearner("C:\projs\\antConf.txt","C:\Repo\Debugger\\globalConf.txt")
+    #wrapperLearner("C:\projs\\cdtConf.txt")
+    #wrapper("C:\projs\\cdtConf.txt","C:\projs\\cdtBugs.csv")
+    #wrapper("C:\projs\\GriConf.txt","C:\projs\\GrizzBugs.csv")
+    #wrapper("C:\projs\\jerseyConf.txt","C:\projs\\jerseyBugs.csv")
+    #gitInfoToCsv("C:\projs\jersey","C:\projs\jersey\\vers.csv")
+    #wrapper("C:\projs\\poiConf.txt","C:\projs\\poiBugs.csv")
+    #wrapper("C:\projs\\karafConf.txt","karafBugs.csv")
+    #Mkdirs("C:\projs\\karafW",["s"])
+    #gitInfoToCsv("C:\projs\\karaf","C:\projs\\karaf\\karaf.csv")
+    #SourceMonitorXml("C:\projs\poiWorking","REL_3_10_1")
+
+    #mvn clean install -Dmaven.test.failure.ignore=true
+    #mvn test -DargLine="-Dsystem.test.property=test"
+    # mvn -DskipTests
+    #ant -Dproperty=value
+    #REL_3_6
