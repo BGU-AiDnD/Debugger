@@ -3,6 +3,7 @@ package inst;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,9 +12,14 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.ClassLoader;
+import java.lang.Class;
+import java.util.Arrays;
+import java.util.ArrayList;
 
 import java.security.ProtectionDomain;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -60,7 +66,7 @@ public class MyInstrumenter implements ClassFileTransformer {
 		cp.importPackage("java.util.List");
 		
 		
-		System.out.println("Injecting methdo to " + injectedClassName + "...");
+		System.out.println("Injecting method to " + injectedClassName + "...");
 		//injectToMethod(loader,protectionDomain);	
 		System.out.println("Method injection done");
 		
@@ -120,7 +126,8 @@ public class MyInstrumenter implements ClassFileTransformer {
 
 			StringBuilder write=new StringBuilder();
 			write.append("public static synchronized void write(java.lang.String line){\n");
-			write.append("String toWrite=line.substring(0, line.lastIndexOf('.'));\n");
+			//write.append("String toWrite=line.substring(0, line.lastIndexOf('.'));\n");
+			write.append("String toWrite=line;\n");
 			write.append("if(TestsTraces.fileName!=null && TestsTraces.out!=null && !TestsTraces.q.contains(toWrite)){\n");
 			
 			write.append("TestsTraces.out.println(\"[inst2] + \"+toWrite);\n");
@@ -163,7 +170,38 @@ public class MyInstrumenter implements ClassFileTransformer {
 	
 	
 }
+public boolean IsClassesDir(File folder){
+	File[] listOfFiles = folder.listFiles();
+    for (int i = 0; i < listOfFiles.length; i++) {
+      if (listOfFiles[i].isFile()) {
+        boolean b=listOfFiles[i].getName().indexOf(".class")!=-1 || listOfFiles[i].getName().indexOf(".jar")!=-1;
+        		if(b)
+        			return true;
+      } 
+    }
+    return false;
+
+}
+	
  	
+	
+public List<File> getSubdirs(File file) {
+    List<File> subdirs = Arrays.asList(file.listFiles(new FileFilter() {
+        public boolean accept(File f) {
+            return f.isDirectory() && IsClassesDir(f);
+        }
+    }));
+    subdirs = new ArrayList<File>(subdirs);
+
+    List<File> deepSubdirs = new ArrayList<File>();
+    for(File subdir : subdirs) {
+        deepSubdirs.addAll(getSubdirs(subdir)); 
+    }
+    subdirs.addAll(deepSubdirs);
+    
+    return subdirs;
+}
+	
 
 public byte[] nicerTransform(ClassLoader loader, String className, Class<?> classBeingRedefined,    		
     ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
@@ -182,18 +220,39 @@ public byte[] nicerTransform(ClassLoader loader, String className, Class<?> clas
 	boolean tomPack=s[2].equals("catalina") || s[2].equals("coyote") || s[2].equals("el") || s[2].equals("jasper") || s[2].equals("juli") || s[2].equals("naming") || s[2].equals("tomcat");
 	boolean tomcat=s[0].equals("javax") ||  s[0].equals("org") &&s[1].equals("apache") && tomPack;
 	boolean myapp=s[0].equals("com") &&s[1].equals("mycompany") &&s[2].equals("app");
-	if (ant) {
-
-		String name=className.replace("/",".");
+	boolean surefire=s[3].equals("surefire");
+	boolean lang=s[0].equals("java") && s[1].equals("lang");
+	//System.out.println(s[0] +" " +s[1]+" " +s[2]+" " +s[3]);
+	ClassPool cp = ClassPool.getDefault();
+	String name=className.replace("/",".");
 		name=name.split("$")[0];
-		/*URL[] paths=((URLClassLoader)loader).getURLs();
-		for (URL c : paths){
-			System.out.println("URL: "+c.toString());
-		}*/
+	cp.importPackage(name);
+	if (!surefire && !lang   && (eclipse || myapp)) {
+
+		
+		
         try { 
 
-            ClassPool cp = ClassPool.getDefault();
-    		
+            
+		/*	paths=((URLClassLoader)"".getClass().getClassLoader().getSystemClassLoader()).getURLs();
+		for (URL c : paths){
+			//System.out.println("URL: "+c.getFile());
+			cp.appendClassPath(c.getFile());
+		}*/
+			cp.importPackage(name);
+			//cp.appendSystemPath();
+			//System.out.println(System.getProperty("user.dir"));
+			/*List<File> WorkingDir= getSubdirs(new File(System.getProperty("user.dir")));
+			for(File path : WorkingDir) {
+				System.out.println(path.toString());
+				cp.appendClassPath(path.toString()); 
+		    }*/
+			cp.appendClassPath(System.getProperty("user.dir"));
+			//cp.appendClassPath("C:/projs/cdt4Working/testedVer/repo/core/org.eclipse.cdt.core/target/classes/org/eclipse/cdt/core/parser");
+			//cp.appendClassPath(new URL(System.getProperty("user.dir")).toString());
+			//cp.appendClassPath(Class.forName(name,true,ClassLoader.getSystemClassLoader()).getClass().getClassLoader().getSystemClassLoader());
+		
+
             CtClass cc = cp.get(name);                
             CtMethod[] methods = cc.getDeclaredMethods();
 			if(!cc.isInterface()){
@@ -203,7 +262,7 @@ public byte[] nicerTransform(ClassLoader loader, String className, Class<?> clas
 				if(m.isEmpty()){
 					continue;
 				}
-            	String met=cc.getName()+"."+method.getName();
+            	String met=cc.getName()+"@"+method.getName();
 
             	StringBuffer toInsert = new StringBuffer();
 
@@ -219,8 +278,9 @@ public byte[] nicerTransform(ClassLoader loader, String className, Class<?> clas
     			//toInsert.append("		URL classUrl = new URL(\"file:\\\\\\target\\\\classes\\\\\");");
     			toInsert.append("try{");
             	//toInsert.append("		URL classUrl = new URL(\"file:///D:/Amir_Almishali/agent/CDT_8_1_2/org.eclipse.cdt/core/org.eclipse.cdt.core.tests/target/classes/\");");
-            	toInsert.append("		URL classUrl = new URL(\"file:///C:/tomcat/TOMCAT_8_0_8/\");");
-    			toInsert.append("		URLClassLoader myLoader = URLClassLoader.newInstance(new URL[]{classUrl}, \"amir\".getClass().getClassLoader().getSystemClassLoader());");
+            	//toInsert.append("		URL classUrl = new URL(\"file:///C:/tomcat/TOMCAT_8_0_8/\");");
+            	toInsert.append("		URL classUrl = new URL(System.getProperty(\"user.dir\"));");
+    			toInsert.append("		URLClassLoader myLoader = URLClassLoader.newInstance(new URL[]{classUrl}, \"amir\".getClass().getClassLoader().getSystemClassLoader());");// get class of String
     			toInsert.append("		System.out.println(\"before load class \" + myLoader);");
     			//toInsert.append("		testsRunnerClass = myLoader.loadClass(\"TestsTraces\");");
     			toInsert.append("	testsRunnerClass = Class.forName(\"TestsTraces\",true, myLoader);");
@@ -265,6 +325,7 @@ public byte[] nicerTransform(ClassLoader loader, String className, Class<?> clas
             	
             	//String ins="System.out.println(\"[inst2] +\" \" "+met+"\");";                	
             	String ins=toInsert.toString();
+				//System.out.println(ins);
             	try {
             		int mod=m.getModifiers();
             		boolean act=true;
@@ -303,7 +364,7 @@ public byte[] nicerTransform(ClassLoader loader, String className, Class<?> clas
         } catch (Exception ex) {
 		System.out.println("exception in nicer");
             ex.printStackTrace();
-			System.out.println(ex.getMessage());
+			System.err.println(ex.getMessage());
         }
 	}
 	
@@ -342,7 +403,7 @@ public byte[] transform2(ClassLoader loader, String className, Class<?> classBei
 				if(m.isEmpty()){
 					continue;
 				}
-            	String met=cc.getName()+"."+method.getName();
+            	String met=cc.getName()+"$"+method.getName();
 
             	StringBuffer toInsert = new StringBuffer();
 

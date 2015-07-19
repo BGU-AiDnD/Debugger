@@ -17,6 +17,7 @@ def issueAnalyze(issue,product,component):
     Resolution=""
     Reporter=str(issue.user)
     Last_Modified=str(issue.updated_at)
+    Last_Modified=Last_Modified.split(" ")[0]
     print Last_Modified
     Last_Modified=datetime.datetime.strptime(Last_Modified,'%Y-%m-%d').date().strftime("%d/%m/%y")
     Version=""
@@ -25,22 +26,25 @@ def issueAnalyze(issue,product,component):
     OS=""
     Priority=""
     Severity=""
-    Summary=str(issue.body)
-    Keywords=str(dict["keywords"])
+    Summary=""
+    if issue.body!=None:
+        Summary=" ".join(str( unicodedata.normalize('NFKD', issue.body).encode('ascii','ignore')).split())
+    Keywords=""#str(dict["keywords"])
     Submit_Date=str(issue.created_at)
+    Submit_Date=Submit_Date.split(" ")[0]
     print Submit_Date
     Submit_Date=datetime.datetime.strptime(Submit_Date,'%Y-%m-%d').date().strftime("%d/%m/%y")
     Blocks=""
     Depends_On=""
     Duplicate_Of=""#,".join([v.name for v in issue.fields.issuelinks])
-    CC=str(dict["cc"])
+    CC=""#str(dict["cc"])
     return [Id,Product,Component,Assigned_To,Status,Resolution,Reporter,Last_Modified,Version,Milestone,Hardware,OS,Priority,Severity,Summary,Keywords,Submit_Date,Blocks,Depends_On,Duplicate_Of,CC]
 
 
 def GithubIssues(url,owner,repo,outFile):
     gh=github3.GitHub()
     lines=[["ID","Product","Component","Assigned To","Status","Resolution","Reporter","Last Modified","Version","Milestone","Hardware","OS","Priority","Severity","Summary","Keywords","Submit Date","Blocks","Depends On","Duplicate Of","CC"]]
-    allIssues= gh.iter_repo_issues(owner,repo)
+    allIssues= gh.iter_repo_issues(owner,repo,state="all")
     print(len(allIssues))
     for issue in allIssues:
         analyze = issueAnalyze(issue,repo,repo)

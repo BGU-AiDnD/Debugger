@@ -50,7 +50,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 <version>2.14</version>
 <configuration>
 <reuseForks>false</reuseForks>
-          <argLine>-javaagent:agent.jar</argLine>
+          <!--<argLine>-javaagent:agent.jar=C:\projs\cdt4Working\testedVer\repo\paths.txt</argLine>-->
+          <argLine>-javaagent:agent.jar=C:\GitHub\agent\my-app\paths.txt</argLine>
 </configuration>
 </plugin>
 			<plugin>

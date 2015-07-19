@@ -241,9 +241,12 @@ def DbAdd(dbPath,allComms):
     conn.commit()
     conn.close()
 
-def RunCheckStyle(workingDir,outPath):
-    print(  "java  -jar  C:\projs\checkstyle-6.8-SNAPSHOT-all.jar   -c  C:\projs\methodNameLines.xml javaFile -o " +outPath+"  "+workingDir)
-    os.system(  "java  -jar  C:\projs\checkstyle-6.8-SNAPSHOT-all.jar   -c  C:\projs\methodNameLines.xml javaFile -o " +outPath+"  "+workingDir)
+def RunCheckStyle(workingDir,outPath,checkStyle68,methodNameLines):
+    #print(  "java  -jar  C:\projs\checkstyle-6.8-SNAPSHOT-all.jar   -c  C:\projs\methodNameLines.xml javaFile -o " +outPath+"  "+workingDir)
+    #os.system(  "java  -jar  C:\projs\checkstyle-6.8-SNAPSHOT-all.jar   -c  C:\projs\methodNameLines.xml javaFile -o " +outPath+"  "+workingDir)
+    run_commands = ["java" ,"-jar" ,checkStyle68 ,"-c" ,methodNameLines ,"javaFile" ,"-o",outPath,workingDir]
+    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True)
+    (out, err) = proc.communicate()
 
 def detectFromConf(lines,lineInd):
     deleted = (lines[lineInd])
@@ -458,16 +461,19 @@ def analyzeCheckStyle(checkOut,changeFile):
 
 
 
-def do_all(workingDir):
+def do_all(workingDir,checkStyle68,methodNameLines):
     patchD=workingDir+"\\patch"
     commitsFiles=workingDir+"\\commitsFiles"
     changedFile=workingDir+"\\commitsFiles\\Ins_dels.txt"
     mkdir(patchD)
     mkdir(commitsFiles)
-    os.system("c: & cd "+workingDir+" & git format-patch --root -o patch --function-context --unified=9000")
+    #os.system("c: & cd "+workingDir+" & git format-patch --root -o patch --function-context --unified=9000")
+    run_commands = ["git" ,"format-patch" ,"--root" ,"-o" ,"patch" ,"--function-context" ,"--unified=9000"]
+    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=workingDir)
+    (out, err) = proc.communicate()
     buildPatchs(patchD,commitsFiles,changedFile)
     checkOut=commitsFiles+"\\CheckStyle.txt"
-    RunCheckStyle(commitsFiles,checkOut)
+    RunCheckStyle(commitsFiles,checkOut,checkStyle68,methodNameLines)
 
 
 
