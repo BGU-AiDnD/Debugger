@@ -100,7 +100,7 @@ class processFamilies:
         for f in files_dict.keys():
             Att_dict[f] = list(basicAtt)
         for row in c.execute(first):
-            name = Agent.pathTopack.pathToPack(row[0])
+            name = row[0]
             if (name in Att_dict):
                 Att_dict[name] = list([x if x!=None else 0 for x in row[1:]])
         for f in Att_dict:

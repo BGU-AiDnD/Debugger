@@ -1,0 +1,162 @@
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for com.mycompany.app:my-app:jar:1.0.1-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-shade-plugin is missing. @ line 57, column 12
+[WARNING] The expression ${artifactId} is deprecated. Please use ${project.artifactId} instead.
+[WARNING] The expression ${version} is deprecated. Please use ${project.version} instead.
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building my-app 1.0.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:2.5:resources (default-resources) @ my-app ---
+[debug] execute contextualize
+[WARNING] Using platform encoding (Cp1255 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory D:\Amir_Almishali\projs\Debugger\Debugger\my-app\src\main\resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.3.2:compile (default-compile) @ my-app ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-jar-plugin:2.4:jar (default) @ my-app ---
+[INFO] 
+[INFO] --- maven-resources-plugin:2.5:testResources (default-testResources) @ my-app ---
+[debug] execute contextualize
+[WARNING] Using platform encoding (Cp1255 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory D:\Amir_Almishali\projs\Debugger\Debugger\my-app\src\test\resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.3.2:testCompile (default-testCompile) @ my-app ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.14:test (default-test) @ my-app ---
+[INFO] Surefire report directory: D:\Amir_Almishali\projs\Debugger\Debugger\my-app\target\surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+D:\Amir_Almishali\projs\Debugger\Debugger\my-app
+C:\Users\amirelm\.m2\repository
+C:\Users\amirelm\.m2\repository\.cache\tycho\org.apache.ant-1.8.3.v201301120609.jar
+javassist.NotFoundException: C:\Users\amirelm\.m2\repository\.cache\tycho\org.apache.ant-1.8.3.v201301120609.jar
+	at javassist.JarClassPath.<init>(ClassPoolTail.java:135)
+	at javassist.ClassPoolTail.makePathObject(ClassPoolTail.java:257)
+	at javassist.ClassPoolTail.appendClassPath(ClassPoolTail.java:249)
+	at javassist.ClassPool.appendClassPath(ClassPool.java:1004)
+	at inst.MyAgent.premain(MyAgent.java:147)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at sun.instrument.InstrumentationImpl.loadClassAndStartAgent(InstrumentationImpl.java:382)
+	at sun.instrument.InstrumentationImpl.loadClassAndCallPremain(InstrumentationImpl.java:397)
+C:\Users\amirelm\.m2\repository\.cache\tycho\org.caleydo.thirdparty.pathvisio-31.0.0.jar
+javassist.NotFoundException: C:\Users\amirelm\.m2\repository\.cache\tycho\org.caleydo.thirdparty.pathvisio-31.0.0.jar
+	at javassist.JarClassPath.<init>(ClassPoolTail.java:135)
+	at javassist.ClassPoolTail.makePathObject(ClassPoolTail.java:257)
+	at javassist.ClassPoolTail.appendClassPath(ClassPoolTail.java:249)
+	at javassist.ClassPool.appendClassPath(ClassPool.java:1004)
+	at inst.MyAgent.premain(MyAgent.java:147)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at sun.instrument.InstrumentationImpl.loadClassAndStartAgent(InstrumentationImpl.java:382)
+	at sun.instrument.InstrumentationImpl.loadClassAndCallPremain(InstrumentationImpl.java:397)
+C:\Users\amirelm\.m2\repository\.cache\tycho\org.eclipse.stardust.ide.thirdparty.commons.logging-1.1.1.v20140424-1340.jar
+javassist.NotFoundException: C:\Users\amirelm\.m2\repository\.cache\tycho\org.eclipse.stardust.ide.thirdparty.commons.logging-1.1.1.v20140424-1340.jar
+	at javassist.JarClassPath.<init>(ClassPoolTail.java:135)
+	at javassist.ClassPoolTail.makePathObject(ClassPoolTail.java:257)
+	at javassist.ClassPoolTail.appendClassPath(ClassPoolTail.java:249)
+	at javassist.ClassPool.appendClassPath(ClassPool.java:1004)
+	at inst.MyAgent.premain(MyAgent.java:147)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at sun.instrument.InstrumentationImpl.loadClassAndStartAgent(InstrumentationImpl.java:382)
+	at sun.instrument.InstrumentationImpl.loadClassAndCallPremain(InstrumentationImpl.java:397)
+C:\Users\amirelm\.m2\repository\.cache\tycho\org.eclipse.ui.intro.universal-3.2.600.v20120912-155524.jar
+javassist.NotFoundException: C:\Users\amirelm\.m2\repository\.cache\tycho\org.eclipse.ui.intro.universal-3.2.600.v20120912-155524.jar
+	at javassist.JarClassPath.<init>(ClassPoolTail.java:135)
+	at javassist.ClassPoolTail.makePathObject(ClassPoolTail.java:257)
+	at javassist.ClassPoolTail.appendClassPath(ClassPoolTail.java:249)
+	at javassist.ClassPool.appendClassPath(ClassPool.java:1004)
+	at inst.MyAgent.premain(MyAgent.java:147)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at sun.instrument.InstrumentationImpl.loadClassAndStartAgent(InstrumentationImpl.java:382)
+	at sun.instrument.InstrumentationImpl.loadClassAndCallPremain(InstrumentationImpl.java:397)
+C:\Users\amirelm\.m2\repository\.cache\tycho\org.eclipse.wb.core.lib-1.7.0.r44x201405021445.jar
+javassist.NotFoundException: C:\Users\amirelm\.m2\repository\.cache\tycho\org.eclipse.wb.core.lib-1.7.0.r44x201405021445.jar
+	at javassist.JarClassPath.<init>(ClassPoolTail.java:135)
+	at javassist.ClassPoolTail.makePathObject(ClassPoolTail.java:257)
+	at javassist.ClassPoolTail.appendClassPath(ClassPoolTail.java:249)
+	at javassist.ClassPool.appendClassPath(ClassPool.java:1004)
+	at inst.MyAgent.premain(MyAgent.java:147)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at sun.instrument.InstrumentationImpl.loadClassAndStartAgent(InstrumentationImpl.java:382)
+C:\Users\amirelm\.m2\repository\.cache\tycho\org.junit-4.10.0.v4_10_0_v20120426-0900.jar
+	at sun.instrument.InstrumentationImpl.loadClassAndCallPremain(InstrumentationImpl.java:397)
+javassist.NotFoundException: C:\Users\amirelm\.m2\repository\.cache\tycho\org.junit-4.10.0.v4_10_0_v20120426-0900.jar
+	at javassist.JarClassPath.<init>(ClassPoolTail.java:135)
+	at javassist.ClassPoolTail.makePathObject(ClassPoolTail.java:257)
+	at javassist.ClassPoolTail.appendClassPath(ClassPoolTail.java:249)
+	at javassist.ClassPool.appendClassPath(ClassPool.java:1004)
+	at inst.MyAgent.premain(MyAgent.java:147)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at sun.instrument.InstrumentationImpl.loadClassAndStartAgent(InstrumentationImpl.java:382)
+	at sun.instrument.InstrumentationImpl.loadClassAndCallPremain(InstrumentationImpl.java:397)
+Injecting method to junit.framework.TestCase...
+Method injection done
+Hello!1437408928847
+Running com.mycompany.app.AppTest
+changed! ..\..\traces\Trace_com.mycompany.app.AppTest@testApp3_1437408937897.txt
+Hello World!
+Hello g!
+Hello g!
+changed! ..\..\traces\Trace_com.mycompany.app.AppTest@testApp_1437408937912.txt
+Hello World!
+Hello g!
+changed! ..\..\traces\Trace_com.mycompany.app.AppTest@testApp2_1437408937913.txt
+Hello g!
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.027 sec
+
+Results :
+
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] 
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ my-app ---
+[INFO] Building jar: D:\Amir_Almishali\projs\Debugger\Debugger\my-app\target\my-app-1.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- maven-shade-plugin:2.4.1:shade (default) @ my-app ---
+[INFO] Including commons-lang:commons-lang:jar:2.1 in the shaded jar.
+[INFO] Including org.javassist:javassist:jar:3.20.0-GA in the shaded jar.
+[INFO] Replacing D:\Amir_Almishali\projs\Debugger\Debugger\my-app\target\uber-my-app-1.0.1-SNAPSHOT.jar with D:\Amir_Almishali\projs\Debugger\Debugger\my-app\target\my-app-1.0.1-SNAPSHOT-shaded.jar
+[INFO] 
+[INFO] --- maven-install-plugin:2.3.1:install (default-install) @ my-app ---
+[INFO] Installing D:\Amir_Almishali\projs\Debugger\Debugger\my-app\target\my-app-1.0.1-SNAPSHOT.jar to C:\Users\amirelm\.m2\repository\com\mycompany\app\my-app\1.0.1-SNAPSHOT\my-app-1.0.1-SNAPSHOT.jar
+[INFO] Installing D:\Amir_Almishali\projs\Debugger\Debugger\my-app\pom.xml to C:\Users\amirelm\.m2\repository\com\mycompany\app\my-app\1.0.1-SNAPSHOT\my-app-1.0.1-SNAPSHOT.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 42.880s
+[INFO] Finished at: Mon Jul 20 19:15:39 IDT 2015
+[INFO] Final Memory: 12M/981M
+[INFO] ------------------------------------------------------------------------

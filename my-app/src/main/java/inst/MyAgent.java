@@ -86,15 +86,19 @@ public static boolean IsClassesDirORG(File folder){
 public static List<File> getSubdirs(File file) {
 	File[] files=file.listFiles(new FileFilter() {
         public boolean accept(File f) {
-            return f.isDirectory() || f.getName().indexOf(".jar")!=-1;//&& IsClassesDir(f);
+            return f.isDirectory() ||  f.getName().indexOf(".jar")!=-1;//&& IsClassesDir(f);
         }
     });
 	
     List<File> subdirs = null;//Arrays.asList();
 	if (files!=null){
 		subdirs=Arrays.asList(files);
+		subdirs = new ArrayList<File>(subdirs);
 	}
-    subdirs = new ArrayList<File>(subdirs);
+	else{
+	subdirs = new ArrayList<File>();
+	}
+	
 
     List<File> deepSubdirs = new ArrayList<File>();
     for(File subdir : subdirs) {
@@ -120,7 +124,7 @@ public static List<File> getSubdirs(File file) {
 		//List<File> WorkingDir= getSubdirs(new File(System.getProperty("user.dir")));
 		//System.out.println("user.dir: "+System.getProperty("user.dir").toString());
 		if (agentArgs!=null){
-			System.out.println(agentArgs);
+			//System.out.println(agentArgs);
 			List<File> WorkingDir=new ArrayList<File>();
 			try{ 
 			ArrayList<String> cPs= classPaths(agentArgs);
@@ -131,6 +135,7 @@ public static List<File> getSubdirs(File file) {
 			WorkingDir.addAll(getSubdirs(new File(n)));
 		}
 			}catch(Exception e){
+					System.out.println(" exception in premain");
 					System.out.println(e.getMessage());
 					e.printStackTrace();
 				}

@@ -16,18 +16,18 @@ import patchsBuild
 import docXml, source_Monitor
 
 
+
 def BugNum(stri):
     s = stri.lower().replace(":","").replace("#","").replace("-","").split()
-    ans = ""
+    ans = "0"
     for x in s:
+        ans="0"
         for i in list(x):
             if (i in list("1234567890")):
                 ans = ans + i
         if(len(ans)<8 and len(ans)>4):
-            return str(ans)
-        ans=""
-    return str(0)
-
+            return str(int(ans))
+    return str(int(ans))
 
 def commTable(bugs,commits ,max):
     commits_items = commits.items()

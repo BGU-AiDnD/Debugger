@@ -1,7 +1,7 @@
 __author__ = 'amir'
 
 from wekaMethods.articles import *
-#from wekaMethods.articles import sqlToAttributes
+import wekaMethods.articles
 
 class processMethods:
     def get_attributes(self):
@@ -39,7 +39,7 @@ class processMethods:
         for f in files_dict.keys():
             Att_dict[f] = list(basicAtt)
         for row in c.execute(first):
-            name = Agent.pathTopack.pathToPack(row[0])
+            name = row[0]
             if (name in Att_dict):
                 Att_dict[name] = list([x if x!=None else 0 for x in row[1:]])
         for f in Att_dict:

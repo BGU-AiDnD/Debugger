@@ -37,11 +37,13 @@ def create(vers,Path):
 #create(('CDT_8_0_1', 'CDT_8_0_2', 'CDT_8_1_0', 'CDT_8_1_1', 'CDT_8_1_2' ),"C:\\GitHub\\vers\\" )
 
 def read(file):
-    lines=[x.split("\n")[0] for x in open(file,"r").readlines()]
+    spaces=[]
     comms=[]
+    if not os.path.isfile(file):
+		return [],[]
+    lines=[x.split("\n")[0] for x in open(file,"r").readlines()]
     if lines[1]!='[]':
         comms=[int(x) for x in lines[1][1:-1].split(",")]
-    spaces=[]
     if lines[3]!='[]':
         spaces=[int(x) for x in lines[3][1:-1].split(",")]
     return  comms,spaces

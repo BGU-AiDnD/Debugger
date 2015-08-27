@@ -88,14 +88,14 @@ public class MyInstrumenter implements ClassFileTransformer {
 			traceWriterClass.addField(testClassField,"null");
 			
 			CtField outField;			
-			outField = CtField.make("public static PrintWriter out=null;", traceWriterClass);
+			outField = CtField.make("public static java.io.PrintWriter out=null;", traceWriterClass);
 			outField.setModifiers(Modifier.PUBLIC | Modifier.STATIC);
 			traceWriterClass.addField(outField,"null");
 			
 			CtField qField;			
-			qField = CtField.make("public static LinkedList q = new LinkedList();", traceWriterClass);
+			qField = CtField.make("public static java.util.LinkedList q = new java.util.LinkedList();", traceWriterClass);
 			qField.setModifiers(Modifier.PUBLIC | Modifier.STATIC);
-			traceWriterClass.addField(qField,"new LinkedList()");
+			traceWriterClass.addField(qField,"new java.util.LinkedList()");
 			
 			
 			StringBuilder changeFile=new StringBuilder();
@@ -112,9 +112,9 @@ public class MyInstrumenter implements ClassFileTransformer {
 			//changeFile.append("System.out.println(\"dir: \" +f.getPath());\n");
 			changeFile.append("f.mkdirs();\n");
 			changeFile.append("System.out.println(\"changed! \" +TestsTraces.fileName);\n");
-			changeFile.append("TestsTraces.testClass=TestsTraces.fileName.substring(0, TestsTraces.fileName.lastIndexOf('.')); TestsTraces.q = new LinkedList();\n");
+			changeFile.append("TestsTraces.testClass=TestsTraces.fileName.substring(0, TestsTraces.fileName.lastIndexOf('.')); TestsTraces.q = new java.util.LinkedList();\n");
 			changeFile.append("try {\n");
-			changeFile.append("TestsTraces.out = new PrintWriter(new BufferedWriter(new FileWriter(TestsTraces.fileName, true)));\n");
+			changeFile.append("TestsTraces.out = new java.io.PrintWriter(new java.io.BufferedWriter(new java.io.FileWriter(TestsTraces.fileName, true)));\n");
 			changeFile.append("} catch (IOException e) {\n");
 			changeFile.append("e.printStackTrace();\n");
 			changeFile.append("}\n");
@@ -221,13 +221,17 @@ public byte[] nicerTransform(ClassLoader loader, String className, Class<?> clas
 	boolean tomcat=s[0].equals("javax") ||  s[0].equals("org") &&s[1].equals("apache") && tomPack;
 	boolean myapp=s[0].equals("com") &&s[1].equals("mycompany") &&s[2].equals("app");
 	boolean surefire=s[3].equals("surefire");
-	boolean lang=s[0].equals("java") && s[1].equals("lang");
+	boolean lang=s[0].equals("java") ;
+	boolean mvn=s[0].equals("org") && s[1].equals("apache") && s[2].equals("maven") ;
+	boolean sun=s[0].equals("sun") || s[1].equals("sun") ;
+	boolean junit=s[0].equals("org") && s[1].equals("junit");
+	boolean osgi=s[0].equals("org") && s[1].equals("eclipse")&& s[2].equals("osgi");
 	//System.out.println(s[0] +" " +s[1]+" " +s[2]+" " +s[3]);
 	ClassPool cp = ClassPool.getDefault();
 	String name=className.replace("/",".");
 		name=name.split("$")[0];
 	cp.importPackage(name);
-	if (!surefire && !lang   && (eclipse || myapp)) {
+	if (!surefire && !lang  && !sun && !junit && !mvn && !osgi) {
 
 		
 		
@@ -336,6 +340,7 @@ public byte[] nicerTransform(ClassLoader loader, String className, Class<?> clas
             		m.insertBefore(ins);
 				}
 				catch(Exception e){
+				System.out.println("exception in insertBefore "+ met);
 					System.out.println(e.getMessage());
 					System.err.println(met);
 					e.printStackTrace();
@@ -500,9 +505,9 @@ public static void injectToMethod(ClassLoader loader, ProtectionDomain protectio
 		StringBuilder write=new StringBuilder();
 		write.append("public static synchronized void write(java.lang.String line){\n");
 		write.append("if("+injectedClassName+".fileName!=null){\n");
-		write.append("PrintWriter out;\n");
+		write.append("java.io.PrintWriter out;\n");
 		write.append("try {\n");
-		write.append("out = new PrintWriter(new BufferedWriter(new FileWriter("+injectedClassName+".fileName, true)));\n");
+		write.append("out = new java.io.PrintWriter(new java.io.BufferedWriter(new java.io.FileWriter("+injectedClassName+".fileName, true)));\n");
 		write.append("out.println(\"[inst2] + \"+line);\n");
 		write.append("out.close();\n");
 		write.append("} catch (IOException e) {\n");

@@ -9,6 +9,7 @@ import sqlite3
 import shutil
 import results
 import winsound
+import subprocess
 import wekaMethods.wekaAccuracy
 
 
@@ -782,11 +783,17 @@ def allPackBugs(dbPath, numOfBugs, packsPath,numOfExperiments,weka,table="bugged
     packsList = getAllpacks(packsPath)
     bugspathsAndpaths = []
     for p in packsList:
-        lst1 = allBugsFromDB(dbPath, p,weka,table)
+        lst1 = []
+        if "Files" in table:
+			lst1 = allBugsFromDB(dbPath, p,weka,table)
+        if "Methods" in table:
+			lst1 = allBugsFromDBMethods(dbPath, p,weka,table)
         bugspathsAndpaths.append((lst1, p))
     #bugs = [x for x in bugspathsAndpaths if len(x[0]) >= numOfBugs]
     bugspathsAndpaths=sorted(bugspathsAndpaths,key=lambda r: len(r[0]),reverse=True)
     bugs = [x for x in bugspathsAndpaths if len(x[0]) >= numOfBugs]
+    bugs = [x for x in bugspathsAndpaths if len(x[0]) >= 1]
+    #bugs = [x for x in bugspathsAndpaths ]
     return bugs
 
 def allPackBugsMethods(dbPath, numOfBugs, packsPath,numOfExperiments,weka,table):
@@ -885,6 +892,7 @@ def buildInstanceAndOptimize(bugsIDS, const, dbPath, pack, times,priorsByFiles,b
 
 def buildInstanceAndOptimizeMethods(bugsIDS, const, dbPath, pack, times,priorsByFiles,buggedTestsChooser,notRand,buggedTable,testTable):
     allBugged, allFiles, allTests,priors,testsChoosedNames,FileNames = getBuggedFilesTestsByBugsIDsMethods(dbPath, bugsIDS, pack, times,priorsByFiles,buggedTestsChooser,notRand,buggedTable,testTable)
+    print "buildInstanceAndOptimizeMethods"
     if(len(allTests)==0 or len(allBugged)==0 or len(allBugged)==1):
         return [],[],[],[],[],[],[]
     outcomes = generateOutcomes(allBugged, allFiles, allTests, const)
@@ -1046,7 +1054,6 @@ def MultyWekaAndSanityMethods(outPath,dbPath,packsPath,numOfExperiments,numOfBug
                 print pack
                 print "contin"
                 exp=exp+1
-
                 continue
         exp=exp+1
         expIND=expIND+1
@@ -1150,6 +1157,7 @@ def statisticalInfo(dbPath,packsPath):
     conn = sqlite3.connect(dbPath)
     conn.text_factory = str
     c = conn.cursor()
+    ans=[]
     for pack in packsBugs:
         bugs,package=pack
         testsFiles=[]
@@ -1161,6 +1169,8 @@ def statisticalInfo(dbPath,packsPath):
         for r in c.execute(s):
             testsFiles.append(r[0])
         print package,len(bugs),len(testsNames),len(testsFiles)
+        ans.append([package,len(bugs),len(testsNames),len(testsFiles)])
+    return ans
 
 def statisticalInfoMethods(dbPath,packsPath):
     packsBugs=allPackBugsMethods(dbPath, 0, packsPath,0,False,"buggedMethods")
@@ -1179,16 +1189,18 @@ def statisticalInfoMethods(dbPath,packsPath):
         s="select distinct methodName from testsMethods where testsMethods.methodName like \"%"+package+"%\" "
         for r in c.execute(s):
             testsFiles.append(r[0])
+        print package,len(bugs),len(testsNames),len(testsFiles)
         ans.append([package,len(bugs),len(testsNames),len(testsFiles)])
     return ans
 
-def copySTMS(outPath):
+def copySTMS(outPath,utilsPath):
     outPath=outPath+"\\"
-    shutil.copyfile("C:\\GitHub\\agent\\conv_comp_table.csv",  outPath + "planner\\conv_comp_table.csv")
-    if not os.path.isfile(outPath+"planner\\conv_comp_table.csv"):
-        shutil.copyfile("C:\\GitHub\\experiments\\conv_comp_table.csv",  outPath + "planner\\conv_comp_table.csv")
-    shutil.copyfile("C:\\GitHub\\agent\\tom.jar", outPath + "tom.jar")
-    shutil.copyfile("C:\\GitHub\\agent\\barinelRun.bat", outPath + "barinelRun.bat")
+    lines=[["Components Table:",""]]+[[str(i),str(i)] for i in range(9000)]
+    print os.path.join(utilsPath,"conv_comp_table.csv")
+    shutil.copyfile(os.path.join(utilsPath,"conv_comp_table.csv"),  outPath + "planner\\conv_comp_table.csv")
+    shutil.copyfile(os.path.join(utilsPath,"barinel.jar"), outPath + "barinel.jar")
+    shutil.copyfile(os.path.join(utilsPath,"planner150.jar"), outPath + "planner150.jar")
+    shutil.copyfile(os.path.join(utilsPath,"barinelRun.bat"), outPath + "barinelRun.bat")
 
 def transposeBugs():
     global bugs, d, x, lst, p, b
@@ -1216,15 +1228,18 @@ def Most_All_Mkdirs(outPath,experimentsInstances):
 def RunAndResults(buggedTestsChooser, bugsPacks, const, copy, copyPath, outpath, dbPath, initialsChooser, initialsFactor,
                   maximalTests, minimalTests, numOfBugs, numOfExperiments, numOfPacks, packsPath, pureSanity, table,
                   times,  wekaAnsArr,testTable):
+    print "RunAndRes"
     numOfExperiments = MultyWekaAndSanityMethods(outpath, dbPath, packsPath, numOfExperiments, numOfBugs, times, const, minimalTests,
                                           maximalTests, wekaAnsArr, initialsFactor, False, numOfPacks, buggedTestsChooser,
                                           initialsChooser, False, copy, copyPath, table, pureSanity, bugsPacks,testTable)
     weka = True
-    plannerRunSTMT = "cmd /x /c \"c: & cd C:\\GitHub\\agent & java -jar planner150.jar %s %s %s %s \"" % (
-    str(1), outpath + "\\planner\\", outpath + "\\plannerRecords\\", str(0.7))
-    os.system(plannerRunSTMT)
-    bat_ = "cmd.exe /X /C \"c: & cd  " + outpath + " & " + outpath + "\\barinelRun.bat\""
-    os.system(bat_)
+    run_commands = ["java", "-jar", "planner150.jar","1", outpath + "\\planner\\", outpath + "\\plannerRecords\\", str(0.7)]
+    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=outpath)
+    (out, err) = proc.communicate()
+
+    run_commands = ["barinelRun.bat"]
+    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=outpath)
+    (out, err) = proc.communicate()
     types = ["all", "normal", "can't advance"]
     a = 0
     for t in types:
@@ -1244,10 +1259,10 @@ def RunAndResultsMethods(buggedTestsChooser, bugsPacks, const, copy, copyPath, d
                                           maximalTests, wekaAnsArr, initialsFactor, False, numOfPacks, buggedTestsChooser,
                                           initialsChooser, False, copy, copyPath, table, pureSanity, bugsPacks)
     weka = True
-    plannerRunSTMT = "cmd /x /c \"c: & cd C:\\GitHub\\agent & java -jar planner150.jar %s %s %s %s \"" % (
+    plannerRunSTMT = "cmd /x /c  \" cd  /d " + d + " & java -jar planner150.jar %s %s %s %s \"" % (
     str(1), d + "\\planner\\", d + "plannerRecords\\", str(0.7))
     os.system(plannerRunSTMT)
-    bat_ = "cmd.exe /X /C \"c: & cd  " + d + " & " + d + "barinelRun.bat\""
+    bat_ = "cmd.exe /X /C \" cd /d " + d + " & " + d + "barinelRun.bat\""
     os.system(bat_)
     types = ["all", "normal", "can't advance"]
     a = 0
@@ -1492,15 +1507,17 @@ def POIMethods():
                   times,  wekaAnsArr)
 
 
-def RunExperiments(dbPath,outPath,packsPath,wekaPath,Unit,buggedType):
-    numOfExperiments=10
+def RunExperiments(dbPath,outPath,packsPath,wekaPath,Unit,buggedType,utilsPath):
+    print "RunExperiments"
+    numOfExperiments=20
     numOfPacks=1
     numOfrepeats=1
     numOfBugs=[2]
     times=[25,40,70,100,130]
-    #times=[10,20,30,40]
+    times=[10,20,30,40]
     const=0.2
     minimalTests=25
+    minimalTests=5
     maximalTests=220
     buggedTestsChooser=10
     initialsFactor=0.1
@@ -1526,11 +1543,11 @@ def RunExperiments(dbPath,outPath,packsPath,wekaPath,Unit,buggedType):
     o=outPath
     if not (os.path.isdir(o)):
         os.mkdir(o)
-    bugs = allPackBugs(dbPath, 2  , packsPath,numOfExperiments,True,table)
-    print bugs
-    bugsPacks=[choosePackBug(bugs, 6,False,5,[])for x in range(numOfExperiments)]
     dirStruct(outPath)
-    copySTMS(outPath)
+    copySTMS(outPath,utilsPath)
+    bugs = allPackBugs(dbPath, 2  , packsPath,numOfExperiments,True,table)
+    print "bugs", bugs
+    bugsPacks=[choosePackBug(bugs, 6,False,5,[])for x in range(numOfExperiments)]
     wekaAnsArr=[(wekaPath,"randomForest")]#+[(wekaBase+"weka.classifiers.trees.RandomForest_Style2.csv","prev")] #all
     RunAndResults(buggedTestsChooser, bugsPacks, const, copy, copyPath, outPath, dbPath, initialsChooser, initialsFactor,
               maximalTests, minimalTests, numOfBugs, numOfExperiments, numOfPacks, packsPath, pureSanity, table ,
@@ -1547,9 +1564,14 @@ def packFileCreate(dbpath, startInd, endInd,outPath):
     for row in c.execute(wanted_files):
         r=row[0]
         r=r.split("\\")
-        r=r[startInd:endInd]
-        r=r
-        lines.add("\\".join(r))
+        #r=r[startInd:endInd]
+        r=r[:-1]
+        concat=[]
+        for elem in r:
+         concat.append(elem)
+         lines.add("\\".join(concat))
+        #r=r
+        #lines.add("\\".join(r))
     f=open(outPath,"wb")
     writer=csv.writer(f)
     writer.writerows([[x] for x in list(lines)])

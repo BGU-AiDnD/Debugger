@@ -14,10 +14,11 @@ def getPack(path):
 
     f=open(path,"r")
     lines=f.readlines()
-    l=[x for x in lines if "package" in x and ";" in x]
+    l=[x for x in lines if "package " in x and ";" in x]
     if len(l)==0:
         return  "",""+Jclass
     line=l[0].lstrip()
+	
     pack=line.split(";")[0].split("package ")[1]
     return pack, pack+"."+Jclass
 

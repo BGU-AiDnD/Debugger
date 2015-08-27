@@ -26,6 +26,7 @@ def issueAnalyze(issue):
     OS=""
     if not None==issue.fields.environment:
         OS=str(unicodedata.normalize('NFKD', issue.fields.environment).encode('ascii','ignore'))
+        OS=" ".join(OS.split())
     Priority=str("")
     if "priority" in  issue.raw:
         Priority=str("P"+issue.raw["priority"]["id"])
@@ -33,6 +34,7 @@ def issueAnalyze(issue):
     if "issuetype"  in  issue.raw:
         Severity=str(issue.raw["issuetype"]["name"])
     Summary=str(unicodedata.normalize('NFKD', issue.fields.summary).encode('ascii','ignore'))
+    Summary=Summary.replace("\n"," ")
     Keywords=str(issue.fields.labels)
     Submit_Date=str(issue.fields.created)[:10]
     Submit_Date=datetime.datetime.strptime(Submit_Date,'%Y-%m-%d').date().strftime("%d/%m/%y")
@@ -58,12 +60,11 @@ def jiraIssues(url,query,maxResults,outFile):
         lines.append(analyze)
     f=open(outFile,"wb")
     #f.writelines([",".join(x) for x in lines])
-
     writer=csv.writer(f)
     writer.writerows(lines)
     f.close()
 
-
+"""
 jiraIssues("https://java.net/jira",'project=JERSEY',2900,"C:\projs\\jerseyBugs.csv")
 exit()
 jiraIssues('https://issues.apache.org/jira','project=KARAF',3800,"C:\projs\\karaf\\karafBugs.csv")
@@ -80,3 +81,4 @@ print issue.fields.project.key             # 'JRA'
 print issue.fields.issuetype.name          # 'New Feature'
 print issue.fields.reporter.displayName    # 'Mike Cannon-Brookes [Atlassian]'
 
+"""

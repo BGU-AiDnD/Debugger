@@ -15,10 +15,14 @@ import csv
 import wekaMethods.patchsBuild
 import wekaMethods.wekaAccuracy
 import wekaMethods.issuesExtract.github_import
+import wekaMethods.issuesExtract.jira_import
 import Agent.bugs_testsDBMethods
 import Agent.experimentsMethods
 import report
 import All_One_create
+import wekaMethods.ParseWekaOutput
+from random import randint
+
 
 """
 resources :
@@ -37,6 +41,7 @@ def globalConfig(confFile):
     lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
     docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar="","","","","","",""
     RemoveBat=""
+    utilsPath=""
     for x in lines:
         if x.startswith("docletPath"):
             v=x.split("=")[1]
@@ -62,8 +67,10 @@ def globalConfig(confFile):
         if x.startswith("RemoveBat"):
             v=x.split("=")[1]
             RemoveBat=v
-    return docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat
-
+        if x.startswith("utilsPath"):
+            v=x.split("=")[1]
+            utilsPath=v
+    return docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath
 
 
 def configure(confFile):
@@ -150,29 +157,40 @@ def CopyDirs(gitPath, versPath,vers):
         path=os.path.join(path,"repo")#+"\\"
         coptSt = "xcopy " + gitPath + " " + path + " /C /e /i /h"
         if not os.path.exists(path):
+            print (gitPath, path)
             shutil.copytree(gitPath, path)
 
 
 def GitRevert(versPath,vers):
     for x in vers:
         path=os.path.join(versPath,x)
+        print(versPath,x)
         path=os.path.join(path,"repo")+"\\"
-        run_commands = ["git", "reset", "-q", x]
+        #run_commands = ["git", "stash"]
+        #proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
+        #(out, err) = proc.communicate()
+
+        print(versPath,x,2)
+        run_commands = ["git", "reset", "-q","--hard", x]
         proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
         (out, err) = proc.communicate()
 
-        run_commands = ["git", "revert",  x]
+        print(versPath,x,3)
+        run_commands = ["git", "revert","--no-commit","--no-edit",  x]
         proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
         (out, err) = proc.communicate()
+        print(versPath,x,5)
+        print(out, err)
 
-        run_commands = ["git", "cherry-pick",  x]
-        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
-        (out, err) = proc.communicate()
+
+        print(versPath,x,4)
+        #run_commands = ["git", "cherry-pick",  x]
+        #proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
+        #(out, err) = proc.communicate()
 
         run_commands = ["git", "clean","-f","-d",  x]
         proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
         (out, err) = proc.communicate()
-
 def OO_features_error_analyze(err):
     # get all corrupted java files in err
     lines=err.split("\n")
@@ -199,9 +217,9 @@ def OO_features_error_analyze(err):
 def Extract_OO_features_OLD(versPath,vers,docletPath="C:\projs\\xml-doclet-1.0.4-jar-with-dependencies.jar"):
     for x in vers:
         verPath=os.path.join(versPath,x)
-        command = """cd  /d """ + verPath + " & for /R .\\repo %f in (*.java) do (call javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath "+docletPath+" -filename %~nxf.xml -private -d .\Jdoc2 %f) "
+        command = """cd /d  """ + verPath + " & for /R .\\repo %f in (*.java) do (call javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath "+docletPath+" -filename %~nxf.xml -private -d .\Jdoc2 %f) "
         #open(os.path.join(verPath,"JdocFunc.txt"),"wt").writelines([x for x in open(os.path.join(verPath,"javaFiles.txt"),"r").readlines() if not "Bad.java" in x ])
-        #command = """cd  /d """ + verPath + " & javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath ..\..\\xml-doclet-1.0.4-jar-with-dependencies.jar  -private -d .\Jdoc2 @JdocFunc.txt"
+        #command = """cd /d  """ + verPath + " & javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath ..\..\\xml-doclet-1.0.4-jar-with-dependencies.jar  -private -d .\Jdoc2 @JdocFunc.txt"
         os.system(command)
 # GENERATE Jdoc
 
@@ -213,8 +231,8 @@ def Extract_OO_features(versPath,vers,docletPath="..\..\\xml-doclet-1.0.4-jar-wi
         outPath=os.path.join(verPath,"Jdoc")
         outPath=os.path.join(outPath,"javadoc.xml")
         err=""
-        #command = """cd  /d """ + verPath + " & for /R .\\repo %f in (*.java) do (call javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath ..\..\\xml-doclet-1.0.4-jar-with-dependencies.jar -filename %~nxf.xml -private -d .\Jdoc2 %f) "
-        #command = """cd  /d """ + verPath + " & javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath "+docletPath+"  -private -d .\Jdoc2 @JdocFunc.txt"
+        #command = """cd /d  """ + verPath + " & for /R .\\repo %f in (*.java) do (call javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath ..\..\\xml-doclet-1.0.4-jar-with-dependencies.jar -filename %~nxf.xml -private -d .\Jdoc2 %f) "
+        #command = """cd /d  """ + verPath + " & javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath "+docletPath+"  -private -d .\Jdoc2 @JdocFunc.txt"
         open(os.path.join(verPath,"JdocFunc.txt"),"wt").writelines([x for x in open(os.path.join(verPath,"javaFiles.txt"),"r").readlines()])
         run_commands = ["javadoc", "-doclet", "com.github.markusbernhardt.xmldoclet.XmlDoclet","-docletpath ", docletPath, "-private","-d",".\Jdoc","@JdocFunc.txt"]
         bads=[]
@@ -289,7 +307,7 @@ def SourceMonitorXml(workingDir,ver,sourceMonitorEXE):
 def blameExecute(  path, pathRepo,ver ):
     blameWrite=" & dir /b /s *.java > ..\\javaFiles.txt"
     doBlame="for /F   %f in (../blame.txt) do (git blame --show-stats --score-debug -p --line-porcelain -l  "+ver+"  %f > ..\\blame\%~nxf)"
-    blame_write = "cd  /d " + pathRepo + blameWrite
+    blame_write = "cd /d  " + pathRepo + blameWrite
     run_commands = ["dir", "/b", "/s", "*.java"]
     proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=pathRepo)
     (out, err) = proc.communicate()
@@ -297,7 +315,7 @@ def blameExecute(  path, pathRepo,ver ):
     blameO3 = os.path.join(path, "javaFiles.txt")
     blameO1 = os.path.join(path, "blame.txt")
     open(blameO1, "wb").write("".join([x.replace(pathRepo + "\\", "") for x in open(blameO3, "r")]))
-    blame = """cd  /d """ + pathRepo + " & " + doBlame
+    blame = """D: & cd """ + pathRepo + " & " + doBlame
     os.system(blame)
 
 
@@ -309,7 +327,7 @@ def Extract_complexity_features(versPath,vers,workingDir,sourceMonitorEXE,checkS
         proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=workingDir)
         (out, err) = proc.communicate()
 
-        checkStyle="cd  /d "+workingDir+ " &  java -jar "+checkStyle57+" -c allChecks.xml -r "+pathRepo+" -f xml -o vers/checkAll/"+x+".xml "
+        checkStyle="cd /d  "+workingDir+ " &  java -jar "+checkStyle57+" -c allChecks.xml -r "+pathRepo+" -f xml -o vers/checkAll/"+x+".xml "
         run_commands = ["java", "-jar", checkStyle57, "-c", allchecks,"-r",pathRepo,"-f","xml","-o","vers/checkAll/"+x+".xml"]
         proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=workingDir)
         (out, err) = proc.communicate()
@@ -338,9 +356,10 @@ def GitVersInfo(basicPath,repoPath,vers):
 #checkStyle
 
 def featuresExtract(vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML):
-    #Extract_complexity_features(versPath, vers, workingDir,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
+    Extract_complexity_features(versPath, vers, workingDir,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
     logfile.write("after Extract_complexity_features "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
+	
 
     Extract_OO_features_OLD(versPath, vers,docletPath)
     logfile.write("after Extract_OO_features "+ str(datetime.datetime.now())+"\n")
@@ -368,7 +387,7 @@ def gitInfoToCsv(gitPath,outFile):
     #vers=["TOMCAT_8_0_4", "TOMCAT_8_0_5", "TOMCAT_8_0_6", "TOMCAT_8_0_7", "TOMCAT_8_0_8", "TOMCAT_8_0_9"]
     wanted=[ x.commit for x in r.tags ]
     vers=r.tags
-    dates=[datetime.datetime.fromtimestamp(x.committed_date).strftime('%Y-%m-%d %H:%M:%S') for x in wanted]
+    dates=[datetime.datetime.fromtimestamp(x.committed_date).strftime('%Y-%m-%d %H:%M:%S') for x in wanted if type(x)==git.Commit]
     lines=[["ver","date"]]
     for v,d in zip(vers,dates):
         lines.append([v,d])
@@ -380,26 +399,24 @@ def gitInfoToCsv(gitPath,outFile):
 
 
 def BuildWekaModel(weka,training,testing,namesCsv,outCsv,name,wekaJar):
-    algorithm="weka.classifiers.bayes.NaiveBayes"
-    #os.system("cd  /d "+weka +" & java -Xmx2024m  -cp \"C:\\Program Files\\Weka-3-7\\weka.jar\" weka.Run " +algorithm+ " -x 10 -d .\\model.model -t "+training+" > training"+name+".txt")
-    os.system("cd  /d "+weka +" & java -Xmx2024m  -cp "+wekaJar+" weka.Run " +algorithm+ " -x 10 -d .\\model.model -t "+training+" > training"+name+".txt")
-    os.system("cd  /d "+weka +" & java -Xmx2024m  -cp "+wekaJar+" weka.Run " +algorithm+ " -l .\\model.model -T "+testing+" -classifications \"weka.classifiers.evaluation.output.prediction.CSV -file testing"+name+".csv\" ")
-    os.system("cd  /d "+weka +" & java -Xmx2024m  -cp "+wekaJar+" weka.Run " +algorithm+ " -l .\\model.model -T "+testing+" > testing"+name+".txt ")
+    algorithm="weka.classifiers.trees.RandomForest -I 1000 -K 0 -S 1 -num-slots 1 "
+    #os.system("cd /d  "+weka +" & java -Xmx2024m  -cp \"C:\\Program Files\\Weka-3-7\\weka.jar\" weka.Run " +algorithm+ " -x 10 -d .\\model.model -t "+training+" > training"+name+".txt")
+    os.system("cd /d  "+weka +" & java -Xmx2024m  -cp "+wekaJar+" weka.Run " +algorithm+ " -x 10 -d .\\model.model -t "+training+" > training"+name+".txt")
+    os.system("cd /d  "+weka +" & java -Xmx2024m  -cp "+wekaJar+" weka.Run " +algorithm+ " -l .\\model.model -T "+testing+" -classifications \"weka.classifiers.evaluation.output.prediction.CSV -file testing"+name+".csv\" ")
+    os.system("cd /d  "+weka +" & java -Xmx2024m  -cp "+wekaJar+" weka.Run " +algorithm+ " -l .\\model.model -T "+testing+" > testing"+name+".txt ")
     wekaCsv=os.path.join(weka,"testing"+name+".csv")
     wekaMethods.wekaAccuracy.priorsCreation(namesCsv,wekaCsv,outCsv,"")
-
-    m=0
 
 
 def testing(repoPath,antOrPom):
     shutil.copyfile("C:\GitHub\\agent\my-app\\agent.jar", repoPath + "\\agent.jar")
     if antOrPom=="ant":
-        ant = "cd  /d " + repoPath + "  & ant test -keep-going -Dhalt.on.test.failure=\"false\" -Dtest.junit.vmargs=\"-javaagent:agent.jar\""
-        #ant = "cd  /d " + repoPath + "  & ant test -keep-going -Dhalt.on.test.failure=\"false\" -Dpoi.test.locale =\"-Duser.language=en -Duser.country=US -javaagent:agent.jar\""
+        ant = "cd /d  " + repoPath + "  & ant test -keep-going -Dhalt.on.test.failure=\"false\" -Dtest.junit.vmargs=\"-javaagent:agent.jar\""
+        #ant = "cd /d  " + repoPath + "  & ant test -keep-going -Dhalt.on.test.failure=\"false\" -Dpoi.test.locale =\"-Duser.language=en -Duser.country=US -javaagent:agent.jar\""
         print ant
         os.system(ant)
     if antOrPom=="pom":
-        runMvn = "cd  /d " + repoPath + "  & mvn clean install -Dmaven.test.failure.ignore=true -DargLine=\"-javaagent:agent.jar\""
+        runMvn = "cd /d  " + repoPath + "  & mvn clean install -Dmaven.test.failure.ignore=true -DargLine=\"-javaagent:agent.jar\""
         print runMvn
         exit()
         os.system(runMvn)
@@ -415,28 +432,41 @@ def ExcelReport(csvData,excel,sheet):
     os.system("java -jar ExcelChanger.jar "+excel+" "+csvData+" "+sheet)
 
 
+def BuildMLFiles(outDir,buggedType,component):
+    trainingFile=os.path.join(outDir,buggedType+"_training_"+component+".arff")
+    testingFile=os.path.join(outDir,buggedType+"_testing_"+component+".arff")
+    NamesFile=os.path.join(outDir,buggedType+"_names_"+component+".csv")
+    #outCsv=os.path.join(weka,buggedType+"_out_"+component+".csv")
+    return trainingFile,testingFile,NamesFile
+
+
 def createBuildMLModels(workingDir,gitPath,weka,vers,dbadd,wekaJar,RemoveBat):
     for buggedType in ["All","Most"]:
+    #for buggedType in ["All"]:
         Bpath=os.path.join(workingDir,buggedType)
         mkOneDir(Bpath)
-        FilesPath=os.path.join(buggedType,"Files")
-        methodsPath=os.path.join(buggedType,"Files")
-        trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacks(FilesPath,gitPath,weka,vers,buggedType,dbadd)
+        FilesPath=os.path.join(Bpath,"Files")
+        methodsPath=os.path.join(Bpath,"Methods")
+        mkOneDir(FilesPath)
+        mkOneDir(methodsPath)
+        #trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacks(FilesPath,gitPath,weka,vers,buggedType,dbadd)
+        trainingFile,testingFile,NamesFile=BuildMLFiles(weka,buggedType,"files")
         outCsv=os.path.join(weka,buggedType+"_out_files.csv")
-        BuildWekaModel(weka,trainingFile,testingFile,NamesFile,outCsv,"files_"+buggedType,wekaJar)
-        All_One_create.allFamilies(FilesPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
+        #BuildWekaModel(weka,trainingFile,testingFile,NamesFile,outCsv,"files_"+buggedType,wekaJar)
+        #All_One_create.allFamilies(FilesPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
         trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacksMethods(methodsPath,gitPath,weka,vers,buggedType,dbadd)
+        trainingFile,testingFile,NamesFile=BuildMLFiles(weka,buggedType,"methods")
         outCsv=os.path.join(weka,buggedType+"_out_methods.csv")
-        BuildWekaModel(weka,trainingFile,testingFile,NamesFile,outCsv,"methods_"+buggedType,wekaJar)
+        #BuildWekaModel(weka,trainingFile,testingFile,NamesFile,outCsv,"methods_"+buggedType,wekaJar)
         All_One_create.allFamilies(methodsPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
 
 
-def filesExperiments(workingDir,weka,packsPath):
-    for buggedType in ["All","Most"]:
-        outPath = os.path.join(workingDir, "experiments\\files" + buggedType)
+def filesExperiments(workingDir,weka,packsPath,utilsPath, randNum):
+    #for buggedType in ["All","Most"]:
+    for buggedType in ["Most"]:
+        outPath = os.path.join(workingDir, "experiments\\files_" + buggedType+randNum)
         outCsv=os.path.join(weka,buggedType+"_out_files.csv")
-        print "experimnt on wrapper"
-        Agent.experimentsMethods.RunExperiments(os.path.join(workingDir,"testsBugsMethods.db"), outPath,packsPath,outCsv,"File",buggedType)
+        Agent.experimentsMethods.RunExperiments(os.path.join(workingDir,"testsBugsMethods.db"), outPath,packsPath,outCsv,"File",buggedType,utilsPath)
         #ExcelReport(os.path.join(outPath,"barinelOptA.csv"),os.path.join(outPath,"barinel.xlsx"),"barinel")
         #ExcelReport(os.path.join(outPath,"plannerResall.csv"),os.path.join(outPath,"planner.xlsx"),"planner")
     #create weka allfiles
@@ -448,14 +478,16 @@ def filesExperiments(workingDir,weka,packsPath):
 
 
 
-def methodsExperiments(workingDir,weka,packsPath):
-    for buggedType in ["All","Most"]:
-        outPath = os.path.join(workingDir, "experiments\\methods" + buggedType)
+def methodsExperiments(workingDir,weka,packsPath,utilsPath,randNum):
+    #for buggedType in ["All","Most"]:
+    for buggedType in ["Most"]:
+        outPath = os.path.join(workingDir, "experiments\\methods" + buggedType+randNum)
         outCsv=os.path.join(weka,buggedType+"_out_methods.csv")
-        Agent.experimentsMethods.RunExperiments(os.path.join(workingDir,"testsBugsMethods.db"), outPath,packsPath,outCsv,"method",buggedType)
+        Agent.experimentsMethods.RunExperiments(os.path.join(workingDir,"testsBugsMethods.db"), outPath,packsPath,outCsv,"method",buggedType,utilsPath)
         #ExcelReport(os.path.join(outPath,"barinelOptA.csv"),os.path.join(outPath,"barinel.xlsx"),"barinel")
         #ExcelReport(os.path.join(outPath,"plannerResall.csv"),os.path.join(outPath,"planner.xlsx"),"planner")
 
+		
 def testVerConfig(workingDir,ver,antOrPom,startDate,endDate):
     testedVer=os.path.join(workingDir,"testedVer")
     testedVer=os.path.join(testedVer,"repo")
@@ -464,8 +496,8 @@ def testVerConfig(workingDir,ver,antOrPom,startDate,endDate):
     tested=os.path.join(tested,"repo")
     if not os.path.exists(testedVer):
         shutil.copytree(tested, testedVer)
-    testing(testedVer,antOrPom)
-    Agent.bugs_testsDBMethods.basicBuild(workingDir,ver,startDate,endDate)
+    #testing(testedVer,antOrPom)
+    #Agent.bugs_testsDBMethods.basicBuild(workingDir,ver,startDate,endDate)
 
 
 def clean(versPath,LocalGitPath):
@@ -474,25 +506,28 @@ def clean(versPath,LocalGitPath):
 
 
 def wrapperLearner(confFile,globalConfFile):
+    print confFile
     vers, gitPath,bugsPath, workingDir =configure(confFile)
-    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat =globalConfig(globalConfFile)
+    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath =globalConfig(globalConfFile)
     versPath, dbadd=Mkdirs(workingDir,vers)
-    logfile=open(os.path.join(workingDir,"timeLog.txt"),"wb")
+    logfile=open(os.path.join(workingDir,"timeLog2.txt"),"wb")
+    print("start "+ str(datetime.datetime.now())+"\n")
     logfile.write("start "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
 
     vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
     LocalGitPath=os.path.join(workingDir,"repo")
-    versionsCreate(gitPath, vers, versPath,LocalGitPath)
+    #versionsCreate(gitPath, vers, versPath,LocalGitPath)
+    #testVerConfig(workingDir,vers[-2],"ant",dates[-2],dates[-1])
     mkOneDir(LocalGitPath)
 
-    featuresExtract(vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
+    #featuresExtract(vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
     logfile.write("after featuresExtract "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
 
     MethodsParsed=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"CheckStyle.txt")
     changeFile=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"Ins_dels.txt")
-    wekaMethods.buildDB.buildOneTimeCommits(versPath,dbadd,bugsPath,False,-1,vers,"repo",MethodsParsed,changeFile,logfile,dates)
+    #wekaMethods.buildDB.buildOneTimeCommits(versPath,dbadd,bugsPath,False,-1,vers,"repo",MethodsParsed,changeFile,logfile,dates)
     logfile.write("after buildDB "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
 
@@ -501,18 +536,46 @@ def wrapperLearner(confFile,globalConfFile):
 
     #allOne types
 
+def comprasionAll(confFile,globalConfFile):
+    vers, gitPath,bugsPath, workingDir =configure(confFile)
+    for buggedType in ["All","Most"]:
+        Bpath=os.path.join(workingDir,buggedType)
+        FilesPath=os.path.join(Bpath,"Files")
+        methodsPath=os.path.join(Bpath,"Methods")
+        packs=["haelstead","g2","g3","methodsArticles","methodsAdded","hirarcy","fieldsArticles","fieldsAdded","constructorsArticles","constructorsAdded","lastProcess","simpleProcessArticles","simpleProcessAdded","bugs","sourceMonitor","checkStyle","blame"]#,"analyzeComms"]
+        FeaturesClasses,Featuresnames=wekaMethods.articles.featuresPacksToClasses(packs)
+        wekaMethods.ParseWekaOutput.comprasion(os.path.join(FilesPath,"Fam_one\\out"),os.path.join(FilesPath,"Fam_all\\out"), os.path.join(workingDir,buggedType+"_"+"Files")+".csv",Featuresnames)
+        packs=["lastProcessMethods","simpleProcessArticlesMethods","simpleProcessAddedMethods","bugsMethods"]#,"analyzeComms"]
+        FeaturesClasses,Featuresnames=wekaMethods.articles.featuresMethodsPacksToClasses(packs)
+        wekaMethods.ParseWekaOutput.comprasion(os.path.join(methodsPath,"Fam_one\\out"),os.path.join(methodsPath,"Fam_all\\out"), os.path.join(workingDir,buggedType+"_"+"Methods")+".csv",Featuresnames)
+
 
     #clean(versPath,LocalGitPath)
 
-def wrapperExperiments(confFile):
-    vers, gitPath,bugsPath, workingDir,docletPath=configure(confFile)
+
+def reportProjectData(confFile,globalConfFile):
+#java -Xmx2024m  -cp "C:\Program Files\Weka-3-7\weka.jar" weka.core.Instances 13_Appended.arff
+    vers, gitPath,bugsPath, workingDir =configure(confFile)
+    versPath, dbadd=Mkdirs(workingDir,vers)
+    LocalGitPath=os.path.join(workingDir,"repo")
+    reportCsv=os.path.join(workingDir,"report.csv")
+    lastVer=os.path.join(dbadd,vers[-1]+".db")
+    testsDB=os.path.join(workingDir,"testsBugsMethods.db")
+    report.report(reportCsv,LocalGitPath,lastVer,testsDB)
+
+
+def wrapperExperiments(confFile,globalConfFile):
+    vers, gitPath,bugsPath, workingDir=configure(confFile)
+    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath =globalConfig(globalConfFile)
     weka=os.path.join(workingDir,"weka")
-    vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
-    testDb=Agent.bugs_testsDBMethods.basicBuild(workingDir,vers[-2],dates[-2],dates[-1])
+    testDb = os.path.join( workingDir , "testsBugsMethods.db")
+    #vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
+    #testDb=Agent.bugs_testsDBMethods.basicBuild(workingDir,vers[-2],dates[-2],dates[-1])
     packsPath = os.path.join(workingDir, "packs.txt")
-    Agent.experimentsMethods.packFileCreate(testDb,1,-1, packsPath)
-    filesExperiments(workingDir,weka,packsPath)
-    methodsExperiments(workingDir,weka,packsPath)
+    #Agent.experimentsMethods.packFileCreate(testDb,1,-1, packsPath)
+    rnd=str(randint(0,900))
+    filesExperiments(workingDir,weka,packsPath,utilsPath,rnd)
+    #methodsExperiments(workingDir,weka,packsPath,utilsPath,rnd)
 
 
 def wrapper(confFile):
@@ -568,22 +631,29 @@ if __name__ == '__main__':
     #SourceMonitorXml("C:\projs\\ant13Working","ANT_171",sourceMonitorEXE)
 
     #gitInfoToCsv("C:\projs\jersey","C:\projs\jersey\\vers.csv")
-#    wekaMethods.issuesExtract.github_import.GithubIssues()
-    wekaMethods.issuesExtract.github_import.GithubIssues("","caleydo","caleydo","C:\\projs\\caleydo_bugs.csv")
+	#gitInfoToCsv("D:\\Amir_Almishali\\projs\\fabric8","D:\\Amir_Almishali\\projs\\fabric8\\fabric8.csv")
+	
+	#for x in ["DSpace","spring-integration","bndtools","jackson-databind","mcMMO"]:
+	#for x in ["hazelcast"]:
+		#gitInfoToCsv("D:\\Amir_Almishali\\projs\\"+x,"D:\\Amir_Almishali\\projs\\"+x+"\\"+x+".csv")
+	#	wrapperLearner("D:\\Amir_Almishali\\projs\\"+x+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+	
+	all=["fabric8io_fabric8","pentaho_pentaho-kettle","FasterXML_jackson-databind","querydsl_querydsl"]
+	for a in all:
+	    y,x=a.split("_")
+	    print y,x
+	    #wekaMethods.issuesExtract.github_import.GithubIssues("",y,x,"D:\\Amir_Almishali\\projs\\issues\\"+x+"_bugs.csv")
 
-    #wekaMethods.issuesExtract.github_import.GithubIssues("","orientechnologies","orientdb","D:\\Amir_Almishali\\projs\\orientdb_bugs.csv")
+	print("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+	#wrapperLearner("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+	#reportProjectData("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+	#comprasionAll("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+	wrapperExperiments("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+#orientechnologies/orientdb
+    
+	#wekaMethods.issuesExtract.github_import.GithubIssues("","orientechnologies","orientdb","D:\\Amir_Almishali\\projs\\orientdb_bugs.csv")
     #wekaMethods.issuesExtract.jira_import.jiraIssues("https://issues.jboss.org","",1500,"D:\\Amir_Almishali\\projs\\horentq_bugs.csv")
-
-    #wrapperLearner("D:\\Amir_Almishali\\projs\\fabric8Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-    #wrapperLearner("D:\\Amir_Almishali\\projs\\pentaho-kettleConf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-	#wrapperLearner("D:\\Amir_Almishali\\projs\\hornetqConf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-    #wrapperLearner("D:\\Amir_Almishali\\projs\\BroadleafCommerce.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-    #wrapperLearner("D:\\Amir_Almishali\\projs\\caleydoConf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-    #wrapperLearner("D:\\Amir_Almishali\\projs\\geotoolsConf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-    #wrapperLearner("D:\\Amir_Almishali\\projs\\hazelcastConf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-    #wrapperLearner("D:\\Amir_Almishali\\projs\\orientdbConf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-
-    #wrapperLearner("C:\projs\\antConf.txt","C:\Repo\Debugger\\globalConf.txt")
+    
 
     #Extract_OO_features("C:\\projs\\JavaDocTry",[""])
     #wrapperLearner("C:\projs\\cdtConf.txt")
@@ -596,7 +666,8 @@ if __name__ == '__main__':
     #gitInfoToCsv("C:\projs\\karaf","C:\projs\\karaf\\karaf.csv")
     #SourceMonitorXml("C:\projs\poiWorking","REL_3_10_1")
 
-    #mvn clean install -Dmaven.test.failure.ignore=true
+    #mvn clean install -Dmaven.test.failure.ignore=true -fn >run2.txt
+    #ant test -keep-going -Dhalt.on.test.failure=false -Dtest.junit.vmargs= >run.txt
     #mvn test -DargLine="-Dsystem.test.property=test"
     # mvn -DskipTests
     #ant -Dproperty=value

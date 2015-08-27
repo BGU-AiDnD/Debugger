@@ -2,18 +2,24 @@ __author__ = 'amir'
 
 import csv
 
-
 def Parse(file):
     print(file)
     f=open(file,"r")
     lines=f.readlines()
-    ind=lines.index('=== Detailed Accuracy By Class ===\n')
-    details=[x.lstrip().replace("Weighted Avg.","").split() for x in lines[ind+3: ind+6]]
+    
     titles=["TP Rate","FP Rate","Precision","Recall"," F-Measure","MCC","ROC Area","PRC Area"]
     classes=['bugged',"valid","both"]
+    dict={}
+    if not '=== Detailed Accuracy By Class ===\n' in lines:
+        for c in classes:
+            dict[c]={}
+            for title in titles:
+                dict[c][title]=0
+        return dict
+    ind=lines.index('=== Detailed Accuracy By Class ===\n')
+    details=[x.lstrip().replace("Weighted Avg.","").split() for x in lines[ind+3: ind+6]]
     details[0]=details[0][:-1]
     details[1]=details[1][:-1]
-    dict={}
     for c,p in zip(classes,details):
         dict[c]={}
         for metric,title in zip(p,titles):
@@ -48,12 +54,12 @@ def comprasion(oned,alld, outPath,Family):
         writer = csv.writer(f)
         writer.writerows(output)
 
-		
-
 def indsFamilies(packsInds,Wanted):
-	return []
+    return []
+
+
 def All_one_parallel(sourcePathTrain,sourcePathTest,oned,alld,packsInds,names):
-	comprasion(oned+"\\out",alld+"\\out", d+"\\"+"_".join(names)+".csv",names)
+    comprasion(oned+"\\out",alld+"\\out", d+"\\"+"_".join(names)+".csv",names)
 
 def allFamilies(d,packs,packsInds):
     methods = packs
@@ -85,57 +91,57 @@ def familiesTypes(d,packs,packsInds):
     names = ["old", "new"]
     All_one_parallel(sourcePathTrain, sourcePathTest, d + "\\All_one", d + "\\All_all", indsMethods, names)
 
+if __name__ == "__main__":
 
-d="D:\\Amir_Almishali\\weka\\ant"+"\\1"
+    d="D:\\Amir_Almishali\\weka\\p"
 
-packs=["haelstead","g2","g3","methodsArticles","methodsAdded","hirarcy","fieldsArticles","fieldsAdded","constructorsArticles","constructorsAdded","lastProcess","simpleProcessArticles","simpleProcessAdded","bugs","sourceMonitor","checkStyle","blame"]#,"analyzeComms"]
+    packs=["haelstead","g2","g3","methodsArticles","methodsAdded","hirarcy","fieldsArticles","fieldsAdded","constructorsArticles","constructorsAdded","lastProcess","simpleProcessArticles","simpleProcessAdded","bugs","sourceMonitor","checkStyle","blame"]#,"analyzeComms"]
 
-packsInds=[]
-sourcePathTrain=""
-sourcePathTest=""
+    packsInds=[]
+    sourcePathTrain=""
+    sourcePathTest=""
 
+    #allFamilies(d,packs,packsInds)
+    familiesTypes(d,packs,packsInds)
 
-allFamilies(d,packs,packsInds)
-familiesTypes(d,packs,packsInds)
-
-exit()
-
-
-OO_old=["haelstead","sourceMonitor","checkStyle"]
-OO_new=OO_old+["bugs"]
-indsMethods=indsFamilies(packsInds,[ [packs.index(y) for y in  OO_old  ],[packs.index(y) for y in OO_new ]])
-names=["Complexity_old","Complexity_new"]
-All_one_parallel(sourcePathTrain,sourcePathTest,d+"\\complexity_add_one",d+"\\complexity_add_all",indsMethods,names)
+    exit()
 
 
-OO_old=["simpleProcessArticles"]
-OO_new=OO_old+["bugs"]
-indsMethods=indsFamilies(packsInds,[ [packs.index(y) for y in  OO_old  ],[packs.index(y) for y in OO_new ]])
-names=["process_old","process_new"]
-All_one_parallel(sourcePathTrain,sourcePathTest,d+"\\process_add_one",d+"\\process_add_all",indsMethods,names)
-
-exit()
-OO_old=["methodsArticles","hirarcy","fieldsArticles","constructorsArticles"]
-OO_new=OO_old+["bugs"]
-names=["OO_old","OO_new"]
-indsMethods=indsFamilies(packsInds,[ [packs.index(y) for y in  OO_old  ],[packs.index(y) for y in OO_new ]])
-All_one_parallel(sourcePathTrain,sourcePathTest,d+"\\OO_add_one",d+"\\OO_add_all",indsMethods,names)
-
-OO_old=["simpleProcessArticles"]
-OO_new=OO_old+["bugs"]
-indsMethods=indsFamilies(packsInds,[ [packs.index(y) for y in  OO_old  ],[packs.index(y) for y in OO_new ]])
-names=["process_old","process_new"]
-All_one_parallel(sourcePathTrain,sourcePathTest,d+"\\process_add_one",d+"\\process_add_all",indsMethods,names)
-
-OO_old=["haelstead","sourceMonitor","checkStyle"]
-OO_new=OO_old+["bugs"]
-indsMethods=indsFamilies(packsInds,[ [packs.index(y) for y in  OO_old  ],[packs.index(y) for y in OO_new ]])
-names=["complexity_old","complexity_new"]
-All_one_parallel(sourcePathTrain,sourcePathTest,d+"\\complexity_add_one",d+"\\complexity_add_all",indsMethods,names)
+    OO_old=["haelstead","sourceMonitor","checkStyle"]
+    OO_new=OO_old+["bugs"]
+    indsMethods=indsFamilies(packsInds,[ [packs.index(y) for y in  OO_old  ],[packs.index(y) for y in OO_new ]])
+    names=["Complexity_old","Complexity_new"]
+    All_one_parallel(sourcePathTrain,sourcePathTest,d+"\\complexity_add_one",d+"\\complexity_add_all",indsMethods,names)
 
 
-OO_old=["haelstead","methodsArticles","hirarcy","fieldsArticles","constructorsArticles","simpleProcessArticles","sourceMonitor","checkStyle"]
-OO_new=OO_old+["bugs"]
-indsMethods=indsFamilies(packsInds,[ [packs.index(y) for y in  OO_old  ],[packs.index(y) for y in OO_new ]])
-names=["old","new"]
-All_one_parallel(sourcePathTrain,sourcePathTest,d+"\\add_one",d+"\\add_all",indsMethods,names)
+    OO_old=["simpleProcessArticles"]
+    OO_new=OO_old+["bugs"]
+    indsMethods=indsFamilies(packsInds,[ [packs.index(y) for y in  OO_old  ],[packs.index(y) for y in OO_new ]])
+    names=["process_old","process_new"]
+    All_one_parallel(sourcePathTrain,sourcePathTest,d+"\\process_add_one",d+"\\process_add_all",indsMethods,names)
+
+    exit()
+    OO_old=["methodsArticles","hirarcy","fieldsArticles","constructorsArticles"]
+    OO_new=OO_old+["bugs"]
+    names=["OO_old","OO_new"]
+    indsMethods=indsFamilies(packsInds,[ [packs.index(y) for y in  OO_old  ],[packs.index(y) for y in OO_new ]])
+    All_one_parallel(sourcePathTrain,sourcePathTest,d+"\\OO_add_one",d+"\\OO_add_all",indsMethods,names)
+
+    OO_old=["simpleProcessArticles"]
+    OO_new=OO_old+["bugs"]
+    indsMethods=indsFamilies(packsInds,[ [packs.index(y) for y in  OO_old  ],[packs.index(y) for y in OO_new ]])
+    names=["process_old","process_new"]
+    All_one_parallel(sourcePathTrain,sourcePathTest,d+"\\process_add_one",d+"\\process_add_all",indsMethods,names)
+
+    OO_old=["haelstead","sourceMonitor","checkStyle"]
+    OO_new=OO_old+["bugs"]
+    indsMethods=indsFamilies(packsInds,[ [packs.index(y) for y in  OO_old  ],[packs.index(y) for y in OO_new ]])
+    names=["complexity_old","complexity_new"]
+    All_one_parallel(sourcePathTrain,sourcePathTest,d+"\\complexity_add_one",d+"\\complexity_add_all",indsMethods,names)
+
+
+    OO_old=["haelstead","methodsArticles","hirarcy","fieldsArticles","constructorsArticles","simpleProcessArticles","sourceMonitor","checkStyle"]
+    OO_new=OO_old+["bugs"]
+    indsMethods=indsFamilies(packsInds,[ [packs.index(y) for y in  OO_old  ],[packs.index(y) for y in OO_new ]])
+    names=["old","new"]
+    All_one_parallel(sourcePathTrain,sourcePathTest,d+"\\add_one",d+"\\add_all",indsMethods,names)

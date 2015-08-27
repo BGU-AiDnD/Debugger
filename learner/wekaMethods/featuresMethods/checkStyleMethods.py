@@ -1,7 +1,7 @@
 __author__ = 'amir'
 
 from wekaMethods.articles import *
-#from wekaMethods.articles import sqlToAttributes
+import wekaMethods.articles
 best_features=[7,15,19,1,23,16,63,22,30,6,2,31,54,62,4,55,27,11,17,26,67,10,35,47,51,24,20,8,48,34,59,66,49,58,52,32]
 class checkStyleMethods:
     def get_attributesOLD(self):
@@ -14,7 +14,7 @@ class checkStyleMethods:
 
     def get_featuresOLD(self, c, files_dict,prev_date,start_date,end_date):
         style='select * from checkStyle group by name'
-        sqlToAttributes(["0","0","0","0","0","0","0","0","0"], c, files_dict, style)
+        wekaMethods.articles.sqlToAttributes(["0","0","0","0","0","0","0","0","0"], c, files_dict, style)
 
     def get_attributes(self):
         all=[("NCSS" , "NUMERIC"),("FileLen" , "NUMERIC"),("sum_fors" , "NUMERIC"),("sum_ifs" , "NUMERIC"),("sum_tries" , "NUMERIC"),
@@ -41,5 +41,5 @@ class checkStyleMethods:
 
     def get_features(self, c, files_dict,prev_date,start_date,end_date):
         style='select * from checkStyleExtends group by name'
-        sqlToAttributesBest(["0" for x in best_features], c, files_dict, style,best_features)
+        wekaMethods.articles.sqlToAttributesBest(["0" for x in best_features], c, files_dict, style,best_features)
 

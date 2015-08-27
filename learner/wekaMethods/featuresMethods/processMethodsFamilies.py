@@ -1,7 +1,7 @@
 __author__ = 'amir'
 
 from wekaMethods.articles import *
-#from wekaMethods.articles import sqlToAttributes
+import wekaMethods.articles
 simple_features=[1,2,3,4,5,6,7,8,9,10,21,26,27,28,29,30,31,32,33,34,35,36,37]
 simpleArticles_features=[1,2,3,4,5,6,7,8,9,10,21,26,27,28]
 simpleAdded_features=[29,30,31,32,33,34,35,36,37]
@@ -100,7 +100,7 @@ class processMethodsFamilies:
         for f in files_dict.keys():
             Att_dict[f] = list(basicAtt)
         for row in c.execute(first):
-            methodDir = Agent.pathTopack.pathToPack(row[0])
+            methodDir = row[0]
             if (methodDir in Att_dict):
                 Att_dict[methodDir] = list([x if x!=None else 0 for x in row[1:]])
         for f in Att_dict:

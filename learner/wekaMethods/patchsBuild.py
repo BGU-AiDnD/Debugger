@@ -114,6 +114,11 @@ def fixAssert(l):
 
 
 def OneClass(lines, outPath,commitID,change):
+    if len(lines)==0:
+		return []
+    fileName=lines[0].split()
+    if len(fileName)<3:
+		return []
     fileName=lines[0].split()[2]
     fileName=fileName[2:]
     fileName=fileName.replace("/","_")
@@ -142,7 +147,6 @@ def OneClass(lines, outPath,commitID,change):
                 continue
             l=fixEnum(l)
             l=fixAssert(l)
-
             replaced=re.sub('@@(-|\+|,| |[0-9])*@@','',l)
             if replaced.startswith("*"):
                 replaced="\\"+replaced
@@ -160,15 +164,16 @@ def OneClass(lines, outPath,commitID,change):
                 delind=delind+1
                 addind=addind+1
 
-        beforeFile=outPath+"\\before\\"+fileName
-        bef=open(beforeFile,"wb")
+        beforeFile="\\\\?\\"+outPath+"\\before\\"+fileName
+        AfterFile="\\\\?\\"+outPath+"\\after\\"+fileName
+        delsIns="\\\\?\\"+outPath+"\\"+fileName+"_deletsIns.txt"
+        bef=open(beforeFile,"w+")
         bef.writelines(befLines)
         bef.close()
-        AfterFile=outPath+"\\after\\"+fileName
-        af=open(AfterFile,"wb")
+        af=open(AfterFile,"w+")
         af.writelines(afterLines)
         af.close()
-        f=open(outPath+"\\"+fileName+"_deletsIns.txt","wb")
+        f=open(delsIns,"w+")
         f.writelines(["deleted\n",str(deletedInds)+"\n","added\n",str(addedInds)])
         f.close()
         change.write(fileName+"@"+str(commitID)+"@"+str(deletedInds)+"@"+str(addedInds)+"\n")
@@ -195,7 +200,6 @@ def oneFile(PatchFile, outDir,change):
     return  commitSha
 
 
-#oneFile("C:\GitHub\\try\org.eclipse.cdt\\0244-Rename-DebugConfiguration-to-avoid-duplicate-names.patch","C:\GitHub\\try\org.eclipse.cdt\\p")
 
 
 
@@ -383,12 +387,16 @@ def checkStyleCreateDict(lines ,changesDict):
             key = "deletions"
             dataFile = file.replace("before\\", "")+"_deletsIns.txt"
             #deleted, insertions = readDataFile(dataFile)
+            if not (fileName,commitID) in changesDict:
+				continue
             deleted, insertions = changesDict[(fileName,commitID)]
             inds = deleted
         if "after" in file:
             key = "insertions"
             dataFile = file.replace("after\\", "")+"_deletsIns.txt"
             #deleted, insertions = readDataFile(dataFile)
+            if not (fileName,commitID) in changesDict:
+				continue
             deleted, insertions = changesDict[(fileName,commitID)]
             inds = insertions
         name, begin, end = data.split("@")
@@ -478,17 +486,22 @@ def do_all(workingDir,checkStyle68,methodNameLines):
 
 
 if __name__ == '__main__':
+	f=open("D:\\Amir_Almishali\\projs\\fabric8Work\\repo\\commitsFiles\\9992c405d5263b8970e3b575c3791bdfb8f15eb8\\7631-1946-INS.patch","wb")
+	oneFile("D:\\Amir_Almishali\\projs\\fabric8Work\\repo\\commitsFiles\\9992c405d5263b8970e3b575c3791bdfb8f15eb8\\0451-finish-committing-module-changes.patch","D:\\Amir_Almishali\\projs\\fabric8Work\\repo\\commitsFiles\\9992c405d5263b8970e3b575c3791bdfb8f15eb8\\p",f)
+
     #build("C:\GitHub\\try\org.eclipse.cdt")
     #build("C:\\tomcat\code\\try\\tomcat8","C:\\tomcat\code\\try\\tomcat8")
     #do_all("C:\projs\\antWorking\\antC")
     #do_all("C:\\projs\\poi2Working\\poi")
     #do_all("C:\\projs\\grizMasterWorking\\repo")
     #do_all("C:\projs\ptry\\repo")
+	"""
     ans,filesRows=analyzeCheckStyle("C:\projs\ptry\\repo\commitsFiles\\CheckStyle.txt","C:\projs\ptry\\repo\commitsFiles\\Ins_dels.txt")
     s=set()
     for f in filesRows:
         s.add(f[1])
     print len(s), len(filesRows)
+	"""
     #debugPatchs("C:\\projs\\ant5Working\\repo\patch","C:\\projs\\ant5Working\\repo\patchHeads.txt")
     #buildPatchs("C:\\projs\\grizMasterWorking\\repo\\patch","C:\\projs\\grizMasterWorking\\repo\\commitsFiles2")
     #buildPatchs("C:\\projs\\grizMasterWorking\\repo\\patch","C:\\projs\\grizMasterWorking\\repo\\commitsFiles2")

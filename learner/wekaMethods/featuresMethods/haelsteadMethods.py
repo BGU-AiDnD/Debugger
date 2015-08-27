@@ -1,7 +1,7 @@
 __author__ = 'amir'
 
 from wekaMethods.articles import *
-#from articles import sqlToAttributes
+#from articles import wekaMethods.articles.sqlToAttributes
 
 class haelsteadMethods:
     def get_attributes(self):
@@ -12,6 +12,6 @@ class haelsteadMethods:
 
     def get_features(self, c, files_dict,prev_date,start_date,end_date):
         hael='select   name,Operators_count, Operands_count , Distinct_operators  , Distinct_operands,Program_length , Program_vocabulary ,Volume , Difficulty , Effort from  haelsTfiles group by name'
-        sqlToAttributes(["0", "0", "0", "0","0","0", "0", "0", "0"], c, files_dict, hael)
+        wekaMethods.articles.sqlToAttributes(["0", "0", "0", "0","0","0", "0", "0", "0"], c, files_dict, hael)
         complex='select * from Complexyfiles group by name'
-        sqlToAttributes(["0"], c, files_dict, complex)
+        wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, complex)

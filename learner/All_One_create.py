@@ -104,19 +104,23 @@ del /F %6
 """
 
 
-def RemoveBuildEval(indices,inputTrain,outputTrain,inputTest,outputTest,model,training,testing,RemoveBat):
-    inds=[x+1 for x in indices]+[406]
+def RemoveBuildEval(indices,inputTrain,outputTrain,inputTest,outputTest,model,training,testing,RemoveBat,classInd):
+    inds=[x+1 for x in indices]
+    inds=[x+1 for x in indices]+[classInd]
+    print classInd,inds
+    print classInd,inds
+    print classInd,inds
     lst = [str(inds).replace('[','"').replace(']','"'), inputTrain, outputTrain, inputTest, outputTest, model, training, testing]
     params=" ".join([str(x) for x in lst])
     #bat_run = "start /b cmd /x /c \"D: & cd  D:\\Amir_Almishali\\weka\\ & D:\\Amir_Almishali\\weka\\RemoveBuildEval.bat " + params +"\""
-    bat_run = "start /b cmd /x /c \"D: & cd  D:\\Amir_Almishali\\weka\\ & "+RemoveBat+" " + params +"\""
-    #print  outputTrain ,model, training
+    bat_run = "start /b cmd /x /c \" "+RemoveBat+" " + params +"\""
+    os.system(bat_run)
     #exit()
     #print inputTrain, outputTrain, inputTest, outputTest, model, training, testing
-    os.system(bat_run)
 
 def All_one_parallel(sourcePathTrain,sourcePathTest,oned,alld,packsInds,names,RemoveBat):
     red=list(set(reduce(lambda x, y: x+y, packsInds)))
+    classInd = max(red)+2
     mkdirs(oned)
     mkdirs(alld)
     Copy(oned)
@@ -126,13 +130,14 @@ def All_one_parallel(sourcePathTrain,sourcePathTest,oned,alld,packsInds,names,Re
         for x in p:
             lst.remove(x)
         reduce1=lst
+        
         print len(reduce1),len(p),len(reduce1)+len(p)
         outPathTrain=oned+"\\"+str(ind)+"_Appended.arff"
         outPathTest=oned+"\\"+str(ind)+"_Only.arff"
-        RemoveBuildEval(p,sourcePathTrain,outPathTrain, sourcePathTest, outPathTest, oned+"\\models\\"+str(ind)+".model",oned+"\\training\\"+str(ind)+".txt",oned+"\\out\\"+str(ind)+".txt",RemoveBat)
+        RemoveBuildEval(p,sourcePathTrain,outPathTrain, sourcePathTest, outPathTest, oned+"\\models\\"+str(ind)+".model",oned+"\\training\\"+str(ind)+".txt",oned+"\\out\\"+str(ind)+".txt",RemoveBat,classInd)
         outPathTrain=alld+"\\"+str(ind)+"_Appended.arff"
         outPathTest=alld+"\\"+str(ind)+"_Only.arff"
-        RemoveBuildEval(reduce1,sourcePathTrain,outPathTrain, sourcePathTest, outPathTest, alld+"\\models\\"+str(ind)+".model",alld+"\\training\\"+str(ind)+".txt",alld+"\\out\\"+str(ind)+".txt",RemoveBat)
+        RemoveBuildEval(reduce1,sourcePathTrain,outPathTrain, sourcePathTest, outPathTest, alld+"\\models\\"+str(ind)+".model",alld+"\\training\\"+str(ind)+".txt",alld+"\\out\\"+str(ind)+".txt",RemoveBat,classInd)
 
 
 def indsFamilies(packsInds,Wanted):
@@ -144,8 +149,11 @@ def indsFamilies(packsInds,Wanted):
 
 
 
-def allFamilies(d,packs,packsInds,sourcePathTrain, sourcePathTest,RemoveBat):
+def allFamilies(d,packs,packsSizes,sourcePathTrain, sourcePathTest,RemoveBat):
     methods = packs
+    packsInds=[]
+    for i in range(len(packsSizes)-1):
+        packsInds.append([x+packsSizes[i] for x in range(packsSizes[i+1]-packsSizes[i])])
     indsMethods = indsFamilies(packsInds, [[packs.index(x)] for x in methods])
     All_one_parallel(sourcePathTrain, sourcePathTest, d + "\\Fam_one", d + "\\Fam_all", indsMethods, methods,RemoveBat)
 

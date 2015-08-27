@@ -1,7 +1,7 @@
 __author__ = 'amir'
 
 from wekaMethods.articles import *
-#from wekaMethods.articles import sqlToAttributes
+import wekaMethods.articles
 import numpy
 from collections import Counter
 class sourceMonitorMethods:
@@ -63,19 +63,19 @@ class sourceMonitorMethods:
    ,Average_Block_Depth	, Average_Complexity	,
  Statements_at_block_level_0 ,Statements_at_block_level_1 ,Statements_at_block_level_2 ,Statements_at_block_level_3 ,Statements_at_block_level_4 ,
  Statements_at_block_level_5 ,Statements_at_block_level_6 ,Statements_at_block_level_7   from JAVAfilesFix'''
-        sqlToAttributes(["0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"], c, files_dict, sourceMethodsFiles)
+        wekaMethods.articles.sqlToAttributes(["0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"], c, files_dict, sourceMethodsFiles)
         sourceMethodsFiles='''select  name  ,
  Statements_at_block_level_3 /(1.0*Statements),Statements_at_block_level_4/(1.0*Statements) ,
  Statements_at_block_level_5 /(1.0*Statements),Statements_at_block_level_6 /(1.0*Statements),Statements_at_block_level_7/(1.0*Statements)  from JAVAfilesFix'''
-        sqlToAttributes(["0","0","0","0","0",], c, files_dict, sourceMethodsFiles)
+        wekaMethods.articles.sqlToAttributes(["0","0","0","0","0",], c, files_dict, sourceMethodsFiles)
         sourceMethodsFiles='''select  name ,
  max(Statements_at_block_level_0 ,Statements_at_block_level_1 ,Statements_at_block_level_2 ,Statements_at_block_level_3 ,Statements_at_block_level_4 ,
  Statements_at_block_level_5 ,Statements_at_block_level_6 ,Statements_at_block_level_7 ,Statements_at_block_level_8 ,Statements_at_block_level_9)  from JAVAfilesFix'''
-        sqlToAttributes(["0"], c, files_dict, sourceMethodsFiles)
+        wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, sourceMethodsFiles)
         sourceMethodsFiles='''select  name  ,
  max(Statements_at_block_level_0/(1.0*Statements) ,Statements_at_block_level_1/(1.0*Statements) ,Statements_at_block_level_2/(1.0*Statements) ,Statements_at_block_level_3 /(1.0*Statements),Statements_at_block_level_4/(1.0*Statements) ,
  Statements_at_block_level_5 /(1.0*Statements),Statements_at_block_level_6 /(1.0*Statements),Statements_at_block_level_7/(1.0*Statements) ,Statements_at_block_level_8/(1.0*Statements) ,Statements_at_block_level_9/(1.0*Statements) )  from JAVAfilesFix'''
-        sqlToAttributes(["0"], c, files_dict, sourceMethodsFiles)
+        wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, sourceMethodsFiles)
         complexity_d={}
         statements_d={}
         depth_d={}
@@ -87,7 +87,7 @@ class sourceMonitorMethods:
             calls_d[f]=[]
         se='select File_Name  ,Complexity	, Statements , 	Maximum_Depth	, Calls from SourcemethodsFix'
         for row in c.execute(se):
-            name = Agent.pathTopack.pathToPack(row[0])
+            name = row[0]
             if (name in files_dict):
                 if str(row[1]).isdigit():
                     complexity_d[name].append(int(row[1]))

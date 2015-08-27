@@ -6,3 +6,4 @@ allchecks=C:\projs\allChecks.xml
 methodsNamesXML=C:\projs\methodNameLines.xml
 wekaJar=C:\Program Files\Weka-3-7\weka.jar
 RemoveBat=C:\Repo\Debugger\removeBat.bat
+utilsPath=C:\Repo\Debugger\utils

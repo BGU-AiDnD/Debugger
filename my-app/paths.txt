@@ -1,2 +1,2 @@
-C:\GitHub\agent\my-app
-C:\Users\amir\.m2\repository
+D:\Amir_Almishali\projs\Debugger\Debugger\my-app
+C:\Users\amirelm\.m2\repository

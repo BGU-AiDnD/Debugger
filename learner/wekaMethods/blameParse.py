@@ -158,9 +158,9 @@ def fileParse(file, prevVersionCommitterTime):
     groupsApproved.append(countS)
     #return name,len(set(commits)),len(comms),len(groups),len(set(committers)),stamp(numpy.mean(times)),stamp(numpy.median(times)),stamp(max(times)),stamp(min(times)),numpy.var(times),stamp(most_common(times)),max(times)- min(times),stamp(numpy.mean(difftimes)),stamp(numpy.median(difftimes)),numpy.var(difftimes),
     ret= [name,len(set(commits)),len(comms),len(set(commitsApproved)),len(commsApproved),numBlobs,numPatchs,numCommits]
-    ret.extend(list(listStats(times,True))+[max(times)- min(times)])
+    ret.extend(list(listStats(times,True))+[maxCheck(times)- minCheck(times)])
     ret.extend(list(countsLines( times)))
-    ret.extend(list(listStats(difftimes,True))+[max(difftimes)- min(difftimes)])
+    ret.extend(list(listStats(difftimes,True))+[maxCheck(difftimes)- minCheck(difftimes)])
     ret.extend(list(countsLines( difftimes)))
     ret.extend(list(commitersFeatures( committers)))
     ret.extend(list(listStats(timesApproved,True))+[maxCheck(timesApproved) - minCheck(timesApproved)])

@@ -75,6 +75,7 @@ def GitVersInfo(basicPath,repoPath,vers):
     r=git.Repo(repoPath)
     #vers=["TOMCAT_8_0_4", "TOMCAT_8_0_5", "TOMCAT_8_0_6", "TOMCAT_8_0_7", "TOMCAT_8_0_8", "TOMCAT_8_0_9"]
     wanted=[ x.commit for x in r.tags if x.name in vers]
+    wan=[ (x.commit,x.name) for x in r.tags if x.name in vers]
     commits=[int("".join(list(x.hexsha)[:7]),16) for x in wanted]
     dates=[datetime.datetime.fromtimestamp(x.committed_date).strftime('%Y-%m-%d %H:%M:%S') for x in wanted]
     paths=[os.path.join(basicPath, os.path.join(n, "repo")) for n in vers]
@@ -338,6 +339,8 @@ def arff88_ByTag_ObjectsMethods(dbpath,dates,commits,i, isTest,max,buggedType,ob
 
 
 def arffCreateForTag(dbpath,dates,i, objects,bugQuery,wanted):
+    print dates,i,dbpath
+    print dates,i,dbpath
     prev_date=dates[i-1]
     start_date=dates[i]
     end_date=dates[i+1]
@@ -779,15 +782,15 @@ def featuresPacksToClasses(packs):
         print "simpleProcessAdded"
     if "bugs" in packs:
         l.append(processFamilies.processFamilies("bugs"))
-        names.append("simpleProcessAdded")
+        names.append("bugs")
         print "bugs"
     if "sourceMonitor" in packs:
         l.append(sourceMonitor.sourceMonitor())
-        names.append("simpleProcessAdded")
+        names.append("sourceMonitor")
         print "sourceMonitor"
     if "checkStyle" in packs:
         l.append(checkStyle.checkStyle())
-        names.append("simpleProcessAdded")
+        names.append("checkStyle")
         print "checkStyle"
     if "blame" in packs:
         l.append(blame.blame())
@@ -897,7 +900,6 @@ if __name__ == "__main__":
     #exit()
     packs=["haelstead","g2","g3","methodsArticles","methodsAdded","hirarcy","fieldsArticles","fieldsAdded","constructorsArticles","constructorsAdded","lastProcess","simpleProcessArticles","simpleProcessAdded","bugs","sourceMonitor","checkStyle","blame","analyzeComms"]
     packs=["haelstead","g2","g3","methodsArticles","methodsAdded","hirarcy","fieldsArticles","fieldsAdded","constructorsArticles","constructorsAdded","lastProcess","simpleProcessArticles","simpleProcessAdded","bugs","sourceMonitor","checkStyle","blame"]#,"analyzeComms"]
-    packs=["bugs"]
     for b in buggedTypes:
         basicPath="C:\GitHub\\vers\dbAdd\done2"
         names,paths,dates,commits=EclipseInfo(basicPath)
