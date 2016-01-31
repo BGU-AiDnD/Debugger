@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/eclipse.iml" filepath="$PROJECT_DIR$/.idea/eclipse.iml" />
+      <module fileurl="file://E:/Dropbo/Dropbox/pdf/.idea/pdf.iml" filepath="E:/Dropbo/Dropbox/pdf/.idea/pdf.iml" />
     </modules>
   </component>
 </project>

@@ -3,15 +3,18 @@
 
 import sys
 import os
-import git
 import subprocess
 import datetime
-import wekaMethods.buildDB
-import wekaMethods.commsSpaces
-import unittest
-import wekaMethods.articles
 import shutil
 import csv
+from random import randint
+
+import git
+
+from utilsConf import globalConfig, configure
+import wekaMethods.buildDB
+import wekaMethods.commsSpaces
+import wekaMethods.articles
 import wekaMethods.patchsBuild
 import wekaMethods.wekaAccuracy
 import wekaMethods.issuesExtract.github_import
@@ -21,7 +24,6 @@ import Agent.experimentsMethods
 import report
 import All_One_create
 import wekaMethods.ParseWekaOutput
-from random import randint
 
 
 """
@@ -37,84 +39,12 @@ workingDir=C:\projs\antWorking
 git=C:\projs\antC
 vers=(ANT_13_B2,ANT_13_MAIN_MERGE4,ANT_MAIN_13_MERGE4)
 """
-def globalConfig(confFile):
-    lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
-    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar="","","","","","",""
-    RemoveBat=""
-    utilsPath=""
-    for x in lines:
-        if x.startswith("docletPath"):
-            v=x.split("=")[1]
-            docletPath=v
-        if x.startswith("sourceMonitorEXE"):
-            v=x.split("=")[1]
-            sourceMonitorEXE=v
-        if x.startswith("checkStyle57"):
-            v=x.split("=")[1]
-            checkStyle57=v
-        if x.startswith("checkStyle68"):
-            v=x.split("=")[1]
-            checkStyle68=v
-        if x.startswith("allchecks"):
-            v=x.split("=")[1]
-            allchecks=v
-        if x.startswith("methodsNamesXML"):
-            v=x.split("=")[1]
-            methodsNamesXML=v
-        if x.startswith("wekaJar"):
-            v=x.split("=")[1]
-            wekaJar=v
-        if x.startswith("RemoveBat"):
-            v=x.split("=")[1]
-            RemoveBat=v
-        if x.startswith("utilsPath"):
-            v=x.split("=")[1]
-            utilsPath=v
-    return docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath
 
 
-def configure(confFile):
-    lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
-    vers, gitPath,bugs, workingDir="","","",""
-    for x in lines:
-        if x.startswith("workingDir"):
-            v=x.split("=")[1]
-            workingDir=v
-        if x.startswith("git"):
-            v=x.split("=")[1]
-            gitPath=v
-        if x.startswith("bugs"):
-            v=x.split("=")[1]
-            bugs=v
-        if x.startswith("vers"):
-            v=x.split("=")[1]
-            v=v.split("(")[1]
-            v=v.split(")")[0]
-            vers=v.split(",")
-    docletPath="C:\projs\\xml-doclet-1.0.4-jar-with-dependencies.jar"
-    sourceMonitorEXE="C:\Program Files (x86)\SourceMonitor\SourceMonitor.exe"
-    checkStyle57,checkStyle68,allchecks,methodsNamesXML="C:\projs\\checkstyle-5.7-all.jar","C:\projs\checkstyle-6.8-SNAPSHOT-all.jar","C:\projs\\allChecks.xml","C:\projs\methodNameLines.xml"
-    return [v.lstrip() for v in vers], gitPath,bugs, workingDir#,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML
 
-def configureExperiments(confFile):
-    lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
-    vers, gitPath,bugs, workingDir="","","",""
-    for x in lines:
-        if x.startswith("workingDir"):
-            v=x.split("=")[1]
-            workingDir=v
-        if x.startswith("git"):
-            v=x.split("=")[1]
-            gitPath=v
-        if x.startswith("bugs"):
-            v=x.split("=")[1]
-            bugs=v
-        if x.startswith("vers"):
-            v=x.split("=")[1]
-            v=v.split("(")[1]
-            v=v.split(")")[0]
-            vers=v.split(",")
-    return [v.lstrip() for v in vers], gitPath,bugs, workingDir
+
+
+
 
 def mkOneDir(dir):
     if not os.path.isdir(dir):
@@ -401,7 +331,10 @@ def gitInfoToCsv(gitPath,outFile):
 def BuildWekaModel(weka,training,testing,namesCsv,outCsv,name,wekaJar):
     algorithm="weka.classifiers.trees.RandomForest -I 1000 -K 0 -S 1 -num-slots 1 "
     #os.system("cd /d  "+weka +" & java -Xmx2024m  -cp \"C:\\Program Files\\Weka-3-7\\weka.jar\" weka.Run " +algorithm+ " -x 10 -d .\\model.model -t "+training+" > training"+name+".txt")
+    print("cd /d  "+weka +" & java -Xmx2024m  -cp "+wekaJar+" weka.Run " +algorithm+ " -x 10 -d .\\model.model -t "+training+" > training"+name+".txt")
+    
     os.system("cd /d  "+weka +" & java -Xmx2024m  -cp "+wekaJar+" weka.Run " +algorithm+ " -x 10 -d .\\model.model -t "+training+" > training"+name+".txt")
+    algorithm="weka.classifiers.trees.RandomForest "
     os.system("cd /d  "+weka +" & java -Xmx2024m  -cp "+wekaJar+" weka.Run " +algorithm+ " -l .\\model.model -T "+testing+" -classifications \"weka.classifiers.evaluation.output.prediction.CSV -file testing"+name+".csv\" ")
     os.system("cd /d  "+weka +" & java -Xmx2024m  -cp "+wekaJar+" weka.Run " +algorithm+ " -l .\\model.model -T "+testing+" > testing"+name+".txt ")
     wekaCsv=os.path.join(weka,"testing"+name+".csv")
@@ -460,12 +393,45 @@ def createBuildMLModels(workingDir,gitPath,weka,vers,dbadd,wekaJar,RemoveBat):
         #BuildWekaModel(weka,trainingFile,testingFile,NamesFile,outCsv,"methods_"+buggedType,wekaJar)
         All_One_create.allFamilies(methodsPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
 
+def mergeArffs(merge,arffFile,tempFile):
+    os.system('java -Xmx2024m  -cp "C:\Program Files\Weka-3-7\weka.jar" weka.filters.unsupervised.attribute.RemoveByName -E hasBug -i '+ merge+' > '+ tempFile)
+    os.system('java -Xmx2024m  -cp "C:\Program Files\Weka-3-7\weka.jar" weka.core.Instances merge '+ tempFile+' '+ arffFile+'  > '+ merge)
+
+def indsFamilies(packsInds,Wanted):
+    outpacksInds=[]
+    for p in Wanted:
+        lst = [packsInds[x] for x in p]
+        outpacksInds.append(reduce(lambda x, y: x + y, lst))
+    return outpacksInds
+
+
+def merge_multiple_arff_file(path,outArff,tempFile,indices):
+        shutil.copyfile(os.path.join(path,str(indices[0])),outArff)
+        for ind in indices[1:]:
+            arffFile=os.path.join(path,str(ind))
+            mergeArffs(outArff,arffFile,tempFile)
+
+			
+			
+def ArticleFeaturesMostFiles(workingDir,outArffTrain,outArffTest,tempFile,outCsv,wekaJar,indices):
+    weka=os.path.join(workingDir,"weka")
+    Bpath=os.path.join(workingDir,"Most")
+    FilesPath=os.path.join(Bpath,"Files")
+    FilesPath=os.path.join(FilesPath,"Fam_one")
+    for train,name in zip([outArffTrain,outArffTest],["_Appended.arff","_Only.arff"]):
+        shutil.copyfile(os.path.join(FilesPath,str(0)+name),train)
+        for ind in indices[1:]:
+            arffFile=os.path.join(FilesPath,str(ind)+name)
+            mergeArffs(train,arffFile,tempFile)
+    trainingFile,testingFile,NamesFile=BuildMLFiles(weka,"Most","files")
+    BuildWekaModel(weka,outArffTrain,outArffTest,NamesFile,outCsv,"methods_"+"Most",wekaJar)
+
 
 def filesExperiments(workingDir,weka,packsPath,utilsPath, randNum):
     #for buggedType in ["All","Most"]:
     for buggedType in ["Most"]:
         outPath = os.path.join(workingDir, "experiments\\files_" + buggedType+randNum)
-        outCsv=os.path.join(weka,buggedType+"_out_files.csv")
+        outCsv=os.path.join(weka,buggedType+"_out_files_Articles.csv")
         Agent.experimentsMethods.RunExperiments(os.path.join(workingDir,"testsBugsMethods.db"), outPath,packsPath,outCsv,"File",buggedType,utilsPath)
         #ExcelReport(os.path.join(outPath,"barinelOptA.csv"),os.path.join(outPath,"barinel.xlsx"),"barinel")
         #ExcelReport(os.path.join(outPath,"plannerResall.csv"),os.path.join(outPath,"planner.xlsx"),"planner")
@@ -515,7 +481,7 @@ def wrapperLearner(confFile,globalConfFile):
     logfile.write("start "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
 
-    vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
+    #vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
     LocalGitPath=os.path.join(workingDir,"repo")
     #versionsCreate(gitPath, vers, versPath,LocalGitPath)
     #testVerConfig(workingDir,vers[-2],"ant",dates[-2],dates[-1])
@@ -532,7 +498,38 @@ def wrapperLearner(confFile,globalConfFile):
     logfile.flush()
 
     weka=os.path.join(workingDir,"weka")
-    createBuildMLModels(workingDir,gitPath,weka,vers,dbadd,wekaJar,RemoveBat)
+    #createBuildMLModels(workingDir,gitPath,weka,vers,dbadd,wekaJar,RemoveBat)
+
+    FilesIndices=[[0,14,15],[1,2,3,4,5,6,7,8,9],[10,11,12,16],[13]] #Traditional , OO, process ,Bugs
+    FilesIndices_all=[indsFamilies(FilesIndices,[[x for x in range(len(FilesIndices)) if x != ind]])[0]  for ind in range(len(FilesIndices))] #Traditional , OO, process ,Bugs
+    MethodsIndices=[[0],[1],[2,3]]
+    MethodsIndices_all=[indsFamilies(MethodsIndices,[[x for x in range(len(MethodsIndices)) if x != ind]])[0]  for ind in range(len(MethodsIndices))] #Traditional , OO, process ,Bugs
+    
+    for granularity,indicesList_one,indicesList_all in [["Files",FilesIndices ,FilesIndices_all ], ["Methods",MethodsIndices ,MethodsIndices_all]]:
+        for Bug_Type in ["All","Most"]:
+            baseDir=os.path.join(workingDir,Bug_Type)
+            baseDir=os.path.join(baseDir,granularity)
+            #for One_or_all,indicesList in [("Fam_one",indicesList_one),("Fam_all",indicesList_all)]:
+            for One_or_all,indicesList in [("Fam_all",indicesList_all)]:
+                One_or_allDir=os.path.join(baseDir,"Fam_one")
+                outDir=os.path.join(baseDir,"ThreeFam_"+One_or_all)
+                mkOneDir(outDir)
+                shutil.copyfile(os.path.join("D:\\Amir_Almishali\\projs","BuildEval.bat"),os.path.join(outDir,"BuildEval.bat"))
+                for ind,indices in enumerate(indicesList):
+                    outArffTrain=os.path.join(outDir,str(ind)+"_Appended.arff")
+                    TraintempFile=os.path.join(baseDir,str(ind)+"_tempTrain.arff")
+                    merge_multiple_arff_file(One_or_allDir,outArffTrain,TraintempFile,[str(x)+"_Appended.arff" for x in indices])
+                    #print [str(x)+"_Appended.arff" for x in indices]
+                    outArffTest=os.path.join(outDir,str(ind)+"_Only.arff")
+                    TesttempFile=os.path.join(baseDir,str(ind)+"_tempTest.arff")
+                    #print [str(y)+"_Only.arff" for y in indsFamilies(indicesList,[[x for x in range(len(indicesList)) if x != ind]])[0]]
+                    #merge_multiple_arff_file(One_or_allDir,outArffTest,TesttempFile,[str(y)+"_Only.arff" for y in indices])
+                #os.system("start /b cmd /x /c \"D: & cd  " + outDir +" &  " + outDir + "\\BuildEval.bat\"")
+
+
+
+			
+    #ArticleFeaturesMostFiles(workingDir,outArffTrain,outArffTest,tempFile,outCsv,wekaJar,[0,3,5,6,8,11,14])
 
     #allOne types
 
@@ -548,6 +545,47 @@ def comprasionAll(confFile,globalConfFile):
         packs=["lastProcessMethods","simpleProcessArticlesMethods","simpleProcessAddedMethods","bugsMethods"]#,"analyzeComms"]
         FeaturesClasses,Featuresnames=wekaMethods.articles.featuresMethodsPacksToClasses(packs)
         wekaMethods.ParseWekaOutput.comprasion(os.path.join(methodsPath,"Fam_one\\out"),os.path.join(methodsPath,"Fam_all\\out"), os.path.join(workingDir,buggedType+"_"+"Methods")+".csv",Featuresnames)
+
+
+
+def comprasionThreeFam(confFile,globalConfFile):
+    vers, gitPath,bugsPath, workingDir =configure(confFile)
+    for buggedType in ["All","Most"]:
+        Bpath=os.path.join(workingDir,buggedType)
+        FilesPath=os.path.join(Bpath,"Files")
+        methodsPath=os.path.join(Bpath,"Methods")
+        packs=["Traditional" , "OO", "process" ,"Fault_History"]#,"analyzeComms"]
+        wekaMethods.ParseWekaOutput.comprasion(os.path.join(FilesPath,"ThreeFam_Fam_one\\out"),os.path.join(FilesPath,"ThreeFam_Fam_all\\out"), os.path.join(workingDir,"ThreeFam_"+buggedType+"_"+"Files")+".csv",packs)
+        packs=["Fault_History","process_version1","process_version2"]#,"analyzeComms"]
+        wekaMethods.ParseWekaOutput.comprasion(os.path.join(methodsPath,"ThreeFam_Fam_one\\out"),os.path.join(methodsPath,"ThreeFam_Fam_all\\out"), os.path.join(workingDir,"ThreeFam_"+buggedType+"_"+"Methods")+".csv",packs)
+
+
+def dictToList(dict,lst):
+    ans=[]
+    for l in lst:
+        ans.append(dict[l])
+    return ans
+
+def comprasionTypes(confFile,globalConfFile):
+    vers, gitPath,bugsPath, workingDir =configure(confFile)
+    learnerOutFile=os.path.join(workingDir,"learner.csv")
+    wekaD=os.path.join(workingDir,"weka")
+    keys=["TP Rate","FP Rate","Precision","Recall"," F-Measure","MCC","ROC Area","PRC Area"]
+    titles=["type","class","TP Rate","FP Rate","Precision","Recall"," F-Measure","MCC","ROC Area","PRC Area"]
+    classes=['bugged',"valid","both"]
+    filesNames=["testingAll_files.txt", "testingAll_methods.txt", "testingMost_files.txt", "testingMost_methods.txt"]
+    lines=[titles]
+    for f in filesNames:
+        file=os.path.join(wekaD,f)
+        Exptype=f.replace(".txt","").replace(".testing","")
+        parsedDict=wekaMethods.ParseWekaOutput.Parse(file)
+        for d in parsedDict:
+          lines.append([Exptype,d]+list(dictToList(parsedDict[d],keys)))
+    f=open(learnerOutFile,"wb")
+    writer=csv.writer(f)
+    writer.writerows(lines)
+    f.close()
+
 
 
     #clean(versPath,LocalGitPath)
@@ -625,19 +663,18 @@ def wrapper(confFile):
 
 
 
-
 if __name__ == '__main__':
     #sourceMonitorEXE="C:\Program Files (x86)\SourceMonitor\SourceMonitor.exe"
     #SourceMonitorXml("C:\projs\\ant13Working","ANT_171",sourceMonitorEXE)
 
     #gitInfoToCsv("C:\projs\jersey","C:\projs\jersey\\vers.csv")
 	#gitInfoToCsv("D:\\Amir_Almishali\\projs\\fabric8","D:\\Amir_Almishali\\projs\\fabric8\\fabric8.csv")
-	
+
 	#for x in ["DSpace","spring-integration","bndtools","jackson-databind","mcMMO"]:
 	#for x in ["hazelcast"]:
 		#gitInfoToCsv("D:\\Amir_Almishali\\projs\\"+x,"D:\\Amir_Almishali\\projs\\"+x+"\\"+x+".csv")
 	#	wrapperLearner("D:\\Amir_Almishali\\projs\\"+x+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-	
+
 	all=["fabric8io_fabric8","pentaho_pentaho-kettle","FasterXML_jackson-databind","querydsl_querydsl"]
 	for a in all:
 	    y,x=a.split("_")
@@ -645,10 +682,14 @@ if __name__ == '__main__':
 	    #wekaMethods.issuesExtract.github_import.GithubIssues("",y,x,"D:\\Amir_Almishali\\projs\\issues\\"+x+"_bugs.csv")
 
 	print("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-	#wrapperLearner("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+	#if sys.argv[2]=="learn":
+	#	wrapperLearner("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
 	#reportProjectData("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
 	#comprasionAll("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-	wrapperExperiments("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+	comprasionTypes("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+	#comprasionThreeFam("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+	if sys.argv[2]=="experiments":
+		wrapperExperiments("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
 #orientechnologies/orientdb
     
 	#wekaMethods.issuesExtract.github_import.GithubIssues("","orientechnologies","orientdb","D:\\Amir_Almishali\\projs\\orientdb_bugs.csv")

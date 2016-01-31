@@ -1,2 +1,2 @@
-D:\Amir_Almishali\projs\Debugger\Debugger\my-app
+C:\projs\orientdb - Copy
 C:\Users\amirelm\.m2\repository

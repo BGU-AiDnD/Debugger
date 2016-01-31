@@ -237,7 +237,6 @@ class OOFamilies:
             if row[2] in files_Names:
                 retAdd=[(nameClass,row[2])]
             sigsEdges.extend([ (nameClass,x) for x in  self.signatureTolst(row[1]) if x in files_Names]+retAdd)
-
         fields='select Dirpath, name ,type from fields where scope='+scope
         fields_d={}
         for x in files_Names:
@@ -625,7 +624,6 @@ class OOFamilies:
         javaLangPy=["java"]
         typesPy=[primitiveTypes,voidType,javaLang,primitiveTypes+voidType+javaLangPy]
         for table in ["(select *,1 as total from classes)","(select classes.Dirpath as Dirpath,classes.name as name,count(*) as total from classes,"+callingTable+" where classes.name="+callingTable+".className group by classes.Dirpath)" ]:
-
             signaturesCheck={}
             signaturesTotal={}
             s='select C.Dirpath,'+callingTable+'.name,signature,(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className'

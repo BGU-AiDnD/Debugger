@@ -6,7 +6,6 @@ def Parse(file):
     print(file)
     f=open(file,"r")
     lines=f.readlines()
-    
     titles=["TP Rate","FP Rate","Precision","Recall"," F-Measure","MCC","ROC Area","PRC Area"]
     classes=['bugged',"valid","both"]
     dict={}

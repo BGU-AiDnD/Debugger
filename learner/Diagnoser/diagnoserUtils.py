@@ -1,0 +1,187 @@
+import Diagnoser.ExperimentInstance
+
+__author__ = 'amir'
+
+import csv
+import Barinel
+
+
+class FullMatrix:
+    def __init__(self):
+        self.matrix=[] # matrix size define the num of tests
+        self.probabilities=[] # probabilities size define the num of components
+        self.error=[]
+
+    def convetTodynamicSpectrum(self):
+        ans=dynamicSpectrum()
+        ans.probabilities=self.probabilities
+        ans.error=list(self.error)
+        testsD=[[y[0] for y in enumerate(x) if y[1]==1] for x in self.matrix]
+        ans.TestsComponents=testsD
+        return ans
+
+    def diagnose(self):
+        bar=Barinel.Barinel()
+        bar.set_matrix_error(self.matrix,self.error)
+        bar.set_prior_probs(self.probabilities)
+        return bar.run()
+
+    # optimization: remove unreachable components & components that pass all their tests
+    # return: optimized FullMatrix, chosen_components( indices)
+    @staticmethod
+    def optimize_FullMatrix(fullMatrix):
+        chosen=[]
+        UnusedComps=range(len(fullMatrix.probabilities))
+
+        for test,err in zip(fullMatrix.matrix,fullMatrix.error):
+            if err==0:
+                continue
+            for comp in list(UnusedComps):
+                if test[comp]==1:
+                    chosen.append(comp)
+                    UnusedComps.remove(comp)
+
+        optimizedMatrix=FullMatrix()
+        optimizedMatrix.probabilities=[x[1] for x in enumerate(fullMatrix.probabilities) if x[0] in chosen]
+        newErr=[]
+        newMatrix=[]
+        for test,err in zip(fullMatrix.matrix,fullMatrix.error):
+            newTest=[x[1] for x in enumerate(test) if x[0] in chosen]
+            if 1 in newTest: ## optimization could remove all comps of a test
+                newMatrix.append(newTest)
+                newErr.append(err)
+        optimizedMatrix.matrix=newMatrix
+        optimizedMatrix.error=newErr
+
+        return optimizedMatrix,sorted(chosen)
+
+
+
+
+class dynamicSpectrum:
+    def __init__(self):
+        self.TestsComponents=[] # TestsComponents size define the num of tests
+        self.probabilities=[] # probabilities size define the num of components
+        self.error=[]
+
+    def convertToFullMatrix(self):
+        ans=FullMatrix()
+        ans.probabilities=list(self.probabilities)
+        ans.error=list(self.error)
+        ans.matrix=[[1 if i in x else 0 for i in range(len(self.probabilities)) ] for x in self.TestsComponents]
+        return ans
+
+    #return diagnoses
+    def diagnose(self):
+        fullM,chosen=FullMatrix.optimize_FullMatrix(self.convertToFullMatrix())
+        # print "chosen",chosen
+        chosenDict=dict([x for x in enumerate(chosen)])
+        Optdiagnoses=fullM.diagnose()
+        diagnoses=[]
+        for Optdiag in Optdiagnoses:
+            diag=Optdiag.clone()
+            diag_comps=[chosenDict[x] for x in Optdiag.diagnosis]
+            diag.diagnosis=list(diag_comps)
+            diagnoses.append(diag)
+        ##change diagnoses to real comps
+        return diagnoses
+
+
+def readMatrixWithProbabilitiesFile(fileName):
+    reader=csv.reader(open(fileName,"r"))
+    lines=[x for x in reader]
+    probabilies=[float(x) for x in  lines[0][:-1]]
+    matrix=[]
+    error=[]
+    lines=[[int(y) for y in x ] for x in lines[1:]]
+    for line in lines:
+        error.append(line[-1])
+        matrix.append(line[:-1])
+    ans=FullMatrix()
+    ans.probabilities=probabilies
+    ans.matrix=matrix
+    ans.error=error
+    return ans
+
+def readPlanningFile(fileName):
+    lines=open(fileName,"r").readlines()
+    lines=[x.replace("\n","") for x in lines]
+    sections=["[Priors]","[Bugs]","[InitialTests]","[TestDetails]"]
+    sections=[lines.index(x) for x in sections]
+    priorsStr,BugsStr,InitialsStr,TestDetailsStr=tuple([lines[x[0]+1:x[1]] for x in zip(sections,sections[1:]+[len(lines)])])
+    priors=eval(priorsStr[0].replace("\n",""))
+    bugs=[eval(x) for x in BugsStr]
+    initials=[eval(x) for x in InitialsStr]
+    testsPool=[]
+    failedTests=[]
+    error=[]
+    for td in TestDetailsStr:
+        ind,actualTrace,guessTrace,err=tuple(td.split(";"))
+        actualTrace=eval(actualTrace)
+        err=int(err)
+        testsPool.append(actualTrace)
+        error.append(err)
+        if err==1:
+            failedTests.append(ind)
+    return Diagnoser.ExperimentInstance.ExperimentInstance(priors,bugs, initials, failedTests,  testsPool,error)
+
+
+def diagnoseTests():
+    full = readMatrixWithProbabilitiesFile("C:\GitHub\matrix\OPT__Rand.csv")
+    print "full",[x.diagnosis for x in full.diagnose()]
+    ds = full.convetTodynamicSpectrum()
+    matrix_ = ds.convertToFullMatrix()
+    print "matrix",[x.diagnosis for x in matrix_.diagnose()]
+    Fullm,chosen=FullMatrix.optimize_FullMatrix(matrix_)
+    print "matrixOPT",[x.diagnosis for x in Fullm.diagnose()] ## should result wrong comps!!
+    print [x.diagnosis for x in ds.diagnose()]
+
+
+
+
+def readMatrixTest():
+    global full, ds
+    full = readMatrixWithProbabilitiesFile("C:\GitHub\matrix\OPT__Rand.csv")
+    print full.probabilities, len(full.probabilities)
+    print full.error[0]
+    print full.matrix[0]
+    ds = full.convetTodynamicSpectrum()
+    print ds.probabilities
+    print ds.error[0]
+    print ds.TestsComponents[0]
+    matrix_ = ds.convertToFullMatrix()
+    print matrix_.probabilities
+    opt = FullMatrix.optimize_FullMatrix(matrix_)
+    print opt.probabilities
+    print len(opt.error), len(matrix_.error)
+
+
+
+def readPlannerTest():
+    global instance
+    print "planner"
+    file="C:\projs\\40_uniform_9.txt"
+    instance = readPlanningFile(file)
+    # print instance.priors
+    # print instance.error
+    # print instance.bugs
+    # print instance.initial_tests
+    # print instance.pool[0]
+    instance.initial_tests=range(len(instance.error))
+    instance.diagnose()
+    print [x.diagnosis for x in instance.diagnoses]
+    ds=instance.initials_to_DS()
+    print [x.diagnosis for x in ds.diagnose()]
+    fm=ds.convertToFullMatrix()
+    print [x.diagnosis for x in fm.diagnose()]
+
+    # print fm.error
+    # for i in range(len(fm.error)):
+    #     print fm.matrix[i]
+
+
+if __name__=="__main__":
+    #readMatrixTest()
+    #diagnoseTests()
+    readPlannerTest()
+    pass
