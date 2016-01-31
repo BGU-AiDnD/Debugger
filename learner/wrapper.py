@@ -616,6 +616,8 @@ def wrapperExperiments(confFile,globalConfFile):
     #methodsExperiments(workingDir,weka,packsPath,utilsPath,rnd)
 
 
+
+
 def wrapper(confFile):
     vers, gitPath,bugsPath, workingDir =configure(confFile)
     versPath, dbadd=Mkdirs(workingDir,vers)
@@ -686,9 +688,11 @@ if __name__ == '__main__':
 	#	wrapperLearner("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
 	#reportProjectData("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
 	#comprasionAll("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-	comprasionTypes("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+	# comprasionTypes("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
 	#comprasionThreeFam("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
 	if sys.argv[2]=="experiments":
+		wrapperExperiments("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+	if sys.argv[2]=="planning":
 		wrapperExperiments("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
 #orientechnologies/orientdb
     
