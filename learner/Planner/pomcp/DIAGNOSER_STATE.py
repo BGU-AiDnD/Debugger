@@ -40,8 +40,8 @@ class DIAGNOSER_STATE(object):
         return new_state,obs
 
     def getOptionalsActions(self):
-        # return self.experimentInstance.next_tests_by_hp()
-        return self.experimentInstance.get_optionals_actions()
+        return self.experimentInstance.next_tests_by_hp()
+        # return self.experimentInstance.get_optionals_actions()
 
     def isTerminal(self):
         return self.experimentInstance.isTerminal()

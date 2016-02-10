@@ -118,6 +118,8 @@ class MCTS(object):
             q = 0.0+nstate.Value.GetValue()
             n = nstate.Value.GetCount()
 
+            if n>0 and besta==[]:
+                amir_amir=""
             if (ucb):
                 q += self.FastUCB(N, n, logN)
 
@@ -127,6 +129,10 @@ class MCTS(object):
                     besta=[]
                 bestq = q
                 besta.append(action)
+        if besta==[]:
+            op=state.getOptionalsActions()
+            print op
+            amir_amir=""
         assert(len(besta)>0)
         return random.choice(besta)
 

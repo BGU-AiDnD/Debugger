@@ -65,7 +65,7 @@ def planning_for_project(dir):
 
 def check__pomcp():
     file="C:\projs\ptry\lrtdp\\30_uniform_1.txt"
-    file="C:\projs\ptry\lrtdp\\30_0.6_0.1_1.txt"
+    file="C:\projs\ptry\lrtdp\\10_0.6_0.0_0.txt"
     ei=Diagnoser.diagnoserUtils.readPlanningFile(file)
     print Planner.pomcp.main.main(ei)
     print HP_Random.main_HP(ei)

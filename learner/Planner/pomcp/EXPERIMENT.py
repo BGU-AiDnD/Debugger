@@ -22,11 +22,11 @@ class EXPERIMENT(object):
         steps=0
         state = self.Real.CreateStartState()#STATE*
         terminal=False
-        while not state.terminal_or_allReach() or terminal:
+        while not (state.terminal_or_allReach() or terminal):
             action = mcts.SelectAction()
             ei=state.experimentInstance
-            print "ei-repr" , repr(ei), ei.calc_precision_recall()
-            print "selected action" , action ,"HP" , ei.next_tests_by_hp()
+            # print "ei-repr" , repr(ei), ei.calc_precision_recall()
+            # print "selected action" , action ,"HP" , ei.next_tests_by_hp()
             state,terminal,observation, reward = self.Real.RealStep(state, action )
             mcts.Update(state)
             steps=steps+1
