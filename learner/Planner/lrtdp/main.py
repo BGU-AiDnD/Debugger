@@ -16,13 +16,30 @@ def main(ei):
 
 
 def mainModule(ei):
+    LRTDPModule.clean()
     LRTDPModule.setVars(ei,0.5,300,200)
     LRTDPModule.lrtdp()
     return LRTDPModule.evaluatePolicy()
     #return LRTDPModule.multiLrtdp()
 
+def run_file(f):
+    instance = Diagnoser.diagnoserUtils.readPlanningFile(f)
+    return mainModule(instance)
+
+
 if __name__=="__main__":
-    file="C:\projs\\40_uniform_9.txt"
+
+    file="C:\projs\ptry\lrtdp\\10_0.6_0.0_15_all.txt"
     instance = Diagnoser.diagnoserUtils.readPlanningFile(file)
-    #main(instance)
-    print mainModule(instance)
+    print instance.calc_precision_recall() ,len(instance.initial_tests)
+
+
+    file="C:\projs\ptry\lrtdp\\10_uniform_15_all.txt"
+    instance = Diagnoser.diagnoserUtils.readPlanningFile(file)
+    print instance.calc_precision_recall() ,len(instance.initial_tests)
+
+    file="C:\projs\ptry\lrtdp\\10_uniform_15.txt"
+    print run_file(file)
+    file="C:\projs\ptry\lrtdp\\10_0.6_0.0_15.txt"
+    print run_file(file)
+

@@ -24,7 +24,8 @@ import Agent.experimentsMethods
 import report
 import All_One_create
 import wekaMethods.ParseWekaOutput
-
+import Planner.planningExperiments
+import Planner.Planning_Results
 
 """
 resources :
@@ -694,6 +695,13 @@ if __name__ == '__main__':
 		wrapperExperiments("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
 	if sys.argv[2]=="planning":
 		wrapperExperiments("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+	path="D:\\Amir_Almishali\\planning\\planners - Copy\\planners - Copy"
+	new_path="D:\\Amir_Almishali\\planning\\planners - Copy\\planners_res"
+	#for x in ["cdt","orient","ant","poi"]:
+	for x in [sys.argv[3]]:
+		#Planner.planningExperiments.planning_for_project(os.path.join(path,x))
+		Planner.Planning_Results.multiProject(path,["cdt","orient","ant","poi"])
+		#Planner.Planning_Results.copy_planners_res(path,new_path)
 #orientechnologies/orientdb
     
 	#wekaMethods.issuesExtract.github_import.GithubIssues("","orientechnologies","orientdb","D:\\Amir_Almishali\\projs\\orientdb_bugs.csv")

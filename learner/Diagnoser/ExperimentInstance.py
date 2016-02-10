@@ -73,7 +73,7 @@ class ExperimentInstance:
         return maxP
 
     def isTerminal(self):
-        return self.getMaxProb()>0.7
+        return self.getMaxProb()>0.6
 
     def AllTestsReached(self):
         return len(self.get_optionals_actions())==0
@@ -169,9 +169,11 @@ class ExperimentInstance:
 
     def calc_precision_recall(self):
         self.diagnose()
+        s=sum([d.probability for d in self.diagnoses ])
         recall_accum=0
         precision_accum=0
         validComps=[x for x in range(max(reduce(list.__add__, self.pool))) if x not in self.bugs]
+
         for  d in self.diagnoses:
             dg=d.diagnosis
             pr=d.probability
@@ -180,7 +182,7 @@ class ExperimentInstance:
                 recall_accum=recall_accum+recall
             if(precision!="undef"):
                 precision_accum=precision_accum+precision
-        return recall_accum,precision_accum
+        return precision_accum,recall_accum
 
     def __repr__(self):
         return repr(self.initial_tests)+"-"+repr([ind for ind,x in enumerate(self.error) if x==1])

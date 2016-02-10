@@ -7,34 +7,22 @@ import Diagnoser.diagnoserUtils
 def main(ei):
     searchParams= MCTSPARAMS.MCTSPARAMS()#MCTS::PARAMS
     expParams= EXPERIMENTPARAMS.EXPERIMENTPARAMS()# EXPERIMENT::PARAMS
-    problem=""
-    outputfile=""
-    policy=""#
-    size=0
-    number=0
-    treeknowledge = 1
-    rolloutknowledge = 1
-    smarttreecount = 10# int
-    smarttreevalue = 1.0#
-
-
-    #real =NETWORK.NETWORK(size, number)#
-    #simulator =NETWORK.NETWORK(size, number)#
-    #
-    # file="C:\projs\\40_weka_randomForest9.txt"
-    # ei=Diagnoser.diagnoserUtils.readPlanningFile(file)
 
     print "start", ei.calc_precision_recall()
-    real = DIAGNOSER.DIAGNOSER(ei,0.7)#
-    simulator = DIAGNOSER.DIAGNOSER(ei.Copy(),0.7)#
+    real = DIAGNOSER.DIAGNOSER(ei,0.6)#
+    simulator = DIAGNOSER.DIAGNOSER(ei.Copy(),0.6)#
 
-    experiment = EXPERIMENT.EXPERIMENT(real, simulator, outputfile, expParams, searchParams)#EXPERIMENT
+    experiment = EXPERIMENT.EXPERIMENT(real, simulator, expParams, searchParams)#EXPERIMENT
+    print "running"
     return experiment.RunMultiple()#
 
     # return 0#
 
 
 if __name__=="__main__":
-    file="C:\projs\\40_weka_randomForest9.txt"
+    file="C:\projs\ptry\lrtdp\\10_0.6_0.0_15_all.txt"
+    file="C:\projs\ptry\lrtdp\\10_uniform_15.txt"
+    file="C:\projs\ptry\lrtdp\\10_uniform_15_all.txt"
+    file="C:\projs\ptry\lrtdp\\10_0.6_0.0_15.txt"
     ei=Diagnoser.diagnoserUtils.readPlanningFile(file)
     print main(ei)

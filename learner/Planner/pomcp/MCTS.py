@@ -35,10 +35,7 @@ class MCTS(object):
 
 
     def SelectAction(self):
-        if (self.Params.DisableTree):
-            self.RolloutSearch()
-        else:
-            self.UCTSearch()
+        self.UCTSearch()
         return self.GreedyUCB(self.Root, False)
 
     def RolloutSearch(self):

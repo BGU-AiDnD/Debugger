@@ -21,9 +21,12 @@ def main_Random(ei):
     precision, recall=ei.calc_precision_recall()
     return precision, recall, steps
 
+def only_initials(ei):
+    pass
 
 if __name__=="__main__":
     file="C:\projs\\40_weka_randomForest9.txt"
+    file="E:\\new_planners\\ant\\new_planners\\10_0.6_0.0_16.txt"
     ei=Diagnoser.diagnoserUtils.readPlanningFile(file)
     print main_Random(ei.Copy())
     print main_HP(ei.Copy())

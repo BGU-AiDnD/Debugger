@@ -26,6 +26,11 @@ def generateState(experimentInstance):
         states[key]= state
     return states[key]
 
+def clean():
+    global states
+    states={}
+
+
 def nextStateDist(ei,action):
     dist=ei.next_state_distribution(action)
     stateDist=[]
@@ -53,7 +58,7 @@ def lrtdp():
 
 def runLrtdpTrial(state):
     visited=[] # stack
-    while not state.isSolved:
+    while not (state.isSolved or state.AllTestsReached()):
         visited.append(state)
         if state.isTerminal():
             break
@@ -97,13 +102,15 @@ def checkSolved(s):
 def evaluatePolicy():
     state=create_start_state()
     steps=0
-    ei=None
+    ei=state.experimentInstance.Copy()
     while (not state.isSolved) and (not state.terminal_or_allReach()):
         a=state.greedyAction()
         ei=state.experimentInstance.Copy()
         obs=ei.addTest(a)
         state=generateState(ei)
         steps=steps+1
+
+    print "initial_tests", len(ei.initial_tests), ei.priors
     precision, recall=ei.calc_precision_recall()
     print "end",repr(ei)
     return precision, recall, steps

@@ -1,16 +1,14 @@
-from Planner.pomcp import RESULTS, MCTS
+from Planner.pomcp import  MCTS
 
 __author__ = 'amir'
 
 
 class EXPERIMENT(object):
-    def __init__(self,real,simulator,outputFile, expParams,  searchParams):
+    def __init__(self,real,simulator, expParams,  searchParams):
         self.Real = real
         self.Simulator = simulator
-        self.OutputFile= outputFile
         self.ExpParams = expParams
         self.SearchParams = searchParams
-        self.Results = RESULTS.RESULTS()
         if (self.ExpParams.AutoExploration):
             self.SearchParams.ExplorationConstant = 1
         MCTS.InitFastUCB(self.SearchParams.ExplorationConstant)
@@ -20,25 +18,21 @@ class EXPERIMENT(object):
         #boost::timer timer
         mcts= MCTS.MCTS(self.Simulator, self.SearchParams)
 
-        undiscountedReturn = 0.0
-        discountedReturn = 0.0
 
         steps=0
         state = self.Real.CreateStartState()#STATE*
-        while not state.terminal_or_allReach():
+        terminal=False
+        while not state.terminal_or_allReach() or terminal:
             action = mcts.SelectAction()
+            ei=state.experimentInstance
+            print "ei-repr" , repr(ei), ei.calc_precision_recall()
+            print "selected action" , action ,"HP" , ei.next_tests_by_hp()
             state,terminal,observation, reward = self.Real.RealStep(state, action )
-            self.Results.Reward.Add(reward)
-            undiscountedReturn += reward
-            discountedReturn += reward
             mcts.Update(state)
             steps=steps+1
         # print  "Terminated" ,state.getMaxProb(), len(state.experimentInstance.initial_tests)
 
 
-        self.Results.Time.Add(-1)
-        self.Results.UndiscountedReturn.Add(undiscountedReturn)
-        self.Results.DiscountedReturn.Add(discountedReturn)
         ei=state.experimentInstance
         precision, recall=ei.calc_precision_recall()
         return precision, recall, steps
@@ -56,7 +50,6 @@ class EXPERIMENT(object):
             action = mcts.SelectAction()
             state,terminal,observation, reward = self.Simulator.Step(state, action )
 
-            self.Results.Reward.Add(reward)
             undiscountedReturn += reward
             discountedReturn += reward
 
@@ -66,10 +59,6 @@ class EXPERIMENT(object):
                 break
 
             mcts.Update(state)
-
-        self.Results.Time.Add(-1)
-        self.Results.UndiscountedReturn.Add(undiscountedReturn)
-        self.Results.DiscountedReturn.Add(discountedReturn)
 
 
     def RunOne(self,tries):
@@ -90,32 +79,4 @@ class EXPERIMENT(object):
         precision, recall=ei.calc_precision_recall()
         print "end",repr(ei)
         print precision, recall, steps
-
-
-
-    def DiscountedReturn(self):
-
-        print  "Main runs"  ,self.OutputFile , "Simulations\tRuns\tUndiscounted return\tUndiscounted error\tDiscounted return\tDiscounted error\tTime\n"
-    
-        self.SearchParams.MaxDepth = self.ExpParams.UndiscountedHorizon
-        self.ExpParams.SimSteps = self.ExpParams.UndiscountedHorizon
-        self.ExpParams.NumSteps =  self.ExpParams.UndiscountedHorizon
-    
-        for i in xrange(self.ExpParams.MinDoubles,self.ExpParams.MaxDoubles,1):
-            self.SearchParams.NumSimulations = 1 << i
-
-            self.Results.Clear()
-            self.RunOne()
-
-            print  "Simulations = " , self.SearchParams.NumSimulations , "Runs = " , self.Results.Time.GetCount() , "Undiscounted return = " , \
-                 self.Results.UndiscountedReturn.GetMean(), " +- " , self.Results.UndiscountedReturn.GetStdErr() , "Discounted return = "\
-                 , self.Results.DiscountedReturn.GetMean(), " +- " , self.Results.DiscountedReturn.GetStdErr() , "Time = " \
-                 , self.Results.Time.GetMean() , self.OutputFile , self.SearchParams.NumSimulations , "\t" \
-                , self.Results.Time.GetCount() , "\t"\
-                , self.Results.UndiscountedReturn.GetMean() , "\t"\
-                , self.Results.UndiscountedReturn.GetStdErr() , "\t"\
-                , self.Results.DiscountedReturn.GetMean() , "\t"\
-                , self.Results.DiscountedReturn.GetStdErr() , "\t"\
-                , self.Results.Time.GetMean()
-
 
