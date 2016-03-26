@@ -870,7 +870,6 @@ def articlesAllpacks(basicPath,repoPath,outDir,vers,buggedType,dbPath):
     return trainingFile,testingFile,NamesFile,Featuresnames,lensAttr
 
 def articlesAllpacksMethods(basicPath,repoPath,outDir,vers,buggedType,dbPath):
-    packs=["haelsteadMethods","g2Methods","g3Methods","methodsArticlesMethods","methodsAddedMethods","hirarcyMethods","fieldsArticlesMethods","fieldsAddedMethods","constructorsArticlesMethods","constructorsAddedMethods","lastProcessMethods","simpleProcessArticlesMethods","simpleProcessAddedMethods","bugsMethods","sourceMonitorMethods","checkStyleMethods","blameMethods"]#,"analyzeComms"]
     packs=["lastProcessMethods","simpleProcessArticlesMethods","simpleProcessAddedMethods","bugsMethods"]#,"analyzeComms"]
     bugQ=""
     wanted='select distinct methodDir from AllMethods order by methodDir'

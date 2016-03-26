@@ -71,6 +71,8 @@ def Mkdirs(workingDir,vers):
     mkOneDir(testedVer)
     weka=os.path.join(workingDir,"weka")
     mkOneDir(weka)
+    weka=os.path.join(workingDir,"weka_known_features")
+    mkOneDir(weka)
 
 
     for v in vers:
@@ -370,8 +372,8 @@ def BuildMLFiles(outDir,buggedType,component):
     trainingFile=os.path.join(outDir,buggedType+"_training_"+component+".arff")
     testingFile=os.path.join(outDir,buggedType+"_testing_"+component+".arff")
     NamesFile=os.path.join(outDir,buggedType+"_names_"+component+".csv")
-    #outCsv=os.path.join(weka,buggedType+"_out_"+component+".csv")
-    return trainingFile,testingFile,NamesFile
+    outCsv=os.path.join(outDir,buggedType+"_out_"+component+".csv")
+    return trainingFile,testingFile,NamesFile, outCsv
 
 
 def createBuildMLModels(workingDir,gitPath,weka,vers,dbadd,wekaJar,RemoveBat):
@@ -426,6 +428,21 @@ def ArticleFeaturesMostFiles(workingDir,outArffTrain,outArffTest,tempFile,outCsv
             mergeArffs(train,arffFile,tempFile)
     trainingFile,testingFile,NamesFile=BuildMLFiles(weka,"Most","files")
     BuildWekaModel(weka,outArffTrain,outArffTest,NamesFile,outCsv,"methods_"+"Most",wekaJar)
+
+def append_families_indices(workingDir,wekaJar, fam_one_path, buggedType,component,indices):
+    weka=os.path.join(workingDir,"weka_known_features")
+    instance_name = component+"_"+buggedType+"_known"
+    outArffTrain = os.path.join(weka, instance_name + "_Appended.arff")
+    outArffTest = os.path.join(weka, instance_name + "_Only.arff")
+    tempFile= os.path.join(weka, instance_name + "_TMP.arff")
+    for train,name in zip([outArffTrain,outArffTest],["_Appended.arff","_Only.arff"]):
+        shutil.copyfile(os.path.join(fam_one_path,str(0)+name),train)
+        for ind in indices[1:]:
+            arffFile=os.path.join(fam_one_path,str(ind)+name)
+            mergeArffs(train,arffFile,tempFile)
+    trainingFile,testingFile,NamesFile, outCsv=BuildMLFiles(weka,buggedType,component + "_known")
+    BuildWekaModel(weka,outArffTrain,outArffTest,NamesFile,outCsv,instance_name,wekaJar)
+
 
 
 def filesExperiments(workingDir,weka,packsPath,utilsPath, randNum):
@@ -499,37 +516,44 @@ def wrapperLearner(confFile,globalConfFile):
     logfile.flush()
 
     weka=os.path.join(workingDir,"weka")
+
     #createBuildMLModels(workingDir,gitPath,weka,vers,dbadd,wekaJar,RemoveBat)
 
-    FilesIndices=[[0,14,15],[1,2,3,4,5,6,7,8,9],[10,11,12,16],[13]] #Traditional , OO, process ,Bugs
-    FilesIndices_all=[indsFamilies(FilesIndices,[[x for x in range(len(FilesIndices)) if x != ind]])[0]  for ind in range(len(FilesIndices))] #Traditional , OO, process ,Bugs
-    MethodsIndices=[[0],[1],[2,3]]
-    MethodsIndices_all=[indsFamilies(MethodsIndices,[[x for x in range(len(MethodsIndices)) if x != ind]])[0]  for ind in range(len(MethodsIndices))] #Traditional , OO, process ,Bugs
-    
-    for granularity,indicesList_one,indicesList_all in [["Files",FilesIndices ,FilesIndices_all ], ["Methods",MethodsIndices ,MethodsIndices_all]]:
-        for Bug_Type in ["All","Most"]:
+    # FilesIndices=[[0,14,15],[1,2,3,4,5,6,7,8,9],[10,11,12,16],[13]] #Traditional , OO, process ,Bugs
+    # FilesIndices_all=[indsFamilies(FilesIndices,[[x for x in range(len(FilesIndices)) if x != ind]])[0]  for ind in range(len(FilesIndices))] #Traditional , OO, process ,Bugs
+    # MethodsIndices=[[0],[1],[2,3]]
+    # MethodsIndices_all=[indsFamilies(MethodsIndices,[[x for x in range(len(MethodsIndices)) if x != ind]])[0]  for ind in range(len(MethodsIndices))] #Traditional , OO, process ,Bugs
+    #
+    # for granularity,indicesList_one,indicesList_all in [["Files",FilesIndices ,FilesIndices_all ], ["Methods",MethodsIndices ,MethodsIndices_all]]:
+    #     for Bug_Type in ["All","Most"]:
+    #         baseDir=os.path.join(workingDir,Bug_Type)
+    #         baseDir=os.path.join(baseDir,granularity)
+    #         #for One_or_all,indicesList in [("Fam_one",indicesList_one),("Fam_all",indicesList_all)]:
+    #         for One_or_all,indicesList in [("Fam_all",indicesList_all)]:
+    #             One_or_allDir=os.path.join(baseDir,"Fam_one")
+    #             outDir=os.path.join(baseDir,"ThreeFam_"+One_or_all)
+    #             mkOneDir(outDir)
+    #             shutil.copyfile(os.path.join("D:\\Amir_Almishali\\projs","BuildEval.bat"),os.path.join(outDir,"BuildEval.bat"))
+    #             for ind,indices in enumerate(indicesList):
+    #                 outArffTrain=os.path.join(outDir,str(ind)+"_Appended.arff")
+    #                 TraintempFile=os.path.join(baseDir,str(ind)+"_tempTrain.arff")
+    #                 merge_multiple_arff_file(One_or_allDir,outArffTrain,TraintempFile,[str(x)+"_Appended.arff" for x in indices])
+    #                 #print [str(x)+"_Appended.arff" for x in indices]
+    #                 outArffTest=os.path.join(outDir,str(ind)+"_Only.arff")
+    #                 TesttempFile=os.path.join(baseDir,str(ind)+"_tempTest.arff")
+    #                 #print [str(y)+"_Only.arff" for y in indsFamilies(indicesList,[[x for x in range(len(indicesList)) if x != ind]])[0]]
+    #                 #merge_multiple_arff_file(One_or_allDir,outArffTest,TesttempFile,[str(y)+"_Only.arff" for y in indices])
+    #             #os.system("start /b cmd /x /c \"D: & cd  " + outDir +" &  " + outDir + "\\BuildEval.bat\"")
+    #
+
+    known_indices_files = [0, 3, 5, 6, 8, 11, 14]
+    known_indices_methods = [0, 2]
+    for granularity,indices in [["Files",known_indices_files ], ["Methods",known_indices_methods]]:
+        for Bug_Type  in ["All","Most"]:
             baseDir=os.path.join(workingDir,Bug_Type)
             baseDir=os.path.join(baseDir,granularity)
-            #for One_or_all,indicesList in [("Fam_one",indicesList_one),("Fam_all",indicesList_all)]:
-            for One_or_all,indicesList in [("Fam_all",indicesList_all)]:
-                One_or_allDir=os.path.join(baseDir,"Fam_one")
-                outDir=os.path.join(baseDir,"ThreeFam_"+One_or_all)
-                mkOneDir(outDir)
-                shutil.copyfile(os.path.join("D:\\Amir_Almishali\\projs","BuildEval.bat"),os.path.join(outDir,"BuildEval.bat"))
-                for ind,indices in enumerate(indicesList):
-                    outArffTrain=os.path.join(outDir,str(ind)+"_Appended.arff")
-                    TraintempFile=os.path.join(baseDir,str(ind)+"_tempTrain.arff")
-                    merge_multiple_arff_file(One_or_allDir,outArffTrain,TraintempFile,[str(x)+"_Appended.arff" for x in indices])
-                    #print [str(x)+"_Appended.arff" for x in indices]
-                    outArffTest=os.path.join(outDir,str(ind)+"_Only.arff")
-                    TesttempFile=os.path.join(baseDir,str(ind)+"_tempTest.arff")
-                    #print [str(y)+"_Only.arff" for y in indsFamilies(indicesList,[[x for x in range(len(indicesList)) if x != ind]])[0]]
-                    #merge_multiple_arff_file(One_or_allDir,outArffTest,TesttempFile,[str(y)+"_Only.arff" for y in indices])
-                #os.system("start /b cmd /x /c \"D: & cd  " + outDir +" &  " + outDir + "\\BuildEval.bat\"")
-
-
-
-			
+            fam_one_path=os.path.join(baseDir,"Fam_one")
+            append_families_indices(workingDir,wekaJar, fam_one_path, Bug_Type,granularity,indices)
     #ArticleFeaturesMostFiles(workingDir,outArffTrain,outArffTest,tempFile,outCsv,wekaJar,[0,3,5,6,8,11,14])
 
     #allOne types
@@ -678,30 +702,30 @@ if __name__ == '__main__':
 		#gitInfoToCsv("D:\\Amir_Almishali\\projs\\"+x,"D:\\Amir_Almishali\\projs\\"+x+"\\"+x+".csv")
 	#	wrapperLearner("D:\\Amir_Almishali\\projs\\"+x+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
 
-	all=["fabric8io_fabric8","pentaho_pentaho-kettle","FasterXML_jackson-databind","querydsl_querydsl"]
-	for a in all:
-	    y,x=a.split("_")
-	    print y,x
-	    #wekaMethods.issuesExtract.github_import.GithubIssues("",y,x,"D:\\Amir_Almishali\\projs\\issues\\"+x+"_bugs.csv")
+    all=["fabric8io_fabric8","pentaho_pentaho-kettle","FasterXML_jackson-databind","querydsl_querydsl"]
+    for a in all:
+        y,x=a.split("_")
+        print y,x
+        #wekaMethods.issuesExtract.github_import.GithubIssues("",y,x,"D:\\Amir_Almishali\\projs\\issues\\"+x+"_bugs.csv")
 
 	print("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-	#if sys.argv[2]=="learn":
-	#	wrapperLearner("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-	#reportProjectData("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-	#comprasionAll("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-	# comprasionTypes("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-	#comprasionThreeFam("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-	if sys.argv[2]=="experiments":
-		wrapperExperiments("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-	if sys.argv[2]=="planning":
-		wrapperExperiments("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-	path="D:\\Amir_Almishali\\planning\\planners - Copy\\planners - Copy"
-	new_path="D:\\Amir_Almishali\\planning\\planners - Copy\\planners_res"
-	#for x in ["cdt","orient","ant","poi"]:
-	for x in [sys.argv[3]]:
-		#Planner.planningExperiments.planning_for_project(os.path.join(path,x))
-		Planner.Planning_Results.multiProject(path,["cdt","orient","ant","poi"])
-		#Planner.Planning_Results.copy_planners_res(path,new_path)
+    if sys.argv[2]=="learn":
+        wrapperLearner("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+    #reportProjectData("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+    #comprasionAll("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+    # comprasionTypes("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+    #comprasionThreeFam("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+    if sys.argv[2]=="experiments":
+        wrapperExperiments("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+    if sys.argv[2]=="planning":
+        wrapperExperiments("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+    path="D:\\Amir_Almishali\\planning\\planners - Copy\\planners - Copy"
+    new_path="D:\\Amir_Almishali\\planning\\planners - Copy\\planners_res"
+    #for x in ["cdt","orient","ant","poi"]:
+    for x in [sys.argv[3]]:
+        #Planner.planningExperiments.planning_for_project(os.path.join(path,x))
+        Planner.Planning_Results.multiProject(path,["cdt","orient","ant","poi"])
+        #Planner.Planning_Results.copy_planners_res(path,new_path)
 #orientechnologies/orientdb
     
 	#wekaMethods.issuesExtract.github_import.GithubIssues("","orientechnologies","orientdb","D:\\Amir_Almishali\\projs\\orientdb_bugs.csv")
