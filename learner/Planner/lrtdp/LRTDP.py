@@ -2,25 +2,14 @@ import Planner.lrtdp.lrtdpState
 
 __author__ = 'amir'
 
-singleton=None
 
-
-class Singleton(object):
-  _instance = None
-  def __new__(class_, *args, **kwargs):
-    if not isinstance(class_._instance, class_):
-        class_._instance = object.__new__(class_, *args, **kwargs)
-    return class_._instance
-
-
-class LRTDP(Singleton):
+class LRTDP(object):
     def __init__(self,experimentInstance,epsilon,stackSize,numTrials):
-        self.states={}
-        self.epsilon=epsilon
-        self.stackSize=stackSize
-        self.numTrials=numTrials
-        self.experimentInstance=experimentInstance
-
+        self.states = {}
+        self.epsilon = epsilon
+        self.stackSize = stackSize
+        self.numTrials = numTrials
+        self.experimentInstance = experimentInstance
 
 
     def create_start_state(self):
@@ -46,13 +35,13 @@ class LRTDP(Singleton):
 
     #generate Policy!!
     def lrtdp(self):
-        start=self.create_start_state()
-        trialsCount=0
+        start = self.create_start_state()
+        trialsCount = 0
         if start.isTerminal():
             return
         else:
             while not start.isSolved:
-                if trialsCount>self.numTrials:
+                if trialsCount > self.numTrials:
                     return
                 self.numTrials=self.numTrials+1
                 success = self.runLrtdpTrial(start)
@@ -117,12 +106,3 @@ class LRTDP(Singleton):
             steps=steps+1
         precision, recall=ei.calc_precision_recall()
         return precision, recall, steps
-
-
-
-def setSingleton(single):
-    global singleton
-    singleton=single
-
-def getSingleton():
-    return singleton

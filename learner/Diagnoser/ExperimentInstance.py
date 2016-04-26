@@ -5,6 +5,8 @@ import Diagnoser.diagnoserUtils
 __author__ = 'amir'
 
 
+TERMINAL_PROB = 0.7
+
 class ExperimentInstance:
     def __init__(self,priors, bugs, initial_tests, failed_tests,  pool	,error):
         self.priors = priors
@@ -73,10 +75,10 @@ class ExperimentInstance:
         return maxP
 
     def isTerminal(self):
-        return self.getMaxProb()>0.6
+        return self.getMaxProb() > TERMINAL_PROB
 
     def AllTestsReached(self):
-        return len(self.get_optionals_actions())==0
+        return len(self.get_optionals_actions())== 0
 
     def addTest(self,next_test):
         self.addTestOutcome(next_test,self.error[next_test])

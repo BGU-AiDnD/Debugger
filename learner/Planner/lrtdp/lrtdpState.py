@@ -6,17 +6,18 @@ __author__ = 'amir'
 
 class LrtdpState(object):
     def __init__(self,experimentInstance):
-        self.experimentInstance=experimentInstance
+        self.experimentInstance = experimentInstance
         self.isSolved=self.isTerminal()
-        self.value=0
-        self.simulationCount=0
+        self.value = 0
+        self.simulationCount = 0
+        self.children  = dict.fromkeys(self.experimentInstance.get_optionals_actions())
 
     def clone(self):
         return LrtdpState(self.experimentInstance.Copy())
 
     def getMaxProb(self):
         self.experimentInstance.diagnose()
-        maxP=max([x.probability for x in self.experimentInstance.diagnoses])
+        maxP = max([x.probability for x in self.experimentInstance.diagnoses])
         return maxP
 
     # do action and return observation
@@ -30,9 +31,9 @@ class LrtdpState(object):
         return self.getGreedyActions()[0]
 
     def getGreedyActions(self):
-        optionals= self.experimentInstance.next_tests_by_hp()
-        minVal=99999999999999999 #big number
-        result=[]
+        optionals = self.experimentInstance.next_tests_by_hp()
+        minVal = 99999999999999999 #big number
+        result = []
         if len(optionals)==0:
             print "len(optionals)==0:"
         for action in optionals:

@@ -61,6 +61,8 @@ def Mkdirs(workingDir,vers):
     mkOneDir(versPath)
     experiments=os.path.join(workingDir,"experiments")
     mkOneDir(experiments)
+    experiments=os.path.join(workingDir,"experiments_known")
+    mkOneDir(experiments)
     ver=os.path.join(versPath,"checkAll")
     mkOneDir(ver)
     ver=os.path.join(versPath,"checkAllMethodsData")
@@ -448,8 +450,8 @@ def append_families_indices(workingDir,wekaJar, fam_one_path, buggedType,compone
 def filesExperiments(workingDir,weka,packsPath,utilsPath, randNum):
     #for buggedType in ["All","Most"]:
     for buggedType in ["Most"]:
-        outPath = os.path.join(workingDir, "experiments\\files_" + buggedType+randNum)
-        outCsv=os.path.join(weka,buggedType+"_out_files_Articles.csv")
+        outPath = os.path.join(workingDir, "experiments_known\\files_" + buggedType+randNum)
+        outCsv=os.path.join(weka,buggedType+"_out_files_known.csv")
         Agent.experimentsMethods.RunExperiments(os.path.join(workingDir,"testsBugsMethods.db"), outPath,packsPath,outCsv,"File",buggedType,utilsPath)
         #ExcelReport(os.path.join(outPath,"barinelOptA.csv"),os.path.join(outPath,"barinel.xlsx"),"barinel")
         #ExcelReport(os.path.join(outPath,"plannerResall.csv"),os.path.join(outPath,"planner.xlsx"),"planner")
@@ -465,8 +467,8 @@ def filesExperiments(workingDir,weka,packsPath,utilsPath, randNum):
 def methodsExperiments(workingDir,weka,packsPath,utilsPath,randNum):
     #for buggedType in ["All","Most"]:
     for buggedType in ["Most"]:
-        outPath = os.path.join(workingDir, "experiments\\methods" + buggedType+randNum)
-        outCsv=os.path.join(weka,buggedType+"_out_methods.csv")
+        outPath = os.path.join(workingDir, "experiments_known\\methods" + buggedType+randNum)
+        outCsv=os.path.join(weka,buggedType+"_out_methods_known.csv")
         Agent.experimentsMethods.RunExperiments(os.path.join(workingDir,"testsBugsMethods.db"), outPath,packsPath,outCsv,"method",buggedType,utilsPath)
         #ExcelReport(os.path.join(outPath,"barinelOptA.csv"),os.path.join(outPath,"barinel.xlsx"),"barinel")
         #ExcelReport(os.path.join(outPath,"plannerResall.csv"),os.path.join(outPath,"planner.xlsx"),"planner")
@@ -630,7 +632,7 @@ def reportProjectData(confFile,globalConfFile):
 def wrapperExperiments(confFile,globalConfFile):
     vers, gitPath,bugsPath, workingDir=configure(confFile)
     docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath =globalConfig(globalConfFile)
-    weka=os.path.join(workingDir,"weka")
+    weka=os.path.join(workingDir,"weka_known_features")
     testDb = os.path.join( workingDir , "testsBugsMethods.db")
     #vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
     #testDb=Agent.bugs_testsDBMethods.basicBuild(workingDir,vers[-2],dates[-2],dates[-1])
@@ -638,7 +640,7 @@ def wrapperExperiments(confFile,globalConfFile):
     #Agent.experimentsMethods.packFileCreate(testDb,1,-1, packsPath)
     rnd=str(randint(0,900))
     filesExperiments(workingDir,weka,packsPath,utilsPath,rnd)
-    #methodsExperiments(workingDir,weka,packsPath,utilsPath,rnd)
+    methodsExperiments(workingDir,weka,packsPath,utilsPath,rnd)
 
 
 

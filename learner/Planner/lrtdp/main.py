@@ -5,19 +5,17 @@ import Diagnoser.ExperimentInstance
 import LRTDP
 import LRTDPModule
 
-
 #### main get experiment instance, return planning report
 
 def main(ei):
-
-    instance=LRTDP.LRTDP(ei,0.8,200,200)
+    instance = LRTDP.LRTDP(ei,0.7,200,200)
     instance.lrtdp()
     return instance.evaluatePolicy()
 
 
 def mainModule(ei):
     LRTDPModule.clean()
-    LRTDPModule.setVars(ei,0.5,300,200)
+    LRTDPModule.setVars(ei,0.7,300,200)
     LRTDPModule.lrtdp()
     return LRTDPModule.evaluatePolicy()
     #return LRTDPModule.multiLrtdp()
@@ -25,7 +23,6 @@ def mainModule(ei):
 def run_file(f):
     instance = Diagnoser.diagnoserUtils.readPlanningFile(f)
     return mainModule(instance)
-
 
 if __name__=="__main__":
 
