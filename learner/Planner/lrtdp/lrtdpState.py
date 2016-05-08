@@ -1,5 +1,6 @@
 import LRTDP
 import LRTDPModule
+import random
 
 __author__ = 'amir'
 
@@ -10,7 +11,6 @@ class LrtdpState(object):
         self.isSolved=self.isTerminal()
         self.value = 0
         self.simulationCount = 0
-        self.children  = dict.fromkeys(self.experimentInstance.get_optionals_actions())
 
     def clone(self):
         return LrtdpState(self.experimentInstance.Copy())
@@ -28,7 +28,7 @@ class LrtdpState(object):
         return self.experimentInstance.SimulateADDTest(ind,observation)
 
     def greedyAction(self):
-        return self.getGreedyActions()[0]
+        return random.choice(self.getGreedyActions())
 
     def getGreedyActions(self):
         optionals = self.experimentInstance.next_tests_by_hp()
@@ -37,11 +37,11 @@ class LrtdpState(object):
         if len(optionals)==0:
             print "len(optionals)==0:"
         for action in optionals:
-            q= self.qValue(action)
-            if q<minVal:
-                minVal=q
-                result=[action]
-            elif q==minVal:
+            q = self.qValue(action)
+            if q < minVal:
+                minVal = q
+                result =[action]
+            elif q == minVal:
                 result.append(action)
         return result
 
@@ -51,14 +51,14 @@ class LrtdpState(object):
 
     def qValue(self,action):
         q = -1
-        nextStateDist=self.getNextStateDist(action)
+        nextStateDist = self.getNextStateDist(action)
         for next,prob in nextStateDist:
-            q=q+prob*next.value
+            q = q + prob * next.value
         return q
 
     def update(self,action):
         if not self.isTerminal():
-            self.value=self.qValue(action)
+            self.value = self.qValue(action)
 
     def isTerminal(self):
         return self.experimentInstance.isTerminal()

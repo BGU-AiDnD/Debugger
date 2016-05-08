@@ -4,7 +4,7 @@ import Diagnoser.diagnoserUtils
 import Diagnoser.ExperimentInstance
 import mcts
 
-DEFAULT_BUDGET = 1000
+DEFAULT_BUDGET = 15
 
 def main_mcts(ei, budget=DEFAULT_BUDGET):
     print "DEFAULT_BUDGET = ", DEFAULT_BUDGET

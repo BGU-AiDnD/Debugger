@@ -42,32 +42,32 @@ def nextStateDist(ei,action):
 #generate Policy!!
 def lrtdp():
     global numTrials
-    start=create_start_state()
-    trialsCount=0
+    start = create_start_state()
+    trialsCount = 0
     if start.isTerminal():
         return
     else:
         while not start.isSolved:
-            if trialsCount>numTrials:
+            if trialsCount > numTrials:
                 return
-            trialsCount=trialsCount+1
+            trialsCount = trialsCount + 1
             success = runLrtdpTrial(start)
-            if not success:
-                return
+            # if not success:
+            #     return
     return
 
 def runLrtdpTrial(state):
-    visited=[] # stack
+    visited = [] # stack
     while not (state.isSolved or state.AllTestsReached()):
         visited.append(state)
         if state.isTerminal():
             break
-        if len(visited)>stackSize:
+        if len(visited) > stackSize:
             return  False
-        a=state.greedyAction()
+        a = state.greedyAction()
         state.update(a)
         state = state.simulate_next_state(a)
-    while len(visited)>0:
+    while len(visited) > 0:
         if not checkSolved(visited.pop()):
             break
     return True
@@ -104,13 +104,13 @@ def evaluatePolicy():
     steps=0
     ei=state.experimentInstance.Copy()
     while (not state.isSolved) and (not state.terminal_or_allReach()):
-        a=state.greedyAction()
+        action = state.greedyAction()
+        print "chose", action
         ei=state.experimentInstance.Copy()
-        obs=ei.addTest(a)
-        state=generateState(ei)
-        steps=steps+1
+        obs = ei.addTest(action)
+        state = generateState(ei)
+        steps = steps + 1
 
-    print "initial_tests", len(ei.initial_tests), ei.priors
     precision, recall=ei.calc_precision_recall()
     print "end",repr(ei)
     return precision, recall, steps

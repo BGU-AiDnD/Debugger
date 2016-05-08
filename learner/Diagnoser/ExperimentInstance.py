@@ -34,17 +34,25 @@ class ExperimentInstance:
         return optionals
 
     def compsProbs(self):
+        """
+        calculate for each component c the sum of probabilities of the diagnoses that include c
+
+        return dict of (component, probability)
+        """
         self.diagnose()
         compsProbs={}
         for d in self.diagnoses:
-            p=d.probability
+            p = d.probability
             for comp in d.diagnosis:
                 if comp not in compsProbs:
-                    compsProbs[comp]=0
-                compsProbs[comp]=compsProbs[comp]+p
+                    compsProbs[comp] = 0
+                compsProbs[comp] = compsProbs[comp] + p
         return sorted(compsProbs.items(),key=lambda x: x[1])
 
     def next_tests_by_hp(self):
+        """
+        order tests by probabilities of the components
+        """
         orderedComps=[x[0] for x in  self.compsProbs()]
         optionals=self.get_optionals_actions()
         if len(optionals)==0:
@@ -62,6 +70,22 @@ class ExperimentInstance:
         # else all optional tests contains un diagnosed comps- return all of them
             return optionals
 
+    def childs_probs_by_hp(self):
+        """
+        compute HP for the optionals tests and return dict of (test, prob)
+        """
+        comps_prob = dict(self.compsProbs()) # tuples of (comp, prob)
+        optionals = self.get_optionals_actions()
+        if len(optionals)==0:
+            print "next_tests_by_hp","len(optionals)==0:"
+        optionals_probs = {}
+        for op in optionals:
+            trace = self.pool[op]
+            prob = 0
+            for comp in trace:
+                prob += comps_prob.get(comp, 0)
+            optionals_probs[op] = prob
+        return optionals_probs
 
     def hp_next(self):
         return random.choice(self.next_tests_by_hp())
@@ -139,7 +163,7 @@ class ExperimentInstance:
 
 
     def simulate_next_ei(self,action):
-        outcome=self.simulate_next_test_outcome(action)
+        outcome = self.simulate_next_test_outcome(action)
         return outcome,self.next_state_distribution(action)[outcome][0]
 
 

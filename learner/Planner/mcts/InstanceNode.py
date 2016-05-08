@@ -24,6 +24,7 @@ class InstanceNode(object):
         # Structure
         self.parent    = parent
         self.children  = dict.fromkeys(self.experimentInstance.get_optionals_actions())
+        self.children_hp = self.experimentInstance.childs_probs_by_hp()
         # Tree data
         self.action    = action
          # Search meta data
@@ -94,10 +95,25 @@ class InstanceNode(object):
         return child
 
     def best_child(self, c=1/sqrt(2)):
-        if not self.fully_expanded():
-            raise Exception('Node is not fully expanded')
+        """
+        return the action with max search_weight + hp. in case that action not expanded weight = 0 .
+        """
+        # if not self.fully_expanded():
+        #     raise Exception('Node is not fully expanded')
+        values = []
+        for action in self.children:
+            weight = 0
+            if self.children[action] != None:
+                weight = self.children[action].search_weight(c)
+            values.append( (action, weight + self.children_hp[action]) )
 
-        return max(self.children.values(), key=lambda x: x.search_weight(c))
+        action = max(values, key=lambda x: x[1])[0]
+        # in case that child not expanded - expand
+        if self.children[action] == None:
+            ei = self.result(action)
+            child = InstanceNode(self, action, ei)
+            self.children[action] = child
+        return self.children[action]
 
     def best_action(self, c=1/sqrt(2)):
         """
@@ -105,7 +121,7 @@ class InstanceNode(object):
         node.
         """
         child = self.best_child(c)
-        return child.action, child.search_weight(c)
+        return child.action, child.weight
 
     def max_child(self):
         """
@@ -119,7 +135,7 @@ class InstanceNode(object):
         manner. The outcome of the simulation is returns as the state value for
         the given player.
         """
-        steps = 0
+        steps = 1
         ei = self.experimentInstance
         while (not ei.isTerminal()) and ( not ei.AllTestsReached()):
             action = sample(ei.get_optionals_actions(), 1)[0]
@@ -127,7 +143,7 @@ class InstanceNode(object):
             steps = steps + 1
         if  not ei.isTerminal():
             steps = steps + 1
-        return (steps, ei.initial_tests)
+        return ( 1/steps, ei.initial_tests)
 
     def dot_string(self, value=False, prettify=lambda x: x):
         """
