@@ -1,19 +1,19 @@
 __author__ = 'amir'
 
 import Planner.pomcp.main
+import Planner.mcts.main
 import Planner.lrtdp.main
 import Diagnoser.diagnoserUtils
 import HP_Random
+
 
 import glob
 import os
 import csv
 import Planning_Results
 
-planners=[("pomcp",Planner.pomcp.main.main),("lrtdp",Planner.lrtdp.main.main),("HP",HP_Random.main_HP),("Random",HP_Random.main_Random)]
-# planners=[("HP",HP_Random.main_HP),("Random",HP_Random.main_Random)]
-
-
+planners=[("mcts",Planner.mcts.main.main_mcts ),("lrtdp",Planner.lrtdp.main.mainModule),("HP",HP_Random.main_HP),
+          ("Random",HP_Random.main_Random), ("initials", HP_Random.only_initials), ("all_tests", HP_Random.all_tests)]
 
 def mkOneDir(dir):
     if not os.path.isdir(dir):

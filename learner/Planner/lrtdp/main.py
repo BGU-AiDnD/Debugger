@@ -12,8 +12,8 @@ import LRTDPModule
 #     instance.lrtdp()
 #     return instance.evaluatePolicy()
 
-STACK = 20
-TRIALS = 20
+STACK = 100
+TRIALS = 100
 
 def mainModule(ei):
     LRTDPModule.clean()
