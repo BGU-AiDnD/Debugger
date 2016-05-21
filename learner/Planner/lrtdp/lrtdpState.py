@@ -31,8 +31,9 @@ class LrtdpState(object):
         return random.choice(self.getGreedyActions())
 
     def getGreedyActions(self):
-        optionals = self.experimentInstance.next_tests_by_hp()
-        minVal = 99999999999999999 #big number
+        # optionals = self.experimentInstance.next_tests_by_hp()
+        optionals = self.experimentInstance.get_optionals_actions()
+        minVal = float('inf') #big number
         result = []
         if len(optionals)==0:
             print "len(optionals)==0:"
@@ -40,20 +41,20 @@ class LrtdpState(object):
             q = self.qValue(action)
             if q < minVal:
                 minVal = q
-                result =[action]
+                result = [action]
             elif q == minVal:
                 result.append(action)
         return result
 
     def getNextStateDist(self,action):
         #return LRTDP.LRTDP(1,2,3,4).nextStateDist(self.experimentInstance,action)
-        return LRTDPModule.nextStateDist(self.experimentInstance,action)
+        return LRTDPModule.nextStateDist(self.experimentInstance, action)
 
     def qValue(self,action):
-        q = -1
+        q = 0
         nextStateDist = self.getNextStateDist(action)
         for next,prob in nextStateDist:
-            q = q + prob * next.value
+            q += prob * next.value
         return q
 
     def update(self,action):
@@ -70,11 +71,11 @@ class LrtdpState(object):
     def terminal_or_allReach(self):
         return self.isTerminal() or self.AllTestsReached()
 
-    def pickNextState(self):
-        return  self.simulate_next_state(self.experimentInstance.hp_next())
+    # def pickNextState(self):
+    #     return  self.simulate_next_state(self.experimentInstance.hp_next())
 
     def residual(self):
-        return abs(self.value- self.qValue(self.greedyAction()))
+        return abs(self.value - self.qValue(self.greedyAction()))
 
     def needsSimulaton(self):
         return self.simulationCount==0

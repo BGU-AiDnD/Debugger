@@ -72,10 +72,10 @@ def results_all_planners(planners_dir,outFile,out_med_file):
 
 
 def project_results(projectDir,outName,out_med_name):
-    for f in glob.glob(os.path.join(projectDir,"*")):
-        if not os.path.isdir(f):
+    for config_dir in glob.glob(os.path.join(projectDir,"*")):
+        if not os.path.isdir(config_dir):
             continue
-        results_all_planners(os.path.join(f,"new_planners"),os.path.join(f,outName+".csv"),os.path.join(f,out_med_name+".csv"))
+        results_all_planners(os.path.join(config_dir,"new_planners"),os.path.join(config_dir,outName+".csv"),os.path.join(config_dir,out_med_name+".csv"))
 
 
 def multiProject(dir,projects):

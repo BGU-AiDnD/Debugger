@@ -14,15 +14,17 @@ def setVars(experimentInstanceArg,epsilonArg,stackSizeArg,numTrialsArg):
     stackSize=stackSizeArg
     numTrials=numTrialsArg
     experimentInstance=experimentInstanceArg
+    clean()
 
 
 def create_start_state():
     return generateState(experimentInstance)
 
-def generateState(experimentInstance):
-    key=repr(experimentInstance)
+def generateState(ei):
+    global states
+    key=repr(ei)
     if key not in states:
-        state = Planner.lrtdp.lrtdpState.LrtdpState(experimentInstance.Copy())
+        state = Planner.lrtdp.lrtdpState.LrtdpState(ei.Copy())
         states[key]= state
     return states[key]
 
@@ -50,6 +52,7 @@ def lrtdp():
         while not start.isSolved:
             if trialsCount > numTrials:
                 return
+            print "trialsCount" , trialsCount
             trialsCount = trialsCount + 1
             success = runLrtdpTrial(start)
             # if not success:
@@ -57,13 +60,15 @@ def lrtdp():
     return
 
 def runLrtdpTrial(state):
+    global stackSize
     visited = [] # stack
     while not (state.isSolved or state.AllTestsReached()):
         visited.append(state)
+        print "visited", len(visited)
         if state.isTerminal():
             break
         if len(visited) > stackSize:
-            return  False
+            return False
         a = state.greedyAction()
         state.update(a)
         state = state.simulate_next_state(a)
@@ -73,31 +78,32 @@ def runLrtdpTrial(state):
     return True
 
 def checkSolved(s):
-    ans=True
-    open=[]
-    closed=[]
+    global epsilon
+    rv=True
+    open = []
+    closed = []
     if not s.isSolved:
         open.append(s)
 
-    while len(open)>0:
-        state=open.pop()
-        if state.residual>epsilon:
-            ans=False
+    while len(open) > 0:
+        state = open.pop()
+        closed.append(state)
+        if state.residual()>epsilon:
+            rv=False
             continue
         a = state.greedyAction()
-        nextStateDist=state.getNextStateDist(a)
+        nextStateDist = state.getNextStateDist(a)
         for next,prob in nextStateDist:
             if (not next.isSolved) and next not in open and next not in closed:
                 open.append(next)
-    if ans:
+    if rv:
         for c in closed:
-            c.isSolved=True
-            print "marked as Solved"
+            c.isSolved = True
     else:
         while len(closed)>0:
-            c=closed.pop()
+            c = closed.pop()
             c.update(c.greedyAction())
-    return ans
+    return rv
 
 def evaluatePolicy():
     state=create_start_state()

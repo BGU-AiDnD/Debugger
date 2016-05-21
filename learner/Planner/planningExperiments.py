@@ -3,6 +3,7 @@ __author__ = 'amir'
 import Planner.pomcp.main
 import Planner.mcts.main
 import Planner.lrtdp.main
+import Planner.lrtdp.LRTDPModule
 import Diagnoser.diagnoserUtils
 import HP_Random
 
@@ -71,8 +72,49 @@ def check__pomcp():
     print HP_Random.main_HP(ei)
 
 
+def one_lrtdp(file, epsilon, out_dir, stack, trials):
+    ei = Diagnoser.diagnoserUtils.readPlanningFile(file)
+    instance = str(epsilon) + "_" + str(stack) + "_" + str(trials)
+    instance_file = os.path.join(out_dir, instance + ".csv")
+
+    Planner.lrtdp.LRTDPModule.setVars(ei.Copy(), epsilon, stack, trials)
+    Planner.lrtdp.LRTDPModule.lrtdp()
+    precision, recall, steps = Planner.lrtdp.LRTDPModule.evaluatePolicy()
+    outData = [["Algorithm", "epsilon", "stack", "trials", "precision", "recall", "steps"]]  # header
+    outData += [[instance, str(epsilon), str(stack), str(trials)] + list((precision, recall, steps))]
+    writer = csv.writer(open(instance_file, "wb"))
+    writer.writerows(outData)
+
+
+def check_lrtdp(file, out_dir):
+    epsilon_start, epsilon_end, epsilon_step = 0, 0.4, 0.4
+    stack_start, stack_end, stack_step = 50, 100, 50
+    trials_start, trials_end, trials_step = 5, 10, 5
+
+    epsilon = epsilon_start
+    while epsilon <= epsilon_end:
+        stack = stack_start
+        while stack <= stack_end:
+            trials = trials_start
+            while trials <= trials_end:
+                one_lrtdp(file, epsilon, out_dir, stack, trials)
+                trials += trials_step
+            stack += stack_step
+        epsilon +=epsilon_step
+
+def lrtdp_multi_check(instances_dir, out_dir):
+    for f in glob.glob(os.path.join(instances_dir,"*.txt")):
+        print f
+        file = os.path.join(instances_dir,f)
+        out_instance_dir = os.path.join(out_dir, f.split("\\")[-1])
+        if not  os.path.isdir(out_instance_dir):
+            os.mkdir(out_instance_dir)
+        check_lrtdp(file, out_instance_dir)
+
+
 if __name__=="__main__":
-    check__pomcp()
+    #check_lrtdp("","")
+    lrtdp_multi_check("C:\projs\lrtdp\instances", "C:\projs\lrtdp\planners2")
     # inDir="C:\\projs\\planningTry\\in"
     # outDir="C:\\projs\\planningTry\\out"
     # runAll(inDir,outDir)

@@ -1514,7 +1514,7 @@ def RunExperiments(dbPath,outPath,packsPath,wekaPath,Unit,buggedType,utilsPath):
     numOfrepeats=1
     numOfBugs=[2]
     times=[25,40,70,100,130]
-    times=[10,20,30,40]
+    times=[10,20,30,40,50,60,70,80]
     const=0.2
     minimalTests=25
     minimalTests=5

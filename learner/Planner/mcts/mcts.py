@@ -5,8 +5,6 @@ games. Specifically, an implementation of the MCTS algorithm.
 import random, Queue
 from math import sqrt, log
 from random import sample
-import Game
-import ConnectFourGame
 import InstanceNode
 
 def mcts_uct(ei, budget):

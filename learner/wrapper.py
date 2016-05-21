@@ -448,8 +448,7 @@ def append_families_indices(workingDir,wekaJar, fam_one_path, buggedType,compone
 
 
 def filesExperiments(workingDir,weka,packsPath,utilsPath, randNum):
-    #for buggedType in ["All","Most"]:
-    for buggedType in ["Most"]:
+    for buggedType in ["All","Most"]:
         outPath = os.path.join(workingDir, "experiments_known\\files_" + buggedType+randNum)
         outCsv=os.path.join(weka,buggedType+"_out_files_known.csv")
         Agent.experimentsMethods.RunExperiments(os.path.join(workingDir,"testsBugsMethods.db"), outPath,packsPath,outCsv,"File",buggedType,utilsPath)

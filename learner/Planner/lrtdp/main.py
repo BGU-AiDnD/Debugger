@@ -12,8 +12,8 @@ import LRTDPModule
 #     instance.lrtdp()
 #     return instance.evaluatePolicy()
 
-STACK = 100
-TRIALS = 100
+STACK = 20
+TRIALS = 5
 
 def mainModule(ei):
     LRTDPModule.clean()
@@ -30,7 +30,7 @@ def run_file(f):
 
 if __name__=="__main__":
 
-    file="C:\projs\ptry\lrtdp\\30_uniform_1.txt"
+    file="C:\\projs\\lrtdp\\instances\\40_uniform_0.txt"
     instance = Diagnoser.diagnoserUtils.readPlanningFile(file)
     print instance.calc_precision_recall() ,len(instance.initial_tests)
     print run_file(file)
