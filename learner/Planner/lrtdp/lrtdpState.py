@@ -9,7 +9,9 @@ class LrtdpState(object):
     def __init__(self,experimentInstance):
         self.experimentInstance = experimentInstance
         self.isSolved=self.isTerminal()
-        self.value = 0
+        self.value = 1
+        if self.isSolved:
+            self.value = 0
         self.simulationCount = 0
 
     def clone(self):
@@ -51,7 +53,7 @@ class LrtdpState(object):
         return LRTDPModule.nextStateDist(self.experimentInstance, action)
 
     def qValue(self,action):
-        q = 0
+        q = 1
         nextStateDist = self.getNextStateDist(action)
         for next,prob in nextStateDist:
             q += prob * next.value

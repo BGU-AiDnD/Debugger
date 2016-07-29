@@ -77,7 +77,7 @@ def one_lrtdp(file, epsilon, out_dir, stack, trials):
     instance = str(epsilon) + "_" + str(stack) + "_" + str(trials)
     instance_file = os.path.join(out_dir, instance + ".csv")
 
-    Planner.lrtdp.LRTDPModule.setVars(ei.Copy(), epsilon, stack, trials)
+    Planner.lrtdp.LRTDPModule.setVars(ei.Copy(), epsilon, stack, 50, trials)
     Planner.lrtdp.LRTDPModule.lrtdp()
     precision, recall, steps = Planner.lrtdp.LRTDPModule.evaluatePolicy()
     outData = [["Algorithm", "epsilon", "stack", "trials", "precision", "recall", "steps"]]  # header
@@ -87,9 +87,9 @@ def one_lrtdp(file, epsilon, out_dir, stack, trials):
 
 
 def check_lrtdp(file, out_dir):
-    epsilon_start, epsilon_end, epsilon_step = 0, 0.4, 0.4
-    stack_start, stack_end, stack_step = 50, 100, 50
-    trials_start, trials_end, trials_step = 5, 10, 5
+    epsilon_start, epsilon_end, epsilon_step = 1.5, 4.7, 0.5
+    stack_start, stack_end, stack_step = 15, 36, 10
+    trials_start, trials_end, trials_step = 1, 32, 10
 
     epsilon = epsilon_start
     while epsilon <= epsilon_end:
@@ -114,7 +114,7 @@ def lrtdp_multi_check(instances_dir, out_dir):
 
 if __name__=="__main__":
     #check_lrtdp("","")
-    lrtdp_multi_check("C:\projs\lrtdp\instances", "C:\projs\lrtdp\planners2")
+    lrtdp_multi_check("C:\projs\lrtdp\instances", "C:\projs\lrtdp\planners3")
     # inDir="C:\\projs\\planningTry\\in"
     # outDir="C:\\projs\\planningTry\\out"
     # runAll(inDir,outDir)

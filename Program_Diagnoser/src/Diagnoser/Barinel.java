@@ -8,6 +8,7 @@ import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.TreeSet;
+import java.util.HashMap;
 
 import Optim.GradientDescent;
 import Optim.LightPSO;
@@ -299,7 +300,9 @@ public class Barinel {
 		writer.close();
 	}
 	
-	
+	public static void export_diags_to_csv_findings_order(LinkedList<int[]> diags, String file_name) throws IOException {
+		
+	}
 	/***********************************************************************************
 	 ***************************************For debug***********************************
 	 ***********************************************************************************/

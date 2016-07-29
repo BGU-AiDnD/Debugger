@@ -5,13 +5,15 @@ import Planner.lrtdp.lrtdpState
 states={}
 epsilon=0
 stackSize=0
+checksolvedSize=0
 numTrials=0
 experimentInstance=None
 
-def setVars(experimentInstanceArg,epsilonArg,stackSizeArg,numTrialsArg):
-    global experimentInstance,epsilon,stackSize,numTrials
+def setVars(experimentInstanceArg,epsilonArg,stackSizeArg, checksolvedSizeArg,numTrialsArg):
+    global experimentInstance,epsilon,stackSize, checksolvedSize,numTrials
     epsilon=epsilonArg
     stackSize=stackSizeArg
+    checksolvedSize = checksolvedSizeArg
     numTrials=numTrialsArg
     experimentInstance=experimentInstanceArg
     clean()
@@ -72,6 +74,7 @@ def runLrtdpTrial(state):
         a = state.greedyAction()
         state.update(a)
         state = state.simulate_next_state(a)
+    print "runLrtdpTrial terminate"
     while len(visited) > 0:
         if not checkSolved(visited.pop()):
             break
@@ -88,14 +91,18 @@ def checkSolved(s):
     while len(open) > 0:
         state = open.pop()
         closed.append(state)
-        if state.residual()>epsilon:
+        if len(closed) > checksolvedSize:
+            rv=False
+            break
+        if state.residual() > epsilon:
             rv=False
             continue
         a = state.greedyAction()
         nextStateDist = state.getNextStateDist(a)
         for next,prob in nextStateDist:
-            if (not next.isSolved) and next not in open and next not in closed:
-                open.append(next)
+            if (not next.isSolved) and (next not in open) and (next not in closed):
+                if not next.AllTestsReached():
+                    open.append(next)
     if rv:
         for c in closed:
             c.isSolved = True
@@ -111,7 +118,6 @@ def evaluatePolicy():
     ei=state.experimentInstance.Copy()
     while (not state.isSolved) and (not state.terminal_or_allReach()):
         action = state.greedyAction()
-        print "chose", action
         ei=state.experimentInstance.Copy()
         obs = ei.addTest(action)
         state = generateState(ei)

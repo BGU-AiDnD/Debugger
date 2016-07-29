@@ -75,7 +75,7 @@ class LRTDP(object):
 
         while len(open)>0:
             state=open.pop()
-            if state.residual>self.epsilon:
+            if state.residual() >self.epsilon:
                 ans=False
                 continue
             a = state.greedyAction()

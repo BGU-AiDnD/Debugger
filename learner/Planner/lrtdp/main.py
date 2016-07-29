@@ -13,12 +13,13 @@ import LRTDPModule
 #     return instance.evaluatePolicy()
 
 STACK = 20
-TRIALS = 5
+TRIALS = 10
 
 def mainModule(ei):
     LRTDPModule.clean()
-    LRTDPModule.setVars(ei,0.7,STACK,TRIALS)
+    LRTDPModule.setVars(ei,0.1,STACK,TRIALS)
     LRTDPModule.lrtdp()
+    print "finish lrtdp"
     return LRTDPModule.evaluatePolicy()
     #return LRTDPModule.multiLrtdp()
 
