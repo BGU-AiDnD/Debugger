@@ -1,3 +1,0 @@
-mvn install
-copy ./target/uber-my-app-1.0.1-SNAPSHOT.jar ./agent.jar
-mvn install

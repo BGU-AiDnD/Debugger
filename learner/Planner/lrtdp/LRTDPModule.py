@@ -54,19 +54,15 @@ def lrtdp():
         while not start.isSolved:
             if trialsCount > numTrials:
                 return
-            print "trialsCount" , trialsCount
             trialsCount = trialsCount + 1
             success = runLrtdpTrial(start)
-            # if not success:
-            #     return
-    return
+        return
 
 def runLrtdpTrial(state):
     global stackSize
     visited = [] # stack
     while not (state.isSolved or state.AllTestsReached()):
         visited.append(state)
-        print "visited", len(visited)
         if state.isTerminal():
             break
         if len(visited) > stackSize:
@@ -74,7 +70,6 @@ def runLrtdpTrial(state):
         a = state.greedyAction()
         state.update(a)
         state = state.simulate_next_state(a)
-    print "runLrtdpTrial terminate"
     while len(visited) > 0:
         if not checkSolved(visited.pop()):
             break
@@ -87,13 +82,13 @@ def checkSolved(s):
     closed = []
     if not s.isSolved:
         open.append(s)
-
     while len(open) > 0:
         state = open.pop()
         closed.append(state)
-        if len(closed) > checksolvedSize:
-            rv=False
-            break
+        # if len(closed) > checksolvedSize:
+        #     rv=False
+        #     break
+        print "residual", repr(state.experimentInstance) ,state.residual()
         if state.residual() > epsilon:
             rv=False
             continue
@@ -118,10 +113,12 @@ def evaluatePolicy():
     ei=state.experimentInstance.Copy()
     while (not state.isSolved) and (not state.terminal_or_allReach()):
         action = state.greedyAction()
-        ei=state.experimentInstance.Copy()
+        ei = state.experimentInstance.Copy()
         obs = ei.addTest(action)
         state = generateState(ei)
         steps = steps + 1
+        precision, recall = ei.calc_precision_recall()
+        print "step",repr(ei), precision, recall
 
     precision, recall=ei.calc_precision_recall()
     print "end",repr(ei)

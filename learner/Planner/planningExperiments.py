@@ -87,9 +87,9 @@ def one_lrtdp(file, epsilon, out_dir, stack, trials):
 
 
 def check_lrtdp(file, out_dir):
-    epsilon_start, epsilon_end, epsilon_step = 1.5, 4.7, 0.5
-    stack_start, stack_end, stack_step = 15, 36, 10
-    trials_start, trials_end, trials_step = 1, 32, 10
+    epsilon_start, epsilon_end, epsilon_step = 0.1, 0.51, 0.2
+    stack_start, stack_end, stack_step = 10, 31, 10
+    trials_start, trials_end, trials_step = 10, 21, 5
 
     epsilon = epsilon_start
     while epsilon <= epsilon_end:
@@ -97,6 +97,7 @@ def check_lrtdp(file, out_dir):
         while stack <= stack_end:
             trials = trials_start
             while trials <= trials_end:
+                print file, epsilon, out_dir, stack, trials
                 one_lrtdp(file, epsilon, out_dir, stack, trials)
                 trials += trials_step
             stack += stack_step
@@ -114,7 +115,12 @@ def lrtdp_multi_check(instances_dir, out_dir):
 
 if __name__=="__main__":
     #check_lrtdp("","")
-    lrtdp_multi_check("C:\projs\lrtdp\instances", "C:\projs\lrtdp\planners3")
+    lrtdp_multi_check("C:\projs\lrtdp\instances2", "C:\projs\lrtdp\planners8")
+    # ei = Diagnoser.diagnoserUtils.readPlanningFile(r"C:\projs\lrtdp\instances\40_uniform_8.txt")
+    # for i in xrange(35):
+    #     ei.addTest(i)
+    # print ei.initial_tests
+    # print ei.calc_precision_recall()
     # inDir="C:\\projs\\planningTry\\in"
     # outDir="C:\\projs\\planningTry\\out"
     # runAll(inDir,outDir)

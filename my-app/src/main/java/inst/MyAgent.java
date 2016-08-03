@@ -152,7 +152,7 @@ public static List<File> getSubdirs(File file) {
 		    }
 		}
 		
-		MyInstrumenter m=new MyInstrumenter();
+		MyInstrumenter m = new MyInstrumenter();
 		//m.initiate();
         inst.addTransformer(m);
     }

@@ -59,7 +59,7 @@ class ExperimentInstance:
             print "next_tests_by_hp","len(optionals)==0:"
         tests_by_copms={}
         for op in optionals:
-            trace=self.pool[op]
+            trace = self.pool[op]
             for comp in trace:
                 if comp not in tests_by_copms:
                     tests_by_copms[comp]=[]
@@ -69,6 +69,12 @@ class ExperimentInstance:
                 return tests_by_copms[comp]
         # else all optional tests contains un diagnosed comps- return all of them
             return optionals
+
+    def next_tests_by_entropy(self):
+        """
+        order by InfoGain using entropy
+        """
+        pass
 
     def childs_probs_by_hp(self):
         """
@@ -166,13 +172,9 @@ class ExperimentInstance:
         outcome = self.simulate_next_test_outcome(action)
         return outcome,self.next_state_distribution(action)[outcome][0]
 
-
-
     def diagnose(self):
-        if self.diagnoses==[]:
+        if self.diagnoses == []:
             self.diagnoses=self.initials_to_DS().diagnose()
-
-
 
     def precision_recall_diag(self,buggedComps, dg, pr, validComps):
         fp = len([i1 for i1 in dg if i1 in validComps])
