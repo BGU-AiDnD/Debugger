@@ -641,7 +641,8 @@ def wrapperExperiments(confFile,globalConfFile):
     filesExperiments(workingDir,weka,packsPath,utilsPath,rnd)
     methodsExperiments(workingDir,weka,packsPath,utilsPath,rnd)
 
-
+def wrapper_planning(confFile,globalConfFile):
+    pass
 
 
 def wrapper(confFile):
@@ -692,61 +693,12 @@ def wrapper(confFile):
 
 
 if __name__ == '__main__':
-    #sourceMonitorEXE="C:\Program Files (x86)\SourceMonitor\SourceMonitor.exe"
-    #SourceMonitorXml("C:\projs\\ant13Working","ANT_171",sourceMonitorEXE)
-
-    #gitInfoToCsv("C:\projs\jersey","C:\projs\jersey\\vers.csv")
-	#gitInfoToCsv("D:\\Amir_Almishali\\projs\\fabric8","D:\\Amir_Almishali\\projs\\fabric8\\fabric8.csv")
-
-	#for x in ["DSpace","spring-integration","bndtools","jackson-databind","mcMMO"]:
-	#for x in ["hazelcast"]:
-		#gitInfoToCsv("D:\\Amir_Almishali\\projs\\"+x,"D:\\Amir_Almishali\\projs\\"+x+"\\"+x+".csv")
-	#	wrapperLearner("D:\\Amir_Almishali\\projs\\"+x+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-
-    all=["fabric8io_fabric8","pentaho_pentaho-kettle","FasterXML_jackson-databind","querydsl_querydsl"]
-    for a in all:
-        y,x=a.split("_")
-        print y,x
-        #wekaMethods.issuesExtract.github_import.GithubIssues("",y,x,"D:\\Amir_Almishali\\projs\\issues\\"+x+"_bugs.csv")
-
-	print("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+    print("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
     if sys.argv[2]=="learn":
         wrapperLearner("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-    #reportProjectData("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-    #comprasionAll("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-    # comprasionTypes("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-    #comprasionThreeFam("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
     if sys.argv[2]=="experiments":
         wrapperExperiments("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
     if sys.argv[2]=="planning":
-        wrapperExperiments("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
-    path="D:\\Amir_Almishali\\planning\\planners - Copy\\planners - Copy"
-    new_path="D:\\Amir_Almishali\\planning\\planners - Copy\\planners_res"
-    #for x in ["cdt","orient","ant","poi"]:
-    for x in [sys.argv[3]]:
-        #Planner.planningExperiments.planning_for_project(os.path.join(path,x))
-        Planner.Planning_Results.multiProject(path,["cdt","orient","ant","poi"])
-        #Planner.Planning_Results.copy_planners_res(path,new_path)
-#orientechnologies/orientdb
-    
-	#wekaMethods.issuesExtract.github_import.GithubIssues("","orientechnologies","orientdb","D:\\Amir_Almishali\\projs\\orientdb_bugs.csv")
-    #wekaMethods.issuesExtract.jira_import.jiraIssues("https://issues.jboss.org","",1500,"D:\\Amir_Almishali\\projs\\horentq_bugs.csv")
-    
-
-    #Extract_OO_features("C:\\projs\\JavaDocTry",[""])
-    #wrapperLearner("C:\projs\\cdtConf.txt")
-    #wrapper("C:\projs\\cdtConf.txt","C:\projs\\cdtBugs.csv")
-    #wrapper("C:\projs\\GriConf.txt","C:\projs\\GrizzBugs.csv")
-    #wrapper("C:\projs\\jerseyConf.txt","C:\projs\\jerseyBugs.csv")
-    #wrapper("C:\projs\\poiConf.txt","C:\projs\\poiBugs.csv")
-    #wrapper("C:\projs\\karafConf.txt","karafBugs.csv")
-    #Mkdirs("C:\projs\\karafW",["s"])
-    #gitInfoToCsv("C:\projs\\karaf","C:\projs\\karaf\\karaf.csv")
-    #SourceMonitorXml("C:\projs\poiWorking","REL_3_10_1")
-
-    #mvn clean install -Dmaven.test.failure.ignore=true -fn >run2.txt
-    #ant test -keep-going -Dhalt.on.test.failure=false -Dtest.junit.vmargs= >run.txt
-    #mvn test -DargLine="-Dsystem.test.property=test"
-    # mvn -DskipTests
-    #ant -Dproperty=value
-    #REL_3_6
+        wrapper_planning("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+    if sys.argv[2]=="all_planning":
+        Planner.planningExperiments.planning_for_project(sys.argv[1])

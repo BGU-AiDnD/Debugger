@@ -5,17 +5,17 @@ import Planner.lrtdp.lrtdpState
 states={}
 epsilon=0
 stackSize=0
-checksolvedSize=0
 numTrials=0
 experimentInstance=None
+approach = "uniform"
 
-def setVars(experimentInstanceArg,epsilonArg,stackSizeArg, checksolvedSizeArg,numTrialsArg):
-    global experimentInstance,epsilon,stackSize, checksolvedSize,numTrials
+def setVars(experimentInstanceArg,epsilonArg,stackSizeArg, numTrialsArg, approachArg):
+    global experimentInstance,epsilon,stackSize, numTrials, approach
     epsilon=epsilonArg
     stackSize=stackSizeArg
-    checksolvedSize = checksolvedSizeArg
     numTrials=numTrialsArg
     experimentInstance=experimentInstanceArg
+    approach = approachArg
     clean()
 
 
@@ -26,7 +26,7 @@ def generateState(ei):
     global states
     key=repr(ei)
     if key not in states:
-        state = Planner.lrtdp.lrtdpState.LrtdpState(ei.Copy())
+        state = Planner.lrtdp.lrtdpState.LrtdpState(ei.Copy(), approach)
         states[key]= state
     return states[key]
 
@@ -85,10 +85,6 @@ def checkSolved(s):
     while len(open) > 0:
         state = open.pop()
         closed.append(state)
-        # if len(closed) > checksolvedSize:
-        #     rv=False
-        #     break
-        print "residual", repr(state.experimentInstance) ,state.residual()
         if state.residual() > epsilon:
             rv=False
             continue
@@ -118,10 +114,8 @@ def evaluatePolicy():
         state = generateState(ei)
         steps = steps + 1
         precision, recall = ei.calc_precision_recall()
-        print "step",repr(ei), precision, recall
 
     precision, recall=ei.calc_precision_recall()
-    print "end",repr(ei)
     return precision, recall, steps
 
 
@@ -136,12 +130,10 @@ def multiLrtdp():
         return precision, recall, 0
     while not state.isSolved:
         if trialsCount>numTrials:
-            print "numTrials Reached" ,numTrials
             return
         trialsCount=trialsCount+1
         success = runLrtdpTrial(state)
         if not success:
-            print "not success"
             return
         a=state.greedyAction()
         ei=state.experimentInstance.Copy()
@@ -149,5 +141,4 @@ def multiLrtdp():
         state=generateState(ei)
         steps=steps+1
     precision, recall=ei.calc_precision_recall()
-    print "end",repr(ei)
     return precision, recall, steps

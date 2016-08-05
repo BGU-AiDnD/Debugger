@@ -74,7 +74,6 @@ class dynamicSpectrum:
     #return diagnoses
     def diagnose(self):
         fullM,chosen=FullMatrix.optimize_FullMatrix(self.convertToFullMatrix())
-        # print "chosen",chosen
         chosenDict=dict([x for x in enumerate(chosen)])
         Optdiagnoses=fullM.diagnose()
         diagnoses=[]

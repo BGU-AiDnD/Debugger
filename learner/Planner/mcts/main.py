@@ -6,15 +6,13 @@ import mcts
 
 DEFAULT_BUDGET = 100
 
-def main_mcts(ei, budget=DEFAULT_BUDGET):
-    print "DEFAULT_BUDGET = ", DEFAULT_BUDGET
+def main_mcts(ei, approach,  budget=DEFAULT_BUDGET):
     steps = 0
     state = ei.Copy()
     while (not state.isTerminal()) and ( not state.AllTestsReached()):
         steps += 1
         # choose action using mcts
-        action, weight = mcts.mcts_uct(state, budget)
-        print "chose", action, weight
+        action, weight = mcts.mcts_uct(state, budget, approach)
         state.addTest(action)
 
     precision, recall = state.calc_precision_recall()

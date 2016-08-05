@@ -21,7 +21,6 @@ def mainModule(ei):
     LRTDPModule.lrtdp()
     print "finish lrtdp"
     return LRTDPModule.evaluatePolicy()
-    #return LRTDPModule.multiLrtdp()
 
 def run_file(f):
     print "STACK" , STACK

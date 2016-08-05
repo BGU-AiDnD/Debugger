@@ -13,14 +13,12 @@ import os
 import csv
 import Planning_Results
 
-planners=[("mcts",Planner.mcts.main.main_mcts ),("lrtdp",Planner.lrtdp.main.mainModule),("HP",HP_Random.main_HP),
-          ("Random",HP_Random.main_Random), ("initials", HP_Random.only_initials), ("all_tests", HP_Random.all_tests)]
 
 def mkOneDir(dir):
     if not os.path.isdir(dir):
             os.mkdir(dir)
 
-def runAll(instancesDir, outDir):
+def runAll(instancesDir, outDir, planners):
     for name,alg in planners:
         outD=os.path.join(outDir,name)
         mkOneDir(outD)
@@ -35,7 +33,7 @@ def runAll(instancesDir, outDir):
             writer.writerows(outData)
 
 
-def runAll_optimized(instancesDir, outDir):
+def runAll_optimized(instancesDir, outDir, planners):
     outData=[["planner","learn_algorithm","pBug","pValid","tests","index","precision","recall","steps" ]]
     outfile=os.path.join(outDir,"planningMED.csv")
     for f in glob.glob(os.path.join(instancesDir,"*.txt")):
@@ -48,21 +46,6 @@ def runAll_optimized(instancesDir, outDir):
             outData.append([name,learn_alg,pBug,pValid,tests,index,precision,recall,steps])
     writer=csv.writer(open(outfile,"wb"))
     writer.writerows(outData)
-
-
-
-def planning_for_project(dir):
-    for d in os.listdir(dir):
-        if "." in d:
-            continue
-        if d=="weka":
-            continue
-        experiment_dir=os.path.join(dir,d)
-        in_dir=os.path.join(experiment_dir,"planner")
-        out_dir=os.path.join(experiment_dir,"new_planners")
-        mkOneDir(out_dir)
-        runAll(in_dir, out_dir)
-
 
 def check__pomcp():
     file="C:\projs\ptry\lrtdp\\30_uniform_1.txt"
@@ -112,10 +95,53 @@ def lrtdp_multi_check(instances_dir, out_dir):
             os.mkdir(out_instance_dir)
         check_lrtdp(file, out_instance_dir)
 
+def mcts_by_approach(approach):
+    def approached_mcts(ei):
+        return Planner.mcts.main.main_mcts(ei, approach)
+    return approached_mcts
+
+def lrtdp_by_approach(epsilonArg,stackSizeArg, numTrialsArg, approachArg):
+    def approached_lrtdp(ei):
+        Planner.lrtdp.LRTDPModule.clean()
+        Planner.lrtdp.LRTDPModule.setVars(ei, epsilonArg,stackSizeArg, numTrialsArg, approachArg)
+        Planner.lrtdp.LRTDPModule.lrtdp()
+        return Planner.lrtdp.LRTDPModule.evaluatePolicy()
+    return approached_lrtdp
+
+
+
+
+def check_all_planners(instances_dir, out_dir):
+    planners=[("mcts_hp",mcts_by_approach("hp") ), ("mcts_entropy",mcts_by_approach("entropy") ),
+              ("lrtdp_hp",lrtdp_by_approach(0.3 , 20, 10,"hp")),("lrtdp_entropy",lrtdp_by_approach(0.3 , 20, 10,"entropy")),
+              ("HP",HP_Random.main_HP), ("entropy", HP_Random.main_entropy),
+          ("Random",HP_Random.main_Random), ("initials", HP_Random.only_initials), ("all_tests", HP_Random.all_tests)]
+    runAll_optimized(instances_dir, out_dir, planners)
+
+
+
+def planning_for_project(dir):
+    for d in os.listdir(dir):
+        if "." in d:
+            continue
+        if d=="weka":
+            continue
+        experiment_dir = os.path.join(dir,d)
+        in_dir = os.path.join(experiment_dir,"planner")
+        out_dir = os.path.join(experiment_dir,"all_planners")
+        mkOneDir(out_dir)
+        planners=[("mcts_hp",mcts_by_approach("hp") ), ("mcts_entropy",mcts_by_approach("entropy") ),
+              ("lrtdp_hp",lrtdp_by_approach(0.3 , 20, 10,"hp")),("lrtdp_entropy",lrtdp_by_approach(0.3 , 20, 10,"entropy")),
+              ("HP",HP_Random.main_HP), ("entropy", HP_Random.main_entropy),
+          ("Random",HP_Random.main_Random), ("initials", HP_Random.only_initials), ("all_tests", HP_Random.all_tests)]
+        runAll_optimized(in_dir, out_dir, planners)
+
+
 
 if __name__=="__main__":
     #check_lrtdp("","")
-    lrtdp_multi_check("C:\projs\lrtdp\instances2", "C:\projs\lrtdp\planners8")
+    #lrtdp_multi_check("C:\projs\lrtdp\instances2", "C:\projs\lrtdp\planners8")
+    check_all_planners("C:\projs\lrtdp\instances2", "C:\projs\planners_check")
     # ei = Diagnoser.diagnoserUtils.readPlanningFile(r"C:\projs\lrtdp\instances\40_uniform_8.txt")
     # for i in xrange(35):
     #     ei.addTest(i)

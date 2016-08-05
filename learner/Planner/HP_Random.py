@@ -44,17 +44,17 @@ def all_tests(ei):
     return precision, recall, steps
 
 
-def entropy(ei):
+def main_entropy(ei):
     steps = 0
     while not (ei.isTerminal() or ei.AllTestsReached() ):
-        ei.addTest(ei.)
+        ei.addTest(ei.entropy_next())
         steps = steps + 1
     precision, recall=ei.calc_precision_recall()
     return precision, recall, steps
 
 if __name__=="__main__":
-    file="C:\projs\\40_weka_randomForest9.txt"
-    file="E:\\new_planners\\ant\\new_planners\\10_0.6_0.0_16.txt"
+    file = r"C:\projs\lrtdp\instances\40_uniform_8.txt"
     ei=Diagnoser.diagnoserUtils.readPlanningFile(file)
     print main_Random(ei.Copy())
     print main_HP(ei.Copy())
+    print main_entropy(ei.Copy())

@@ -7,11 +7,11 @@ from math import sqrt, log
 from random import sample
 import InstanceNode
 
-def mcts_uct(ei, budget):
+def mcts_uct(ei, budget, approach):
     """
     Implementation of the UCT variant of the MCTS algorithm.
     """
-    root = InstanceNode.InstanceNode(None, None, ei)
+    root = InstanceNode.InstanceNode(None, None, ei, approach)
     while budget:
         budget -= 1
         # Tree Policy

@@ -1,5 +1,7 @@
 import copy
+import math
 import random
+import numpy
 import Diagnoser.diagnoserUtils
 
 __author__ = 'amir'
@@ -33,10 +35,26 @@ class ExperimentInstance:
         optionals = [x for x in range(len(self.pool)) if x not in self.initial_tests]
         return optionals
 
+    def get_optionals_probabilities(self):
+        optionals = self.get_optionals_actions()
+        probabilites = [ 1.0/len(optionals) for x in optionals]
+        return  optionals, probabilites
+
+    def get_optionals_probabilities_by_approach(self, approach):
+        optionals, probabilities = [], []
+        if approach == "uniform":
+            optionals, probabilities = self.get_optionals_probabilities()
+        elif approach == "hp":
+            optionals, probabilities = self.next_tests_by_hp()
+        elif approach == "entropy":
+            optionals, probabilities = self.next_tests_by_entropy()
+        else:
+            raise RuntimeError("self.approach is not configured")
+        return optionals, probabilities
+
     def compsProbs(self):
         """
         calculate for each component c the sum of probabilities of the diagnoses that include c
-
         return dict of (component, probability)
         """
         self.diagnose()
@@ -52,29 +70,53 @@ class ExperimentInstance:
     def next_tests_by_hp(self):
         """
         order tests by probabilities of the components
+        return tests and probabilities
         """
-        orderedComps=[x[0] for x in  self.compsProbs()]
-        optionals=self.get_optionals_actions()
+        compsProbs = self.compsProbs()
+        comps_probabilities = dict(compsProbs)
+        optionals = self.get_optionals_actions()
         if len(optionals)==0:
             print "next_tests_by_hp","len(optionals)==0:"
-        tests_by_copms={}
-        for op in optionals:
-            trace = self.pool[op]
+        tests_probabilities = []
+        for test in optionals:
+            trace = self.pool[test]
+            test_p = 0.0
             for comp in trace:
-                if comp not in tests_by_copms:
-                    tests_by_copms[comp]=[]
-                tests_by_copms[comp].append(op)
-        for comp in orderedComps: # return tests that contains the most faulty comp
-            if comp in tests_by_copms:
-                return tests_by_copms[comp]
-        # else all optional tests contains un diagnosed comps- return all of them
-            return optionals
+                test_p += comps_probabilities.get(comp, 0)
+            tests_probabilities.append(test_p)
+        tests_probabilities = [abs(x) for x in tests_probabilities]
+        tests_probabilities = [x / sum(tests_probabilities) for x in tests_probabilities]
+        return optionals, tests_probabilities
 
     def next_tests_by_entropy(self):
         """
         order by InfoGain using entropy
+        return tests and probabilities
         """
-        pass
+        probabilities = []
+        optionals = self.get_optionals_actions()
+        for t in optionals:
+            probabilities.append(self.info_gain(t))
+        probabilities = [abs(x) for x in probabilities]
+        probabilities = [x / sum(probabilities) for x in probabilities]
+        return optionals, probabilities
+
+    def info_gain(self, test):
+        """
+        calculate the information gain by test
+        """
+        fail_test, pass_test = self.next_state_distribution(test)
+        ei_fail, p_fail = fail_test
+        ei_pass, p_pass = pass_test
+        return self.entropy() - (p_fail * ei_fail.entropy() + p_pass * ei_pass.entropy())
+
+    def entropy(self):
+        self.diagnose()
+        sum = 0.0
+        for d in self.diagnoses:
+            p = d.get_prob()
+            sum += p * math.log(p)
+        return sum
 
     def childs_probs_by_hp(self):
         """
@@ -94,7 +136,12 @@ class ExperimentInstance:
         return optionals_probs
 
     def hp_next(self):
-        return random.choice(self.next_tests_by_hp())
+        optionals, probabilities =  self.next_tests_by_hp()
+        return numpy.random.choice(optionals, 1, p = probabilities).tolist()[0]
+
+    def entropy_next(self):
+        optionals, probabilities =  self.next_tests_by_entropy()
+        return numpy.random.choice(optionals, 1, p = probabilities).tolist()[0]
 
     def random_next(self):
         return random.choice(self.get_optionals_actions())
@@ -111,11 +158,14 @@ class ExperimentInstance:
         return len(self.get_optionals_actions())== 0
 
     def addTest(self,next_test):
-        self.addTestOutcome(next_test,self.error[next_test])
+        """
+        add test with real outcome
+        """
+        self.simulateTestOutcome(next_test,self.error[next_test])
         return self.error[next_test]
 
 
-    def addTestOutcome(self,next_test,outcome):
+    def simulateTestOutcome(self,next_test,outcome):
         self.initial_tests.append(next_test)
         self.error[next_test]=outcome
         if self.error[next_test]==1:
@@ -145,19 +195,19 @@ class ExperimentInstance:
         probs=dict(self.compsProbs())
         pass_Probability=1
         for comp in trace:
-            pass_Probability=pass_Probability*0.9 # all components has chance of 0.1 to be faulty
+            pass_Probability=pass_Probability * 0.9 # all components has chance of 0.1 to be faulty
             if comp in probs:
-                pass_Probability=pass_Probability*(1-probs[comp]) # add known faults
+                pass_Probability=pass_Probability * (1-probs[comp]) # add known faults
         return pass_Probability
 
 
     def next_state_distribution(self,action):
         pass_Probability=self.compute_pass_prob(action)
-        zeroOut=self.Copy()
-        zeroOut.addTestOutcome(action,0)
-        oneOut=self.Copy()
-        oneOut.addTestOutcome(action,1)
-        return [(zeroOut,pass_Probability),(oneOut,1-pass_Probability)]
+        ei_fail=self.Copy()
+        ei_fail.simulateTestOutcome(action,0)
+        ei_pass=self.Copy()
+        ei_pass.simulateTestOutcome(action,1)
+        return [(ei_fail,pass_Probability),(ei_pass,1-pass_Probability)]
 
 
     def simulate_next_test_outcome(self,action):

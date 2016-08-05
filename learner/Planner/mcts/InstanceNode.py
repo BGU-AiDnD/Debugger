@@ -7,24 +7,18 @@ from random import sample
 
 class InstanceNode(object):
 
-    COLORS = {
-        1: 'red',
-        2: 'yellow',
-        3: 'orange',
-        4: 'green',
-        5: 'blue',
-        6: 'purple'
-    }
-
-    def __init__(self, parent, action, experimentInstance):
+    def __init__(self, parent, action, experimentInstance, approach):
+        """
+        approach - how to combine tests probabilities to qvalue.
+            can be one of the following: "uniform" , "hp", "entropy"
+        """
 
         self.experimentInstance = experimentInstance
-        # Game
-        # self.game = game or parent.game
-        # Structure
+        self.approach = approach
         self.parent    = parent
         self.children  = dict.fromkeys(self.experimentInstance.get_optionals_actions())
-        self.children_hp = self.experimentInstance.childs_probs_by_hp()
+        optionals, probabilities = self.experimentInstance.get_optionals_probabilities_by_approach(approach)
+        self.children_probability = dict(zip(optionals, probabilities))
         # Tree data
         self.action    = action
          # Search meta data
@@ -90,7 +84,7 @@ class InstanceNode(object):
             raise Exception('Node is already fully expanded')
 
         ei = self.result(action)
-        child = InstanceNode(self, action, ei)
+        child = InstanceNode(self, action, ei, self.approach)
         self.children[action] = child
         return child
 
@@ -105,13 +99,12 @@ class InstanceNode(object):
             weight = 0
             if self.children[action] != None:
                 weight = self.children[action].search_weight(c)
-            values.append( (action, weight + self.children_hp[action]) )
-
+            values.append( (action, weight + self.children_probability.get(action, 0)) )
         action = max(values, key=lambda x: x[1])[0]
         # in case that child not expanded - expand
         if self.children[action] == None:
             ei = self.result(action)
-            child = InstanceNode(self, action, ei)
+            child = InstanceNode(self, action, ei, self.approach)
             self.children[action] = child
         return self.children[action]
 
@@ -144,33 +137,3 @@ class InstanceNode(object):
         if  not ei.isTerminal():
             steps = steps + 1
         return ( 1/steps, ei.initial_tests)
-
-    def dot_string(self, value=False, prettify=lambda x: x):
-        """
-        Returns the tree rooted at the current node as a string
-        in dot format. Each node is labeled with its state, which
-        is first run through prettify. If value is True, then
-        the value is included in the node label.
-        """
-        output = ''
-        output += 'digraph {\n'
-        for node in self:
-            # Define the node
-            name = prettify(node.state)
-            if value:
-                name += '%s\\n' % node.value
-            color = self.COLORS[node.player]
-            output += '\t"%s" [style="filled", fillcolor="%s"]\n' % (
-                name, color
-            )
-            # No edge into the root node
-            if node.parent is None:
-                continue
-            # Add edge from node parent to node
-            pname = prettify(node.parent.state)
-            if value:
-                pname += '%s\\n' % node.parent.value
-            output += '\t"%s" -> "%s"\n' % (pname, name)
-        output += '}'
-        return output
-

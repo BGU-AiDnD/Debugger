@@ -6,8 +6,14 @@ __author__ = 'amir'
 
 
 class LrtdpState(object):
-    def __init__(self,experimentInstance):
+    def __init__(self,experimentInstance, approach):
+        """
+        experimentInstance - the instance of this state
+        approach - how to combine tests probabilities to qvalue.
+            can be one of the following: "uniform" , "hp", "entropy"
+        """
         self.experimentInstance = experimentInstance
+        self.approach = approach
         self.isSolved=self.isTerminal()
         self.value = 1
         if self.isSolved:
@@ -15,7 +21,7 @@ class LrtdpState(object):
         self.simulationCount = 0
 
     def clone(self):
-        return LrtdpState(self.experimentInstance.Copy())
+        return LrtdpState(self.experimentInstance.Copy(), self.approach)
 
     def getMaxProb(self):
         self.experimentInstance.diagnose()
@@ -33,14 +39,14 @@ class LrtdpState(object):
         return random.choice(self.getGreedyActions())
 
     def getGreedyActions(self):
-        # optionals = self.experimentInstance.next_tests_by_hp()
-        optionals = self.experimentInstance.get_optionals_actions()
-        minVal = float('inf') #big number
+        optionals, probabilities = self.experimentInstance.get_optionals_probabilities_by_approach(self.approach)
+        probs_dict = dict(zip(optionals, probabilities))
+        minVal = float('inf')
         result = []
         if len(optionals)==0:
             print "len(optionals)==0:"
         for action in optionals:
-            q = self.qValue(action)
+            q = self.qValue(action) * probs_dict[action]
             if q < minVal:
                 minVal = q
                 result = [action]
@@ -49,7 +55,6 @@ class LrtdpState(object):
         return result
 
     def getNextStateDist(self,action):
-        #return LRTDP.LRTDP(1,2,3,4).nextStateDist(self.experimentInstance,action)
         return LRTDPModule.nextStateDist(self.experimentInstance, action)
 
     def qValue(self,action):
