@@ -115,8 +115,8 @@ def evaluatePolicy():
         steps = steps + 1
         precision, recall = ei.calc_precision_recall()
 
-    precision, recall=ei.calc_precision_recall()
-    return precision, recall, steps
+    precision, recall = ei.calc_precision_recall()
+    return precision, recall, steps, repr(ei)
 
 
 def multiLrtdp():

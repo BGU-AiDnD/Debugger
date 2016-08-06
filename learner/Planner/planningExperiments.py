@@ -34,7 +34,7 @@ def runAll(instancesDir, outDir, planners):
 
 
 def runAll_optimized(instancesDir, outDir, planners):
-    outData=[["planner","learn_algorithm","pBug","pValid","tests","index","precision","recall","steps" ]]
+    outData=[["planner","learn_algorithm","pBug","pValid","tests","index","precision","recall","steps", "repr" ]]
     outfile=os.path.join(outDir,"planningMED.csv")
     for f in glob.glob(os.path.join(instancesDir,"*.txt")):
         print f
@@ -42,8 +42,8 @@ def runAll_optimized(instancesDir, outDir, planners):
         file=os.path.join(instancesDir,f)
         ei = Diagnoser.diagnoserUtils.readPlanningFile(file)
         for name,alg in planners:
-            precision,recall,steps=alg(ei.Copy())
-            outData.append([name,learn_alg,pBug,pValid,tests,index,precision,recall,steps])
+            precision,recall,steps, rpr =alg(ei.Copy())
+            outData.append([name,learn_alg,pBug,pValid,tests,index,precision,recall,steps, rpr])
     writer=csv.writer(open(outfile,"wb"))
     writer.writerows(outData)
 
@@ -141,7 +141,7 @@ def planning_for_project(dir):
 if __name__=="__main__":
     #check_lrtdp("","")
     #lrtdp_multi_check("C:\projs\lrtdp\instances2", "C:\projs\lrtdp\planners8")
-    check_all_planners("C:\projs\lrtdp\instances2", "C:\projs\planners_check")
+    check_all_planners("C:\projs\lrtdp\instances3", "C:\projs\planners_check")
     # ei = Diagnoser.diagnoserUtils.readPlanningFile(r"C:\projs\lrtdp\instances\40_uniform_8.txt")
     # for i in xrange(35):
     #     ei.addTest(i)

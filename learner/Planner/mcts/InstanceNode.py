@@ -17,8 +17,11 @@ class InstanceNode(object):
         self.approach = approach
         self.parent    = parent
         self.children  = dict.fromkeys(self.experimentInstance.get_optionals_actions())
-        optionals, probabilities = self.experimentInstance.get_optionals_probabilities_by_approach(approach)
-        self.children_probability = dict(zip(optionals, probabilities))
+        if not self.experimentInstance.AllTestsReached() and not self.experimentInstance.isTerminal():
+            optionals, probabilities = self.experimentInstance.get_optionals_probabilities_by_approach(approach)
+            self.children_probability = dict(zip(optionals, probabilities))
+        else:
+            self.children_probability = {}
         # Tree data
         self.action    = action
          # Search meta data

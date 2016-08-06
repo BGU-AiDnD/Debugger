@@ -18,7 +18,7 @@ def main_HP(ei):
         ei.addTest(ei.hp_next())
         steps = steps + 1
     precision, recall=ei.calc_precision_recall()
-    return precision, recall, steps
+    return precision, recall, steps, repr(ei)
 
 
 def main_Random(ei):
@@ -27,12 +27,12 @@ def main_Random(ei):
         ei.addTest(ei.random_next())
         steps=steps+1
     precision, recall=ei.calc_precision_recall()
-    return precision, recall, steps
+    return precision, recall, steps, repr(ei)
 
 def only_initials(ei):
     steps = 0
     precision, recall=ei.calc_precision_recall()
-    return precision, recall, steps
+    return precision, recall, steps, repr(ei)
 
 
 def all_tests(ei):
@@ -41,7 +41,7 @@ def all_tests(ei):
         ei.addTest(ei.random_next())
         steps=steps+1
     precision, recall=ei.calc_precision_recall()
-    return precision, recall, steps
+    return precision, recall, steps, repr(ei)
 
 
 def main_entropy(ei):
@@ -50,7 +50,7 @@ def main_entropy(ei):
         ei.addTest(ei.entropy_next())
         steps = steps + 1
     precision, recall=ei.calc_precision_recall()
-    return precision, recall, steps
+    return precision, recall, steps, repr(ei)
 
 if __name__=="__main__":
     file = r"C:\projs\lrtdp\instances\40_uniform_8.txt"

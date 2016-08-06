@@ -16,7 +16,7 @@ def main_mcts(ei, approach,  budget=DEFAULT_BUDGET):
         state.addTest(action)
 
     precision, recall = state.calc_precision_recall()
-    return precision, recall, steps
+    return precision, recall, steps, repr(state)
 
 
 def test_mcts(f):

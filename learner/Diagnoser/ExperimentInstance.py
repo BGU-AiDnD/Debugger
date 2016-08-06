@@ -20,7 +20,7 @@ class ExperimentInstance:
         self.diagnoses=[]
 
     def Copy(self):
-        exp= ExperimentInstance(copy.deepcopy(self.priors), copy.deepcopy(self.bugs), copy.deepcopy(self.initial_tests), copy.deepcopy(self.failed_tests),  copy.deepcopy(self.pool)	,copy.deepcopy(self.error))
+        exp = ExperimentInstance(copy.deepcopy(self.priors), copy.deepcopy(self.bugs), copy.deepcopy(self.initial_tests), copy.deepcopy(self.failed_tests),  copy.deepcopy(self.pool)	,copy.deepcopy(self.error))
         exp.diagnoses=[x.clone() for x in self.diagnoses]
         return exp
 
@@ -42,6 +42,8 @@ class ExperimentInstance:
 
     def get_optionals_probabilities_by_approach(self, approach):
         optionals, probabilities = [], []
+        if len(self.pool) == len(self.initial_tests):
+            print "len(self.pool) == len(self.initial_tests)"
         if approach == "uniform":
             optionals, probabilities = self.get_optionals_probabilities()
         elif approach == "hp":
@@ -75,8 +77,7 @@ class ExperimentInstance:
         compsProbs = self.compsProbs()
         comps_probabilities = dict(compsProbs)
         optionals = self.get_optionals_actions()
-        if len(optionals)==0:
-            print "next_tests_by_hp","len(optionals)==0:"
+        assert  len(optionals) > 0
         tests_probabilities = []
         for test in optionals:
             trace = self.pool[test]
@@ -84,6 +85,8 @@ class ExperimentInstance:
             for comp in trace:
                 test_p += comps_probabilities.get(comp, 0)
             tests_probabilities.append(test_p)
+        if sum(tests_probabilities) == 0.0:
+            return self.get_optionals_probabilities()
         tests_probabilities = [abs(x) for x in tests_probabilities]
         tests_probabilities = [x / sum(tests_probabilities) for x in tests_probabilities]
         return optionals, tests_probabilities
@@ -97,6 +100,8 @@ class ExperimentInstance:
         optionals = self.get_optionals_actions()
         for t in optionals:
             probabilities.append(self.info_gain(t))
+        if sum(probabilities) == 0.0:
+            return self.get_optionals_probabilities()
         probabilities = [abs(x) for x in probabilities]
         probabilities = [x / sum(probabilities) for x in probabilities]
         return optionals, probabilities
@@ -124,8 +129,7 @@ class ExperimentInstance:
         """
         comps_prob = dict(self.compsProbs()) # tuples of (comp, prob)
         optionals = self.get_optionals_actions()
-        if len(optionals)==0:
-            print "next_tests_by_hp","len(optionals)==0:"
+        assert len(optionals) > 0
         optionals_probs = {}
         for op in optionals:
             trace = self.pool[op]
