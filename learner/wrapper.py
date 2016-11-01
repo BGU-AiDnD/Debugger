@@ -637,7 +637,8 @@ def wrapperExperiments(confFile,globalConfFile):
     #testDb=Agent.bugs_testsDBMethods.basicBuild(workingDir,vers[-2],dates[-2],dates[-1])
     packsPath = os.path.join(workingDir, "packs.txt")
     #Agent.experimentsMethods.packFileCreate(testDb,1,-1, packsPath)
-    rnd=str(randint(0,900))
+    rnd = str(randint(0,900))
+    print rnd
     filesExperiments(workingDir,weka,packsPath,utilsPath,rnd)
     methodsExperiments(workingDir,weka,packsPath,utilsPath,rnd)
 

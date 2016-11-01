@@ -1,18 +1,14 @@
 from distutils.core import setup
 
 setup(
-    name='Learner',
-    version='1.0.0',
-    packages=['weka', 'weka.features', 'weka.issuesExtract', 'weka.FeatureExtract', 'Agent', 'Sanity', 'tomcat',
-              'diffAnalyze', 'wekaMethods', 'wekaMethods.features', 'wekaMethods.issuesExtract',
-              'wekaMethods.FeatureExtract', 'wekaMethods.featuresMethods'],
-    install_requires = ['LIAC-ARFF',"networkx","numpy","jira","gitpython","python-igraph","scipy","bugzillatools"],
+    name='learner',
+    version='',
+    packages=['Agent', 'Sanity', 'Planner', 'Planner.mcts', 'Planner.lrtdp', 'Planner.pomcp', 'Planner.pomcp_old.pomcp',
+              'Planner.lrtdp_checker', 'Diagnoser', 'diffAnalyze', 'wekaMethods', 'wekaMethods.features',
+              'wekaMethods.issuesExtract', 'wekaMethods.featuresMethods'],
     url='',
     license='',
     author='amir',
     author_email='',
     description=''
 )
-
-
-#python setup.py sdist

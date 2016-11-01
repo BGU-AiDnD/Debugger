@@ -95,8 +95,8 @@ class InstanceNode(object):
         """
         return the action with max search_weight + hp. in case that action not expanded weight = 0 .
         """
-        # if not self.fully_expanded():
-        #     raise Exception('Node is not fully expanded')
+        if not self.fully_expanded():
+            raise Exception('Node is not fully expanded')
         values = []
         for action in self.children:
             weight = 0

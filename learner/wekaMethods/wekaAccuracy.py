@@ -118,7 +118,7 @@ def method_name():
     print len([x for x in vals if x > 0.8])
 
 
-#method_name()
+#create_bp_script_file()
 #print properties('C:\GitHub\weka\more\CDT_8_1_2_lastVer_bugs_OnlyNames.csv')
 #priorsCreation('C:\GitHub\\experiments\weka\CDT_8_1_2_Style_OnlyNames.csv','C:\GitHub\\experiments\\weka.classifiers.trees.J48_Style23.csv','C:\GitHub\\experiments\\weka.classifiers.trees.J48_Style23.csv',"")
 #exit()
