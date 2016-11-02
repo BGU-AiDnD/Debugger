@@ -493,7 +493,7 @@ def clean(versPath,LocalGitPath):
 def wrapperLearner(confFile,globalConfFile):
     print confFile
     vers, gitPath,bugsPath, workingDir =configure(confFile)
-    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath =globalConfig(globalConfFile)
+    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath = globalConfig(globalConfFile)
     versPath, dbadd=Mkdirs(workingDir,vers)
     logfile=open(os.path.join(workingDir,"timeLog2.txt"),"wb")
     print("start "+ str(datetime.datetime.now())+"\n")
@@ -694,12 +694,14 @@ def wrapper(confFile):
 
 
 if __name__ == '__main__':
-    print("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    globalConf = os.path.realpath(os.path.join(current_dir, "../globalConf.txt"))
+    print(sys.argv[1], globalConf)
     if sys.argv[2]=="learn":
-        wrapperLearner("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+        wrapperLearner(sys.argv[1], globalConf)
     if sys.argv[2]=="experiments":
-        wrapperExperiments("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+        wrapperExperiments(sys.argv[1], globalConf)
     if sys.argv[2]=="planning":
-        wrapper_planning("D:\\Amir_Almishali\\projs\\"+sys.argv[1]+"Conf.txt","D:\\Amir_Almishali\\projs\\Debugger\\globalConf.txt")
+        wrapper_planning(sys.argv[1], globalConf)
     if sys.argv[2]=="all_planning":
         Planner.planningExperiments.planning_for_project(sys.argv[1])

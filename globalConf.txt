@@ -1,9 +1,1 @@
-docletPath=C:\projs\xml-doclet-1.0.4-jar-with-dependencies.jar
 sourceMonitorEXE=C:\Program Files (x86)\SourceMonitor\SourceMonitor.exe
-checkStyle57=C:\projs\checkstyle-5.7-all.jar
-checkStyle68=C:\projs\checkstyle-6.8-SNAPSHOT-all.jar
-allchecks=C:\projs\allChecks.xml
-methodsNamesXML=C:\projs\methodNameLines.xml
-wekaJar=C:\Program Files\Weka-3-7\weka.jar
-RemoveBat=C:\Repo\Debugger\removeBat.bat
-utilsPath=C:\Repo\Debugger\utils

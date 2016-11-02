@@ -1,39 +1,22 @@
 __author__ = 'amir'
-
+import os
 
 def globalConfig(confFile):
     lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
-    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar="","","","","","",""
-    RemoveBat=""
-    utilsPath=""
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    utilsPath = os.path.realpath(os.path.join(current_dir, "../utils"))
+    docletPath = os.path.join(utilsPath, "xml-doclet-1.0.4-jar-with-dependencies.jar")
+    sourceMonitorEXE = "C:\Program Files (x86)\SourceMonitor\SourceMonitor.exe"
+    checkStyle57 = os.path.join(utilsPath, "checkstyle-5.7-all.jar")
+    checkStyle68 = os.path.join(utilsPath, "checkstyle-6.8-SNAPSHOT-all.jar")
+    allchecks = os.path.join(utilsPath, "allChecks.xml")
+    methodsNamesXML = os.path.join(utilsPath, "methodNameLines.xml")
+    wekaJar = os.path.join(utilsPath, "weka.jar")
+    RemoveBat = os.path.join(utilsPath, "../removeBat.bat")
     for x in lines:
-        if x.startswith("docletPath"):
-            v=x.split("=")[1]
-            docletPath=v
         if x.startswith("sourceMonitorEXE"):
             v=x.split("=")[1]
             sourceMonitorEXE=v
-        if x.startswith("checkStyle57"):
-            v=x.split("=")[1]
-            checkStyle57=v
-        if x.startswith("checkStyle68"):
-            v=x.split("=")[1]
-            checkStyle68=v
-        if x.startswith("allchecks"):
-            v=x.split("=")[1]
-            allchecks=v
-        if x.startswith("methodsNamesXML"):
-            v=x.split("=")[1]
-            methodsNamesXML=v
-        if x.startswith("wekaJar"):
-            v=x.split("=")[1]
-            wekaJar=v
-        if x.startswith("RemoveBat"):
-            v=x.split("=")[1]
-            RemoveBat=v
-        if x.startswith("utilsPath"):
-            v=x.split("=")[1]
-            utilsPath=v
     return docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath
 
 
