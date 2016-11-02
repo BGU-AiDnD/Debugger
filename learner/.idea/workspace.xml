@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a99ccab5-ef05-47d7-a302-2dc78736cec3" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utilsConf.py" afterPath="$PROJECT_DIR$/utilsConf.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wrapper.py" afterPath="$PROJECT_DIR$/wrapper.py" />
     </list>
     <ignored path="eclipse.iws" />
@@ -79,8 +78,8 @@
       <file leaf-file-name="wrapper.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/wrapper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5541958" vertical-offset="11141" max-vertical-offset="11713">
-              <caret line="698" column="34" selection-start-line="698" selection-start-column="34" selection-end-line="698" selection-end-column="34" />
+            <state vertical-scroll-proportion="0.5104895" vertical-offset="8021" max-vertical-offset="11713">
+              <caret line="513" column="27" selection-start-line="513" selection-start-column="27" selection-end-line="513" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -990,8 +989,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/wrapper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5541958" vertical-offset="11141" max-vertical-offset="11713">
-          <caret line="698" column="34" selection-start-line="698" selection-start-column="34" selection-end-line="698" selection-end-column="34" />
+        <state vertical-scroll-proportion="0.5104895" vertical-offset="8021" max-vertical-offset="11713">
+          <caret line="513" column="27" selection-start-line="513" selection-start-column="27" selection-end-line="513" selection-end-column="27" />
           <folding />
         </state>
       </provider>

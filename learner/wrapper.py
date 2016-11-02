@@ -500,25 +500,25 @@ def wrapperLearner(confFile,globalConfFile):
     logfile.write("start "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
 
-    #vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
+    vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
     LocalGitPath=os.path.join(workingDir,"repo")
-    #versionsCreate(gitPath, vers, versPath,LocalGitPath)
-    #testVerConfig(workingDir,vers[-2],"ant",dates[-2],dates[-1])
+    versionsCreate(gitPath, vers, versPath,LocalGitPath)
+    testVerConfig(workingDir,vers[-2],"ant",dates[-2],dates[-1])
     mkOneDir(LocalGitPath)
 
-    #featuresExtract(vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
+    featuresExtract(vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
     logfile.write("after featuresExtract "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
 
     MethodsParsed=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"CheckStyle.txt")
     changeFile=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"Ins_dels.txt")
-    #wekaMethods.buildDB.buildOneTimeCommits(versPath,dbadd,bugsPath,False,-1,vers,"repo",MethodsParsed,changeFile,logfile,dates)
+    wekaMethods.buildDB.buildOneTimeCommits(versPath,dbadd,bugsPath,False,-1,vers,"repo",MethodsParsed,changeFile,logfile,dates)
     logfile.write("after buildDB "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
 
     weka=os.path.join(workingDir,"weka")
 
-    #createBuildMLModels(workingDir,gitPath,weka,vers,dbadd,wekaJar,RemoveBat)
+    createBuildMLModels(workingDir,gitPath,weka,vers,dbadd,wekaJar,RemoveBat)
 
     # FilesIndices=[[0,14,15],[1,2,3,4,5,6,7,8,9],[10,11,12,16],[13]] #Traditional , OO, process ,Bugs
     # FilesIndices_all=[indsFamilies(FilesIndices,[[x for x in range(len(FilesIndices)) if x != ind]])[0]  for ind in range(len(FilesIndices))] #Traditional , OO, process ,Bugs
@@ -546,15 +546,15 @@ def wrapperLearner(confFile,globalConfFile):
     #                 #merge_multiple_arff_file(One_or_allDir,outArffTest,TesttempFile,[str(y)+"_Only.arff" for y in indices])
     #             #os.system("start /b cmd /x /c \"D: & cd  " + outDir +" &  " + outDir + "\\BuildEval.bat\"")
     #
-
-    known_indices_files = [0, 3, 5, 6, 8, 11, 14]
-    known_indices_methods = [0, 2]
-    for granularity,indices in [["Files",known_indices_files ], ["Methods",known_indices_methods]]:
-        for Bug_Type  in ["All","Most"]:
-            baseDir=os.path.join(workingDir,Bug_Type)
-            baseDir=os.path.join(baseDir,granularity)
-            fam_one_path=os.path.join(baseDir,"Fam_one")
-            append_families_indices(workingDir,wekaJar, fam_one_path, Bug_Type,granularity,indices)
+    #
+    # known_indices_files = [0, 3, 5, 6, 8, 11, 14]
+    # known_indices_methods = [0, 2]
+    # for granularity,indices in [["Files",known_indices_files ], ["Methods",known_indices_methods]]:
+    #     for Bug_Type  in ["All","Most"]:
+    #         baseDir=os.path.join(workingDir,Bug_Type)
+    #         baseDir=os.path.join(baseDir,granularity)
+    #         fam_one_path=os.path.join(baseDir,"Fam_one")
+    #         append_families_indices(workingDir,wekaJar, fam_one_path, Bug_Type,granularity,indices)
     #ArticleFeaturesMostFiles(workingDir,outArffTrain,outArffTest,tempFile,outCsv,wekaJar,[0,3,5,6,8,11,14])
 
     #allOne types
