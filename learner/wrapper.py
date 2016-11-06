@@ -294,7 +294,7 @@ def featuresExtract(vers, versPath, workingDir,LocalGitPath,logfile,docletPath,s
     Extract_complexity_features(versPath, vers, workingDir,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
     logfile.write("after Extract_complexity_features "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
-	
+
 
     Extract_OO_features_OLD(versPath, vers,docletPath)
     logfile.write("after Extract_OO_features "+ str(datetime.datetime.now())+"\n")
@@ -380,22 +380,19 @@ def BuildMLFiles(outDir,buggedType,component):
 
 def createBuildMLModels(workingDir,gitPath,weka,vers,dbadd,wekaJar,RemoveBat):
     for buggedType in ["All","Most"]:
-    #for buggedType in ["All"]:
         Bpath=os.path.join(workingDir,buggedType)
         mkOneDir(Bpath)
         FilesPath=os.path.join(Bpath,"Files")
         methodsPath=os.path.join(Bpath,"Methods")
         mkOneDir(FilesPath)
         mkOneDir(methodsPath)
-        #trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacks(FilesPath,gitPath,weka,vers,buggedType,dbadd)
-        trainingFile,testingFile,NamesFile=BuildMLFiles(weka,buggedType,"files")
-        outCsv=os.path.join(weka,buggedType+"_out_files.csv")
-        #BuildWekaModel(weka,trainingFile,testingFile,NamesFile,outCsv,"files_"+buggedType,wekaJar)
-        #All_One_create.allFamilies(FilesPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
+        trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacks(FilesPath,gitPath,weka,vers,buggedType,dbadd)
+        trainingFile, testingFile, NamesFile, outCsv=BuildMLFiles(weka,buggedType,"files")
+        BuildWekaModel(weka,trainingFile,testingFile,NamesFile,outCsv,"files_"+buggedType,wekaJar)
+        All_One_create.allFamilies(FilesPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
         trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacksMethods(methodsPath,gitPath,weka,vers,buggedType,dbadd)
-        trainingFile,testingFile,NamesFile=BuildMLFiles(weka,buggedType,"methods")
-        outCsv=os.path.join(weka,buggedType+"_out_methods.csv")
-        #BuildWekaModel(weka,trainingFile,testingFile,NamesFile,outCsv,"methods_"+buggedType,wekaJar)
+        trainingFile, testingFile, NamesFile, outCsv=BuildMLFiles(weka,buggedType,"methods")
+        BuildWekaModel(weka,trainingFile,testingFile,NamesFile,outCsv,"methods_"+buggedType,wekaJar)
         All_One_create.allFamilies(methodsPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
 
 def mergeArffs(merge,arffFile,tempFile):

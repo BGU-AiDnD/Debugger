@@ -115,20 +115,20 @@ def fixAssert(l):
 
 def OneClass(lines, outPath,commitID,change):
     if len(lines)==0:
-		return []
+        return []
     fileName=lines[0].split()
     if len(fileName)<3:
-		return []
+        return []
     fileName=lines[0].split()[2]
     fileName=fileName[2:]
     fileName=fileName.replace("/","_")
     if not ".java" in fileName:
         return []
     if len(lines) >3:
-        isNew="new file " in lines[1]
-        isdeleted="deleted file " in lines[1]
-        reducedFile=lines[3]
-        addedFile=lines[4]
+        # isNew="new file " in lines[1]
+        # isdeleted="deleted file " in lines[1]
+        # reducedFile=lines[3]
+        # addedFile=lines[4]
         lines=lines[5:]
         befLines=[]
         afterLines=[]
@@ -214,7 +214,6 @@ def debugPatchs(Path,outFile):
         lines=f.readlines()[:9]
         ou.writelines(lines)
     ou.close()
-    #print(allComms)
 
 
 def buildPatchs(Path,outDir,changedFile):
@@ -226,9 +225,9 @@ def buildPatchs(Path,outDir,changedFile):
     change=open(changedFile,"wb")
     for doc in lst:
         i=i+1
+        print doc
         comm=oneFile(doc,outDir,change)
         allComms.append(comm)
-    #print(allComms)
 
 def mkdir(d):
     if not os.path.isdir(d):
@@ -246,8 +245,6 @@ def DbAdd(dbPath,allComms):
     conn.close()
 
 def RunCheckStyle(workingDir,outPath,checkStyle68,methodNameLines):
-    #print(  "java  -jar  C:\projs\checkstyle-6.8-SNAPSHOT-all.jar   -c  C:\projs\methodNameLines.xml javaFile -o " +outPath+"  "+workingDir)
-    #os.system(  "java  -jar  C:\projs\checkstyle-6.8-SNAPSHOT-all.jar   -c  C:\projs\methodNameLines.xml javaFile -o " +outPath+"  "+workingDir)
     run_commands = ["java" ,"-jar" ,checkStyle68 ,"-c" ,methodNameLines ,"javaFile" ,"-o",outPath,workingDir]
     proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True)
     (out, err) = proc.communicate()
@@ -475,8 +472,7 @@ def do_all(workingDir,checkStyle68,methodNameLines):
     changedFile=workingDir+"\\commitsFiles\\Ins_dels.txt"
     mkdir(patchD)
     mkdir(commitsFiles)
-    #os.system("c: & cd "+workingDir+" & git format-patch --root -o patch --function-context --unified=9000")
-    run_commands = ["git" ,"format-patch" ,"--root" ,"-o" ,"patch" ,"--function-context" ,"--unified=9000"]
+    run_commands = "git format-patch --root -o patch --function-context --unified=9000".split()
     proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=workingDir)
     (out, err) = proc.communicate()
     buildPatchs(patchD,commitsFiles,changedFile)
@@ -486,8 +482,11 @@ def do_all(workingDir,checkStyle68,methodNameLines):
 
 
 if __name__ == '__main__':
-	f=open("D:\\Amir_Almishali\\projs\\fabric8Work\\repo\\commitsFiles\\9992c405d5263b8970e3b575c3791bdfb8f15eb8\\7631-1946-INS.patch","wb")
-	oneFile("D:\\Amir_Almishali\\projs\\fabric8Work\\repo\\commitsFiles\\9992c405d5263b8970e3b575c3791bdfb8f15eb8\\0451-finish-committing-module-changes.patch","D:\\Amir_Almishali\\projs\\fabric8Work\\repo\\commitsFiles\\9992c405d5263b8970e3b575c3791bdfb8f15eb8\\p",f)
+    do_all(r"C:\Users\User\Downloads\antWorking\repo", r"C:\Users\User\Documents\GitHub\Debugger\utils\checkstyle-6.8-SNAPSHOT-all.jar", r"C:\Users\User\Documents\GitHub\Debugger\utils\methodNameLines.xml")
+    patch_file = r"C:\Users\User\Downloads\antWorking\repo\patch\12906-adapting-code-and-tests-since-Apt-is-not-available-.patch"
+    patch_file = r"C:\Users\User\Downloads\antWorking\repo\patch\2125-Fix-up-packaging-of-bzip-utilities.patch"
+    f=open(patch_file, "wb")
+    oneFile(patch_file,r"C:\Users\User\Downloads\\p",f)
 
     #build("C:\GitHub\\try\org.eclipse.cdt")
     #build("C:\\tomcat\code\\try\\tomcat8","C:\\tomcat\code\\try\\tomcat8")
@@ -495,13 +494,13 @@ if __name__ == '__main__':
     #do_all("C:\\projs\\poi2Working\\poi")
     #do_all("C:\\projs\\grizMasterWorking\\repo")
     #do_all("C:\projs\ptry\\repo")
-	"""
+    """
     ans,filesRows=analyzeCheckStyle("C:\projs\ptry\\repo\commitsFiles\\CheckStyle.txt","C:\projs\ptry\\repo\commitsFiles\\Ins_dels.txt")
     s=set()
     for f in filesRows:
         s.add(f[1])
     print len(s), len(filesRows)
-	"""
+    """
     #debugPatchs("C:\\projs\\ant5Working\\repo\patch","C:\\projs\\ant5Working\\repo\patchHeads.txt")
     #buildPatchs("C:\\projs\\grizMasterWorking\\repo\\patch","C:\\projs\\grizMasterWorking\\repo\\commitsFiles2")
     #buildPatchs("C:\\projs\\grizMasterWorking\\repo\\patch","C:\\projs\\grizMasterWorking\\repo\\commitsFiles2")
