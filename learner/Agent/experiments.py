@@ -346,11 +346,6 @@ def barinelAppend(bugsFiles,barinelFiles):
         AllTests.append(test)
 
     l=len(AllTests[0])
-    for t in AllTests:
-        if(len(t)!=l):
-            print "error"
-            print(l)
-            print len(t)
     return allBugged,allFiles,AllTests
 
 def getBuggedFilesTestsByBugsIDs(dbPath,bugsIDS,package,times,priorsByFiles, buggedTestsChooser,notRand,buggedTable):
@@ -378,14 +373,12 @@ def getBuggedFilesTestsByBugsIDs(dbPath,bugsIDS,package,times,priorsByFiles, bug
     if( type(package) is list):
         package="or testsFiles.fileName like ".join(["\"%"+ pack+"%\" " for pack in package])
     else:
-        print type(package)
         package="\"%"+ package+"%\" "
     s="select distinct Test from testsFiles where testsFiles.fileName like "+package
     for r in c.execute(s):
         testsNames.append(r[0])
     s="select Test,c from (select Test,count(fileName) as c from testsFiles  where testsFiles.fileName like" +package+"  group by Test) where c>=2  order by c DESC"
     s="select Test,c/(a+0.0) as d,c ,a from (select Test,count(fileName) as a, count(case When fileName like "+package+" Then 1 Else Null End) as c from testsFiles  group by Test) where c>0 order by d DESC"
-    print s
     #s="select Test, a-c as d,c ,a from (select Test,count(fileName) as a, count(case When fileName like "+package+" Then 1 Else Null End) as c from testsFiles  group by Test) where c>0 order by d"
     for r in c.execute(s):
         if(r[0] in testsNames):
@@ -621,7 +614,6 @@ def priorsFromWeka(dbPathTests,wekaAns,FileNames,allFiles):
         for x in c.execute(' select distinct fileName,fileID from testsFiles order by fileID'):
             if (x[0] not in wekaPriors):
                 filesPriors[x[1]]=0.01
-                print "not In!!", x[0]
             else:
                 filesPriors[x[1]]=wekaPriors[x[0]]
         conn.close()
@@ -632,9 +624,6 @@ def priorsFromWeka(dbPathTests,wekaAns,FileNames,allFiles):
             ind=allFiles[i]
             if name not in wekaPriors:
                 filesPriors[ind]=0.01
-                print "Not!! in weka", name , wekaAns
-
-                #exit()
             else:
                 filesPriors[ind]=wekaPriors[name]
     return  filesPriors
@@ -823,14 +812,9 @@ def MultyWekaAndSanity(outPath,dbPath,packsPath,numOfExperiments,numOfBugsARR,ti
         else:
             allBuggedExp, allFilesExp, allTestsExp, outcomesExp, priorsExp,testsChoosedNamesExp,FileNamesExp = buildInstanceAndOptimize(bugsIDS, const, dbPath, pack, timesMax,[],buggedTestsChooser,notRand,buggedTable)
             if(len(allTestsExp)<=minimalTests or len(allTestsExp)>maximalTests or  len(allBuggedExp)==0):
-                amir=9
-                print len(allTestsExp)
-                print pack
-                print "contin"
                 continue
         exp=exp+1
         expIND=expIND+1
-        print expIND
         for t in range(len(timesArr)):
             times=timesArr[t]
             filePre=str(times)+"_"
@@ -940,7 +924,6 @@ def statisticalInfo(dbPath,packsPath):
         s="select distinct fileName from testsFiles where testsFiles.fileName like \""+package+".%\" "
         for r in c.execute(s):
             testsFiles.append(r[0])
-        print [package,len(bugs),len(testsNames),len(testsFiles)]
 
 def copySTMS(outPath):
     CopyStatement = "cmd /x /c \"c: & copy C:\\GitHub\\agent\\conv_comp_table.csv %sconv_comp_table.csv\"" % (
@@ -1027,7 +1010,6 @@ def Most_All_Real(outPath,dbPath,packsPath,wekaBase,numOfExperiments,numOfBugs,t
     for ei,d in zip(experimentsInstances,dirs):
         copySTMS(d)
     for ei,d in zip(experimentsInstances,dirs):
-        print ei
         training,testing, weka, table=ei
         RunAndResults(buggedTestsChooser, bugsPacks, const, copy, copyPath, d, dbPath, initialsChooser, initialsFactor,
                       maximalTests, minimalTests, numOfBugs, numOfExperiments, numOfPacks, packsPath, pureSanity, table,
@@ -1183,7 +1165,6 @@ def POI():
         if not (os.path.isdir(o)):
             os.mkdir(o)
         bugs = allPackBugs(dbPath, 2  , packsPath,numOfExperiments,True,"buggedFiles")
-        print bugs
         bugsPacks=[choosePackBug(bugs, 6,False,5,[])for x in range(numOfExperiments)]
         dirStruct(outPath)
         copySTMS(outPath)
@@ -1213,7 +1194,6 @@ def Ant(dbPath,outPath,packsPath,wekaPath):
     if not (os.path.isdir(o)):
         os.mkdir(o)
     bugs = allPackBugs(dbPath, 2  , packsPath,numOfExperiments,True,"buggedFiles")
-    print bugs
     bugsPacks=[choosePackBug(bugs, 6,False,5,[])for x in range(numOfExperiments)]
     dirStruct(outPath)
     copySTMS(outPath)

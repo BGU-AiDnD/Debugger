@@ -348,11 +348,6 @@ def barinelAppend(bugsFiles,barinelFiles):
         AllTests.append(test)
 
     l=len(AllTests[0])
-    for t in AllTests:
-        if(len(t)!=l):
-            print "error"
-            print(l)
-            print len(t)
     return allBugged,allFiles,AllTests
 
 def getBuggedFilesTestsByBugsIDs(dbPath,bugsIDS,package,times,priorsByFiles, buggedTestsChooser,notRand,buggedTable):
@@ -380,14 +375,12 @@ def getBuggedFilesTestsByBugsIDs(dbPath,bugsIDS,package,times,priorsByFiles, bug
     if( type(package) is list):
         package="or testsFiles.fileName like ".join(["\"%"+ pack+"%\" " for pack in package])
     else:
-        print type(package)
         package="\"%"+ package+"%\" "
     s="select distinct Test from testsFiles where testsFiles.fileName like "+package
     for r in c.execute(s):
         testsNames.append(r[0])
     s="select Test,c from (select Test,count(fileName) as c from testsFiles  where testsFiles.fileName like" +package+"  group by Test) where c>=2  order by c DESC"
     s="select Test,c/(a+0.0) as d,c ,a from (select Test,count(fileName) as a, count(case When fileName like "+package+" Then 1 Else Null End) as c from testsFiles  group by Test) where c>0 order by d DESC"
-    print s
     #s="select Test, a-c as d,c ,a from (select Test,count(fileName) as a, count(case When fileName like "+package+" Then 1 Else Null End) as c from testsFiles  group by Test) where c>0 order by d"
     for r in c.execute(s):
         if(r[0] in testsNames):
@@ -500,15 +493,12 @@ def getBuggedFilesTestsByBugsIDsMethods(dbPath,bugsIDS,package,times,priorsByFil
     if( type(package) is list):
         package=("or "+testTable+".name like ").join(["\"%"+ pack+"%\" " for pack in package])
     else:
-        print type(package)
         package="\"%"+ package+"%\" "
     s="select distinct Test from "+testTable+" where "+testTable+".name like "+package
-    print s
     for r in c.execute(s):
         testsNames.append(r[0])
     s="select Test,c from (select Test,count(name) as c from "+testTable+"  where "+testTable+".name like" +package+"  group by Test) where c>=2  order by c DESC"
     s="select Test,c/(a+0.0) as d,c ,a from (select Test,count(name) as a, count(case When name like "+package+" Then 1 Else Null End) as c from "+testTable+"  group by Test) where c>0 order by d DESC"
-    print s
     for r in c.execute(s):
         if(r[0] in testsNames):
                 testsSorted.append(r[0])
@@ -523,7 +513,6 @@ def getBuggedFilesTestsByBugsIDsMethods(dbPath,bugsIDS,package,times,priorsByFil
     bugsTup = str(tuple(bugsIDS))
     buggedNames=[]
     s="select distinct name,BugId  from "+buggedTable+" where BugId in "+ bugsTup
-    print s
     for r in c.execute(s):
         if(r[0] in allFiles):
             allBugged.append(r[0])
@@ -759,7 +748,6 @@ def priorsFromWeka(dbPathTests,wekaAns,FileNames,allFiles):
         for x in c.execute(' select distinct methodName,methodName from testsMethods order by methodName'):
             if (x[0] not in wekaPriors):
                 filesPriors[x[1]]=0.01
-                print "not In!!", x[0]
             else:
                 filesPriors[x[1]]=wekaPriors[x[0]]
         conn.close()
@@ -770,9 +758,6 @@ def priorsFromWeka(dbPathTests,wekaAns,FileNames,allFiles):
             ind=allFiles[i]
             if name not in wekaPriors:
                 filesPriors[ind]=0.01
-                print "Not!! in weka", name , wekaAns
-
-                #exit()
             else:
                 filesPriors[ind]=wekaPriors[name]
     return  filesPriors
@@ -892,7 +877,6 @@ def buildInstanceAndOptimize(bugsIDS, const, dbPath, pack, times,priorsByFiles,b
 
 def buildInstanceAndOptimizeMethods(bugsIDS, const, dbPath, pack, times,priorsByFiles,buggedTestsChooser,notRand,buggedTable,testTable):
     allBugged, allFiles, allTests,priors,testsChoosedNames,FileNames = getBuggedFilesTestsByBugsIDsMethods(dbPath, bugsIDS, pack, times,priorsByFiles,buggedTestsChooser,notRand,buggedTable,testTable)
-    print "buildInstanceAndOptimizeMethods"
     if(len(allTests)==0 or len(allBugged)==0 or len(allBugged)==1):
         return [],[],[],[],[],[],[]
     outcomes = generateOutcomes(allBugged, allFiles, allTests, const)
@@ -987,14 +971,9 @@ def MultyWekaAndSanity(outPath,dbPath,packsPath,numOfExperiments,numOfBugsARR,ti
         else:
             allBuggedExp, allFilesExp, allTestsExp, outcomesExp, priorsExp,testsChoosedNamesExp,FileNamesExp = buildInstanceAndOptimize(bugsIDS, const, dbPath, pack, timesMax,[],buggedTestsChooser,notRand,buggedTable)
             if(len(allTestsExp)<=minimalTests or len(allTestsExp)>maximalTests or  len(allBuggedExp)==0):
-                amir=9
-                print len(allTestsExp)
-                print pack
-                print "contin"
                 continue
         exp=exp+1
         expIND=expIND+1
-        print expIND
         for t in range(len(timesArr)):
             times=timesArr[t]
             filePre=str(times)+"_"
@@ -1049,15 +1028,10 @@ def MultyWekaAndSanityMethods(outPath,dbPath,packsPath,numOfExperiments,numOfBug
         else:
             allBuggedExp, allFilesExp, allTestsExp, outcomesExp, priorsExp,testsChoosedNamesExp,FileNamesExp = buildInstanceAndOptimizeMethods(bugsIDS, const, dbPath, pack, timesMax,[],buggedTestsChooser,notRand,buggedTable,testTable)
             if(len(allTestsExp)<=minimalTests or len(allTestsExp)>maximalTests or  len(allBuggedExp)==0):
-                amir=9
-                print len(allTestsExp)
-                print pack
-                print "contin"
                 exp=exp+1
                 continue
         exp=exp+1
         expIND=expIND+1
-        print expIND
         for t in range(len(timesArr)):
             times=timesArr[t]
             filePre=str(times)+"_"
@@ -1168,7 +1142,6 @@ def statisticalInfo(dbPath,packsPath):
         s="select distinct fileName from testsFiles where testsFiles.fileName like \""+package+".%\" "
         for r in c.execute(s):
             testsFiles.append(r[0])
-        print package,len(bugs),len(testsNames),len(testsFiles)
         ans.append([package,len(bugs),len(testsNames),len(testsFiles)])
     return ans
 
@@ -1189,14 +1162,12 @@ def statisticalInfoMethods(dbPath,packsPath):
         s="select distinct methodName from testsMethods where testsMethods.methodName like \"%"+package+"%\" "
         for r in c.execute(s):
             testsFiles.append(r[0])
-        print package,len(bugs),len(testsNames),len(testsFiles)
         ans.append([package,len(bugs),len(testsNames),len(testsFiles)])
     return ans
 
 def copySTMS(outPath,utilsPath):
     outPath=outPath+"\\"
     lines=[["Components Table:",""]]+[[str(i),str(i)] for i in range(9000)]
-    print os.path.join(utilsPath,"conv_comp_table.csv")
     shutil.copyfile(os.path.join(utilsPath,"conv_comp_table.csv"),  outPath + "planner\\conv_comp_table.csv")
     shutil.copyfile(os.path.join(utilsPath,"barinel.jar"), outPath + "barinel.jar")
     shutil.copyfile(os.path.join(utilsPath,"planner150.jar"), outPath + "planner150.jar")
@@ -1228,7 +1199,6 @@ def Most_All_Mkdirs(outPath,experimentsInstances):
 def RunAndResults(buggedTestsChooser, bugsPacks, const, copy, copyPath, outpath, dbPath, initialsChooser, initialsFactor,
                   maximalTests, minimalTests, numOfBugs, numOfExperiments, numOfPacks, packsPath, pureSanity, table,
                   times,  wekaAnsArr,testTable):
-    print "RunAndRes"
     numOfExperiments = MultyWekaAndSanityMethods(outpath, dbPath, packsPath, numOfExperiments, numOfBugs, times, const, minimalTests,
                                           maximalTests, wekaAnsArr, initialsFactor, False, numOfPacks, buggedTestsChooser,
                                           initialsChooser, False, copy, copyPath, table, pureSanity, bugsPacks,testTable)
@@ -1301,7 +1271,6 @@ def Most_All_Real(outPath,dbPath,packsPath,wekaBase,numOfExperiments,numOfBugs,t
     for ei,d in zip(experimentsInstances,dirs):
         copySTMS(d)
     for ei,d in zip(experimentsInstances,dirs):
-        print ei
         training,testing, weka, table=ei
         RunAndResults(buggedTestsChooser, bugsPacks, const, copy, copyPath, d, dbPath, initialsChooser, initialsFactor,
                       maximalTests, minimalTests, numOfBugs, numOfExperiments, numOfPacks, packsPath, pureSanity, table,
@@ -1457,7 +1426,6 @@ def POI():
         if not (os.path.isdir(o)):
             os.mkdir(o)
         bugs = allPackBugs(dbPath, 2  , packsPath,numOfExperiments,True,"buggedFiles")
-        print bugs
         bugsPacks=[choosePackBug(bugs, 6,False,5,[])for x in range(numOfExperiments)]
         dirStruct(outPath)
         copySTMS(outPath)
@@ -1497,7 +1465,6 @@ def POIMethods():
             os.mkdir(o)
         #bugs = allPackBugs(dbPath, 2  , packsPath,numOfExperiments,True,"buggedFiles")
         bugs = allPackBugsMethods(dbPath, 1 , packsPath,numOfExperiments,True,"buggedMethods")
-        print bugs, "bugs"
         bugsPacks=[choosePackBug(bugs, 20,False,15,[])for x in range(numOfExperiments)]
         dirStruct(outPath)
         copySTMS(outPath)
@@ -1546,7 +1513,6 @@ def RunExperiments(dbPath,outPath,packsPath,wekaPath,Unit,buggedType,utilsPath):
     dirStruct(outPath)
     copySTMS(outPath,utilsPath)
     bugs = allPackBugs(dbPath, 2  , packsPath,numOfExperiments,True,table)
-    print "bugs", bugs
     bugsPacks=[choosePackBug(bugs, 6,False,5,[])for x in range(numOfExperiments)]
     wekaAnsArr=[(wekaPath,"randomForest")]#+[(wekaBase+"weka.classifiers.trees.RandomForest_Style2.csv","prev")] #all
     RunAndResults(buggedTestsChooser, bugsPacks, const, copy, copyPath, outPath, dbPath, initialsChooser, initialsFactor,

@@ -11,7 +11,6 @@ def reportsAppend(Path, out):
         tests= suite.getElementsByTagName("testcase")
         for i in range(len(tests)):
             childs.append(tests[i].toprettyxml())
-    print(childs)
 
     header="""<?xml version="1.0" ?>\n<testsuite>\n"""
     footer="</testsuite>"

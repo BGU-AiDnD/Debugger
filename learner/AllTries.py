@@ -20,5 +20,4 @@ basicBuild("C:\projs\\ant3Working\\","ANT_182",'20/12/2010 20:59', '25/02/2012 2
 
 prevVersionCommitterTime='2012-06-10'
 f="C:\GitHub\\vers\CDT_8_0_1\\blame\CaseBreakQuickFixTest.java"
-print f
 fileParse(f,prevVersionCommitterTime)

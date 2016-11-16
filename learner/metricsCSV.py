@@ -10,9 +10,7 @@ import csv
 def BuildWekaModel(training,testing,name,wekaJar):
     algorithm="weka.classifiers.trees.RandomForest -I 1000 -K 0 -S 1 -num-slots 1 "
     #os.system("cd /d  "+weka +" & java -Xmx2024m  -cp \"C:\\Program Files\\Weka-3-7\\weka.jar\" weka.Run " +algorithm+ " -x 10 -d .\\model.model -t "+training+" > training"+name+".txt")
-    print("java -Xmx2024m  -cp "+wekaJar+" weka.Run " +algorithm+ " -x 10 -d .\\model.model -t "+training+" > training"+name+".txt")
     #os.system("cd /d  "+weka +" & java -Xmx2024m  -cp "+wekaJar+" weka.Run " +algorithm+ " -l .\\model.model -T "+testing+" -classifications \"weka.classifiers.evaluation.output.prediction.CSV -file testing"+name+".csv\" ")
-    print("java -Xmx2024m  -cp "+wekaJar+" weka.Run " +algorithm+ " -l .\\model.model -T "+testing+" > testing"+name+".txt ")
 
 
 BuildWekaModel("TRAIN","TEST","NAME","JAR")

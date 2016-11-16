@@ -93,9 +93,7 @@ def testsDBConcatinationMany(dbPath, tracesPath , tests,filesDict,methodsDict,pa
     conn.commit()
     c.executemany("INSERT INTO tests VALUES (?,?)", testsRows)
     conn.commit()
-    print "Many end tests"
     c.executemany("INSERT INTO testsMethods VALUES (?,?,?,?)", testsMethodsRows)
-    print "Many end testsMethods"
     conn.commit()
     conn.close()
     return filesDict
@@ -111,7 +109,6 @@ def bugsDBFiles(dbPath,cdtDb,filesDict,startingDate,endDate):
     conn2.text_factory = str
     c2 = conn2.cursor()
     bug_id = 'select bugId,name from Commitedfiles where bugId<>0  and name like "%.java" and commiter_date>="'+startingDate+'"  and commiter_date<="'+endDate+'" order by bugId'
-    print bug_id
     rows=c2.execute(bug_id)
     for r in rows:
         name=r[1]
@@ -137,7 +134,6 @@ def bugsDBFilesMostModified(dbPath,cdtDb,filesDict,startingDate,endDate):
     c2 = conn2.cursor()
     bug_id = 'select Commitedfiles.bugId,Commitedfiles.name  from Commitedfiles , (select max(lines) as l, bugId from Commitedfiles where name like "%.java" and commiter_date>="'+startingDate+'"  and commiter_date<="'+endDate+'" group by bugId) as T where Commitedfiles.lines=T.l and Commitedfiles.bugId=T.bugId'
 
-    print bug_id
     rows=c2.execute(bug_id)
     for r in rows:
         name=r[1]
@@ -149,7 +145,6 @@ def bugsDBFilesMostModified(dbPath,cdtDb,filesDict,startingDate,endDate):
         else:
             filesDict[name]=len(filesDict)
             fileInd=filesDict[name]
-            print(fileInd)
         c.execute("INSERT INTO buggedFilesMostModified VALUES (?,?,?,?)",[r[0],name,fileInd,name])
     conn.commit()
     conn.close()
@@ -165,7 +160,6 @@ def bugsDBMethods(dbPath,cdtDb,filesDict,startingDate,endDate):
     conn2.text_factory = str
     c2 = conn2.cursor()
     bug_id = 'select bugId,methodDir from CommitedMethods where bugId<>0  and methodDir like "%.java%" and commiter_date>="'+startingDate+'"  and commiter_date<="'+endDate+'" order by bugId'
-    print bug_id
     rows=c2.execute(bug_id)
     for r in rows:
         name=r[1]
@@ -186,7 +180,6 @@ def bugsDBMethodsMostModified(dbPath,cdtDb,filesDict,startingDate,endDate):
     c2 = conn2.cursor()
     bug_id = 'select CommitedMethods.bugId,CommitedMethods.methodDir  from CommitedMethods , (select max(lines) as l, bugId from CommitedMethods where methodDir like "%.java%" and commiter_date>="'+startingDate+'"  and commiter_date<="'+endDate+'" group by bugId) as T where CommitedMethods.lines=T.l and CommitedMethods.bugId=T.bugId'
 
-    print bug_id
     rows=c2.execute(bug_id)
     for r in rows:
         name=r[1]
