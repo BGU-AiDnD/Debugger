@@ -137,13 +137,5 @@ if __name__=="__main__":
     bar=Barinel()
     bar.set_matrix_error(matrix,error_vec)
     diags=bar.run()
-    print diags
-    print diags[0]
-    print diags[1]
 
     bar=load_file_with_header("C:\GitHub\matrix\OPT__Rand.csv")
-    print len(bar.prior_probs)
-    print bar.prior_probs
-    print len(bar.e_vector)
-    print bar.e_vector[14]
-    print bar.M_matrix[14][-2]
