@@ -135,7 +135,7 @@ def OO_features_error_analyze(err):
     return ans
 
 
-
+@utilsConf.marker_decorator(utilsConf.OO_OLD_FEATURES_MARKER)
 def Extract_OO_features_OLD(versPath,vers,docletPath="C:\projs\\xml-doclet-1.0.4-jar-with-dependencies.jar"):
     for x in vers:
         verPath=os.path.join(versPath,x)
@@ -146,7 +146,7 @@ def Extract_OO_features_OLD(versPath,vers,docletPath="C:\projs\\xml-doclet-1.0.4
 # GENERATE Jdoc
 
 
-
+@utilsConf.marker_decorator(utilsConf.OO_FEATURES_MARKER)
 def Extract_OO_features(versPath,vers,docletPath="..\..\\xml-doclet-1.0.4-jar-with-dependencies.jar"):
     for x in vers:
         verPath=os.path.join(versPath,x)
@@ -170,7 +170,7 @@ def Extract_OO_features(versPath,vers,docletPath="..\..\\xml-doclet-1.0.4-jar-wi
 # GENERATE Jdoc
 
 
-
+@utilsConf.marker_decorator(utilsConf.SOURCE_MONITOR_FEATURES_MARKER)
 def SourceMonitorXml(workingDir,ver,sourceMonitorEXE):
     bat="\""+sourceMonitorEXE+"\" /C sourceMonitor.xml "
     versParh=os.path.join(workingDir,"vers")
@@ -225,7 +225,7 @@ def SourceMonitorXml(workingDir,ver,sourceMonitorEXE):
 
 
 
-
+@utilsConf.marker_decorator(utilsConf.BLAME_FEATURES_MARKER)
 def blameExecute(  path, pathRepo,ver ):
     blameWrite=" & dir /b /s *.java > ..\\javaFiles.txt"
     doBlame="for /F   %f in (../blame.txt) do (git blame --show-stats --score-debug -p --line-porcelain -l  "+ver+"  %f > ..\\blame\%~nxf)"
@@ -240,7 +240,7 @@ def blameExecute(  path, pathRepo,ver ):
     blame = """D: & cd """ + pathRepo + " & " + doBlame
     os.system(blame)
 
-
+@utilsConf.marker_decorator(utilsConf.COMPLEXITY_FEATURES_MARKER)
 def Extract_complexity_features(versPath,vers,workingDir,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML):
     for x in vers:
         path=os.path.join(versPath,x)
@@ -256,8 +256,6 @@ def Extract_complexity_features(versPath,vers,workingDir,sourceMonitorEXE,checkS
 
         blameExecute(path, pathRepo,x)
         SourceMonitorXml(workingDir,x,sourceMonitorEXE)
-
-
 
 def GitVersInfo(basicPath,repoPath,vers):
     #repoPath="C:\\tomcat\\code\\tomcat8\\"
@@ -281,7 +279,6 @@ def featuresExtract(vers, versPath, workingDir,LocalGitPath,logfile,docletPath,s
     Extract_complexity_features(versPath, vers, workingDir,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
     logfile.write("after Extract_complexity_features "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
-
 
     Extract_OO_features_OLD(versPath, vers,docletPath)
     logfile.write("after Extract_OO_features "+ str(datetime.datetime.now())+"\n")
@@ -397,8 +394,7 @@ def merge_multiple_arff_file(path,outArff,tempFile,indices):
             arffFile=os.path.join(path,str(ind))
             mergeArffs(outArff,arffFile,tempFile)
 
-			
-			
+
 def ArticleFeaturesMostFiles(workingDir,outArffTrain,outArffTest,tempFile,outCsv,wekaJar,indices):
     weka=os.path.join(workingDir,"weka")
     Bpath=os.path.join(workingDir,"Most")
@@ -472,8 +468,8 @@ def clean(versPath,LocalGitPath):
 
 
 def wrapperLearner(confFile,globalConfFile):
-    vers, gitPath,bugsPath, workingDir =configure(confFile)
-    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath = globalConfig(globalConfFile)
+    vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
+    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath = utilsConf.globalConfig(globalConfFile)
     versPath, dbadd=Mkdirs(workingDir,vers)
     logfile=open(os.path.join(workingDir,"timeLog2.txt"),"wb")
     logfile.write("start "+ str(datetime.datetime.now())+"\n")
@@ -485,13 +481,13 @@ def wrapperLearner(confFile,globalConfFile):
     testVerConfig(workingDir,vers[-2],"ant",dates[-2],dates[-1])
     mkOneDir(LocalGitPath)
 
-    # featuresExtract(vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
+    featuresExtract(vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
     logfile.write("after featuresExtract "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
 
     MethodsParsed=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"CheckStyle.txt")
     changeFile=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"Ins_dels.txt")
-    # wekaMethods.buildDB.buildOneTimeCommits(versPath,dbadd,bugsPath,False,-1,vers,"repo",MethodsParsed,changeFile,logfile,dates)
+    wekaMethods.buildDB.buildOneTimeCommits(versPath,dbadd,bugsPath,False,-1,vers,"repo",MethodsParsed,changeFile,logfile,dates)
     logfile.write("after buildDB "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
 
@@ -669,8 +665,6 @@ def wrapper(confFile):
 
     logfile.close()
     clean(versPath,LocalGitPath)
-
-
 
 if __name__ == '__main__':
     current_dir = os.path.dirname(os.path.realpath(__file__))

@@ -2,6 +2,7 @@ __author__ = 'amir'
 
 import diffAnalyze.comments
 import os
+import utilsConf
 
 def commentsSpacesLines(doc):
         comm=diffAnalyze.comments.commLines(doc)
@@ -18,7 +19,7 @@ def commentsSpacesLines(doc):
 
 
 #print commentsSpacesLines("C:\\GitHub\\vers\\CDT_8_1_2\\org.eclipse.cdt\\memory\\org.eclipse.cdt.debug.ui.memory.traditional\\src\\org\\eclipse\\cdt\\debug\\ui\\memory\\traditional\\IMemoryByte.java","")
-
+@utilsConf.marker_decorator(utilsConf.COMMENTS_SPACES_MARKER)
 def create(vers,Path):
     for ver in vers:
         vPath = Path +"\\"+ ver

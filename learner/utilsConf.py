@@ -6,6 +6,13 @@ VERSION_TEST_MARKER = "test_version"
 FEATURES_MARKER = "features"
 DB_BUILD_MARKER = "db"
 ML_MODELS_MARKER = "ml"
+COMPLEXITY_FEATURES_MARKER = "complexity_features"
+OO_OLD_FEATURES_MARKER = "old_oo_features"
+OO_FEATURES_MARKER = "oo_features"
+COMMENTS_SPACES_MARKER = "comments_spaces_features"
+PATCHS_FEATURES_MARKER = "patchs_features"
+SOURCE_MONITOR_FEATURES_MARKER = "source_monitor_features"
+BLAME_FEATURES_MARKER = "blame_features"
 
 conf = None
 
