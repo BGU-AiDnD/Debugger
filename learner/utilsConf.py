@@ -84,6 +84,9 @@ class Configuration:
     def get_marker_path(self, marker):
         return os.path.join(self.markers_dir, marker)
 
+    def get_marker(self, marker):
+        return Marker(self.get_marker_path(marker))
+
 class Marker:
     def __init__(self, path):
         self.marker_path = path
@@ -110,9 +113,9 @@ def marker_decorator(marker):
     def decorator(func):
         def f(*args, **kwargs):
             ans = None
-            if not get_configuration().get_marker_path(marker).is_exists():
+            if not get_configuration().get_marker(marker).is_exists():
                 ans = func(*args, **kwargs)
-                get_configuration().get_marker_path(marker).finish()
+                get_configuration().get_marker(marker).finish()
             return ans
         return f
     return decorator
