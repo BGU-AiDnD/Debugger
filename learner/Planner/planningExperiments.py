@@ -102,10 +102,8 @@ def mcts_by_approach(approach, budget):
 
 def lrtdp_by_approach(epsilonArg,stackSizeArg, numTrialsArg, approachArg):
     def approached_lrtdp(ei):
-        Planner.lrtdp.LRTDPModule.clean()
         Planner.lrtdp.LRTDPModule.setVars(ei, epsilonArg,stackSizeArg, numTrialsArg, approachArg)
-        Planner.lrtdp.LRTDPModule.lrtdp()
-        return Planner.lrtdp.LRTDPModule.evaluatePolicy()
+        return Planner.lrtdp.LRTDPModule.lrtdp()
     return approached_lrtdp
 
 

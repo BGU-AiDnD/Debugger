@@ -16,7 +16,6 @@ def setVars(experimentInstanceArg,epsilonArg,stackSizeArg, numTrialsArg, approac
     numTrials=numTrialsArg
     experimentInstance=experimentInstanceArg
     approach = approachArg
-    clean()
 
 
 def create_start_state():
@@ -43,20 +42,23 @@ def nextStateDist(ei,action):
     return stateDist
 
 
-#generate Policy!!
 def lrtdp():
     global numTrials
-    start = create_start_state()
-    trialsCount = 0
-    if start.isTerminal():
-        return
-    else:
-        while not start.isSolved:
-            if trialsCount > numTrials:
-                return
-            trialsCount = trialsCount + 1
-            success = runLrtdpTrial(start)
-        return
+    state = create_start_state()
+    steps = 0
+    while not state.isTerminal() and not state.AllTestsReached():
+        clean()
+        for i in xrange(numTrials):
+            if state.isSolved:
+                break
+            runLrtdpTrial(state)
+        steps += 1
+        action = state.greedyAction()
+        ei = state.experimentInstance.Copy()
+        ei.addTest(action)
+        state = generateState(ei)
+    precision, recall = state.experimentInstance.calc_precision_recall()
+    return precision, recall, steps
 
 def runLrtdpTrial(state):
     global stackSize
@@ -66,14 +68,14 @@ def runLrtdpTrial(state):
         if state.isTerminal():
             break
         if len(visited) > stackSize:
-            return False
+            return
         a = state.greedyAction()
         state.update(a)
         state = state.simulate_next_state(a)
-    while len(visited) > 0:
+    while visited:
         if not checkSolved(visited.pop()):
             break
-    return True
+    return
 
 def checkSolved(s):
     global epsilon
@@ -82,23 +84,24 @@ def checkSolved(s):
     closed = []
     if not s.isSolved:
         open.append(s)
-    while len(open) > 0:
+    while open:
         state = open.pop()
         closed.append(state)
-        if state.residual() > epsilon:
-            rv=False
+        if state.AllTestsReached():
             continue
         a = state.greedyAction()
+        if state.residual(a) > epsilon:
+            rv = False
+            continue
         nextStateDist = state.getNextStateDist(a)
         for next,prob in nextStateDist:
             if (not next.isSolved) and (next not in open) and (next not in closed):
-                if not next.AllTestsReached():
-                    open.append(next)
+                open.append(next)
     if rv:
         for c in closed:
             c.isSolved = True
     else:
-        while len(closed)>0:
+        while closed:
             c = closed.pop()
             c.update(c.greedyAction())
     return rv

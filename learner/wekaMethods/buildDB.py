@@ -14,7 +14,7 @@ import pathPackCsv
 import unicodedata
 import patchsBuild
 import docXml, source_Monitor
-
+import utilsConf
 
 
 def BugNum(stri):
@@ -590,13 +590,8 @@ def buildBasicAllVers(vers,dates,versPath,CodeDir,dbsPath, bugsPath,MethodsParse
         basicBuildOneTimeCommits( c, conn, gitPath, max,commits, commitedFiles,allMethodsCommits, bugs)
         conn.close()
 
+@utilsConf.marker_decorator(utilsConf.DB_BUILD_MARKER)
 def buildOneTimeCommits(versPath,dbsPath,bugsPath,add,max,vers, CodeDir,MethodsParsed,changeFile,logfile,dates):
-
-    #vers=('CDT_8_0_2', 'CDT_8_1_0','CDT_8_1_1','CDT_8_1_2' )
-    #vers= ('CDT_3_0',  'CDT_4_0_0',  'CDT_5_0_0',  'CDT_6_0_0',  'CDT_7_0_0',  'CDT_8_0_0')
-    #vers= (  'CDT_5_0_0',  'CDT_6_0_0',  'CDT_7_0_0',  'CDT_8_0_0')
-    #commsSpaces.create(vers,versPath)
-
     for ver,date in zip(vers,dates):
         Path=versPath+"\\"+ver
         gitPath=Path+"\\"+ CodeDir
@@ -609,15 +604,12 @@ def buildOneTimeCommits(versPath,dbsPath,bugsPath,add,max,vers, CodeDir,MethodsP
         blamePath=Path+"\\blame"
         BuildAllOneTimeCommits(gitPath, dbPath ,JavaDocPath, sourceMonitorFiles,sourceMonitorMethods,checkStyle,checkStyleMethods,blamePath,date,add, max,CodeDir)
         createIndexes(dbPath)
-
-
     buildBasicAllVers(vers,dates,versPath,CodeDir,dbsPath, bugsPath,MethodsParsed,changeFile)
     logfile.write("after BuildRepo "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
 
 
 if __name__ == "__main__":
-
     vers=('CDT_8_0_1','CDT_8_0_2', 'CDT_8_1_0','CDT_8_1_1','CDT_8_1_2' )
     #build("C:\GitHub\\vers","C:\GitHub\\vers\\dbP","C:\GitHub\\CDT-MORE-DATA.csv",False,30,vers,"org.eclipse.cdt")
     #build("C:\GitHub\\vers","C:\GitHub\\vers\\dbAdd\\done2","C:\GitHub\\CDT-MORE-DATA.csv",True,-1,vers,"org.eclipse.cdt")

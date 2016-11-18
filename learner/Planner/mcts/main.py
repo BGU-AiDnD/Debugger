@@ -11,7 +11,6 @@ def main_mcts(ei, approach,  budget=DEFAULT_BUDGET):
     state = ei.Copy()
     while (not state.isTerminal()) and ( not state.AllTestsReached()):
         steps += 1
-        # choose action using mcts
         action, weight = mcts.mcts_uct(state, budget, approach)
         state.addTest(action)
 

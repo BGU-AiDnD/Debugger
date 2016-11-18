@@ -1,5 +1,20 @@
 __author__ = 'amir'
 import os
+# markers names:
+VERSIONS_MARKER = "versions"
+VERSION_TEST_MARKER = "test_version"
+FEATURES_MARKER = "features"
+DB_BUILD_MARKER = "db"
+ML_MODELS_MARKER = "ml"
+COMPLEXITY_FEATURES_MARKER = "complexity_features"
+OO_OLD_FEATURES_MARKER = "old_oo_features"
+OO_FEATURES_MARKER = "oo_features"
+COMMENTS_SPACES_MARKER = "comments_spaces_features"
+PATCHS_FEATURES_MARKER = "patchs_features"
+SOURCE_MONITOR_FEATURES_MARKER = "source_monitor_features"
+BLAME_FEATURES_MARKER = "blame_features"
+
+conf = None
 
 def globalConfig(confFile):
     lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
@@ -38,10 +53,8 @@ def configure(confFile):
             v=v.split("(")[1]
             v=v.split(")")[0]
             vers=v.split(",")
-    docletPath="C:\projs\\xml-doclet-1.0.4-jar-with-dependencies.jar"
-    sourceMonitorEXE="C:\Program Files (x86)\SourceMonitor\SourceMonitor.exe"
-    checkStyle57,checkStyle68,allchecks,methodsNamesXML="C:\projs\\checkstyle-5.7-all.jar","C:\projs\checkstyle-6.8-SNAPSHOT-all.jar","C:\projs\\allChecks.xml","C:\projs\methodNameLines.xml"
-    return [v.lstrip() for v in vers], gitPath,bugs, workingDir#,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML
+    init_configuration(workingDir)
+    return [v.lstrip() for v in vers], gitPath,bugs, workingDir
 
 
 def configureExperiments(confFile):
@@ -63,3 +76,43 @@ def configureExperiments(confFile):
             v=v.split(")")[0]
             vers=v.split(",")
     return [v.lstrip() for v in vers], gitPath,bugs, workingDir
+
+class Configuration:
+    def __init__(self, workingDir):
+        self.markers_dir = os.path.join(workingDir,"markers")
+
+    def get_marker_path(self, marker):
+        return os.path.join(self.markers_dir, marker)
+
+class Marker:
+    def __init__(self, path):
+        self.marker_path = path
+
+    def is_exists(self):
+        os.path.isfile(self.marker_path)
+
+    def finish(self):
+        with open(self.marker_path, "wb") as f:
+            f.write("done")
+
+def init_configuration(workingDir):
+    global conf
+    assert(conf is None)
+    conf = Configuration(workingDir)
+
+def get_configuration():
+    return conf
+
+def marker_decorator(marker):
+    """
+    run function if marker doesnt exists
+    """
+    def decorator(func):
+        def f(*args, **kwargs):
+            ans = None
+            if not get_configuration().get_marker_path(marker).is_exists():
+                ans = func(*args, **kwargs)
+                get_configuration().get_marker_path(marker).finish()
+            return ans
+        return f
+    return decorator

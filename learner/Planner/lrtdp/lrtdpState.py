@@ -15,7 +15,7 @@ class LrtdpState(object):
         self.experimentInstance = experimentInstance
         self.approach = approach
         self.isSolved=self.isTerminal()
-        self.value = 1
+        self.value = float('inf')
         if self.isSolved:
             self.value = 0
         self.simulationCount = 0
@@ -40,13 +40,10 @@ class LrtdpState(object):
 
     def getGreedyActions(self):
         optionals, probabilities = self.experimentInstance.get_optionals_probabilities_by_approach(self.approach)
-        probs_dict = dict(zip(optionals, probabilities))
         minVal = float('inf')
         result = []
-        if len(optionals)==0:
-            print "len(optionals)==0:"
         for action in optionals:
-            q = self.qValue(action) * probs_dict[action]
+            q = self.qValue(action)
             if q < minVal:
                 minVal = q
                 result = [action]
@@ -58,7 +55,7 @@ class LrtdpState(object):
         return LRTDPModule.nextStateDist(self.experimentInstance, action)
 
     def qValue(self,action):
-        q = 1
+        q = 1 # cost
         nextStateDist = self.getNextStateDist(action)
         for next,prob in nextStateDist:
             q += prob * next.value
@@ -81,14 +78,13 @@ class LrtdpState(object):
     # def pickNextState(self):
     #     return  self.simulate_next_state(self.experimentInstance.hp_next())
 
-    def residual(self):
-        return abs(self.value - self.qValue(self.greedyAction()))
+    def residual(self, action):
+        return abs(self.value - self.qValue(action))
 
     def needsSimulaton(self):
         return self.simulationCount==0
 
     def simulate_next_state(self,action):
-        #return LRTDP.LRTDP(1,2,3,4).generateState(self.experimentInstance.simulate_next_ei(action))
         return LRTDPModule.generateState(self.experimentInstance.simulate_next_ei(action)[1])
 
 

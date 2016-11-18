@@ -8,6 +8,7 @@ import re
 import subprocess
 import shutil
 import sqlite3
+import utilsConf
 
 # git format-patch --root origin
 
@@ -465,7 +466,7 @@ def analyzeCheckStyle(checkOut,changeFile):
     return ans,filesRows
 
 
-
+@utilsConf.marker_decorator(utilsConf.PATCHS_FEATURES_MARKER)
 def do_all(workingDir,checkStyle68,methodNameLines):
     patchD=workingDir+"\\patch"
     commitsFiles=workingDir+"\\commitsFiles"

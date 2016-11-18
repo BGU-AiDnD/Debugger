@@ -60,8 +60,7 @@ class InstanceNode(object):
         The state resulting from the given action taken on the current node
         state by the node player.
         """
-        newEI = self.experimentInstance.simulate_next_ei(action)[1]
-        return newEI
+        return self.experimentInstance.simulate_next_ei(action)[1]
 
     def terminal(self):
         """
@@ -85,7 +84,6 @@ class InstanceNode(object):
             action = self.children.keys()[self.children.values().index(None)]
         except ValueError:
             raise Exception('Node is already fully expanded')
-
         ei = self.result(action)
         child = InstanceNode(self, action, ei, self.approach)
         self.children[action] = child
@@ -99,16 +97,14 @@ class InstanceNode(object):
             raise Exception('Node is not fully expanded')
         values = []
         for action in self.children:
-            weight = 0
-            if self.children[action] != None:
-                weight = self.children[action].search_weight(c)
-            values.append( (action, weight + self.children_probability.get(action, 0)) )
+            weight = self.children[action].search_weight(c)
+            values.append((action, weight))
         action = max(values, key=lambda x: x[1])[0]
         # in case that child not expanded - expand
-        if self.children[action] == None:
-            ei = self.result(action)
-            child = InstanceNode(self, action, ei, self.approach)
-            self.children[action] = child
+        # if self.children[action] == None:
+        #     ei = self.result(action)
+        #     child = InstanceNode(self, action, ei, self.approach)
+        #     self.children[action] = child
         return self.children[action]
 
     def best_action(self, c=1/sqrt(2)):
@@ -139,4 +135,4 @@ class InstanceNode(object):
             steps = steps + 1
         if  not ei.isTerminal():
             steps = steps + 1
-        return ( 1/steps, ei.initial_tests)
+        return -steps
