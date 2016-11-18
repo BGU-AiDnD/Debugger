@@ -46,3 +46,4 @@ learner/.idea/workspace.xml
 learner/.idea/eclipse.iml
 *.iml
 learner/.idea/misc.xml
+*.pyc
