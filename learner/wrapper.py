@@ -8,10 +8,9 @@ import datetime
 import shutil
 import csv
 from random import randint
-
 import git
 
-from utilsConf import globalConfig, configure
+import utilsConf
 import wekaMethods.buildDB
 import wekaMethods.commsSpaces
 import wekaMethods.articles
@@ -42,11 +41,6 @@ vers=(ANT_13_B2,ANT_13_MAIN_MERGE4,ANT_MAIN_13_MERGE4)
 """
 
 
-
-
-
-
-
 def mkOneDir(dir):
     if not os.path.isdir(dir):
             os.mkdir(dir)
@@ -56,7 +50,6 @@ def Mkdirs(workingDir,vers):
     #shutil.copyfile("C:\projs\\xml-doclet-1.0.4-jar-with-dependencies.jar", workingDir + "\\xml-doclet-1.0.4-jar-with-dependencies.jar")
     #shutil.copyfile("C:\projs\\allChecks.xml", workingDir + "\\allChecks.xml")
     #shutil.copyfile("C:\projs\\checkstyle-5.7-all.jar", workingDir + "\\checkstyle-5.7-all.jar")
-
     versPath=os.path.join(workingDir,"vers")
     mkOneDir(versPath)
     experiments=os.path.join(workingDir,"experiments")
@@ -75,8 +68,8 @@ def Mkdirs(workingDir,vers):
     mkOneDir(weka)
     weka=os.path.join(workingDir,"weka_known_features")
     mkOneDir(weka)
-
-
+    markers=os.path.join(workingDir,"markers")
+    mkOneDir(markers)
     for v in vers:
         ver=os.path.join(versPath,v)
         mkOneDir(ver)
@@ -126,6 +119,7 @@ def GitRevert(versPath,vers):
         run_commands = ["git", "clean","-f","-d",  x]
         proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
         (out, err) = proc.communicate()
+
 def OO_features_error_analyze(err):
     # get all corrupted java files in err
     lines=err.split("\n")
@@ -289,7 +283,7 @@ def GitVersInfo(basicPath,repoPath,vers):
 
 # blame
 #checkStyle
-
+@utilsConf.marker_decorator(utilsConf.FEATURES_MARKER)
 def featuresExtract(vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML):
     Extract_complexity_features(versPath, vers, workingDir,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
     logfile.write("after Extract_complexity_features "+ str(datetime.datetime.now())+"\n")
@@ -307,7 +301,7 @@ def featuresExtract(vers, versPath, workingDir,LocalGitPath,logfile,docletPath,s
     wekaMethods.patchsBuild.do_all(LocalGitPath,checkStyle68,methodsNamesXML)
 
 
-
+@utilsConf.marker_decorator(utilsConf.VERSIONS_MARKER)
 def versionsCreate(gitPath, vers, versPath,LocalGitPath):
     CopyDirs(gitPath, versPath, vers)
     GitRevert(versPath, vers)
@@ -377,7 +371,7 @@ def BuildMLFiles(outDir,buggedType,component):
     outCsv=os.path.join(outDir,buggedType+"_out_"+component+".csv")
     return trainingFile,testingFile,NamesFile, outCsv
 
-
+@utilsConf.marker_decorator(utilsConf.ML_MODELS_MARKER)
 def createBuildMLModels(workingDir,gitPath,weka,vers,dbadd,wekaJar,RemoveBat):
     for buggedType in ["All","Most"]:
     #for buggedType in ["All"]:
@@ -390,7 +384,7 @@ def createBuildMLModels(workingDir,gitPath,weka,vers,dbadd,wekaJar,RemoveBat):
         #trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacks(FilesPath,gitPath,weka,vers,buggedType,dbadd)
         trainingFile,testingFile,NamesFile=BuildMLFiles(weka,buggedType,"files")
         outCsv=os.path.join(weka,buggedType+"_out_files.csv")
-        #BuildWekaModel(weka,trainingFile,testingFile,NamesFile,outCsv,"files_"+buggedType,wekaJar)
+        BuildWekaModel(weka,trainingFile,testingFile,NamesFile,outCsv,"files_"+buggedType,wekaJar)
         #All_One_create.allFamilies(FilesPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
         trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacksMethods(methodsPath,gitPath,weka,vers,buggedType,dbadd)
         trainingFile,testingFile,NamesFile=BuildMLFiles(weka,buggedType,"methods")
@@ -472,7 +466,7 @@ def methodsExperiments(workingDir,weka,packsPath,utilsPath,randNum):
         #ExcelReport(os.path.join(outPath,"barinelOptA.csv"),os.path.join(outPath,"barinel.xlsx"),"barinel")
         #ExcelReport(os.path.join(outPath,"plannerResall.csv"),os.path.join(outPath,"planner.xlsx"),"planner")
 
-		
+@utilsConf.marker_decorator(utilsConf.VERSION_TEST_MARKER)
 def testVerConfig(workingDir,ver,antOrPom,startDate,endDate):
     testedVer=os.path.join(workingDir,"testedVer")
     testedVer=os.path.join(testedVer,"repo")
@@ -492,9 +486,9 @@ def clean(versPath,LocalGitPath):
 
 def wrapperLearner(confFile,globalConfFile):
     print confFile
-    vers, gitPath,bugsPath, workingDir =configure(confFile)
-    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath = globalConfig(globalConfFile)
-    versPath, dbadd=Mkdirs(workingDir,vers)
+    vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
+    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath = utilsConf.globalConfig(globalConfFile)
+    versPath, dbadd = Mkdirs(workingDir,vers)
     logfile=open(os.path.join(workingDir,"timeLog2.txt"),"wb")
     print("start "+ str(datetime.datetime.now())+"\n")
     logfile.write("start "+ str(datetime.datetime.now())+"\n")
@@ -560,7 +554,7 @@ def wrapperLearner(confFile,globalConfFile):
     #allOne types
 
 def comprasionAll(confFile,globalConfFile):
-    vers, gitPath,bugsPath, workingDir =configure(confFile)
+    vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
     for buggedType in ["All","Most"]:
         Bpath=os.path.join(workingDir,buggedType)
         FilesPath=os.path.join(Bpath,"Files")
@@ -575,7 +569,7 @@ def comprasionAll(confFile,globalConfFile):
 
 
 def comprasionThreeFam(confFile,globalConfFile):
-    vers, gitPath,bugsPath, workingDir =configure(confFile)
+    vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
     for buggedType in ["All","Most"]:
         Bpath=os.path.join(workingDir,buggedType)
         FilesPath=os.path.join(Bpath,"Files")
@@ -593,7 +587,7 @@ def dictToList(dict,lst):
     return ans
 
 def comprasionTypes(confFile,globalConfFile):
-    vers, gitPath,bugsPath, workingDir =configure(confFile)
+    vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
     learnerOutFile=os.path.join(workingDir,"learner.csv")
     wekaD=os.path.join(workingDir,"weka")
     keys=["TP Rate","FP Rate","Precision","Recall"," F-Measure","MCC","ROC Area","PRC Area"]
@@ -619,7 +613,7 @@ def comprasionTypes(confFile,globalConfFile):
 
 def reportProjectData(confFile,globalConfFile):
 #java -Xmx2024m  -cp "C:\Program Files\Weka-3-7\weka.jar" weka.core.Instances 13_Appended.arff
-    vers, gitPath,bugsPath, workingDir =configure(confFile)
+    vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
     versPath, dbadd=Mkdirs(workingDir,vers)
     LocalGitPath=os.path.join(workingDir,"repo")
     reportCsv=os.path.join(workingDir,"report.csv")
@@ -629,8 +623,8 @@ def reportProjectData(confFile,globalConfFile):
 
 
 def wrapperExperiments(confFile,globalConfFile):
-    vers, gitPath,bugsPath, workingDir=configure(confFile)
-    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath =globalConfig(globalConfFile)
+    vers, gitPath,bugsPath, workingDir= utilsConf.configure(confFile)
+    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath = utilsConf.globalConfig(globalConfFile)
     weka=os.path.join(workingDir,"weka_known_features")
     testDb = os.path.join( workingDir , "testsBugsMethods.db")
     #vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
@@ -647,7 +641,7 @@ def wrapper_planning(confFile,globalConfFile):
 
 
 def wrapper(confFile):
-    vers, gitPath,bugsPath, workingDir =configure(confFile)
+    vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
     versPath, dbadd=Mkdirs(workingDir,vers)
     logfile=open(os.path.join(workingDir,"timeLog.txt"),"wb")
     logfile.write("start "+ str(datetime.datetime.now())+"\n")
