@@ -13,6 +13,8 @@ COMMENTS_SPACES_MARKER = "comments_spaces_features"
 PATCHS_FEATURES_MARKER = "patchs_features"
 SOURCE_MONITOR_FEATURES_MARKER = "source_monitor_features"
 BLAME_FEATURES_MARKER = "blame_features"
+TEST_DB_MARKER = "test_db_features"
+PACKS_FILE_MARKER = "packs_file_features"
 
 conf = None
 

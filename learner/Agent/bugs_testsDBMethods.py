@@ -6,6 +6,7 @@ import glob
 import os
 import wekaMethods.pathPackCsv
 from xml.dom import minidom
+import utilsConf
 
 # dir /b /s /O:d >f.txt
 #for /f %a in (f.txt) do ( type %a >com.txt)
@@ -300,7 +301,7 @@ def createTables(dbPath):
     conn.close()
 
 
-
+@utilsConf.marker_decorator(utilsConf.TEST_DB_MARKER)
 def basicBuild(workingDir,ver,startDate,EndDate):
     testDb = os.path.join( workingDir , "testsBugsMethods.db")
     dbData =os.path.join( workingDir ,"dbAdd\\"+ver+".db")

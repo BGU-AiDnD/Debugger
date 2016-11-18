@@ -607,10 +607,10 @@ def wrapperExperiments(confFile,globalConfFile):
     docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath = utilsConf.globalConfig(globalConfFile)
     weka=os.path.join(workingDir,"weka_known_features")
     testDb = os.path.join( workingDir , "testsBugsMethods.db")
-    #vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
-    #testDb=Agent.bugs_testsDBMethods.basicBuild(workingDir,vers[-2],dates[-2],dates[-1])
+    vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
+    testDb=Agent.bugs_testsDBMethods.basicBuild(workingDir,vers[-2],dates[-2],dates[-1])
     packsPath = os.path.join(workingDir, "packs.txt")
-    #Agent.experimentsMethods.packFileCreate(testDb,1,-1, packsPath)
+    Agent.experimentsMethods.packFileCreate(testDb,1,-1, packsPath)
     rnd = str(randint(0,900))
     print rnd
     filesExperiments(workingDir,weka,packsPath,utilsPath,rnd)

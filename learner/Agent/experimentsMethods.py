@@ -11,6 +11,7 @@ import results
 import winsound
 import subprocess
 import wekaMethods.wekaAccuracy
+import utilsConf
 
 
 def optimize(inds_bef, mat, priors):
@@ -1519,7 +1520,7 @@ def RunExperiments(dbPath,outPath,packsPath,wekaPath,Unit,buggedType,utilsPath):
               maximalTests, minimalTests, numOfBugs, numOfExperiments, numOfPacks, packsPath, pureSanity, table ,
               times,  wekaAnsArr,testTable)
 
-
+@utilsConf.marker_decorator(utilsConf.PACKS_FILE_MARKER)
 def packFileCreate(dbpath, startInd, endInd,outPath):
     conn = sqlite3.connect(dbpath)
     conn.text_factory = str
