@@ -55,7 +55,6 @@ def copyArffs(project,transferDir):
 def ConfFileTowekaPathName(conf):
     vers, gitPath,bugsPath, workingDir=utilsConf.configure(conf)
     name=conf.split("\\")[-1].replace("Conf.txt","")
-    print name,workingDir
     return name,workingDir
 
 

@@ -54,7 +54,6 @@ def buildModel(wekaDir,trainingArff,project,wekaJar):
 
 def evalModel(wekaDir,testingArff,outTxt,wekaJar,project):
     algorithm="weka.classifiers.trees.RandomForest "
-    print("cd /d  "+wekaDir +" & java -Xmx2024m  -cp "+wekaJar+" weka.Run " +algorithm+ " -l .\\model_"+project+".model -T "+testingArff+" >"+outTxt)
     os.system("cd /d  "+wekaDir +" & java -Xmx2024m  -cp "+wekaJar+" weka.Run " +algorithm+ " -l .\\model_"+project+".model -T "+testingArff+" >"+outTxt)
 
 

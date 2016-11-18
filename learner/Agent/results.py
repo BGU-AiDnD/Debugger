@@ -614,9 +614,7 @@ if __name__ == "__main__":
     #print aucCheck("C:\\GitHub\\agent\\learner\\exWekaLOWER\\out\\DIFG_check_weka_1.csv.csv","C:\\GitHub\\agent\\learner\\exWekaLOWER\\bugs_Files\\1.txt",1)
 #def one_file_res(DiagFile, accA_count, accB_count, bug_f, precision_avg, recall_avg,tests_avg,files_avg,bugged_avg, rowToAdd, thresholdPorbs):
     accA_count, accB_count,precision_avg,recall_avg,tests_avg,files_avg,bugged_avg=one_file_res("C:\GitHub\experiments\plannerDebug\plannerRecords\DIFG_check_25_0.6_0.0_0.csv.csv", 0.0, 0.0, "C:\GitHub\experiments\plannerDebug\\25_0.txt", 0.0, 0.0, 0.0, 0.0, 0.0, ['uniform', 0, 0, 25, 0], 1)
-    print precision_avg,recall_avg
     accA_count, accB_count,precision_avg,recall_avg,tests_avg,files_avg,bugged_avg=one_file_res("C:\GitHub\experiments\plannerDebug\plannerRecords\\25_0.6_0.0_1.txt0_AllDiags.csv.csv", 0.0, 0.0, "C:\GitHub\experiments\plannerDebug\\25_0.txt", 0.0, 0.0, 0.0, 0.0, 0.0, ['uniform', 0, 0, 25, 0], 1)
-    print precision_avg,recall_avg
     exit()
 
     d="C:\GitHub\\all-all"

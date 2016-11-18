@@ -67,7 +67,6 @@ def All_one(sourcePathTrain,sourcePathTest,oned,alld,packsInds):
         for x in p:
             lst.remove(x)
         reduce1=lst
-        print len(reduce1),len(p),len(reduce1)+len(p)
         outPathTrain=oned+"\\CDT_8_1_1_AllFiles_"+str(ind)+"_Appended.arff"
         outPathTest=oned+"\\CDT_8_1_2_AllFiles_"+str(ind)+"_Only.arff"
         attributeSelect(sourcePathTrain,outPathTrain,p)
@@ -105,11 +104,7 @@ del /F %6
 
 
 def RemoveBuildEval(indices,inputTrain,outputTrain,inputTest,outputTest,model,training,testing,RemoveBat,classInd):
-    inds=[x+1 for x in indices]
     inds=[x+1 for x in indices]+[classInd]
-    print classInd,inds
-    print classInd,inds
-    print classInd,inds
     lst = [str(inds).replace('[','"').replace(']','"'), inputTrain, outputTrain, inputTest, outputTest, model, training, testing]
     params=" ".join([str(x) for x in lst])
     #bat_run = "start /b cmd /x /c \"D: & cd  D:\\Amir_Almishali\\weka\\ & D:\\Amir_Almishali\\weka\\RemoveBuildEval.bat " + params +"\""

@@ -43,7 +43,6 @@ class ExperimentInstance:
     def get_optionals_probabilities_by_approach(self, approach):
         optionals, probabilities = [], []
         if len(self.pool) == len(self.initial_tests):
-            print "len(self.pool) == len(self.initial_tests)"
         if approach == "uniform":
             optionals, probabilities = self.get_optionals_probabilities()
         elif approach == "hp":
