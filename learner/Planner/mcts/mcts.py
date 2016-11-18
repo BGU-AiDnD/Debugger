@@ -14,7 +14,6 @@ def mcts_uct(ei, budget, approach):
     root = InstanceNode.InstanceNode(None, None, ei, approach)
     while budget:
         budget -= 1
-        # Tree Policy
         child = root
         while not child.terminal() and (not child.experimentInstance.AllTestsReached()):
             if not child.fully_expanded():
@@ -22,14 +21,11 @@ def mcts_uct(ei, budget, approach):
                 break
             else:
                 child = child.best_child()
-        # Default Policy
-        delta, initial_tests = child.simulation()
-        # print "simulation", initial_tests
-        # Backup
+        delta = child.simulation()
         while not child is None:
             child.visits += 1
             child.value += delta
+            # delta -= 1
             child = child.parent
-
 
     return root.best_action(c=0)

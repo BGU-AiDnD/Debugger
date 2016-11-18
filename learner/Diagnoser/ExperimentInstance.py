@@ -120,7 +120,7 @@ class ExperimentInstance:
         sum = 0.0
         for d in self.diagnoses:
             p = d.get_prob()
-            sum += p * math.log(p)
+            sum -= p * math.log(p)
         return sum
 
     def childs_probs_by_hp(self):
