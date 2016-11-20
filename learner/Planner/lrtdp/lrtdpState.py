@@ -58,6 +58,8 @@ class LrtdpState(object):
         q = 1 # cost
         nextStateDist = self.getNextStateDist(action)
         for next,prob in nextStateDist:
+            if prob == 0:
+                continue
             q += prob * next.value
         return q
 
@@ -69,8 +71,7 @@ class LrtdpState(object):
         return self.experimentInstance.isTerminal()
 
     def AllTestsReached(self):
-        reached = self.experimentInstance.AllTestsReached()
-        return reached
+        return self.experimentInstance.AllTestsReached()
 
     def terminal_or_allReach(self):
         return self.isTerminal() or self.AllTestsReached()
