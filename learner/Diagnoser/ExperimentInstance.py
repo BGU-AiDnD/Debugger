@@ -200,7 +200,7 @@ class ExperimentInstance:
             pass_Probability=pass_Probability * 0.9 # all components has chance of 0.1 to be faulty
             if comp in probs:
                 pass_Probability=pass_Probability * (1-probs[comp]) # add known faults
-        return pass_Probability
+        return round(pass_Probability, 6)
 
 
     def next_state_distribution(self,action):
