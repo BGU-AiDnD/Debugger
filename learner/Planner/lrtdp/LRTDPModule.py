@@ -89,7 +89,10 @@ def checkSolved(s):
         closed.append(state)
         if state.AllTestsReached():
             continue
-        a = state.greedyAction()
+        try:
+            a = state.greedyAction()
+        except:
+            x  = 96
         if state.residual(a) > epsilon:
             rv = False
             continue
@@ -103,7 +106,8 @@ def checkSolved(s):
     else:
         while closed:
             c = closed.pop()
-            c.update(c.greedyAction())
+            if not c.AllTestsReached():
+                c.update(c.greedyAction())
     return rv
 
 def evaluatePolicy():
