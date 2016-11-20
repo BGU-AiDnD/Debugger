@@ -143,9 +143,12 @@ def planning_for_project(dir):
 
 
 if __name__=="__main__":
+    alg = lrtdp_by_approach(0.3 , 30, 30,"hp")
+    ei = Diagnoser.diagnoserUtils.readPlanningFile(r"C:\projs\planning\antCheck\files_All867\planner\40_uniform_0.txt")
+    print alg(ei.Copy())
     #check_lrtdp("","")
     #lrtdp_multi_check("C:\projs\lrtdp\instances2", "C:\projs\lrtdp\planners8")
-    check_all_planners("C:\projs\lrtdp\instances3", "C:\projs\planners_check")
+    # check_all_planners("C:\projs\lrtdp\instances3", "C:\projs\planners_check")
     # ei = Diagnoser.diagnoserUtils.readPlanningFile(r"C:\projs\lrtdp\instances\40_uniform_8.txt")
     # for i in xrange(35):
     #     ei.addTest(i)
