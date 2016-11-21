@@ -95,14 +95,14 @@ def lrtdp_multi_check(instances_dir, out_dir):
             os.mkdir(out_instance_dir)
         check_lrtdp(file, out_instance_dir)
 
-def mcts_by_approach(approach, budget):
+def mcts_by_approach(approach, iterations):
     def approached_mcts(ei):
-        return Planner.mcts.main.main_mcts(ei, approach, budget)
+        return Planner.mcts.main.main_mcts(ei, approach, iterations)
     return approached_mcts
 
-def lrtdp_by_approach(epsilonArg,stackSizeArg, numTrialsArg, approachArg):
+def lrtdp_by_approach(epsilonArg, stackSizeArg, iterations, approachArg):
     def approached_lrtdp(ei):
-        Planner.lrtdp.LRTDPModule.setVars(ei, epsilonArg,stackSizeArg, numTrialsArg, approachArg)
+        Planner.lrtdp.LRTDPModule.setVars(ei, epsilonArg, stackSizeArg, iterations, approachArg)
         return Planner.lrtdp.LRTDPModule.lrtdp()
     return approached_lrtdp
 
@@ -111,7 +111,7 @@ def lrtdp_by_approach(epsilonArg,stackSizeArg, numTrialsArg, approachArg):
 
 def check_all_planners(instances_dir, out_dir):
     planners=[("mcts_hp",mcts_by_approach("hp", 100) ), ("mcts_entropy",mcts_by_approach("entropy", 100) ),
-              ("lrtdp_hp",lrtdp_by_approach(0.3 , 20, 10,"hp")),("lrtdp_entropy",lrtdp_by_approach(0.3 , 20, 10,"entropy")),
+              ("lrtdp_hp",lrtdp_by_approach(0 , 20, 100,"hp")),("lrtdp_entropy",lrtdp_by_approach(0 , 20, 100,"entropy")),
               ("HP",HP_Random.main_HP), ("entropy", HP_Random.main_entropy),
           ("Random",HP_Random.main_Random), ("initials", HP_Random.only_initials), ("all_tests", HP_Random.all_tests)]
     runAll_optimized(instances_dir, out_dir, planners)
@@ -129,21 +129,15 @@ def planning_for_project(dir):
         out_dir = os.path.join(experiment_dir,"all_planners")
         mkOneDir(out_dir)
         planners=[("mcts_hp",mcts_by_approach("hp", 100) ), ("mcts_entropy",mcts_by_approach("entropy", 100) ),
-              ("lrtdp_hp",lrtdp_by_approach(0.3 , 20, 10,"hp")),("lrtdp_entropy",lrtdp_by_approach(0.3 , 20, 10,"entropy")),
+              ("lrtdp_hp",lrtdp_by_approach(0 , 20, 100,"hp")),("lrtdp_entropy",lrtdp_by_approach(0 , 20, 1000,"entropy")),
               ("HP",HP_Random.main_HP), ("entropy", HP_Random.main_entropy),
           ("Random",HP_Random.main_Random), ("initials", HP_Random.only_initials), ("all_tests", HP_Random.all_tests)]
-        lrtdp_hp_planners = [("lrtdp_hp_big_stack_30_trials",lrtdp_by_approach(0.3 , 30, 30,"hp")),
-                          ("lrtdp_hp_big_epsilon",lrtdp_by_approach(0.5 , 20, 10,"hp"))]
-        lrtdp_entropy_planners = [("lrtdp_entropy_small_epsilon",lrtdp_by_approach(0.1 , 20, 10,"entropy")), ("lrtdp_entropy_big_stack",lrtdp_by_approach(0.3 , 30, 10,"entropy")),
-                                  ("lrtdp_entropy_more_trials",lrtdp_by_approach(0.3 , 20, 20,"entropy")), ("lrtdp_entropy_small_epsilon_more_trials",lrtdp_by_approach(0.1 , 20, 20,"entropy"))]
-        mcts_hp_planners = [("mcts_hp_200",mcts_by_approach("hp", 200) ), ("mcts_hp_2500",mcts_by_approach("hp", 250) ), ("mcts_hp_300",mcts_by_approach("hp", 300) ), ]
-        mcts_entropy_planners = [("mcts_entropy_100",mcts_by_approach("entropy", 100)), ("mcts_entropy_120",mcts_by_approach("entropy", 120)),("mcts_entropy_80",mcts_by_approach("entropy", 80))]
-        runAll_optimized(in_dir, out_dir, lrtdp_hp_planners +  mcts_hp_planners)
+        runAll_optimized(in_dir, out_dir, planners)
 
 
 
 if __name__=="__main__":
-    alg = lrtdp_by_approach(0.3 , 30, 30,"hp")
+    alg = lrtdp_by_approach(0.3 , 10, 10,"hp")
     ei = Diagnoser.diagnoserUtils.readPlanningFile(r"C:\projs\planning\antCheck\files_All867\planner\40_uniform_0.txt")
     print alg(ei.Copy())
     #check_lrtdp("","")

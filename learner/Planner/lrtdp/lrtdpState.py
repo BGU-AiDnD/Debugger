@@ -38,6 +38,7 @@ class LrtdpState(object):
     def greedyAction(self):
         return random.choice(self.getGreedyActions())
 
+
     def getGreedyActions(self):
         optionals, probabilities = self.experimentInstance.get_optionals_probabilities_by_approach(self.approach)
         minVal = float('inf')
@@ -49,6 +50,9 @@ class LrtdpState(object):
                 result = [action]
             elif q == minVal:
                 result.append(action)
+        if minVal == float('inf'):
+            p = min(probabilities)
+            result = [a for (a, prob) in zip(optionals, probabilities) if prob == p]
         return result
 
     def getNextStateDist(self,action):

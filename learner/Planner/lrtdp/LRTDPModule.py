@@ -5,15 +5,15 @@ import Planner.lrtdp.lrtdpState
 states={}
 epsilon=0
 stackSize=0
-numTrials=0
+iterations=0
 experimentInstance=None
 approach = "uniform"
 
-def setVars(experimentInstanceArg,epsilonArg,stackSizeArg, numTrialsArg, approachArg):
-    global experimentInstance,epsilon,stackSize, numTrials, approach
+def setVars(experimentInstanceArg, epsilonArg, stackSizeArg, iterationsArg, approachArg):
+    global experimentInstance,epsilon,stackSize, iterations, approach
     epsilon=epsilonArg
     stackSize=stackSizeArg
-    numTrials=numTrialsArg
+    iterations=iterationsArg
     experimentInstance=experimentInstanceArg
     approach = approachArg
 
@@ -43,12 +43,12 @@ def nextStateDist(ei,action):
 
 
 def lrtdp():
-    global numTrials
+    global iterations
     state = create_start_state()
     steps = 0
     while not state.isTerminal() and not state.AllTestsReached():
         clean()
-        for i in xrange(numTrials):
+        for i in xrange(iterations):
             if state.isSolved:
                 break
             runLrtdpTrial(state)
@@ -57,6 +57,7 @@ def lrtdp():
         ei = state.experimentInstance.Copy()
         ei.addTest(action)
         state = generateState(ei)
+        print "action: ", action
     precision, recall = state.experimentInstance.calc_precision_recall()
     return precision, recall, steps
 
@@ -127,7 +128,7 @@ def evaluatePolicy():
 
 
 def multiLrtdp():
-    global numTrials
+    global iterations
     state=create_start_state()
     trialsCount=0
     steps=0
@@ -136,7 +137,7 @@ def multiLrtdp():
         precision, recall=ei.calc_precision_recall()
         return precision, recall, 0
     while not state.isSolved:
-        if trialsCount>numTrials:
+        if trialsCount>iterations:
             return
         trialsCount=trialsCount+1
         success = runLrtdpTrial(state)

@@ -6,12 +6,12 @@ import mcts
 
 DEFAULT_BUDGET = 100
 
-def main_mcts(ei, approach,  budget=DEFAULT_BUDGET):
+def main_mcts(ei, approach, iterations=DEFAULT_BUDGET):
     steps = 0
     state = ei.Copy()
     while (not state.isTerminal()) and ( not state.AllTestsReached()):
         steps += 1
-        action, weight = mcts.mcts_uct(state, budget, approach)
+        action, weight = mcts.mcts_uct(state, iterations, approach)
         state.addTest(action)
 
     precision, recall = state.calc_precision_recall()

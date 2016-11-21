@@ -4,6 +4,7 @@ __author__ = 'amir'
 import random, Queue
 from math import sqrt, log
 from random import sample
+import numpy
 
 class InstanceNode(object):
 
@@ -130,9 +131,10 @@ class InstanceNode(object):
         steps = 1
         ei = self.experimentInstance
         while (not ei.isTerminal()) and ( not ei.AllTestsReached()):
-            action = sample(ei.get_optionals_actions(), 1)[0]
+            optionals, probabilities = self.experimentInstance.get_optionals_probabilities_by_approach(self.approach)
+            action = numpy.random.choice(optionals, p=probabilities)
             ei = ei.simulate_next_ei(action)[1]
             steps = steps + 1
         if  not ei.isTerminal():
-            steps = steps + 1
+            steps = float('inf')
         return -steps
