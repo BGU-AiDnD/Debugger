@@ -2,16 +2,37 @@
 A collection of classes and functions for playing certain types of
 games. Specifically, an implementation of the MCTS algorithm.
 """
-import random, Queue
-from math import sqrt, log
-from random import sample
 import InstanceNode
+import gc
+states={}
+
+def clear_states():
+    global states
+    states = {}
+
+def generateState(parent, action, ei, approach):
+    global states
+    key = repr(ei)
+    if key not in states:
+        state = InstanceNode.InstanceNode(parent, action, ei, approach)
+        states[key]= state
+    return states[key]
+
+def getStateIfExists(parent, action, ei):
+    global states
+    key = repr(ei)
+    if key not in states:
+        return None
+    states[key].add_parent(parent, action)
+    return states[key]
 
 def mcts_uct(ei, iterations, approach):
     """
     Implementation of the UCT variant of the MCTS algorithm.
     """
-    root = InstanceNode.InstanceNode(None, None, ei, approach)
+    clear_states()
+    print "collect garbage: ", gc.collect()
+    root = generateState(None, None, ei, approach)
     for i in xrange(iterations):
         child = root
         while not child.terminal() and (not child.experimentInstance.AllTestsReached()):
@@ -20,11 +41,15 @@ def mcts_uct(ei, iterations, approach):
                 break
             else:
                 child = child.best_child()
-        delta = child.simulation()
-        while not child is None:
-            child.visits += 1
-            child.value += delta
-            # delta -= 1
-            child = child.parent
-
+        cost = child.simulation()
+        update_parents(child, cost)
     return root.best_action(c=0)
+
+def update_parents(child, cost):
+    if child is None:
+        return
+    for p in child.parents:
+        parent = child.parents[p]
+        parent.visits[p] += 1
+        parent.value[p] += cost
+        update_parents(parent, cost)

@@ -148,10 +148,7 @@ class Staccato():
 
         N = len(M_matrix)
         M = len(M_matrix[0])
-
         strip =St_Strip.St_Strip(M, N)
-
-
         result = self.runStrip(M_matrix, e_vector, strip)
 
         return result

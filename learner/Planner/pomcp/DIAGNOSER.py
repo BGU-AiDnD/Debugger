@@ -12,8 +12,6 @@ class DIAGNOSER(object):
         self.experimentInstance=experimentInstance
         self.threshold=threshold
         self.states={}
-
-
         self.NumActions=len(self.experimentInstance.error)
         self.NumObservations=2
         self.Discount=1

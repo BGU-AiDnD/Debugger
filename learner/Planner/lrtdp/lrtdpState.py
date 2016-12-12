@@ -1,8 +1,8 @@
-import LRTDP
+__author__ = 'amir'
 import LRTDPModule
 import random
+import Diagnoser.ExperimentInstance
 
-__author__ = 'amir'
 
 
 class LrtdpState(object):
@@ -20,9 +20,6 @@ class LrtdpState(object):
             self.value = 0
         self.simulationCount = 0
 
-    def clone(self):
-        return LrtdpState(self.experimentInstance.Copy(), self.approach)
-
     def getMaxProb(self):
         self.experimentInstance.diagnose()
         maxP = max([x.probability for x in self.experimentInstance.diagnoses])
@@ -30,14 +27,10 @@ class LrtdpState(object):
 
     # do action and return observation
     def addTest(self,ind):
-        return self.experimentInstance.addTest(ind)
-
-    def SimulateADDTest(self,ind,observation):
-        return self.experimentInstance.SimulateADDTest(ind,observation)
+        return Diagnoser.ExperimentInstance.addTest(self.experimentInstance, ind)
 
     def greedyAction(self):
         return random.choice(self.getGreedyActions())
-
 
     def getGreedyActions(self):
         optionals, probabilities = self.experimentInstance.get_optionals_probabilities_by_approach(self.approach)

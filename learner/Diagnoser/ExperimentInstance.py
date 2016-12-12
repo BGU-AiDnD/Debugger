@@ -6,33 +6,57 @@ import Diagnoser.diagnoserUtils
 
 __author__ = 'amir'
 
-
 TERMINAL_PROB = 0.7
 
+instances = {}
+priors = []
+bugs = []
+pool = []
+
+def clear():
+    global instances, priors, bugs, pool
+    instances = {}
+    priors = []
+    bugs = []
+    pool = []
+
+def set_values(priors_arg, bugs_arg, pool_arg):
+    clear()
+    global instances, priors, bugs, pool
+    priors = priors_arg
+    bugs = bugs_arg
+    pool = pool_arg
+
+def get_instance(key):
+    global instances
+    if key not in instances:
+        instances[key] = create_instance_from_key(key)
+    return instances[key]
+
+def create_instance_from_key(key):
+    initial, failed = key.split('-')
+    error = [1 if i in eval(failed) else 0 for i in xrange(len(pool))]
+    if 1 not in error:
+        x = 9
+    return ExperimentInstance(eval(initial), error)
+
 class ExperimentInstance:
-    def __init__(self,priors, bugs, initial_tests, failed_tests,  pool	,error):
-        self.priors = priors
-        self.bugs = bugs
+    def __init__(self, initial_tests, error):
         self.initial_tests=initial_tests
-        self.failed_tests=failed_tests
-        self.pool = pool
         self.error = error
         self.diagnoses=[]
 
-    def Copy(self):
-        exp = ExperimentInstance(copy.deepcopy(self.priors), copy.deepcopy(self.bugs), copy.deepcopy(self.initial_tests), copy.deepcopy(self.failed_tests),  copy.deepcopy(self.pool)	,copy.deepcopy(self.error))
-        exp.diagnoses=[x.clone() for x in self.diagnoses]
-        return exp
-
     def initials_to_DS(self):
         ds=Diagnoser.diagnoserUtils.dynamicSpectrum()
-        ds.TestsComponents=copy.deepcopy([x for ind,x in enumerate(self.pool) if ind in self.initial_tests ])
-        ds.probabilities=list(self.priors)
+        ds.TestsComponents = copy.deepcopy([x for ind,x in enumerate(pool) if ind in self.initial_tests ])
+        ds.probabilities=list(priors)
         ds.error=[x for ind,x in enumerate(self.error) if ind in self.initial_tests ]
+        if 1 not in ds.error:
+            x=9
         return ds
 
     def get_optionals_actions(self):
-        optionals = [x for x in range(len(self.pool)) if x not in self.initial_tests]
+        optionals = [x for x in range(len(pool)) if x not in self.initial_tests]
         return optionals
 
     def get_optionals_probabilities(self):
@@ -78,7 +102,7 @@ class ExperimentInstance:
         assert  len(optionals) > 0
         tests_probabilities = []
         for test in optionals:
-            trace = self.pool[test]
+            trace = pool[test]
             test_p = 0.0
             for comp in trace:
                 test_p += comps_probabilities.get(comp, 0)
@@ -130,7 +154,7 @@ class ExperimentInstance:
         assert len(optionals) > 0
         optionals_probs = {}
         for op in optionals:
-            trace = self.pool[op]
+            trace = pool[op]
             prob = 0
             for comp in trace:
                 prob += comps_prob.get(comp, 0)
@@ -159,41 +183,12 @@ class ExperimentInstance:
     def AllTestsReached(self):
         return len(self.get_optionals_actions())== 0
 
-    def addTest(self,next_test):
-        """
-        add test with real outcome
-        """
-        self.simulateTestOutcome(next_test,self.error[next_test])
-        return self.error[next_test]
-
-
-    def simulateTestOutcome(self,next_test,outcome):
-        self.initial_tests.append(next_test)
-        self.error[next_test]=outcome
-        if self.error[next_test]==1:
-            self.failed_tests=list(set(self.failed_tests+[next_test]))
-        self.diagnoses=[]
-        return self.error[next_test]
-
-    def SimulateADDTest(self,ind,observation):
-        optionals = self.get_optionals_actions()
-        if optionals==[]:
-            return -1
-        next_test=optionals[ind % len(optionals)]
-        self.initial_tests.append(next_test)
-        self.error[next_test]=observation # set observation!
-        if self.error[next_test]==1:
-            self.failed_tests.append(next_test)
-        self.diagnoses=[]
-        return self.error[next_test]
-
-
     def compute_pass_prob(self,action):
         optionals = self.get_optionals_actions()
         if optionals==[]:
             return -1
         next_test=optionals[action % len(optionals)]
-        trace=self.pool[next_test]
+        trace = pool[next_test]
         probs=dict(self.compsProbs())
         pass_Probability=1
         for comp in trace:
@@ -202,15 +197,11 @@ class ExperimentInstance:
                 pass_Probability=pass_Probability * (1-probs[comp]) # add known faults
         return round(pass_Probability, 6)
 
-
     def next_state_distribution(self,action):
         pass_Probability=self.compute_pass_prob(action)
-        ei_fail=self.Copy()
-        ei_fail.simulateTestOutcome(action,0)
-        ei_pass=self.Copy()
-        ei_pass.simulateTestOutcome(action,1)
+        ei_fail = simulateTestOutcome(self, action,0)
+        ei_pass = simulateTestOutcome(self, action,1)
         return [(ei_fail,pass_Probability),(ei_pass,1-pass_Probability)]
-
 
     def simulate_next_test_outcome(self,action):
         pass_Probability=self.compute_pass_prob(action)
@@ -218,7 +209,6 @@ class ExperimentInstance:
             return 0
         else:
             return 1
-
 
     def simulate_next_ei(self,action):
         outcome = self.simulate_next_test_outcome(action)
@@ -246,18 +236,17 @@ class ExperimentInstance:
             recall = recall * float(pr)
         return precision, recall
 
-
     def calc_precision_recall(self):
         self.diagnose()
         s=sum([d.probability for d in self.diagnoses ])
         recall_accum=0
         precision_accum=0
-        validComps=[x for x in range(max(reduce(list.__add__, self.pool))) if x not in self.bugs]
+        validComps=[x for x in range(max(reduce(list.__add__, pool))) if x not in bugs]
 
         for  d in self.diagnoses:
             dg=d.diagnosis
             pr=d.probability
-            precision, recall = self.precision_recall_diag(self.bugs, dg, pr, validComps)
+            precision, recall = self.precision_recall_diag(bugs, dg, pr, validComps)
             if(recall!="undef"):
                 recall_accum=recall_accum+recall
             if(precision!="undef"):
@@ -266,3 +255,23 @@ class ExperimentInstance:
 
     def __repr__(self):
         return repr(self.initial_tests)+"-"+repr([ind for ind,x in enumerate(self.error) if x==1])
+
+
+def create_key(initial_tests, error):
+    return repr(initial_tests)+"-"+repr([ind for ind,x in enumerate(error) if x==1])
+
+def addTest(ei, next_test):
+    """
+    add test with real outcome
+    """
+    return simulateTestOutcome(ei, next_test, ei.error[next_test])
+
+def simulateTestOutcome(ei, next_test, outcome):
+    initial_tests = copy.deepcopy(ei.initial_tests)
+    initial_tests.append(next_test)
+    error = list(ei.error)
+    if 1 not in error:
+        fdf=4
+    error[next_test] = outcome
+    returned_instance = create_instance_from_key(create_key(initial_tests, error))
+    return returned_instance

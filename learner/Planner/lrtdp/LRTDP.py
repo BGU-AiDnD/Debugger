@@ -16,7 +16,7 @@ class LRTDP(object):
         return self.generateState(self.experimentInstance)
 
     def generateState(self,experimentInstance):
-        key=repr(experimentInstance.initial_tests)+"-"+repr([ind for ind,x in enumerate(experimentInstance.error) if x==1])
+        key=repr(experimentInstance)
         print key
         if key in self.states:
             print key, "saved!"
