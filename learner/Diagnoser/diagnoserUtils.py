@@ -32,7 +32,6 @@ class FullMatrix:
     def optimize_FullMatrix(fullMatrix):
         chosen=[]
         UnusedComps=range(len(fullMatrix.probabilities))
-
         for test,err in zip(fullMatrix.matrix,fullMatrix.error):
             if err==0:
                 continue
@@ -75,11 +74,11 @@ class dynamicSpectrum:
     def diagnose(self):
         fullM,chosen=FullMatrix.optimize_FullMatrix(self.convertToFullMatrix())
         chosenDict=dict([x for x in enumerate(chosen)])
-        Optdiagnoses=fullM.diagnose()
+        Opt_diagnoses=fullM.diagnose()
         diagnoses=[]
-        for Optdiag in Optdiagnoses:
-            diag=Optdiag.clone()
-            diag_comps=[chosenDict[x] for x in Optdiag.diagnosis]
+        for diag in Opt_diagnoses:
+            diag=diag.clone()
+            diag_comps=[chosenDict[x] for x in diag.diagnosis]
             diag.diagnosis=list(diag_comps)
             diagnoses.append(diag)
         ##change diagnoses to real comps
@@ -112,7 +111,6 @@ def readPlanningFile(fileName):
     bugs=[eval(x) for x in BugsStr]
     initials=[eval(x) for x in InitialsStr]
     testsPool=[]
-    failedTests=[]
     error=[]
     for td in TestDetailsStr:
         ind,actualTrace,guessTrace,err=tuple(td.split(";"))
@@ -120,9 +118,8 @@ def readPlanningFile(fileName):
         err=int(err)
         testsPool.append(actualTrace)
         error.append(err)
-        if err==1:
-            failedTests.append(ind)
-    return Diagnoser.ExperimentInstance.ExperimentInstance(priors,bugs, initials, failedTests,  testsPool,error)
+    Diagnoser.ExperimentInstance.set_values(priors, bugs, testsPool)
+    return Diagnoser.ExperimentInstance.ExperimentInstance(initials, error)
 
 
 def diagnoseTests():

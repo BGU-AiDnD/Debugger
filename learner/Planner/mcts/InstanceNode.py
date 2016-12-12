@@ -1,9 +1,8 @@
 __author__ = 'amir'
-
-
-import random, Queue
 from math import sqrt, log
-from random import sample
+import numpy
+import Planner.mcts.mcts
+import Planner.mcts.actionNode
 
 class InstanceNode(object):
 
@@ -12,30 +11,42 @@ class InstanceNode(object):
         approach - how to combine tests probabilities to qvalue.
             can be one of the following: "uniform" , "hp", "entropy"
         """
-
         self.experimentInstance = experimentInstance
         self.approach = approach
-        self.parent    = parent
-        self.children  = dict.fromkeys(self.experimentInstance.get_optionals_actions())
-        if not self.experimentInstance.AllTestsReached() and not self.experimentInstance.isTerminal():
-            optionals, probabilities = self.experimentInstance.get_optionals_probabilities_by_approach(approach)
-            self.children_probability = dict(zip(optionals, probabilities))
-        else:
-            self.children_probability = {}
-        # Tree data
-        self.action    = action
-         # Search meta data
-        self.visits    = 0
-        self.value     = 0.0
+        self.parents = {}
+        if not parent is None:
+            self.parents[action] = parent
+        self.children  = {}
+        for act in self.experimentInstance.get_optionals_actions():
+            self.children[act] = Planner.mcts.actionNode.ActionNode(act, self, self.approach)
+        self.visits = dict.fromkeys(self.children.keys(), 0)
+        self.value = dict.fromkeys(self.children.keys(), 0)
 
     @property
     def weight(self):
         """
         The weight of the current node.
         """
-        if self.visits == 0:
+        if sum(self.visits.values()) == 0:
             return 0
-        return self.value / float(self.visits)
+        return sum(self.value.values()) / float(sum(self.visits.values()))
+
+    def find_childs(self):
+        changed = False
+        for c in self.children:
+            action = self.children[c]
+            if not action.fully_expanded():
+                action.getStatesIfExists()
+                if action.fully_expanded():
+                    changed = True
+        if changed:
+            self.update_from_childs()
+
+    def update_from_childs(self):
+        for c in self.children:
+            action = self.children[c]
+            self.visits[c] = action.visits()
+            self.value[c] = action.value()
 
     def search_weight(self, c):
         """
@@ -47,13 +58,14 @@ class InstanceNode(object):
         and Q(x) is the total value of node x and N(x) is the number of visits
         to node x.
         """
-        return self.weight + c * sqrt(2 * log(self.parent.visits) / self.visits)
+        weight = self.weight
+        for p in self.parents:
+            parent = self.parents[p]
+            weight += c * sqrt(2 * log(sum(parent.visits.values())) / sum(self.visits.values()))
+        return weight
 
-    def actions(self):
-        """
-        The valid actions for the current node state.
-        """
-        return self.experimentInstance.get_optionals_actions()
+    def add_parent(self, parent, action):
+        self.parents[action]  = parent
 
     def result(self, action):
         """
@@ -81,13 +93,10 @@ class InstanceNode(object):
         otherwise raises an exception) and returns it.
         """
         try:
-            action = self.children.keys()[self.children.values().index(None)]
+            action = filter(lambda c: not c.fully_expanded(),self.children.values())[0]
         except ValueError:
             raise Exception('Node is already fully expanded')
-        ei = self.result(action)
-        child = InstanceNode(self, action, ei, self.approach)
-        self.children[action] = child
-        return child
+        return action.expand()
 
     def best_child(self, c=1/sqrt(2)):
         """
@@ -100,12 +109,7 @@ class InstanceNode(object):
             weight = self.children[action].search_weight(c)
             values.append((action, weight))
         action = max(values, key=lambda x: x[1])[0]
-        # in case that child not expanded - expand
-        # if self.children[action] == None:
-        #     ei = self.result(action)
-        #     child = InstanceNode(self, action, ei, self.approach)
-        #     self.children[action] = child
-        return self.children[action]
+        return self.children[action].expand()
 
     def best_action(self, c=1/sqrt(2)):
         """
@@ -113,13 +117,8 @@ class InstanceNode(object):
         node.
         """
         child = self.best_child(c)
-        return child.action, child.weight
-
-    def max_child(self):
-        """
-        Returns the child with the highest value.
-        """
-        return max(self.children.values(), key=lambda x: x.weight)
+        action = filter(lambda parent: parent[1] == self,child.parents.items())[0][0]
+        return action, child.weight
 
     def simulation(self):
         """
@@ -130,9 +129,10 @@ class InstanceNode(object):
         steps = 1
         ei = self.experimentInstance
         while (not ei.isTerminal()) and ( not ei.AllTestsReached()):
-            action = sample(ei.get_optionals_actions(), 1)[0]
+            optionals, probabilities = self.experimentInstance.get_optionals_probabilities_by_approach(self.approach)
+            action = numpy.random.choice(optionals, p=probabilities)
             ei = ei.simulate_next_ei(action)[1]
             steps = steps + 1
         if  not ei.isTerminal():
-            steps = steps + 1
+            steps = float('inf')
         return -steps

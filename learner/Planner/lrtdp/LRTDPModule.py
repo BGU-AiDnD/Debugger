@@ -1,19 +1,18 @@
 __author__ = 'amir'
 
 import Planner.lrtdp.lrtdpState
+import Diagnoser.ExperimentInstance
 
 states={}
 epsilon=0
-stackSize=0
-numTrials=0
+iterations=0
 experimentInstance=None
 approach = "uniform"
 
-def setVars(experimentInstanceArg,epsilonArg,stackSizeArg, numTrialsArg, approachArg):
-    global experimentInstance,epsilon,stackSize, numTrials, approach
+def setVars(experimentInstanceArg, epsilonArg, iterationsArg, approachArg):
+    global experimentInstance,epsilon, iterations, approach
     epsilon=epsilonArg
-    stackSize=stackSizeArg
-    numTrials=numTrialsArg
+    iterations=iterationsArg
     experimentInstance=experimentInstanceArg
     approach = approachArg
 
@@ -25,7 +24,7 @@ def generateState(ei):
     global states
     key=repr(ei)
     if key not in states:
-        state = Planner.lrtdp.lrtdpState.LrtdpState(ei.Copy(), approach)
+        state = Planner.lrtdp.lrtdpState.LrtdpState(ei, approach)
         states[key]= state
     return states[key]
 
@@ -43,32 +42,31 @@ def nextStateDist(ei,action):
 
 
 def lrtdp():
-    global numTrials
+    global iterations
     state = create_start_state()
     steps = 0
     while not state.isTerminal() and not state.AllTestsReached():
         clean()
-        for i in xrange(numTrials):
+        for i in xrange(iterations):
             if state.isSolved:
                 break
             runLrtdpTrial(state)
+        if state.isSolved:
+            break
         steps += 1
         action = state.greedyAction()
-        ei = state.experimentInstance.Copy()
-        ei.addTest(action)
+        ei = Diagnoser.ExperimentInstance.addTest(state.experimentInstance, action)
         state = generateState(ei)
+        print "action: ", action
     precision, recall = state.experimentInstance.calc_precision_recall()
-    return precision, recall, steps
+    return precision, recall, steps, repr(state)
 
 def runLrtdpTrial(state):
-    global stackSize
     visited = [] # stack
     while not (state.isSolved or state.AllTestsReached()):
         visited.append(state)
         if state.isTerminal():
             break
-        if len(visited) > stackSize:
-            return
         a = state.greedyAction()
         state.update(a)
         state = state.simulate_next_state(a)
@@ -89,10 +87,7 @@ def checkSolved(s):
         closed.append(state)
         if state.AllTestsReached():
             continue
-        try:
-            a = state.greedyAction()
-        except:
-            x  = 96
+        a = state.greedyAction()
         if state.residual(a) > epsilon:
             rv = False
             continue
@@ -113,11 +108,10 @@ def checkSolved(s):
 def evaluatePolicy():
     state=create_start_state()
     steps=0
-    ei=state.experimentInstance.Copy()
+    ei=state.experimentInstance
     while (not state.isSolved) and (not state.terminal_or_allReach()):
         action = state.greedyAction()
-        ei = state.experimentInstance.Copy()
-        obs = ei.addTest(action)
+        ei = Diagnoser.ExperimentInstance.addTest(ei, action)
         state = generateState(ei)
         steps = steps + 1
         precision, recall = ei.calc_precision_recall()
@@ -127,24 +121,23 @@ def evaluatePolicy():
 
 
 def multiLrtdp():
-    global numTrials
+    global iterations
     state=create_start_state()
     trialsCount=0
     steps=0
-    ei=state.experimentInstance.Copy()
+    ei=state.experimentInstance
     if state.isTerminal():
         precision, recall=ei.calc_precision_recall()
         return precision, recall, 0
     while not state.isSolved:
-        if trialsCount>numTrials:
+        if trialsCount>iterations:
             return
         trialsCount=trialsCount+1
         success = runLrtdpTrial(state)
         if not success:
             return
         a=state.greedyAction()
-        ei=state.experimentInstance.Copy()
-        obs=ei.addTest(a)
+        ei = Diagnoser.ExperimentInstance.addTest(ei, a)
         state=generateState(ei)
         steps=steps+1
     precision, recall=ei.calc_precision_recall()
