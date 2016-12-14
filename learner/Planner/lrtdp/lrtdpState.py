@@ -85,7 +85,8 @@ class LrtdpState(object):
     def simulate_next_state(self,action):
         return LRTDPModule.generateState(self.experimentInstance.simulate_next_ei(action)[1])
 
-
+    def __repr__(self):
+        return repr(self.experimentInstance)
 
 
 

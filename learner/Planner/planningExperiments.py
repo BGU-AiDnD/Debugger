@@ -34,18 +34,18 @@ def runAll(instancesDir, outDir, planners):
 
 
 def runAll_optimized(instancesDir, outDir, planners):
-    outData=[["planner","learn_algorithm","pBug","pValid","tests","index","precision","recall","steps", "repr" ]]
+    outData=[["file_name","planner","learn_algorithm","pBug","pValid","tests","index","precision","recall","steps", "repr" ]]
     outfile=os.path.join(outDir,"planningMED.csv")
     for f in glob.glob(os.path.join(instancesDir,"*.txt")):
         print f
-        learn_alg,pBug,pValid,tests,index=Planning_Results.instance_name_to_meta(f.split("\\")[-1])
+        learn_alg,pBug,pValid,tests,index=Planning_Results.instance_name_to_meta(os.path.basename(f))
         file=os.path.join(instancesDir,f)
         ei = Diagnoser.diagnoserUtils.readPlanningFile(file)
         for name,alg in planners:
             precision,recall,steps, rpr =alg(ei)
-            outData.append([name,learn_alg,pBug,pValid,tests,index,precision,recall,steps, rpr])
-    writer=csv.writer(open(outfile,"wb"))
-    writer.writerows(outData)
+            outData.append([os.path.basename(f), name,learn_alg,pBug,pValid,tests,index,precision,recall,steps, rpr])
+            writer=csv.writer(open(outfile,"wb"))
+            writer.writerows(outData)
 
 def check__pomcp():
     file="C:\projs\ptry\lrtdp\\30_uniform_1.txt"
