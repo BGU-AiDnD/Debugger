@@ -106,17 +106,12 @@ def lrtdp_by_approach(epsilonArg, iterations, approachArg):
         return Planner.lrtdp.LRTDPModule.lrtdp()
     return approached_lrtdp
 
-
-
-
 def check_all_planners(instances_dir, out_dir):
     planners=[("mcts_hp",mcts_by_approach("hp", 100) ), ("mcts_entropy",mcts_by_approach("entropy", 100) ),
               ("lrtdp_hp",lrtdp_by_approach(0 , 20, 100,"hp")),("lrtdp_entropy",lrtdp_by_approach(0 , 20, 100,"entropy")),
               ("HP",HP_Random.main_HP), ("entropy", HP_Random.main_entropy),
           ("Random",HP_Random.main_Random), ("initials", HP_Random.only_initials), ("all_tests", HP_Random.all_tests)]
     runAll_optimized(instances_dir, out_dir, planners)
-
-
 
 def planning_for_project(dir):
     for d in os.listdir(dir):
