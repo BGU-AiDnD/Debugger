@@ -1,5 +1,6 @@
 __author__ = 'amir'
 import os
+from datetime import datetime
 # markers names:
 VERSIONS_MARKER = "versions"
 VERSION_TEST_MARKER = "test_version"
@@ -15,6 +16,7 @@ SOURCE_MONITOR_FEATURES_MARKER = "source_monitor_features"
 BLAME_FEATURES_MARKER = "blame_features"
 TEST_DB_MARKER = "test_db_features"
 PACKS_FILE_MARKER = "packs_file_features"
+LEARNER_PHASE_FILE = "learner_phase_file"
 
 conf = None
 
@@ -96,9 +98,13 @@ class Marker:
     def is_exists(self):
         os.path.isfile(self.marker_path)
 
-    def finish(self):
+    def start(self):
         with open(self.marker_path, "wb") as f:
-            f.write("done")
+            f.write("start time: " + str(datetime.now()) + "\n")
+
+    def finish(self):
+        with open(self.marker_path, "ab") as f:
+            f.write("finish time: " + str(datetime.now()) + "\n")
 
 def init_configuration(workingDir):
     global conf
@@ -116,6 +122,7 @@ def marker_decorator(marker):
         def f(*args, **kwargs):
             ans = None
             if not get_configuration().get_marker(marker).is_exists():
+                get_configuration().get_marker(marker).start()
                 ans = func(*args, **kwargs)
                 get_configuration().get_marker(marker).finish()
             return ans

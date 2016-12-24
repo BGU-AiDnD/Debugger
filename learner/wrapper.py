@@ -494,6 +494,8 @@ def wrapperLearner(confFile,globalConfFile):
 
     createBuildMLModels(workingDir,gitPath,weka,vers,dbadd,wekaJar,RemoveBat)
 
+    utilsConf.get_configuration().get_marker(utilsConf.LEARNER_PHASE_FILE).finish()
+
     # FilesIndices=[[0,14,15],[1,2,3,4,5,6,7,8,9],[10,11,12,16],[13]] #Traditional , OO, process ,Bugs
     # FilesIndices_all=[indsFamilies(FilesIndices,[[x for x in range(len(FilesIndices)) if x != ind]])[0]  for ind in range(len(FilesIndices))] #Traditional , OO, process ,Bugs
     # MethodsIndices=[[0],[1],[2,3]]
