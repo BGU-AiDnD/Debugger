@@ -673,9 +673,11 @@ if __name__ == '__main__':
     print(sys.argv[1], globalConf)
     if sys.argv[2]=="learn":
         wrapperLearner(sys.argv[1], globalConf)
-    if sys.argv[2]=="experiments":
+    elif sys.argv[2]=="experiments":
         wrapperExperiments(sys.argv[1], globalConf)
-    if sys.argv[2]=="planning":
+    elif sys.argv[2]=="planning":
         wrapper_planning(sys.argv[1], globalConf)
-    if sys.argv[2]=="all_planning":
+    elif sys.argv[2]=="all_planning":
         Planner.planningExperiments.planning_for_project(sys.argv[1])
+    else:
+        Planner.planningExperiments.test()

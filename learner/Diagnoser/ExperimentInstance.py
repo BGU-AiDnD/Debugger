@@ -192,7 +192,7 @@ class ExperimentInstance:
         probs=dict(self.compsProbs())
         pass_Probability=1
         for comp in trace:
-            pass_Probability=pass_Probability * 0.9 # all components has chance of 0.1 to be faulty
+            pass_Probability=pass_Probability * 0.999 # probability of 1 fault for each 1000 lines of code
             if comp in probs:
                 pass_Probability=pass_Probability * (1-probs[comp]) # add known faults
         return round(pass_Probability, 6)

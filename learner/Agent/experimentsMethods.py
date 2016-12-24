@@ -51,6 +51,7 @@ def optimizeAll(allFiles, allTests,outcomes, allBugs,priors,testsChoosedNames,Fi
     newTests = []
     newOutcomes=[]
     testsChoosedNamesNew=[]
+    # remove irrelevant files: files that participate just in pass tests
     for index in range(len(allFiles)):
         i=allFiles[index]
         need = False
@@ -66,7 +67,7 @@ def optimizeAll(allFiles, allTests,outcomes, allBugs,priors,testsChoosedNames,Fi
             newFileNames.append(FileNames[index])
             if i in allBugs:
                 newBugs.append(i)
-
+    # update tests
     for t in allTests:
         test={}
         for i in newFiles:
@@ -78,6 +79,7 @@ def optimizeAll(allFiles, allTests,outcomes, allBugs,priors,testsChoosedNames,Fi
         ind=ind+1
     ind=0
     testsRet=[]
+    # remove tests without files
     for t in newTests:
         need = False
         for i in t:
@@ -85,15 +87,16 @@ def optimizeAll(allFiles, allTests,outcomes, allBugs,priors,testsChoosedNames,Fi
                 need=True
                 break
         if (need==True):
-            testsRet.append(t)
-            newOutcomes.append(outcomes[ind])
-            testsChoosedNamesNew.append(testsChoosedNames[ind])
+            # check if there is a test with same components and result
+            if not (t in testsRet and outcomes[ind] == outcomes[testsRet.index(t)]):
+                testsRet.append(t)
+                newOutcomes.append(outcomes[ind])
+                testsChoosedNamesNew.append(testsChoosedNames[ind])
         ind=ind+1
     newBugs=[newFiles.index(i) for i in newBugs ]
     if(priors!=[]):
         priors=[priors[newFiles.index(i)] for i in newFiles]
     newFiles=range(len(newFiles))
-
     return newFiles, testsRet,newOutcomes,newBugs,priors,testsChoosedNamesNew,newFileNames
 
 def conesOptimize2(allFiles, allTests,outcomes, allBugs,priors,testsChoosedNames,FileNames):
@@ -702,6 +705,9 @@ def allBugsFromDBMethods(dbPath,package,weka, table):
 
 
 def dirStruct(outPath):
+    o = outPath
+    if not (os.path.isdir(o)):
+        os.mkdir(o)
     o = outPath + "\\barinel\\"
     if not (os.path.isdir(o)):
         os.mkdir(o)
@@ -1479,20 +1485,15 @@ def RunExperiments(dbPath,outPath,packsPath,wekaPath,Unit,buggedType,utilsPath):
     print "RunExperiments"
     numOfExperiments=20
     numOfPacks=1
-    numOfrepeats=1
-    numOfBugs=[2]
-    times=[25,40,70,100,130]
-    times=[10,20,30,40,50,60,70,80]
-    const=0.2
+    times=[25,40,70,100,130, 180]
+    const=0.05
     minimalTests=25
-    minimalTests=5
-    maximalTests=220
+    maximalTests=250
     buggedTestsChooser=10
     initialsFactor=0.1
     initialsChooser=0.5
     tresh=0.7
     pureSanity=False
-    copyPath="C:\\GitHub\\experiments\\POI50E2\\"
     table=""
     testTable=""
     if (Unit=="File"):
@@ -1507,17 +1508,13 @@ def RunExperiments(dbPath,outPath,packsPath,wekaPath,Unit,buggedType,utilsPath):
             table="buggedMethods"
         if (buggedType=="Most"):
             table="buggedMethodsMostModified"
-    copy=False
-    o=outPath
-    if not (os.path.isdir(o)):
-        os.mkdir(o)
     dirStruct(outPath)
     copySTMS(outPath,utilsPath)
     bugs = allPackBugs(dbPath, 2  , packsPath,numOfExperiments,True,table)
     bugsPacks=[choosePackBug(bugs, 6,False,5,[])for x in range(numOfExperiments)]
     wekaAnsArr=[(wekaPath,"randomForest")]#+[(wekaBase+"weka.classifiers.trees.RandomForest_Style2.csv","prev")] #all
-    RunAndResults(buggedTestsChooser, bugsPacks, const, copy, copyPath, outPath, dbPath, initialsChooser, initialsFactor,
-              maximalTests, minimalTests, numOfBugs, numOfExperiments, numOfPacks, packsPath, pureSanity, table ,
+    RunAndResults(buggedTestsChooser, bugsPacks, const, False, "", outPath, dbPath, initialsChooser, initialsFactor,
+              maximalTests, minimalTests, [2], numOfExperiments, numOfPacks, packsPath, pureSanity, table ,
               times,  wekaAnsArr,testTable)
 
 @utilsConf.marker_decorator(utilsConf.PACKS_FILE_MARKER)

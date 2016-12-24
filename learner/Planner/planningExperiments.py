@@ -131,9 +131,7 @@ def planning_for_project(dir):
                     ("all_tests", HP_Random.all_tests)]
         runAll_optimized(in_dir, out_dir, planners)
 
-
-
-if __name__=="__main__":
+def test():
     ei = Diagnoser.diagnoserUtils.readPlanningFile(r"C:\projs\planning\ant\files_All752\planner\180_uniform_5.txt")
     planners = [("mcts_hp", mcts_by_approach("hp", 200)), ("mcts_entropy", mcts_by_approach("entropy", 200)),
                 ("lrtdp_hp", lrtdp_by_approach(0, 200, "hp")), ("lrtdp_entropy", lrtdp_by_approach(0, 200, "entropy")),
@@ -143,6 +141,9 @@ if __name__=="__main__":
     for name, alg in planners:
         print name
         print alg(ei)
+
+if __name__ == "__main__":
+    pass
     # print a(ei.Copy())
     #check_lrtdp("","")
     #lrtdp_multi_check("C:\projs\lrtdp\instances2", "C:\projs\lrtdp\planners8")
