@@ -670,14 +670,15 @@ def wrapper(confFile):
 if __name__ == '__main__':
     current_dir = os.path.dirname(os.path.realpath(__file__))
     globalConf = os.path.realpath(os.path.join(current_dir, "../globalConf.txt"))
-    print(sys.argv[1], globalConf)
-    if sys.argv[2]=="learn":
-        wrapperLearner(sys.argv[1], globalConf)
-    elif sys.argv[2]=="experiments":
-        wrapperExperiments(sys.argv[1], globalConf)
-    elif sys.argv[2]=="planning":
-        wrapper_planning(sys.argv[1], globalConf)
-    elif sys.argv[2]=="all_planning":
-        Planner.planningExperiments.planning_for_project(sys.argv[1])
-    else:
+    if len(sys.argv) == 1:
         Planner.planningExperiments.test()
+    else:
+        print(sys.argv[1], globalConf)
+        if sys.argv[2]=="learn":
+            wrapperLearner(sys.argv[1], globalConf)
+        elif sys.argv[2]=="experiments":
+            wrapperExperiments(sys.argv[1], globalConf)
+        elif sys.argv[2]=="planning":
+            wrapper_planning(sys.argv[1], globalConf)
+        elif sys.argv[2]=="all_planning":
+            Planner.planningExperiments.planning_for_project(sys.argv[1])

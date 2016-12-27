@@ -132,7 +132,7 @@ def planning_for_project(dir):
         runAll_optimized(in_dir, out_dir, planners)
 
 def test():
-    ei = Diagnoser.diagnoserUtils.readPlanningFile(r"C:\projs\planning\ant\files_All752\planner\180_uniform_5.txt")
+    ei = Diagnoser.diagnoserUtils.readPlanningFile(r"C:\Temp\180_uniform_1.txt")
     planners = [("mcts_hp", mcts_by_approach("hp", 200)), ("mcts_entropy", mcts_by_approach("entropy", 200)),
                 ("lrtdp_hp", lrtdp_by_approach(0, 200, "hp")), ("lrtdp_entropy", lrtdp_by_approach(0, 200, "entropy")),
                 ("HP", HP_Random.main_HP), ("entropy", HP_Random.main_entropy),
