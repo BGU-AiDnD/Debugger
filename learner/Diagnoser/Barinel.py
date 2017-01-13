@@ -18,7 +18,6 @@ class Barinel:
         self.e_vector = []
         self.prior_probs = []
         self.diagnoses = []
-        self.staccato = Staccato.Staccato()
 
 
     def set_matrix_error(self,M,e):
@@ -47,9 +46,7 @@ class Barinel:
             #setup target function
             TargetFunc =TF.TF()
             TargetFunc.setup(self.M_matrix,self.e_vector,temp_diagnosis.get_diag())
-
             dim = len(temp_diagnosis.get_diag()) #deduce dimensions
-
             #optimize according to designated tehnique
             x = []
             e_dk = 0.0
@@ -96,9 +93,7 @@ class Barinel:
     def run(self):
         #initialize
         self.diagnoses = []
-
-        #generate diagnoses using STACCATO
-        diags = self.staccato.run(self.M_matrix, self.e_vector)
+        diags = Staccato.Staccato().run(self.M_matrix, self.e_vector)
         for  diag in diags:
             d=Diagnosis.Diagnosis()
             d.diagnosis=diag
@@ -127,13 +122,11 @@ def load_file_with_header( file):
 if __name__=="__main__":
     matrix=[]
     error_vec=[]
-
     matrix.append([1,1,0])
     matrix.append([0,1,1])
     matrix.append([1,0,0])
     matrix.append([1,0,1])
     error_vec.extend([1,1,1,0])
-
     bar=Barinel()
     bar.set_matrix_error(matrix,error_vec)
     diags=bar.run()

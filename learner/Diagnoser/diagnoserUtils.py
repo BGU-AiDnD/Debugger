@@ -39,7 +39,6 @@ class FullMatrix:
                 if test[comp]==1:
                     chosen.append(comp)
                     UnusedComps.remove(comp)
-
         optimizedMatrix=FullMatrix()
         optimizedMatrix.probabilities=[x[1] for x in enumerate(fullMatrix.probabilities) if x[0] in chosen]
         newErr=[]
@@ -51,10 +50,7 @@ class FullMatrix:
                 newErr.append(err)
         optimizedMatrix.matrix=newMatrix
         optimizedMatrix.error=newErr
-
         return optimizedMatrix,sorted(chosen)
-
-
 
 
 class dynamicSpectrum:
@@ -81,7 +77,6 @@ class dynamicSpectrum:
             diag_comps=[chosenDict[x] for x in diag.diagnosis]
             diag.diagnosis=list(diag_comps)
             diagnoses.append(diag)
-        ##change diagnoses to real comps
         return diagnoses
 
 

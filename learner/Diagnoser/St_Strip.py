@@ -4,6 +4,10 @@ import Ochiai_Rank
 
 class St_Strip:
     def __init__(self,M,N):
+        """
+        :param M: components No.
+        :param N: sets No.
+        """
         self.comps={}
         for x in range(M):
             self.comps[x]=False
@@ -22,7 +26,6 @@ class St_Strip:
 
     def setup(self,comps,conflicts,last_unstripped_comps,last_unstripped_confs):
         self.comps=dict(comps)
-        #self.confs=dict(confs)
         self.conflicts=dict(conflicts)
 
         self.last_unstripped_comps=last_unstripped_comps
@@ -119,10 +122,8 @@ class St_Strip:
             for comp in unstripped_comps:
                 if (M_matrix[conf][comp] == 1 and e_vector[conf] == 1):
                     self.ochiai_ranks[comp].advance_counter(1, 1)
-
                 elif (M_matrix[conf][comp] == 0 and e_vector[conf] == 1):
                     self.ochiai_ranks[comp].advance_counter(0, 1)
-
                 elif (M_matrix[conf][comp] == 1 and e_vector[conf] == 0):
                     self.ochiai_ranks[comp].advance_counter(1, 0)
 
