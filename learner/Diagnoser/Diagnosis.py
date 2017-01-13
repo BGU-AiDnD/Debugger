@@ -25,6 +25,9 @@ class Diagnosis:
     def __str__(self):
         return str(self.diagnosis)+" P: "+str(self.probability)
 
+    def __repr__(self):
+        return str(self.diagnosis)+" P: "+str(self.probability)
+
 
 
 

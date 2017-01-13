@@ -36,8 +36,6 @@ def get_instance(key):
 def create_instance_from_key(key):
     initial, failed = key.split('-')
     error = [1 if i in eval(failed) else 0 for i in xrange(len(pool))]
-    if 1 not in error:
-        x = 9
     return ExperimentInstance(eval(initial), error)
 
 class ExperimentInstance:
@@ -51,8 +49,6 @@ class ExperimentInstance:
         ds.TestsComponents = copy.deepcopy([x for ind,x in enumerate(pool) if ind in self.initial_tests ])
         ds.probabilities=list(priors)
         ds.error=[x for ind,x in enumerate(self.error) if ind in self.initial_tests ]
-        if 1 not in ds.error:
-            x=9
         return ds
 
     def get_optionals_actions(self):
