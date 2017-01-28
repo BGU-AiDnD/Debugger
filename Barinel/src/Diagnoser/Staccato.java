@@ -1,5 +1,8 @@
 package Diagnoser;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.TreeSet;
@@ -260,6 +263,34 @@ public class Staccato {
 		return result;
 	}
 	
+	public void save_matrix(Dynamic_Spectrum ds){
+		try {
+		String file_name = "C:\\temp\\barinel\\mat12.csv";
+		File file = new File(file_name);
+		if (!file.exists())
+				file.createNewFile();
+		
+		//get ready
+		PrintWriter writer = new PrintWriter(file);
+		for(int j=0; j < ds.M[0].length; j++){
+			if (j ==ds.M[0].length -1)
+				writer.println("0.01");
+			else
+				writer.print("0.01,");
+		}
+		for(int i=0; i < ds.M.length; i++){
+			for(int j=0; j < ds.M[i].length; j++){
+				writer.print(ds.M[i][j] + ",");
+			}
+			writer.println(ds.e[i]);
+		}
+		
+		writer.close();
+		} catch (Exception e) {
+			
+		}
+		
+	}
 	
 	/**************************************************
 	 * Runs Staccato algorithm for a dynamic spectrum.
@@ -268,6 +299,7 @@ public class Staccato {
 	 **************************************************/
 	public LinkedList<int[]> run(Dynamic_Spectrum ds){
 		LinkedList<int[]> diags;
+		save_matrix(ds);
 		diags = run(ds.M, ds.e);
 		
 		return diags;

@@ -32,62 +32,34 @@ class Barinel:
         comps = diag.get_diag()
         prob = 1
         for i in range(len(comps)):
-            prob =prob * self.prior_probs[comps[i]]
+            prob *= self.prior_probs[comps[i]]
         return prob
 
     def generate_probs(self):
-        #declare vars
-        #temp_probs = new double[diagnoses.size()]
-        new_set = []
+        new_diagnoses = []
         probs_sum = 0.0
-
-        #start process
-        for  temp_diagnosis in  self.diagnoses:
+        for diag in self.diagnoses:
             #setup target function
-            TargetFunc =TF.TF()
-            TargetFunc.setup(self.M_matrix,self.e_vector,temp_diagnosis.get_diag())
-            dim = len(temp_diagnosis.get_diag()) #deduce dimensions
-            #optimize according to designated tehnique
-            x = []
-            e_dk = 0.0
-            dk = 0.0
-            lb=[0 for x in temp_diagnosis.get_diag()]
-            ub=[1 for x in temp_diagnosis.get_diag()]
-            initialGuess=[random.uniform(0, 1) for x in temp_diagnosis.get_diag()]
-            boundsC=tuple(zip(lb,ub))
-            res=scipy.optimize.minimize(TargetFunc.probabilty_TF,initialGuess,method="L-BFGS-B",bounds=boundsC,jac=False)
+            tf =TF.TF()
+            tf.setup(self.M_matrix,self.e_vector,diag.get_diag())
+            initialGuess=[random.uniform(0, 1) for _ in diag.get_diag()]
+            boundsC=tuple([(0,1) for _ in diag.get_diag()])
+            res=scipy.optimize.minimize(tf.probabilty_TF,initialGuess,method="L-BFGS-B",bounds=boundsC)
             x = res.x
-            e_dk = -TargetFunc.probabilty_TF(x)
-
-            dk=0
+            e_dk = -tf.probabilty_TF(x)
+            dk = 0.0
             if (self.prior_probs == []):
-                dk = math.pow(prior_p,len(temp_diagnosis.get_diag())) #assuming same prior prob. for every component.
-
+                dk = math.pow(prior_p,len(diag.get_diag())) #assuming same prior prob. for every component.
             else:
-                dk = self.non_uniform_prior(temp_diagnosis)
-
-            temp_diagnosis.probability=e_dk * dk #temporary probability
-
-            #update probabilities sum
-            probs_sum =probs_sum+ temp_diagnosis.probability
-
-            #save h probabilities
-            temp_diagnosis.h_list=x
-
-        #normalize probabilities (and order them)
-        temp_prob=0
-        for  temp_diagnosis in self.diagnoses:
-            #normalize
-            temp_prob = temp_diagnosis.get_prob() / probs_sum
-
-            #round
-
-            #set
-            temp_diagnosis.probability=temp_prob
-
-            new_set.append(temp_diagnosis)
-
-        self.diagnoses = new_set
+                dk = self.non_uniform_prior(diag)
+            diag.probability=e_dk * dk #temporary probability
+            probs_sum += diag.probability
+            diag.h_list=x
+        for diag in self.diagnoses:
+            temp_prob = diag.get_prob() / probs_sum
+            diag.probability=temp_prob
+            new_diagnoses.append(diag)
+        self.diagnoses = new_diagnoses
 
 
     def run(self):
@@ -105,30 +77,26 @@ class Barinel:
         return self.diagnoses
 
 def load_file_with_header( file):
-    reader=csv.reader(open(file,"r"))
-    lines=[x for x in reader]
-    ans= Barinel()
-    probs=[float(x) for x in lines[0][:-1]]
-    lines=lines[1:]
-    comps_num=len(probs)
-    erorr_vector=[int(x[comps_num]) for x in  lines]
-    Matrix=[[int(y) for y in x[:comps_num]] for x in  lines]
-    ans.set_matrix_error(Matrix,erorr_vector)
-    ans.set_prior_probs(probs)
-    return ans
+    with open(file,"r") as f:
+        lines = list(csv.reader(f))
+        probs=[float(x) for x in lines[0]]
+        comps_num=len(probs)
+        tests = lines[1:]
+        erorr_vector = [int(t[comps_num]) for t in  tests]
+        Matrix = [[int(float(y)) for y in x[:comps_num]] for x in  tests]
+        ans = Barinel()
+        ans.set_prior_probs(probs)
+        ans.set_matrix_error(Matrix,erorr_vector)
+        return ans
 
 
+
+def test():
+    bar = load_file_with_header(r"C:\temp\barinel\matrix.csv")
+    diags = bar.run()
+    sorted_diags = sorted(diags, key=lambda d: d.probability, reverse=True)
+    exit()
 
 if __name__=="__main__":
-    matrix=[]
-    error_vec=[]
-    matrix.append([1,1,0])
-    matrix.append([0,1,1])
-    matrix.append([1,0,0])
-    matrix.append([1,0,1])
-    error_vec.extend([1,1,1,0])
-    bar=Barinel()
-    bar.set_matrix_error(matrix,error_vec)
-    diags=bar.run()
-
     bar=load_file_with_header("C:\GitHub\matrix\OPT__Rand.csv")
+    diags = bar.run()

@@ -7,6 +7,6 @@
 <listEntry value="1"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="Diagnoser.Barinel"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="40_0.6_0.0_176.csv out1.csv out2.csv"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="C:\temp\barinel\matrix.csv C:\temp\barinel\reg.csv C:\temp\barinel\out.csv"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="Barinel"/>
 </launchConfiguration>

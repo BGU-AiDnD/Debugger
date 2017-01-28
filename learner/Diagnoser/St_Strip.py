@@ -120,16 +120,10 @@ class St_Strip:
         unstripped_comps = self.unstripped_comps_array_Func()
         for conf in unstripped_confs:
             for comp in unstripped_comps:
-                if (M_matrix[conf][comp] == 1 and e_vector[conf] == 1):
-                    self.ochiai_ranks[comp].advance_counter(1, 1)
-                elif (M_matrix[conf][comp] == 0 and e_vector[conf] == 1):
-                    self.ochiai_ranks[comp].advance_counter(0, 1)
-                elif (M_matrix[conf][comp] == 1 and e_vector[conf] == 0):
-                    self.ochiai_ranks[comp].advance_counter(1, 0)
+                self.ochiai_ranks[comp].advance_counter(M_matrix[conf][comp], e_vector[conf])
 
     def get_ochiai_rank(self, M_matrix,  e_vector,  comp):
-        if (len(self.ochiai_ranks) == 0):
-            self.calc_ochiai_ranks(M_matrix, e_vector)
+        self.calc_ochiai_ranks(M_matrix, e_vector)
         return self.ochiai_ranks[comp].get_rank()
     
     def strip(self, M_matrix,  e_vector,  comp):
@@ -146,8 +140,8 @@ class St_Strip:
 
         self.strip_comp(comp)
 		
-        removed_confs_array = list(removed_confs)
-        self.update_ochiai_ranks(M_matrix, e_vector, removed_confs_array, comp)
+        # removed_confs_array = list(removed_confs)
+        # self.update_ochiai_ranks(M_matrix, e_vector, removed_confs_array, comp)
 
         self.last_unstripped_comps = self.unstripped_comps_array
         self.last_unstripped_confs = self.unstripped_confs_array
@@ -178,10 +172,9 @@ class St_Strip:
     def unstripped_confs_array_Func(self):
         list=[]
         if (self.unstripped_confs_array == [] and self.last_unstripped_confs != []):
-            for conf in  self.last_unstripped_confs:
-                if (self.conflicts[conf] != True):
+            for conf in self.last_unstripped_confs:
+                if (not self.conflicts[conf]):
                     list.append(conf)
-
             self.last_unstripped_confs = self.unstripped_confs_array
             self.unstripped_confs_array = list
 
@@ -189,7 +182,5 @@ class St_Strip:
             for i in range(len(self.conflicts)):
                 if (self.conflicts[i] != True):
                     list.append(i)
-
             self.unstripped_confs_array = list
-
         return self.unstripped_confs_array

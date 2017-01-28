@@ -26,6 +26,13 @@ class FullMatrix:
         bar.set_prior_probs(self.probabilities)
         return bar.run()
 
+    def save_to_csv_file(self, out_file):
+        import csv
+        lines = [self.probabilities] + map(lambda x : x[0] + [x[1]] ,zip(self.matrix, self.error))
+        with open(out_file, "wb") as f:
+            writer = csv.writer(f)
+            writer.writerows(lines)
+
     # optimization: remove unreachable components & components that pass all their tests
     # return: optimized FullMatrix, chosen_components( indices)
     @staticmethod
@@ -69,7 +76,7 @@ class dynamicSpectrum:
     #return diagnoses
     def diagnose(self):
         fullM,chosen=FullMatrix.optimize_FullMatrix(self.convertToFullMatrix())
-        chosenDict=dict([x for x in enumerate(chosen)])
+        chosenDict=dict(enumerate(chosen))
         Opt_diagnoses=fullM.diagnose()
         diagnoses=[]
         for diag in Opt_diagnoses:

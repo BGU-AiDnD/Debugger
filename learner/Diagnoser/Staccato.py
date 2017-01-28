@@ -3,7 +3,7 @@ __author__ = 'amir'
 
 import St_Strip
 
-L = 50
+L = 20
 
 class Staccato():
     def __init__(self):
@@ -12,7 +12,7 @@ class Staccato():
     def ochiai(self,M_matrix, e_vector, strip):
         result = {}
         for i in range(len(M_matrix[0])):
-            result[i]  = strip.get_ochiai_rank(M_matrix, e_vector, i)
+            result[i] = strip.get_ochiai_rank(M_matrix, e_vector, i)
         return result
 
 
@@ -23,7 +23,7 @@ class Staccato():
         for i in range(M):
             if (ochiai_vector[i] > 0):
                 ranks.append((i, ochiai_vector[i]))
-        sorted_by_second = sorted(ranks, key=lambda tup: tup[1])
+        sorted_by_second = sorted(ranks, key=lambda tup: tup[1], reverse=True)
         result = []
         for comp,rank in sorted_by_second:
             result.append(comp)
@@ -49,15 +49,19 @@ class Staccato():
 
     def is_subsumed(self,diagnoses, candidate):
         for current_d in diagnoses:
-            if current_d in candidate:
+            is_sublist = True
+            for elem in current_d:
+                if elem not in candidate:
+                    is_sublist = False
+                    break
+            if is_sublist:
                 return True
         return False
 
     def runStrip(self, M_matrix, e_vector, strip):
-        self.calls = self.calls+1
+        self.calls += 1
         if (self.calls > L):
             return []
-        #declare vars
         diagnoses = []
         #process
         ranking = self.rank(M_matrix, e_vector, strip) #rank components

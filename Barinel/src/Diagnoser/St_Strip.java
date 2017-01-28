@@ -205,6 +205,13 @@ public class St_Strip {
 	}
 	
 	
+	public double[] get_ochiai_ranks_as_array(){
+		double[] ranks = new double[ochiai_ranks.length];
+		for (int i=0; i < ranks.length; i++)
+			ranks[i] = ochiai_ranks[i].get_rank();
+		return ranks;
+	}
+	
 	/**********************************************
 	 * Calculates Ochiai ranks for the components.
 	 * @param M_matrix
