@@ -31,7 +31,6 @@ def mcts_uct(ei, iterations, approach):
     Implementation of the UCT variant of the MCTS algorithm.
     """
     clear_states()
-    print "collect garbage: ", gc.collect()
     root = generateState(None, None, ei, approach)
     for i in xrange(iterations):
         child = root
