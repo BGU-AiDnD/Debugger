@@ -92,10 +92,9 @@ def load_file_with_header( file):
 
 
 def test():
-    bar = load_file_with_header(r"C:\temp\barinel\matrix.csv")
+    bar = load_file_with_header(r"C:\Users\User\Downloads\ant3\files_Most760\barinel\100_0.6_0.0_2.csv")
     diags = bar.run()
     sorted_diags = sorted(diags, key=lambda d: d.probability, reverse=True)
-    exit()
 
 if __name__=="__main__":
     bar=load_file_with_header("C:\GitHub\matrix\OPT__Rand.csv")

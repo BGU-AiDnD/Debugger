@@ -234,12 +234,11 @@ class ExperimentInstance:
 
     def calc_precision_recall(self):
         self.diagnose()
-        s=sum([d.probability for d in self.diagnoses ])
         recall_accum=0
         precision_accum=0
         validComps=[x for x in range(max(reduce(list.__add__, pool))) if x not in bugs]
 
-        for  d in self.diagnoses:
+        for d in self.diagnoses:
             dg=d.diagnosis
             pr=d.probability
             precision, recall = self.precision_recall_diag(bugs, dg, pr, validComps)
@@ -266,8 +265,5 @@ def simulateTestOutcome(ei, next_test, outcome):
     initial_tests = copy.deepcopy(ei.initial_tests)
     initial_tests.append(next_test)
     error = list(ei.error)
-    if 1 not in error:
-        fdf=4
     error[next_test] = outcome
-    returned_instance = create_instance_from_key(create_key(initial_tests, error))
-    return returned_instance
+    return create_instance_from_key(create_key(initial_tests, error))

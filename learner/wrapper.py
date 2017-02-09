@@ -672,6 +672,8 @@ if __name__ == '__main__':
     globalConf = os.path.realpath(os.path.join(current_dir, "../globalConf.txt"))
     if len(sys.argv) == 1:
         Planner.planningExperiments.test()
+        # import Diagnoser.Barinel
+        # Diagnoser.Barinel.test()
     else:
         print(sys.argv[1], globalConf)
         if sys.argv[2]=="learn":

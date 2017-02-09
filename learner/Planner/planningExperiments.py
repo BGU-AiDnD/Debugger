@@ -132,14 +132,17 @@ def planning_for_project(dir):
         runAll_optimized(in_dir, out_dir, planners)
 
 def test():
-    ei = Diagnoser.diagnoserUtils.readPlanningFile(r"C:\Temp\ant_bug\100_0.6_0.0_0_all.txt")
+    ei = Diagnoser.diagnoserUtils.readPlanningFile(r"C:\Users\User\Downloads\ant3\files_Most760\planner\130_uniform_0.txt")
     print ei.calc_precision_recall()
     planners = [("mcts_hp", mcts_by_approach("hp", 200)), ("mcts_entropy", mcts_by_approach("entropy", 200)),
                 ("lrtdp_hp", lrtdp_by_approach(0, 200, "hp")), ("lrtdp_entropy", lrtdp_by_approach(0, 200, "entropy")),
                 ("HP", HP_Random.main_HP), ("entropy", HP_Random.main_entropy),
                 ("Random", HP_Random.main_Random), ("initials", HP_Random.only_initials),
                 ("all_tests", HP_Random.all_tests)]
-    for name, alg in planners:
+    planners = [("HP", HP_Random.main_HP), ("entropy", HP_Random.main_entropy),
+                ("Random", HP_Random.main_Random), ("initials", HP_Random.only_initials),
+                ("all_tests", HP_Random.all_tests)]
+    for name, alg in reversed(planners):
         print name
         print alg(ei)
 
