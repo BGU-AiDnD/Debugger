@@ -9,16 +9,9 @@ class Staccato():
     def __init__(self):
         self.calls=0
 
-    def ochiai(self,M_matrix, e_vector, strip):
-        result = {}
-        for i in range(len(M_matrix[0])):
-            result[i] = strip.get_ochiai_rank(M_matrix, e_vector, i)
-        return result
-
-
     def rank(self, M_matrix, e_vector,  strip):
         M = len(M_matrix[0])
-        ochiai_vector = self.ochiai(M_matrix, e_vector, strip)
+        ochiai_vector = strip.calc_ochiai_ranks(M_matrix, e_vector)
         ranks =[]
         for i in range(M):
             if (ochiai_vector[i] > 0):
@@ -89,7 +82,7 @@ class Staccato():
             else:
                 break
             #scan "tag" diagnoses
-            for tag_diag in  diagnoses_tag:
+            for tag_diag in diagnoses_tag:
                 temp_d = self.join(tag_diag,j)
                 if (not self.is_subsumed(diagnoses, temp_d)):
                     diagnoses.append(temp_d)

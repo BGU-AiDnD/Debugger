@@ -237,7 +237,6 @@ class ExperimentInstance:
         recall_accum=0
         precision_accum=0
         validComps=[x for x in range(max(reduce(list.__add__, pool))) if x not in bugs]
-
         for d in self.diagnoses:
             dg=d.diagnosis
             pr=d.probability

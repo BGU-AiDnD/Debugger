@@ -134,15 +134,18 @@ def planning_for_project(dir):
 def test():
     ei = Diagnoser.diagnoserUtils.readPlanningFile(r"C:\Users\User\Downloads\ant3\files_Most760\planner\130_uniform_0.txt")
     print ei.calc_precision_recall()
-    planners = [("mcts_hp", mcts_by_approach("hp", 200)), ("mcts_entropy", mcts_by_approach("entropy", 200)),
-                ("lrtdp_hp", lrtdp_by_approach(0, 200, "hp")), ("lrtdp_entropy", lrtdp_by_approach(0, 200, "entropy")),
+    planners = [("mcts_hp", mcts_by_approach("hp", 10)), ("mcts_entropy", mcts_by_approach("entropy", 10)),
+                ("lrtdp_hp", lrtdp_by_approach(0, 10, "hp")), ("lrtdp_entropy", lrtdp_by_approach(0, 10, "entropy")),
                 ("HP", HP_Random.main_HP), ("entropy", HP_Random.main_entropy),
                 ("Random", HP_Random.main_Random), ("initials", HP_Random.only_initials),
                 ("all_tests", HP_Random.all_tests)]
-    planners = [("HP", HP_Random.main_HP), ("entropy", HP_Random.main_entropy),
+    planners = [#("mcts_hp", mcts_by_approach("hp", 5)), ("mcts_entropy", mcts_by_approach("entropy", 5)),
+                ("entropy", HP_Random.main_entropy),
                 ("Random", HP_Random.main_Random), ("initials", HP_Random.only_initials),
                 ("all_tests", HP_Random.all_tests)]
     for name, alg in reversed(planners):
+        import gc
+        gc.collect()
         print name
         print alg(ei)
 

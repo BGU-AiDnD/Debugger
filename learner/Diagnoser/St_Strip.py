@@ -114,6 +114,7 @@ class St_Strip:
                 self.ochiai_ranks[comp].reduce_counter(1, 0)
 
     def calc_ochiai_ranks(self, M_matrix, e_vector):
+        result = {}
         for i in range(len(M_matrix[0])):
             self.ochiai_ranks[i] = Ochiai_Rank.Ochiai_Rank()
         unstripped_confs = self.unstripped_confs_array_Func()
@@ -121,11 +122,10 @@ class St_Strip:
         for conf in unstripped_confs:
             for comp in unstripped_comps:
                 self.ochiai_ranks[comp].advance_counter(M_matrix[conf][comp], e_vector[conf])
+        for i in range(len(M_matrix[0])):
+            result[i] = self.ochiai_ranks[i].get_rank()
+        return result
 
-    def get_ochiai_rank(self, M_matrix,  e_vector,  comp):
-        self.calc_ochiai_ranks(M_matrix, e_vector)
-        return self.ochiai_ranks[comp].get_rank()
-    
     def strip(self, M_matrix,  e_vector,  comp):
         unstripped_confs = self.unstripped_confs_array_Func()
         removed_confs = []

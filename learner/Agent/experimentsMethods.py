@@ -8,7 +8,6 @@ import math
 import sqlite3
 import shutil
 import results
-import winsound
 import subprocess
 import wekaMethods.wekaAccuracy
 import utilsConf
@@ -1314,7 +1313,6 @@ def Most_All_Real(outPath,dbPath,packsPath,wekaBase,numOfExperiments,numOfBugs,t
         writer = csv.writer(f)
         writer.writerows(linesWrite)
 
-    winsound.PlaySound("SystemExit", winsound.SND_ALIAS)
 
 
 
@@ -1380,7 +1378,6 @@ def Old_main():
         #results.planner_recordes(outPath+"plannerRes"+t+".csv",outPath+"plannerMEDRes"+t+".csv",outPath+"\\plannerRecords\\",numOfExperiments,t,weka,exps)
     #results.resultsAllBarinel("%s\\barinelOptA.csv" % outPath,"%s\\barinelOptA2.csv" % outPath, "%s\\" % outPath,1,weka,numOfExperiments)
     results.resultsMultyWekaAndSanity("%s\\barinelOptA.csv" % outPath,"%s\\barinelOptA2.csv" % outPath, "%s\\" % outPath,1,numOfExperiments,times,wekaAnsArr)
-    winsound.PlaySound("SystemExit", winsound.SND_ALIAS)
 
 
 def eclipse():

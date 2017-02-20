@@ -1,7 +1,7 @@
 __author__ = 'amir'
 
 import csv
-import scipy
+import numpy as np
 import sys, string, os
 
 
@@ -102,7 +102,7 @@ def buggedprobabilities(buggedFiles,wekaFile):
 def method_name():
     global priors, vals, x
     priors = buggedprobabilities('C:\GitHub\weka\\bugged.csv', 'C:\GitHub\weka\outNew.csv')
-    print scipy.average(priors.values())
+    print np.mean(priors.values())
     print max(priors.values())
     print min(priors.values())
     print sorted(priors.items(), key=lambda r: r[1])

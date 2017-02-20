@@ -57,14 +57,14 @@ def probabilty_TF(h): #should receive only diag comps
     #print(all_s)
     return -p_d
 
-lb=[0 for x in d]
-ub=[1 for x in d]
+lb=[0 for _ in d]
+# ub=[1 for _ in d]
 #ub=[1 for x,ind in enumerate(matrix[0]) if ind ]
 
 
 xopt, fopt = pso(probabilty_TF, lb, ub,swarmsize =1000,maxiter =10000000)
-print xopt, -fopt
+print -fopt
 
 
-print -probabilty_TF([0.47,0.19])
-print -probabilty_TF([0.41,0.5])
+# print -probabilty_TF([0.47,0.19])
+# print -probabilty_TF([0.41,0.5])

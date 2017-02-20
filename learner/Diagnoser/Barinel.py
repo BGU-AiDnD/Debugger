@@ -6,7 +6,6 @@ import Diagnosis
 import math
 import TF
 import random
-import scipy.optimize
 import csv
 
 prior_p = 0.05
@@ -39,22 +38,15 @@ class Barinel:
         new_diagnoses = []
         probs_sum = 0.0
         for diag in self.diagnoses:
-            #setup target function
-            tf =TF.TF()
-            tf.setup(self.M_matrix,self.e_vector,diag.get_diag())
-            initialGuess=[random.uniform(0, 1) for _ in diag.get_diag()]
-            boundsC=tuple([(0,1) for _ in diag.get_diag()])
-            res=scipy.optimize.minimize(tf.probabilty_TF,initialGuess,method="L-BFGS-B",bounds=boundsC)
-            x = res.x
-            e_dk = -tf.probabilty_TF(x)
             dk = 0.0
             if (self.prior_probs == []):
                 dk = math.pow(prior_p,len(diag.get_diag())) #assuming same prior prob. for every component.
             else:
                 dk = self.non_uniform_prior(diag)
+            tf = TF.TF(self.M_matrix,self.e_vector,diag.get_diag())
+            e_dk = tf.maximize()
             diag.probability=e_dk * dk #temporary probability
             probs_sum += diag.probability
-            diag.h_list=x
         for diag in self.diagnoses:
             temp_prob = diag.get_prob() / probs_sum
             diag.probability=temp_prob
@@ -70,7 +62,6 @@ class Barinel:
             d=Diagnosis.Diagnosis()
             d.diagnosis=diag
             self.diagnoses.append(d)
-
         #generate probabilities
         self.generate_probs()
 

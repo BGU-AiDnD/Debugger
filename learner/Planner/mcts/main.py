@@ -13,7 +13,6 @@ def main_mcts(ei, approach, iterations=DEFAULT_BUDGET):
         steps += 1
         action, weight = mcts.mcts_uct(state, iterations, approach)
         state = Diagnoser.ExperimentInstance.addTest(state, action)
-
     precision, recall = state.calc_precision_recall()
     return precision, recall, steps, repr(state)
 

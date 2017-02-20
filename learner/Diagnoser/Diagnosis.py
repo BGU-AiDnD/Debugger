@@ -5,15 +5,11 @@ class Diagnosis:
     def __init__(self):
         self.diagnosis = []
         self.probability = 0.0
-        self.h_list = []
-        self.sorted = False
 
     def clone(self):
         res=Diagnosis()
         res.diagnosis = list(self.diagnosis)
         res.probability = self.get_prob()
-        res.h_list = list(self.h_list)
-        res.sorted = self.sorted
         return res
 
     def get_diag(self):
