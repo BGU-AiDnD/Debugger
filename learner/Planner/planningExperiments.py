@@ -6,6 +6,8 @@ import Planner.lrtdp.main
 import Planner.lrtdp.LRTDPModule
 import Diagnoser.diagnoserUtils
 import HP_Random
+import similarity
+import time
 
 
 import glob
@@ -34,7 +36,7 @@ def runAll(instancesDir, outDir, planners):
 
 
 def runAll_optimized(instancesDir, outDir, planners):
-    outData=[["file_name","planner","learn_algorithm","pBug","pValid","tests","index","precision","recall","steps", "repr" ]]
+    outData=[["file_name","planner","learn_algorithm","pBug","pValid","tests","index","precision","recall","steps", "time", "repr" ]]
     outfile=os.path.join(outDir,"planningMED.csv")
     for f in glob.glob(os.path.join(instancesDir,"*.txt")):
         print f
@@ -42,8 +44,10 @@ def runAll_optimized(instancesDir, outDir, planners):
         file=os.path.join(instancesDir,f)
         ei = Diagnoser.diagnoserUtils.readPlanningFile(file)
         for name,alg in planners:
+            start = time.time()
             precision,recall,steps, rpr =alg(ei)
-            outData.append([os.path.basename(f), name,learn_alg,pBug,pValid,tests,index,precision,recall,steps, rpr])
+            total_time = time.time() - start
+            outData.append([os.path.basename(f), name,learn_alg,pBug,pValid,tests,index,precision,recall,steps,total_time, rpr])
             writer=csv.writer(open(outfile,"wb"))
             writer.writerows(outData)
 
@@ -106,6 +110,12 @@ def lrtdp_by_approach(epsilonArg, iterations, approachArg):
         return Planner.lrtdp.LRTDPModule.lrtdp()
     return approached_lrtdp
 
+def entropy_by_threshold(threshold):
+    return lambda ei: HP_Random.main_entropy(ei, threshold=threshold)
+
+def entropy_by_batch(batch):
+    return lambda ei: HP_Random.main_entropy(ei, batch=batch)
+
 def check_all_planners(instances_dir, out_dir):
     planners=[("mcts_hp",mcts_by_approach("hp", 100) ), ("mcts_entropy",mcts_by_approach("entropy", 100) ),
               ("lrtdp_hp",lrtdp_by_approach(0 , 20, 100,"hp")),("lrtdp_entropy",lrtdp_by_approach(0 , 20, 100,"entropy")),
@@ -123,9 +133,12 @@ def planning_for_project(dir):
         in_dir = os.path.join(experiment_dir,"planner")
         out_dir = os.path.join(experiment_dir,"all_planners")
         mkOneDir(out_dir)
-        planners = [("mcts_hp", mcts_by_approach("hp", 200)), ("mcts_entropy", mcts_by_approach("entropy", 200)),
-                    ("lrtdp_hp", lrtdp_by_approach(0, 200, "hp")),
-                    ("lrtdp_entropy", lrtdp_by_approach(0, 200, "entropy")),
+        planners = [#("mcts_hp", mcts_by_approach("hp", 200)), ("mcts_entropy", mcts_by_approach("entropy", 200)),
+                    # ("lrtdp_hp", lrtdp_by_approach(0, 200, "hp")),
+                    # ("lrtdp_entropy", lrtdp_by_approach(0, 200, "entropy")),
+                    ("entropy_0.6", entropy_by_threshold(0.6)),
+                ("entropy_0.4", entropy_by_threshold(0.4)),
+                ("entropy_0.2", entropy_by_threshold(0.2)),
                     ("HP", HP_Random.main_HP), ("entropy", HP_Random.main_entropy),
                     ("Random", HP_Random.main_Random), ("initials", HP_Random.only_initials),
                     ("all_tests", HP_Random.all_tests)]
@@ -140,14 +153,23 @@ def test():
                 ("Random", HP_Random.main_Random), ("initials", HP_Random.only_initials),
                 ("all_tests", HP_Random.all_tests)]
     planners = [#("mcts_hp", mcts_by_approach("hp", 5)), ("mcts_entropy", mcts_by_approach("entropy", 5)),
-                ("entropy", HP_Random.main_entropy),
-                ("Random", HP_Random.main_Random), ("initials", HP_Random.only_initials),
+                ("HP", HP_Random.main_HP),
+                ("entropy_0.6", entropy_by_threshold(0.6)),
+                ("entropy_0.4", entropy_by_threshold(0.4)),
+                ("entropy_0.2", entropy_by_threshold(0.2)),
+                # ("entropy_batch_2", entropy_by_batch(2)),
+                # ("entropy_batch_5", entropy_by_batch(5)),
+                # ("entropy", HP_Random.main_entropy),
+                # ("Random", HP_Random.main_Random), ("initials", HP_Random.only_initials),
                 ("all_tests", HP_Random.all_tests)]
     for name, alg in reversed(planners):
         import gc
         gc.collect()
+        start = time.time()
         print name
-        print alg(ei)
+        print  alg(ei)
+        print time.time() - start
+
 
 if __name__ == "__main__":
     pass

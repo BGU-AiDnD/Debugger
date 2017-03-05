@@ -55,7 +55,7 @@ def lrtdp():
             break
         steps += 1
         action = state.greedyAction()
-        ei = Diagnoser.ExperimentInstance.addTest(state.experimentInstance, action)
+        ei = Diagnoser.ExperimentInstance.addTests(state.experimentInstance, action)
         state = generateState(ei)
         print "action: ", action
     precision, recall = state.experimentInstance.calc_precision_recall()
@@ -111,7 +111,7 @@ def evaluatePolicy():
     ei=state.experimentInstance
     while (not state.isSolved) and (not state.terminal_or_allReach()):
         action = state.greedyAction()
-        ei = Diagnoser.ExperimentInstance.addTest(ei, action)
+        ei = Diagnoser.ExperimentInstance.addTests(ei, action)
         state = generateState(ei)
         steps = steps + 1
         precision, recall = ei.calc_precision_recall()
@@ -137,7 +137,7 @@ def multiLrtdp():
         if not success:
             return
         a=state.greedyAction()
-        ei = Diagnoser.ExperimentInstance.addTest(ei, a)
+        ei = Diagnoser.ExperimentInstance.addTests(ei, a)
         state=generateState(ei)
         steps=steps+1
     precision, recall=ei.calc_precision_recall()

@@ -3,6 +3,8 @@ import math
 import random
 import numpy
 import Diagnoser.diagnoserUtils
+import Planner.domain_knowledge
+from math import ceil
 
 __author__ = 'amir'
 
@@ -60,14 +62,14 @@ class ExperimentInstance:
         probabilites = [ 1.0/len(optionals) for x in optionals]
         return  optionals, probabilites
 
-    def get_optionals_probabilities_by_approach(self, approach):
+    def get_optionals_probabilities_by_approach(self, approach, *args, **kwargs):
         optionals, probabilities = [], []
         if approach == "uniform":
             optionals, probabilities = self.get_optionals_probabilities()
         elif approach == "hp":
             optionals, probabilities = self.next_tests_by_hp()
         elif approach == "entropy":
-            optionals, probabilities = self.next_tests_by_entropy()
+            optionals, probabilities = self.next_tests_by_entropy(*args, **kwargs)
         else:
             raise RuntimeError("self.approach is not configured")
         return optionals, probabilities
@@ -80,11 +82,9 @@ class ExperimentInstance:
         self.diagnose()
         compsProbs={}
         for d in self.diagnoses:
-            p = d.probability
-            for comp in d.diagnosis:
-                if comp not in compsProbs:
-                    compsProbs[comp] = 0
-                compsProbs[comp] = compsProbs[comp] + p
+            p = d.get_prob()
+            for comp in d.get_diag():
+                compsProbs[comp] = compsProbs.get(comp,0) + p
         return sorted(compsProbs.items(),key=lambda x: x[1])
 
     def next_tests_by_hp(self):
@@ -109,18 +109,40 @@ class ExperimentInstance:
         tests_probabilities = [x / sum(tests_probabilities) for x in tests_probabilities]
         return optionals, tests_probabilities
 
-    def next_tests_by_entropy(self):
+    def next_tests_by_bd(self):
+        self.diagnose()
+        probabilities = []
+        optionals = self.get_optionals_actions()
+        for test in optionals:
+            p = 0.0
+            trace = pool[test]
+            for d in self.diagnoses:
+                p += (d.get_prob() / len(d.get_diag())) * ([x for x in d.get_diag() if x in trace])
+            probabilities.append(p)
+        probabilities = [abs(x) for x in probabilities]
+        probabilities = [x / sum(probabilities) for x in probabilities]
+        return optionals, probabilities
+
+    def next_tests_by_entropy(self, threshold = 1.0):
         """
         order by InfoGain using entropy
         return tests and probabilities
         """
         probabilities = []
-        optionals = self.get_optionals_actions()
-        for t in optionals:
+        optionals = []
+        threshold_sum = 0.0
+        # optionals = self.get_optionals_actions()
+        optionals_seperator, tests_probabilities = Planner.domain_knowledge.seperator_hp(self)
+        # optionals, tests_probabilities = self.next_tests_by_hp()
+        for t, p in sorted(zip(optionals_seperator, tests_probabilities), key=lambda x: x[1], reverse=True)[:int(ceil(len(optionals_seperator) * threshold))]:
+            # if threshold_sum > threshold:
+            #     break
+            threshold_sum += p
             probabilities.append(self.info_gain(t))
+            optionals.append(t)
         if sum(probabilities) == 0.0:
             return self.get_optionals_probabilities()
-        probabilities = [abs(x) for x in probabilities]
+        # probabilities = [abs(x) for x in probabilities]
         probabilities = [x / sum(probabilities) for x in probabilities]
         return optionals, probabilities
 
@@ -131,7 +153,8 @@ class ExperimentInstance:
         fail_test, pass_test = self.next_state_distribution(test)
         ei_fail, p_fail = fail_test
         ei_pass, p_pass = pass_test
-        return self.entropy() - (p_fail * ei_fail.entropy() + p_pass * ei_pass.entropy())
+        # return self.entropy() - (p_fail * ei_fail.entropy() + p_pass * ei_pass.entropy())
+        return (p_fail * ei_fail.entropy() + p_pass * ei_pass.entropy())
 
     def entropy(self):
         self.diagnose()
@@ -157,13 +180,18 @@ class ExperimentInstance:
             optionals_probs[op] = prob
         return optionals_probs
 
+    def bd_next(self):
+        optionals, probabilities =  self.next_tests_by_bd()
+        return numpy.random.choice(optionals, 1, p = probabilities).tolist()[0]
+
     def hp_next(self):
         optionals, probabilities =  self.next_tests_by_hp()
         return numpy.random.choice(optionals, 1, p = probabilities).tolist()[0]
 
-    def entropy_next(self):
-        optionals, probabilities =  self.next_tests_by_entropy()
-        return numpy.random.choice(optionals, 1, p = probabilities).tolist()[0]
+    def entropy_next(self, threshold = 1.2, batch=1):
+        optionals, information =  self.next_tests_by_entropy(threshold)
+        # return sorted(zip(optionals, information), reverse=True, key = lambda x: x[1])[0][0]
+        return numpy.random.choice(optionals, batch, p = information).tolist()
 
     def random_next(self):
         return random.choice(self.get_optionals_actions())
@@ -186,11 +214,11 @@ class ExperimentInstance:
         next_test=optionals[action % len(optionals)]
         trace = pool[next_test]
         probs=dict(self.compsProbs())
-        pass_Probability=1
+        pass_Probability = 1.0
         for comp in trace:
-            pass_Probability=pass_Probability * 0.999 # probability of 1 fault for each 1000 lines of code
+            pass_Probability *= 0.999 # probability of 1 fault for each 1000 lines of code
             if comp in probs:
-                pass_Probability=pass_Probability * (1-probs[comp]) # add known faults
+                pass_Probability *= (1-probs[comp]) # add known faults
         return round(pass_Probability, 6)
 
     def next_state_distribution(self,action):
@@ -252,17 +280,20 @@ class ExperimentInstance:
 
 
 def create_key(initial_tests, error):
-    return repr(initial_tests)+"-"+repr([ind for ind,x in enumerate(error) if x==1])
+    return repr(sorted(initial_tests))+"-"+repr(sorted([ind for ind,x in enumerate(error) if x==1]))
 
-def addTest(ei, next_test):
+def addTests(ei, next_tests):
     """
-    add test with real outcome
+    add tests with real outcome
     """
-    return simulateTestOutcome(ei, next_test, ei.error[next_test])
+    tests_to_add = [next_tests] if type(next_tests) != list else next_tests
+    for t in tests_to_add:
+        ei = simulateTestOutcome(ei, t, ei.error[t])
+    return ei
 
 def simulateTestOutcome(ei, next_test, outcome):
     initial_tests = copy.deepcopy(ei.initial_tests)
     initial_tests.append(next_test)
     error = list(ei.error)
     error[next_test] = outcome
-    return create_instance_from_key(create_key(initial_tests, error))
+    return get_instance(create_key(initial_tests, error))

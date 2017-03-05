@@ -16,7 +16,7 @@ import Diagnoser.ExperimentInstance
 def main_HP(ei):
     steps = 0
     while not (ei.isTerminal() or ei.AllTestsReached() ):
-        ei = Diagnoser.ExperimentInstance.addTest(ei, ei.hp_next())
+        ei = Diagnoser.ExperimentInstance.addTests(ei, ei.hp_next())
         steps = steps + 1
     precision, recall=ei.calc_precision_recall()
     return precision, recall, steps, repr(ei)
@@ -25,7 +25,7 @@ def main_HP(ei):
 def main_Random(ei):
     steps = 0
     while not (ei.isTerminal() or ei.AllTestsReached() ):
-        ei = Diagnoser.ExperimentInstance.addTest(ei, ei.random_next())
+        ei = Diagnoser.ExperimentInstance.addTests(ei, ei.random_next())
         steps=steps+1
     precision, recall=ei.calc_precision_recall()
     return precision, recall, steps, repr(ei)
@@ -39,16 +39,16 @@ def only_initials(ei):
 def all_tests(ei):
     steps = 0
     while not ei.AllTestsReached() :
-        ei = Diagnoser.ExperimentInstance.addTest(ei, ei.random_next())
+        ei = Diagnoser.ExperimentInstance.addTests(ei, ei.random_next())
         steps=steps+1
     precision, recall=ei.calc_precision_recall()
     return precision, recall, steps, repr(ei)
 
 
-def main_entropy(ei):
+def main_entropy(ei, *args, **kwargs):
     steps = 0
-    while not (ei.isTerminal() or ei.AllTestsReached() ):
-        ei = Diagnoser.ExperimentInstance.addTest(ei, ei.entropy_next())
+    while not (ei.isTerminal() or ei.AllTestsReached()):
+        ei = Diagnoser.ExperimentInstance.addTests(ei, ei.entropy_next(*args, **kwargs))
         steps = steps + 1
     precision, recall=ei.calc_precision_recall()
     return precision, recall, steps, repr(ei)

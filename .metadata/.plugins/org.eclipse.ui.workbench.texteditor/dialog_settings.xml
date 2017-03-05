@@ -2,12 +2,13 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="main(String" key="selection"/>
+		<item value="gbest" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="gbest"/>
 			<item value="main(String"/>
 			<item value="update"/>
 			<item value="load"/>
@@ -15,7 +16,6 @@
 			<item value="Arrays"/>
 			<item value="export_diags_to_csv"/>
 			<item value="HashMap"/>
-			<item value="run("/>
 		</list>
 		<list key="replacehistory">
 		</list>

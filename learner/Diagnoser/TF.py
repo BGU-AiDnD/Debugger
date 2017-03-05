@@ -10,7 +10,6 @@ def add(tf):
     global instances, calls
     calls += 1
     len_d = len(tf.diagnosis)
-    sum_e = sum(tf.e_vector)
     func = []
     h = [1 for _ in tf.diagnosis]
     step = 1.0 / (11 * len_d)
@@ -18,7 +17,7 @@ def add(tf):
     for i in range(len_d * 10):
         h = [1 - (i * step) for _ in tf.diagnosis]
         func.append((h, tf.probabilty_TF(h)))
-    for instance in filter(lambda inst: len_d == len(inst.diagnosis) and sum_e == sum(inst.e_vector), instances):
+    for instance in filter(lambda inst: len_d == len(inst.diagnosis), instances):
         equals = True
         for h,val in func:
             if instance.probabilty_TF(h) != val:
@@ -32,19 +31,17 @@ def add(tf):
 
 class TF:
     def __init__(self,matrix,e,d):
-        self.M_matrix = matrix
-        self.e_vector = e
+        self.activity = zip(matrix,e)
         self.diagnosis = d
         self.max_value = None
         # add(self)
 
     def probabilty(self,h_dict):
-        p_d=1.0
-        for activity_vec,e in zip(self.M_matrix,self.e_vector):
-            p_e_d = reduce(lambda x,y: x*y, map(lambda c: h_dict.get(c,1), filter(lambda c: activity_vec[c]==1, self.diagnosis)), 1)
-            p_e_d = e + ((-2*e+1) * p_e_d) # if e==0 : p_e_d, if e==1: 1-p_e_d
-            p_d=p_d*p_e_d
-        return p_d
+        def test_prob(v,e):
+            # if e==0 : h1*h2*h3..., if e==1: 1-h1*h2*h3...
+            return e + ((-2.0 * e +1) * reduce(lambda x, y: x*y,
+                   map(lambda c: h_dict.get(c, 1) * v[c], filter(lambda c: v[c] == 1, self.diagnosis)), 1))
+        return reduce(lambda x,y: x*y, map(lambda a:test_prob(a[0],a[1]), self.activity), 1.0)
 
     def probabilty_TF(self,h):
         h_dict={}
@@ -61,13 +58,13 @@ class TF:
             initialGuess=[0.1 for _ in self.diagnosis]
             lb=[0 for _ in self.diagnosis]
             ub=[1 for _ in self.diagnosis]
-            # import scipy.optimize
-            # self.max_value = scipy.optimize.minimize(self.probabilty_TF,initialGuess,method="L-BFGS-B"
-            #                             ,bounds=zip(lb,ub), tol=1e-2,options={"maxiter":10}).fun
+            import scipy.optimize
+            self.max_value = -scipy.optimize.minimize(self.probabilty_TF,initialGuess,method="L-BFGS-B"
+                                        ,bounds=zip(lb,ub), tol=1e-2,options={"maxiter":10}).fun
             # self.max_value = self.maximize_by_gradient()
             # self.max_value = -pso(self.probabilty_TF, lb, ub, minfunc=1e-3, minstep=1e-3, swarmsize=20,maxiter=10)[1]
             # self.max_value = -self.probabilty_TF(initialGuess)
-            self.max_value = -LightPSO(len(self.diagnosis), self).run()
+            # self.max_value = -LightPSO(len(self.diagnosis), self).run()
         return self.max_value
 
     def calculate(self, values):

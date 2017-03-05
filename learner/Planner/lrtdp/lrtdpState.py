@@ -27,7 +27,7 @@ class LrtdpState(object):
 
     # do action and return observation
     def addTest(self,ind):
-        return Diagnoser.ExperimentInstance.addTest(self.experimentInstance, ind)
+        return Diagnoser.ExperimentInstance.addTests(self.experimentInstance, ind)
 
     def greedyAction(self):
         return random.choice(self.getGreedyActions())

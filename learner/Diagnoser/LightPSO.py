@@ -1,6 +1,6 @@
 from random import random
 iterations = 3
-particles = 10
+particles = range(10)
 
 class LightPSO:
 
@@ -15,36 +15,29 @@ class LightPSO:
         self.gbest_val = 0.0
 
     def initialize(self):
-        for particle in range(particles):
-            self.position_matrix[particle] = []
-            self.velocity_matrix[particle] = []
-            for d in range(self.dim):
-                self.velocity_matrix[particle].append(random())
-                self.position_matrix[particle].append(random())
-            self.pbest[particle] = list(self.position_matrix[particle])
-            self.pbest_val[particle] = self.tf.probabilty_TF(self.position_matrix[particle])
+        self.position_matrix.update(map(lambda x: (x, map(lambda x: random(), range(self.dim))), particles))
+        self.velocity_matrix.update(map(lambda x: (x, map(lambda x: random(), range(self.dim))), particles))
+        self.pbest.update(map(lambda particle: (particle,list(self.position_matrix[particle])), particles))
+        self.pbest_val.update(map(lambda particle: (particle, self.tf.probabilty_TF(self.pbest[particle])), particles))
         self.find_gbest()
 
     def find_gbest(self):
-        self.gbest = self.position_matrix[0]
-        self.gbest_val = self.tf.probabilty_TF(self.gbest)
-        for particle in range(particles)[1:]:
-            current_val = self.tf.probabilty_TF(self.position_matrix[particle])
-            if (current_val < self.gbest_val):
-                gbest = self.position_matrix[particle]
-                self.gbest_val = current_val
+        def prob(particle):
+            return self.position_matrix[particle], self.tf.probabilty_TF(self.position_matrix[particle])
+        self.gbest ,self.gbest_val = min(map(prob, particles),key=lambda x: x[1])
 
     def move_particles(self):
-        for particle in range(particles):
-            self.move_particle(particle)
+        map(lambda x: self.move_particles, particles)
 
     def move_particle(self, particle):
         random_factor = random()
-        for d in range(self.dim):
-            self.position_matrix[particle][d] += self.velocity_matrix[particle][d]
-            self.position_matrix[particle][d] = min(max(self.position_matrix[particle][d], 0), 1)
-            if self.position_matrix[particle][d] == 1 or self.position_matrix[particle][d] == 0:
-                self.velocity_matrix[particle][d] = 0
+        def update_position(d):
+            return min(max(self.position_matrix[particle][d] + self.velocity_matrix[particle][d], 0), 1)
+        def update_velocity(d):
+            v = self.position_matrix[particle][d]
+            return 0 if (v == 1 or v == 0) else v
+        self.position_matrix[particle].update(map(lambda d: (d, update_position(d)), range(self.dim)))
+        self.velocity_matrix[particle].update(map(lambda d: (d, update_velocity(d)), range(self.dim)))
         temp_val = self.tf.probabilty_TF(self.position_matrix[particle])
         if temp_val < self.pbest_val[particle]:
             self.pbest[particle] = list(self.position_matrix[particle])
