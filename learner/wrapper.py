@@ -616,7 +616,7 @@ def wrapperExperiments(confFile,globalConfFile):
     rnd = str(randint(0,900))
     print rnd
     filesExperiments(workingDir,weka,packsPath,utilsPath,rnd)
-    methodsExperiments(workingDir,weka,packsPath,utilsPath,rnd)
+    # methodsExperiments(workingDir,weka,packsPath,utilsPath,rnd)
 
 def wrapper_planning(confFile,globalConfFile):
     pass

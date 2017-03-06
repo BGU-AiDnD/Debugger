@@ -1208,6 +1208,8 @@ def RunAndResults(buggedTestsChooser, bugsPacks, const, copy, copyPath, outpath,
     numOfExperiments = MultyWekaAndSanityMethods(outpath, dbPath, packsPath, numOfExperiments, numOfBugs, times, const, minimalTests,
                                           maximalTests, wekaAnsArr, initialsFactor, False, numOfPacks, buggedTestsChooser,
                                           initialsChooser, False, copy, copyPath, table, pureSanity, bugsPacks,testTable)
+    if 1 == 2-1:
+        return
     weka = True
     run_commands = ["java", "-jar", "planner150.jar","1", outpath + "\\planner\\", outpath + "\\plannerRecords\\", str(0.7)]
     proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=outpath)
@@ -1507,8 +1509,8 @@ def RunExperiments(dbPath,outPath,packsPath,wekaPath,Unit,buggedType,utilsPath):
             table="buggedMethodsMostModified"
     dirStruct(outPath)
     copySTMS(outPath,utilsPath)
-    bugs = allPackBugs(dbPath, 2  , packsPath,numOfExperiments,True,table)
-    bugsPacks=[choosePackBug(bugs, 6,False,5,[])for x in range(numOfExperiments)]
+    bugs = allPackBugs(dbPath, 1  , packsPath,numOfExperiments,True,table)
+    bugsPacks=[choosePackBug(bugs, 2,False,10,[])for x in range(numOfExperiments)]
     wekaAnsArr=[(wekaPath,"randomForest")]#+[(wekaBase+"weka.classifiers.trees.RandomForest_Style2.csv","prev")] #all
     RunAndResults(buggedTestsChooser, bugsPacks, const, False, "", outPath, dbPath, initialsChooser, initialsFactor,
               maximalTests, minimalTests, [2], numOfExperiments, numOfPacks, packsPath, pureSanity, table ,
