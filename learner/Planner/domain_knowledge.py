@@ -197,5 +197,7 @@ def seperator_hp(ei):
             probabilities.append(0.0)
             continue
         probabilities.append(reduce(lambda x,y: x*y, trace_probs,1))
+    if sum(probabilities) == 0:
+        return optionals, [1/ len(optionals) for x in optionals]
     return optionals,[x / sum(probabilities) for x in probabilities]
 
