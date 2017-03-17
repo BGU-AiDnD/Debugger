@@ -136,16 +136,19 @@ def planning_for_project(dir):
         planners = [#("mcts_hp", mcts_by_approach("hp", 200)), ("mcts_entropy", mcts_by_approach("entropy", 200)),
                     # ("lrtdp_hp", lrtdp_by_approach(0, 200, "hp")),
                     # ("lrtdp_entropy", lrtdp_by_approach(0, 200, "entropy")),
+                    ("entropy_0.8", entropy_by_threshold(0.8)),
                     ("entropy_0.6", entropy_by_threshold(0.6)),
-                ("entropy_0.4", entropy_by_threshold(0.4)),
-                ("entropy_0.2", entropy_by_threshold(0.2)),
+                    ("entropy_0.4", entropy_by_threshold(0.4)),
+                    ("entropy_0.2", entropy_by_threshold(0.2)),
+                    ("entropy_batch_2", entropy_by_batch(2)),
+                    ("entropy_batch_5", entropy_by_batch(5)),
                     ("HP", HP_Random.main_HP), ("entropy", HP_Random.main_entropy),
                     ("Random", HP_Random.main_Random), ("initials", HP_Random.only_initials),
                     ("all_tests", HP_Random.all_tests)]
         runAll_optimized(in_dir, out_dir, planners)
 
 def test():
-    ei = Diagnoser.diagnoserUtils.readPlanningFile(r"C:\Users\User\Downloads\ant3\files_Most760\planner\130_uniform_0.txt")
+    ei = Diagnoser.diagnoserUtils.readPlanningFile(r"C:\Temp\ant_bug\100_uniform_1.txt")
     print ei.calc_precision_recall()
     planners = [("mcts_hp", mcts_by_approach("hp", 10)), ("mcts_entropy", mcts_by_approach("entropy", 10)),
                 ("lrtdp_hp", lrtdp_by_approach(0, 10, "hp")), ("lrtdp_entropy", lrtdp_by_approach(0, 10, "entropy")),
@@ -157,10 +160,10 @@ def test():
                 ("entropy_0.6", entropy_by_threshold(0.6)),
                 ("entropy_0.4", entropy_by_threshold(0.4)),
                 ("entropy_0.2", entropy_by_threshold(0.2)),
-                # ("entropy_batch_2", entropy_by_batch(2)),
-                # ("entropy_batch_5", entropy_by_batch(5)),
-                # ("entropy", HP_Random.main_entropy),
-                # ("Random", HP_Random.main_Random), ("initials", HP_Random.only_initials),
+                ("entropy_batch_2", entropy_by_batch(2)),
+                ("entropy_batch_5", entropy_by_batch(5)),
+                ("entropy", HP_Random.main_entropy),
+                ("Random", HP_Random.main_Random), ("initials", HP_Random.only_initials),
                 ("all_tests", HP_Random.all_tests)]
     for name, alg in reversed(planners):
         import gc

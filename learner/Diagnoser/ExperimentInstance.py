@@ -153,7 +153,6 @@ class ExperimentInstance:
         fail_test, pass_test = self.next_state_distribution(test)
         ei_fail, p_fail = fail_test
         ei_pass, p_pass = pass_test
-        # return self.entropy() - (p_fail * ei_fail.entropy() + p_pass * ei_pass.entropy())
         return (p_fail * ei_fail.entropy() + p_pass * ei_pass.entropy())
 
     def entropy(self):
@@ -190,7 +189,7 @@ class ExperimentInstance:
 
     def entropy_next(self, threshold = 1.2, batch=1):
         optionals, information =  self.next_tests_by_entropy(threshold)
-        # return sorted(zip(optionals, information), reverse=True, key = lambda x: x[1])[0][0]
+        # return map(lambda x: x[0], sorted(zip(optionals, information), reverse=True, key = lambda x: x[1])[:batch])
         return numpy.random.choice(optionals, batch, p = information).tolist()
 
     def random_next(self):
@@ -208,11 +207,7 @@ class ExperimentInstance:
         return len(self.get_optionals_actions())== 0
 
     def compute_pass_prob(self,action):
-        optionals = self.get_optionals_actions()
-        if optionals==[]:
-            return -1
-        next_test=optionals[action % len(optionals)]
-        trace = pool[next_test]
+        trace = pool[action]
         probs=dict(self.compsProbs())
         pass_Probability = 1.0
         for comp in trace:
