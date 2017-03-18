@@ -148,7 +148,7 @@ def planning_for_project(dir):
         runAll_optimized(in_dir, out_dir, planners)
 
 def test():
-    ei = Diagnoser.diagnoserUtils.readPlanningFile(r"C:\Temp\ant_bug\100_uniform_1.txt")
+    ei = Diagnoser.diagnoserUtils.readPlanningFile(r"C:\Temp\ant_bug\130_uniform_2.txt")
     print ei.calc_precision_recall()
     planners = [("mcts_hp", mcts_by_approach("hp", 10)), ("mcts_entropy", mcts_by_approach("entropy", 10)),
                 ("lrtdp_hp", lrtdp_by_approach(0, 10, "hp")), ("lrtdp_entropy", lrtdp_by_approach(0, 10, "entropy")),

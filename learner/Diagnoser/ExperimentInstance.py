@@ -137,12 +137,13 @@ class ExperimentInstance:
         for t, p in sorted(zip(optionals_seperator, tests_probabilities), key=lambda x: x[1], reverse=True)[:int(ceil(len(optionals_seperator) * threshold))]:
             # if threshold_sum > threshold:
             #     break
-            threshold_sum += p
-            probabilities.append(self.info_gain(t))
-            optionals.append(t)
+            info = self.info_gain(t)
+            if info > 0:
+                threshold_sum += p
+                probabilities.append(info)
+                optionals.append(t)
         if sum(probabilities) == 0.0:
             return self.get_optionals_probabilities()
-        # probabilities = [abs(x) for x in probabilities]
         probabilities = [x / sum(probabilities) for x in probabilities]
         return optionals, probabilities
 
@@ -153,7 +154,7 @@ class ExperimentInstance:
         fail_test, pass_test = self.next_state_distribution(test)
         ei_fail, p_fail = fail_test
         ei_pass, p_pass = pass_test
-        return (p_fail * ei_fail.entropy() + p_pass * ei_pass.entropy())
+        return self.entropy() - (p_fail * ei_fail.entropy() + p_pass * ei_pass.entropy())
 
     def entropy(self):
         self.diagnose()
@@ -189,8 +190,8 @@ class ExperimentInstance:
 
     def entropy_next(self, threshold = 1.2, batch=1):
         optionals, information =  self.next_tests_by_entropy(threshold)
-        # return map(lambda x: x[0], sorted(zip(optionals, information), reverse=True, key = lambda x: x[1])[:batch])
-        return numpy.random.choice(optionals, batch, p = information).tolist()
+        return map(lambda x: x[0], sorted(zip(optionals, information), reverse=True, key = lambda x: x[1])[:batch])
+        # return numpy.random.choice(optionals, batch, p = information).tolist()
 
     def random_next(self):
         return random.choice(self.get_optionals_actions())
