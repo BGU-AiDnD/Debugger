@@ -3,9 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="a99ccab5-ef05-47d7-a302-2dc78736cec3" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Diagnoser/ExperimentInstance.py" afterPath="$PROJECT_DIR$/Diagnoser/ExperimentInstance.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Diagnoser/Barinel.py" afterPath="$PROJECT_DIR$/Diagnoser/Barinel.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Planner/mcts/InstanceNode.py" afterPath="$PROJECT_DIR$/Planner/mcts/InstanceNode.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Planner/mcts/main.py" afterPath="$PROJECT_DIR$/Planner/mcts/main.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Planner/mcts/mcts.py" afterPath="$PROJECT_DIR$/Planner/mcts/mcts.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Planner/planningExperiments.py" afterPath="$PROJECT_DIR$/Planner/planningExperiments.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wrapper.py" afterPath="$PROJECT_DIR$/wrapper.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wekaMethods/issuesExtract/python_bugzilla.py" afterPath="$PROJECT_DIR$/wekaMethods/issuesExtract/python_bugzilla.py" />
     </list>
     <ignored path="eclipse.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -25,45 +28,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="TF.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Diagnoser/TF.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="986">
-              <caret line="59" column="42" selection-start-line="59" selection-start-column="42" selection-end-line="59" selection-end-column="42" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="ExperimentInstance.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Diagnoser/ExperimentInstance.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="187" column="18" selection-start-line="187" selection-start-column="18" selection-end-line="187" selection-end-column="18" />
+            <state relative-caret-position="86">
+              <caret line="180" column="30" selection-start-line="180" selection-start-column="30" selection-end-line="180" selection-end-column="30" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="diagnoserUtils.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Diagnoser/diagnoserUtils.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="121">
-              <caret line="111" column="0" selection-start-line="111" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="domain_knowledge.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Planner/domain_knowledge.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3400">
-              <caret line="201" column="4" selection-start-line="201" selection-start-column="4" selection-end-line="201" selection-end-column="4" />
-              <folding>
-                <element signature="e#161#196#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -72,40 +43,60 @@
       <file leaf-file-name="wrapper.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wrapper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="429" column="44" selection-start-line="429" selection-start-column="44" selection-end-line="429" selection-end-column="44" />
+            <state relative-caret-position="175">
+              <caret line="673" column="39" selection-start-line="673" selection-start-column="39" selection-end-line="673" selection-end-column="39" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="bugs_testsDBMethods.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Agent/bugs_testsDBMethods.py">
+      <file leaf-file-name="python_bugzilla.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/python_bugzilla.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="202">
-              <caret line="304" column="4" selection-start-line="304" selection-start-column="4" selection-end-line="304" selection-end-column="4" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="experimentsMethods.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Agent/experimentsMethods.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-206">
-              <caret line="1482" column="4" selection-start-line="1482" selection-start-column="4" selection-end-line="1482" selection-end-column="4" />
+            <state relative-caret-position="85">
+              <caret line="8" column="51" selection-start-line="8" selection-start-column="50" selection-end-line="8" selection-end-column="51" />
               <folding>
-                <element signature="e#21#32#0" expanded="true" />
+                <element signature="e#20#35#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="planningExperiments.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="InstanceNode.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Planner/mcts/InstanceNode.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="217">
+              <caret line="100" column="26" selection-start-line="100" selection-start-column="26" selection-end-line="100" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="actionNode.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Planner/mcts/actionNode.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="124">
+              <caret line="60" column="8" selection-start-line="60" selection-start-column="8" selection-end-line="60" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Planner/mcts/main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="14" column="35" selection-start-line="14" selection-start-column="35" selection-end-line="14" selection-end-column="35" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="planningExperiments.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Planner/planningExperiments.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="144" column="27" selection-start-line="144" selection-start-column="27" selection-end-line="144" selection-end-column="27" />
+            <state relative-caret-position="171">
+              <caret line="103" column="40" selection-start-line="103" selection-start-column="40" selection-end-line="103" selection-end-column="40" />
               <folding>
                 <element signature="e#21#46#0" expanded="true" />
               </folding>
@@ -116,8 +107,28 @@
       <file leaf-file-name="HP_Random.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Planner/HP_Random.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="18" column="44" selection-start-line="18" selection-start-column="44" selection-end-line="18" selection-end-column="44" />
+            <state relative-caret-position="188">
+              <caret line="18" column="63" selection-start-line="18" selection-start-column="63" selection-end-line="18" selection-end-column="63" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mcts.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Planner/mcts/mcts.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="192">
+              <caret line="38" column="32" selection-start-line="38" selection-start-column="32" selection-end-line="38" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Barinel.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Diagnoser/Barinel.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="164">
+              <caret line="86" column="21" selection-start-line="86" selection-start-column="21" selection-end-line="86" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -143,12 +154,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Planner/mcts/mcts.py" />
         <option value="$PROJECT_DIR$/Diagnoser/St_Strip.py" />
         <option value="$PROJECT_DIR$/Diagnoser/Staccato.py" />
-        <option value="$PROJECT_DIR$/Planner/mcts/main.py" />
         <option value="$PROJECT_DIR$/Diagnoser/Diagnosis.py" />
-        <option value="$PROJECT_DIR$/Diagnoser/Barinel.py" />
         <option value="$PROJECT_DIR$/Diagnoser/PSO.py" />
         <option value="$PROJECT_DIR$/wekaMethods/features/OO.py" />
         <option value="$PROJECT_DIR$/wekaMethods/features/OOFamilies.py" />
@@ -162,8 +170,14 @@
         <option value="$PROJECT_DIR$/Agent/experimentsMethods.py" />
         <option value="$PROJECT_DIR$/Planner/domain_knowledge.py" />
         <option value="$PROJECT_DIR$/wrapper.py" />
-        <option value="$PROJECT_DIR$/Diagnoser/ExperimentInstance.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/issuesExtract/python_bugzilla.py" />
+        <option value="$PROJECT_DIR$/Diagnoser/Barinel.py" />
+        <option value="$PROJECT_DIR$/Planner/mcts/InstanceNode.py" />
         <option value="$PROJECT_DIR$/Planner/planningExperiments.py" />
+        <option value="$PROJECT_DIR$/Diagnoser/ExperimentInstance.py" />
+        <option value="$PROJECT_DIR$/Planner/mcts/mcts.py" />
+        <option value="$PROJECT_DIR$/Planner/mcts/main.py" />
+        <option value="$PROJECT_DIR$/Planner/mcts/actionNode.py" />
       </list>
     </option>
   </component>
@@ -229,7 +243,53 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="wekaMethods" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eclipse" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="learner" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wekaMethods" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="issuesExtract" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eclipse" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="learner" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="Planner" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eclipse" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="learner" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Diagnoser" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -249,6 +309,7 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="true" />
+    <property name="SearchEverywhereHistoryKey" value="bugzi&#9;FILE&#9;file://C:/Users/User/Documents/GitHub/Debugger/learner/wekaMethods/issuesExtract/python_bugzilla.py" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -286,23 +347,6 @@
       <RunnerSettings RunnerId="PythonRunner" />
       <ConfigurationWrapper RunnerId="PyDebugRunner" />
       <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
-    <configuration default="false" name="patchsBuild" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/wekaMethods" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="eclipse" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/wekaMethods/patchsBuild.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
     <configuration default="false" name="python_bugzilla" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -354,6 +398,23 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="learner" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Diagnoser/PSO.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Barinel" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Diagnoser" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="learner" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Diagnoser/Barinel.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -514,18 +575,18 @@
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Python.diagnoserUtils" />
       <item index="1" class="java.lang.String" itemvalue="Python.planningExperiments" />
-      <item index="2" class="java.lang.String" itemvalue="Python.patchsBuild" />
-      <item index="3" class="java.lang.String" itemvalue="Python.python_bugzilla" />
-      <item index="4" class="java.lang.String" itemvalue="Python.wrapper" />
-      <item index="5" class="java.lang.String" itemvalue="Python.PSO" />
+      <item index="2" class="java.lang.String" itemvalue="Python.python_bugzilla" />
+      <item index="3" class="java.lang.String" itemvalue="Python.wrapper" />
+      <item index="4" class="java.lang.String" itemvalue="Python.PSO" />
+      <item index="5" class="java.lang.String" itemvalue="Python.Barinel" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Python.wrapper" />
-        <item index="1" class="java.lang.String" itemvalue="Python.PSO" />
-        <item index="2" class="java.lang.String" itemvalue="Python.planningExperiments" />
-        <item index="3" class="java.lang.String" itemvalue="Python.python_bugzilla" />
-        <item index="4" class="java.lang.String" itemvalue="Python.patchsBuild" />
+        <item index="1" class="java.lang.String" itemvalue="Python.Barinel" />
+        <item index="2" class="java.lang.String" itemvalue="Python.python_bugzilla" />
+        <item index="3" class="java.lang.String" itemvalue="Python.PSO" />
+        <item index="4" class="java.lang.String" itemvalue="Python.planningExperiments" />
       </list>
     </recent_temporary>
   </component>
@@ -552,10 +613,9 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17423134" sideWeight="0.7224959" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.509434" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27760252" sideWeight="0.49853587" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329653" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30441642" sideWeight="0.49707174" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3659306" sideWeight="0.49707174" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2484375" sideWeight="0.6914378" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3280757" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -566,6 +626,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27760252" sideWeight="0.49853587" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -624,11 +685,6 @@
           <option name="timeStamp" value="192" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Planner/mcts/InstanceNode.py</url>
-          <line>75</line>
-          <option name="timeStamp" value="195" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Diagnoser/ExperimentInstance.py</url>
           <line>80</line>
           <option name="timeStamp" value="217" />
@@ -653,41 +709,22 @@
           <line>366</line>
           <option name="timeStamp" value="231" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Planner/planningExperiments.py</url>
-          <line>151</line>
-          <option name="timeStamp" value="255" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Planner/planningExperiments.py</url>
-          <line>172</line>
-          <option name="timeStamp" value="256" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Diagnoser/ExperimentInstance.py</url>
-          <line>210</line>
-          <option name="timeStamp" value="258" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Diagnoser/ExperimentInstance.py</url>
-          <line>45</line>
-          <option name="timeStamp" value="264" />
-        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="265" />
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+      <option name="time" value="267" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://C:/diagnose_vulnerabilities/FOE2/README.txt" />
-    <entry file="file://C:/diagnose_vulnerabilities/FOE2/certfuzz/crash/crash_base.py" />
-    <entry file="file://C:/diagnose_vulnerabilities/FOE2/certfuzz/crash/foe_crash.py" />
-    <entry file="file://C:/diagnose_vulnerabilities/FOE2/certfuzz/debuggers/debugger_base.py" />
-    <entry file="file://C:/diagnose_vulnerabilities/startup.txt" />
-    <entry file="file://C:/diagnose_vulnerabilities/FOE2/certfuzz/fuzztools/subprocess_helper.py" />
     <entry file="file://C:/diagnose_vulnerabilities/FOE2/certfuzz/runners/winrun.py" />
     <entry file="file://C:/diagnose_vulnerabilities/FOE2/foe2.py" />
     <entry file="file://C:/diagnose_vulnerabilities/FOE2/certfuzz/campaign/iteration.py" />
@@ -696,20 +733,6 @@
     <entry file="file://C:/diagnose_vulnerabilities/diagnoser/campaign_matrix.py" />
     <entry file="file://C:/diagnose_vulnerabilities/FOE2/certfuzz/debuggers/tracing/ida.py" />
     <entry file="file://C:/diagnose_vulnerabilities/FOE2/certfuzz/debuggers/msec.py" />
-    <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/bugzilla_old.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="12" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/bugzilla_import.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/query.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -721,13 +744,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="850">
           <caret line="53" column="4" selection-start-line="53" selection-start-column="4" selection-end-line="57" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/python_bugzilla.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="17" column="29" selection-start-line="17" selection-start-column="29" selection-end-line="17" selection-end-column="29" />
         </state>
       </provider>
     </entry>
@@ -749,20 +765,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="127">
           <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Planner/mcts/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="13" column="34" selection-start-line="13" selection-start-column="34" selection-end-line="13" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Planner/mcts/mcts.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="279">
-          <caret line="44" column="25" selection-start-line="44" selection-start-column="25" selection-end-line="44" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -791,13 +793,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="2" column="4" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Diagnoser/Barinel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-349">
-          <caret line="39" column="23" selection-start-line="39" selection-start-column="23" selection-end-line="39" selection-end-column="23" />
         </state>
       </provider>
     </entry>
@@ -875,7 +870,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="986">
           <caret line="59" column="42" selection-start-line="59" selection-start-column="42" selection-end-line="59" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -904,25 +898,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3400">
           <caret line="201" column="4" selection-start-line="201" selection-start-column="4" selection-end-line="201" selection-end-column="4" />
-          <folding>
-            <element signature="e#161#196#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Agent/bugs_testsDBMethods.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="202">
-          <caret line="304" column="4" selection-start-line="304" selection-start-column="4" selection-end-line="304" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wrapper.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="429" column="44" selection-start-line="429" selection-start-column="44" selection-end-line="429" selection-end-column="44" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -930,17 +905,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-206">
           <caret line="1482" column="4" selection-start-line="1482" selection-start-column="4" selection-end-line="1482" selection-end-column="4" />
-          <folding>
-            <element signature="e#21#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Planner/HP_Random.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="18" column="44" selection-start-line="18" selection-start-column="44" selection-end-line="18" selection-end-column="44" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -952,10 +916,98 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/bugzilla_old.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="12" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/bugzilla_import.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/requests/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="908" column="0" selection-start-line="908" selection-start-column="0" selection-end-line="908" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Agent/bugs_testsDBMethods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="137">
+          <caret line="304" column="28" selection-start-line="304" selection-start-column="28" selection-end-line="304" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/blameParse.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3281">
+          <caret line="199" column="7" selection-start-line="199" selection-start-column="6" selection-end-line="199" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda2/Lib/site-packages/bugzilla/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="13753">
+          <caret line="815" column="0" selection-start-line="815" selection-start-column="0" selection-end-line="815" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/buildDB.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="48" column="47" selection-start-line="48" selection-start-column="43" selection-end-line="48" selection-end-column="47" />
+          <folding>
+            <element signature="e#25#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/python_bugzilla.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="8" column="51" selection-start-line="8" selection-start-column="50" selection-end-line="8" selection-end-column="51" />
+          <folding>
+            <element signature="e#20#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Diagnoser/Barinel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="164">
+          <caret line="86" column="21" selection-start-line="86" selection-start-column="21" selection-end-line="86" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wrapper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="673" column="39" selection-start-line="673" selection-start-column="39" selection-end-line="673" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Planner/HP_Random.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="18" column="63" selection-start-line="18" selection-start-column="63" selection-end-line="18" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Diagnoser/ExperimentInstance.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="187" column="18" selection-start-line="187" selection-start-column="18" selection-end-line="187" selection-end-column="18" />
+        <state relative-caret-position="86">
+          <caret line="180" column="30" selection-start-line="180" selection-start-column="30" selection-end-line="180" selection-end-column="30" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
@@ -964,11 +1016,43 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Planner/planningExperiments.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="144" column="27" selection-start-line="144" selection-start-column="27" selection-end-line="144" selection-end-column="27" />
+        <state relative-caret-position="171">
+          <caret line="103" column="40" selection-start-line="103" selection-start-column="40" selection-end-line="103" selection-end-column="40" />
           <folding>
             <element signature="e#21#46#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Planner/mcts/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="14" column="35" selection-start-line="14" selection-start-column="35" selection-end-line="14" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Planner/mcts/mcts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="38" column="32" selection-start-line="38" selection-start-column="32" selection-end-line="38" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Planner/mcts/InstanceNode.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="100" column="26" selection-start-line="100" selection-start-column="26" selection-end-line="100" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Planner/mcts/actionNode.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="60" column="8" selection-start-line="60" selection-start-column="8" selection-end-line="60" selection-end-column="8" />
+          <folding />
         </state>
       </provider>
     </entry>

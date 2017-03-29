@@ -82,11 +82,17 @@ def load_file_with_header( file):
 
 
 
-def test():
-    bar = load_file_with_header(r"C:\Users\User\Downloads\ant3\files_Most760\barinel\100_0.6_0.0_2.csv")
+def test(name):
+    bar = load_file_with_header(r"C:\Users\User\Dropbox\work\PHD\planning_example\{0}.csv".format(name))
     diags = bar.run()
     sorted_diags = sorted(diags, key=lambda d: d.probability, reverse=True)
+    print name, str(sorted_diags)
+    with open(r"C:\Users\User\Dropbox\work\PHD\planning_example\{0}.txt".format(name), "wb") as f:
+        f.write(str(sorted_diags))
 
 if __name__=="__main__":
-    bar=load_file_with_header("C:\GitHub\matrix\OPT__Rand.csv")
-    diags = bar.run()
+    test('all')
+    test('s0')
+    test('choose_worse')
+    test('choose_better')
+    test('choose_best')

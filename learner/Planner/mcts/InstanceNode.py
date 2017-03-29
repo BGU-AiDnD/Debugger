@@ -61,6 +61,8 @@ class InstanceNode(object):
         weight = self.weight
         for p in self.parents:
             parent = self.parents[p]
+            if sum(parent.visits.values()) == 0:
+                continue
             weight += c * sqrt(2 * log(sum(parent.visits.values())) / sum(self.visits.values()))
         return weight
 
