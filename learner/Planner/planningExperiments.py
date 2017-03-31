@@ -135,14 +135,16 @@ def planning_for_project(dir):
         mkOneDir(out_dir)
         planners = [#("mcts_hp", mcts_by_approach("hp", 200)), ("mcts_entropy", mcts_by_approach("entropy", 200)),
                     # ("lrtdp_hp", lrtdp_by_approach(0, 200, "hp")),
+                    ("mcts_hp_10", mcts_by_approach("hp", 10)),
+                    ("mcts_hp_5", mcts_by_approach("hp", 5)),
                     # ("lrtdp_entropy", lrtdp_by_approach(0, 200, "entropy")),
-                    ("entropy_0.8", entropy_by_threshold(0.8)),
-                    ("entropy_0.6", entropy_by_threshold(0.6)),
-                    ("entropy_0.4", entropy_by_threshold(0.4)),
-                    ("entropy_0.2", entropy_by_threshold(0.2)),
-                    ("entropy_batch_2", entropy_by_batch(2)),
-                    ("entropy_batch_5", entropy_by_batch(5)),
-                    ("HP", HP_Random.main_HP), ("entropy", HP_Random.main_entropy),
+                    # ("entropy_0.8", entropy_by_threshold(0.8)),
+                    # ("entropy_0.6", entropy_by_threshold(0.6)),
+                    # ("entropy_0.4", entropy_by_threshold(0.4)),
+                    # ("entropy_0.2", entropy_by_threshold(0.2)),
+                    # ("entropy_batch_2", entropy_by_batch(2)),
+                    # ("entropy_batch_5", entropy_by_batch(5)),
+                    ("HP", HP_Random.main_HP), #("entropy", HP_Random.main_entropy),
                     ("Random", HP_Random.main_Random), ("initials", HP_Random.only_initials),
                     ("all_tests", HP_Random.all_tests)]
         runAll_optimized(in_dir, out_dir, planners)
