@@ -23,17 +23,24 @@ def get_bug_data(bug):
 def get_all_bugs(url, product):
     bzapi = bugzilla.Bugzilla(url)
     bugs = []
-    for component in bzapi.getcomponents(product):
-        bugs.extend(bzapi.query(bzapi.build_query(product=product, component=component)))
+    if product == None:
+        product = bzapi.getproducts()
+    else:
+        product = [product]
+    for p in product:
+        for component in bzapi.getcomponents(p):
+            bugs.extend(bzapi.query(bzapi.build_query(product=p, component=component)))
     return map(get_bug_data, bugs)
 
-def write_bugs_csv(csv_bug_file, url, product):
-    bugs = get_all_bugs(url, product)
+def write_bugs_csv(csv_bug_file, url, product=None):
     lines=[["id", "product", "component", "assigned_to", "status", "resolution", "reporter", "last_change_time", "version", "target_milestone", "platform", "op_sys", "priority", "severity", "summary", "keywords", "creation_time", "blocks", "depends_on", "Duplicate Of", "cc"]]
+    bugs = get_all_bugs(url, product)
     lines.extend(bugs)
     with open(csv_bug_file,"wb") as f:
         writer=csv.writer(f)
         writer.writerows(lines)
 
 if __name__ == "__main__":
-    write_bugs_csv("C:\Temp\\AntBugs.csv", "bz.apache.org/bugzilla/xmlrpc.cgi", "Ant")
+    # write_bugs_csv("C:\Temp\\AntBugs.csv", "bz.apache.org/bugzilla/xmlrpc.cgi", "Ant")
+    # write_bugs_csv("C:\Temp\\mozilla.csv", "bugzilla.mozilla.org/xmlrpc.cgi", "Ant")
+    write_bugs_csv("C:\Temp\\redhat.csv", "bugzilla.redhat.com/xmlrpc.cgi", "Security Response")
