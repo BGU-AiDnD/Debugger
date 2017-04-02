@@ -7,6 +7,7 @@ import math
 import TF
 import random
 import csv
+import os
 
 prior_p = 0.05
 
@@ -82,17 +83,18 @@ def load_file_with_header( file):
 
 
 
-def test(name):
-    bar = load_file_with_header(r"C:\Users\User\Dropbox\work\PHD\planning_example\{0}.csv".format(name))
+def test(matrix_file, out_file):
+    bar = load_file_with_header(matrix_file)
     diags = bar.run()
     sorted_diags = sorted(diags, key=lambda d: d.probability, reverse=True)
-    print name, str(sorted_diags)
-    with open(r"C:\Users\User\Dropbox\work\PHD\planning_example\{0}.txt".format(name), "wb") as f:
+    with open(out_file, "wb") as f:
         f.write(str(sorted_diags))
 
 if __name__=="__main__":
-    test('all')
-    test('s0')
-    test('choose_worse')
-    test('choose_better')
-    test('choose_best')
+    matrix_file = os.path.join(os.path.dirname(__file__), "planning_example\\{0}.csv")
+    out_file = os.path.join(os.path.dirname(__file__), "planning_example\\{0}.txt")
+    test(matrix_file.format('all'), out_file.format('all'))
+    test(matrix_file.format('s0'), out_file.format('s0'))
+    test(matrix_file.format('choose_worse'), out_file.format('choose_worse'))
+    test(matrix_file.format('choose_better'), out_file.format('choose_better'))
+    test(matrix_file.format('choose_best'), out_file.format('choose_best'))

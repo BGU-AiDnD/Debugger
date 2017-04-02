@@ -44,7 +44,7 @@ class LrtdpState(object):
             elif q == minVal:
                 result.append(action)
         if minVal == float('inf'):
-            p = min(probabilities)
+            p = max(probabilities)
             result = [a for (a, prob) in zip(optionals, probabilities) if prob == p]
         return result
 

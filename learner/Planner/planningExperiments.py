@@ -160,9 +160,10 @@ def test():
                 ("HP", HP_Random.main_HP), ("entropy", HP_Random.main_entropy),
                 ("Random", HP_Random.main_Random), ("initials", HP_Random.only_initials),
                 ("all_tests", HP_Random.all_tests)]
-    planners = [("mcts_hp_50", mcts_by_approach("hp", 50)),
-                ("mcts_hp_10", mcts_by_approach("hp", 10)),
-                ("mcts_hp_5", mcts_by_approach("hp", 5)),
+    planners = [ ("lrtdp_hp", lrtdp_by_approach(0, 10, "hp")),
+                #("mcts_hp_50", mcts_by_approach("hp", 50)),
+                #("mcts_hp_10", mcts_by_approach("hp", 10)),
+                #("mcts_hp_5", mcts_by_approach("hp", 5)),
                 # ("mcts_entropy", mcts_by_approach("entropy", 5)),
                 ("HP", HP_Random.main_HP),
                 # ("entropy_0.6", entropy_by_threshold(0.6)),

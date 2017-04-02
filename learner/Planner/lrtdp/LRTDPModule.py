@@ -90,7 +90,7 @@ def checkSolved(s):
         a = state.greedyAction()
         if state.residual(a) > epsilon:
             rv = False
-            continue
+            break
         nextStateDist = state.getNextStateDist(a)
         for next,prob in nextStateDist:
             if (not next.isSolved) and (next not in open) and (next not in closed):
