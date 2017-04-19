@@ -7,7 +7,7 @@ import math
 import TF
 import random
 import csv
-import os
+import sys
 
 prior_p = 0.05
 
@@ -68,7 +68,7 @@ class Barinel:
 
         return self.diagnoses
 
-def load_file_with_header( file):
+def load_file_with_header(file):
     with open(file,"r") as f:
         lines = list(csv.reader(f))
         probs=[float(x) for x in lines[0]]
@@ -83,7 +83,7 @@ def load_file_with_header( file):
 
 
 
-def test(matrix_file, out_file):
+def main(matrix_file, out_file):
     bar = load_file_with_header(matrix_file)
     diags = bar.run()
     sorted_diags = sorted(diags, key=lambda d: d.probability, reverse=True)
@@ -91,10 +91,9 @@ def test(matrix_file, out_file):
         f.write(str(sorted_diags))
 
 if __name__=="__main__":
-    matrix_file = os.path.join(os.path.dirname(__file__), "planning_example\\{0}.csv")
-    out_file = os.path.join(os.path.dirname(__file__), "planning_example\\{0}.txt")
-    test(matrix_file.format('all'), out_file.format('all'))
-    test(matrix_file.format('s0'), out_file.format('s0'))
-    test(matrix_file.format('choose_worse'), out_file.format('choose_worse'))
-    test(matrix_file.format('choose_better'), out_file.format('choose_better'))
-    test(matrix_file.format('choose_best'), out_file.format('choose_best'))
+    if len(sys.argv) != 3:
+        print "Usage: Barinel.py matrix_file out_file"
+        exit()
+    main(sys.argv[1], sys.argv[2])
+
+

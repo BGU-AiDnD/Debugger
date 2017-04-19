@@ -8,7 +8,9 @@ states={}
 
 def clear_states():
     global states
-    states = {}
+    states.clear()
+    import gc
+    gc.collect()
 
 def generateState(parent, action, ei, approach):
     global states
@@ -30,7 +32,7 @@ def mcts_uct(ei, iterations, approach):
     """
     Implementation of the UCT variant of the MCTS algorithm.
     """
-    # clear_states()
+    clear_states()
     root = generateState(None, None, ei, approach)
     for i in xrange(iterations):
         child = root

@@ -8,31 +8,52 @@ import Diagnoser.diagnoserUtils
 import HP_Random
 import similarity
 import time
+import timer
 
 
 import glob
+import gc
 import os
 import csv
 import Planning_Results
+from threading import Thread
+import functools
 
+def timeout(timeout):
+    def deco(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            res = [Exception('function [%s] timeout [%s seconds] exceeded!' % (func.__name__, timeout))]
+            def newFunc():
+                try:
+                    res[0] = func(*args, **kwargs)
+                except Exception, e:
+                    res[0] = e
+            t = Thread(target=newFunc)
+            t.daemon = True
+            try:
+                t.start()
+                t.join(timeout)
+            except Exception, je:
+                print 'error starting thread'
+                raise je
+            ret = res[0]
+            if isinstance(ret, BaseException):
+                raise ret
+            return ret
+        return wrapper
+    return deco
 
 def mkOneDir(dir):
     if not os.path.isdir(dir):
             os.mkdir(dir)
-
-def runAll(instancesDir, outDir, planners):
-    for name,alg in planners:
-        outD=os.path.join(outDir,name)
-        mkOneDir(outD)
-        for f in glob.glob(os.path.join(instancesDir,"*.txt")):
-            print f
-            file=os.path.join(instancesDir,f)
-            outfile=os.path.join(outD,f.split("\\")[-1]+".csv")
-            outData=[["Algorithm","precision", "recall", "steps"]] # header
-            ei = Diagnoser.diagnoserUtils.readPlanningFile(file)
-            outData=outData+[[name]+list(alg(ei))]
-            writer=csv.writer(open(outfile,"wb"))
-            writer.writerows(outData)
+#@timeout(3600)
+def get_results_from_mdp(ei, alg):
+    gc.collect()
+    start = time.time()
+    precision, recall, steps, rpr = alg(ei)
+    total_time = time.time() - start
+    return precision, recall, steps, total_time, rpr
 
 
 def runAll_optimized(instancesDir, outDir, planners):
@@ -44,69 +65,22 @@ def runAll_optimized(instancesDir, outDir, planners):
         file=os.path.join(instancesDir,f)
         ei = Diagnoser.diagnoserUtils.readPlanningFile(file)
         for name,alg in planners:
-            start = time.time()
-            precision,recall,steps, rpr =alg(ei)
-            total_time = time.time() - start
-            outData.append([os.path.basename(f), name,learn_alg,pBug,pValid,tests,index,precision,recall,steps,total_time, rpr])
-            writer=csv.writer(open(outfile,"wb"))
-            writer.writerows(outData)
-
-def check__pomcp():
-    file="C:\projs\ptry\lrtdp\\30_uniform_1.txt"
-    file="C:\projs\ptry\lrtdp\\10_0.6_0.0_0.txt"
-    ei=Diagnoser.diagnoserUtils.readPlanningFile(file)
-    print Planner.pomcp.main.main(ei)
-    print HP_Random.main_HP(ei)
-
-
-def one_lrtdp(file, epsilon, out_dir, stack, trials):
-    ei = Diagnoser.diagnoserUtils.readPlanningFile(file)
-    instance = str(epsilon) + "_" + str(stack) + "_" + str(trials)
-    instance_file = os.path.join(out_dir, instance + ".csv")
-
-    Planner.lrtdp.LRTDPModule.setVars(ei, epsilon, stack, 50, trials)
-    Planner.lrtdp.LRTDPModule.lrtdp()
-    precision, recall, steps = Planner.lrtdp.LRTDPModule.evaluatePolicy()
-    outData = [["Algorithm", "epsilon", "stack", "trials", "precision", "recall", "steps"]]  # header
-    outData += [[instance, str(epsilon), str(stack), str(trials)] + list((precision, recall, steps))]
-    writer = csv.writer(open(instance_file, "wb"))
-    writer.writerows(outData)
-
-
-def check_lrtdp(file, out_dir):
-    epsilon_start, epsilon_end, epsilon_step = 0.1, 0.51, 0.2
-    stack_start, stack_end, stack_step = 10, 31, 10
-    trials_start, trials_end, trials_step = 10, 21, 5
-
-    epsilon = epsilon_start
-    while epsilon <= epsilon_end:
-        stack = stack_start
-        while stack <= stack_end:
-            trials = trials_start
-            while trials <= trials_end:
-                print file, epsilon, out_dir, stack, trials
-                one_lrtdp(file, epsilon, out_dir, stack, trials)
-                trials += trials_step
-            stack += stack_step
-        epsilon +=epsilon_step
-
-def lrtdp_multi_check(instances_dir, out_dir):
-    for f in glob.glob(os.path.join(instances_dir,"*.txt")):
-        print f
-        file = os.path.join(instances_dir,f)
-        out_instance_dir = os.path.join(out_dir, f.split("\\")[-1])
-        if not  os.path.isdir(out_instance_dir):
-            os.mkdir(out_instance_dir)
-        check_lrtdp(file, out_instance_dir)
+            try:
+                precision, recall, steps, total_time, rpr = get_results_from_mdp(ei, alg)
+                outData.append([os.path.basename(f), name,learn_alg,pBug,pValid,tests,index,precision,recall,steps,total_time, rpr])
+                writer=csv.writer(open(outfile,"wb"))
+                writer.writerows(outData)
+            except:
+                pass
 
 def mcts_by_approach(approach, iterations):
     def approached_mcts(ei):
         return Planner.mcts.main.main_mcts(ei, approach, iterations)
     return approached_mcts
 
-def lrtdp_by_approach(epsilonArg, iterations, approachArg):
+def lrtdp_by_approach(epsilonArg, iterations, greedy_action_treshold, approachArg):
     def approached_lrtdp(ei):
-        Planner.lrtdp.LRTDPModule.setVars(ei, epsilonArg, iterations, approachArg)
+        Planner.lrtdp.LRTDPModule.setVars(ei, epsilonArg, iterations, greedy_action_treshold, approachArg)
         return Planner.lrtdp.LRTDPModule.lrtdp()
     return approached_lrtdp
 
@@ -115,13 +89,6 @@ def entropy_by_threshold(threshold):
 
 def entropy_by_batch(batch):
     return lambda ei: HP_Random.main_entropy(ei, batch=batch)
-
-def check_all_planners(instances_dir, out_dir):
-    planners=[("mcts_hp",mcts_by_approach("hp", 100) ), ("mcts_entropy",mcts_by_approach("entropy", 100) ),
-              ("lrtdp_hp",lrtdp_by_approach(0 , 20, 100,"hp")),("lrtdp_entropy",lrtdp_by_approach(0 , 20, 100,"entropy")),
-              ("HP",HP_Random.main_HP), ("entropy", HP_Random.main_entropy),
-          ("Random",HP_Random.main_Random), ("initials", HP_Random.only_initials), ("all_tests", HP_Random.all_tests)]
-    runAll_optimized(instances_dir, out_dir, planners)
 
 def planning_for_project(dir):
     for d in os.listdir(dir):
@@ -153,16 +120,13 @@ def planning_for_project(dir):
         runAll_optimized(in_dir, out_dir, planners)
 
 def test():
-    ei = Diagnoser.diagnoserUtils.readPlanningFile(r"C:\Temp\ant_bug\130_uniform_2.txt")
+    ei = Diagnoser.diagnoserUtils.readPlanningFile(r"C:\Temp\ant_bug\100_uniform_0.txt")
     print ei.calc_precision_recall()
-    planners = [("mcts_hp", mcts_by_approach("hp", 10)), ("mcts_entropy", mcts_by_approach("entropy", 10)),
-                ("lrtdp_hp", lrtdp_by_approach(0, 10, "hp")), ("lrtdp_entropy", lrtdp_by_approach(0, 10, "entropy")),
-                ("HP", HP_Random.main_HP), ("entropy", HP_Random.main_entropy),
-                ("Random", HP_Random.main_Random), ("initials", HP_Random.only_initials),
-                ("all_tests", HP_Random.all_tests)]
-    planners = [ ("lrtdp_hp", lrtdp_by_approach(0, 10, "hp")),
-                #("mcts_hp_50", mcts_by_approach("hp", 50)),
-                #("mcts_hp_10", mcts_by_approach("hp", 10)),
+    planners = [ # ("lrtdp_hp_0.3", lrtdp_by_approach(1, 10, 0.3, "hp")),
+                 # ("lrtdp_hp_0.7", lrtdp_by_approach(1, 10, 0.7, "hp")),
+                 ("lrtdp_hp_0.1", lrtdp_by_approach(1, 10, 0.1, "hp")),
+                 #("mcts_hp_50", mcts_by_approach("hp", 50)),
+                # ("mcts_hp_10", mcts_by_approach("hp", 200)),
                 #("mcts_hp_5", mcts_by_approach("hp", 5)),
                 # ("mcts_entropy", mcts_by_approach("entropy", 5)),
                 ("HP", HP_Random.main_HP),
@@ -175,12 +139,8 @@ def test():
                 # ("Random", HP_Random.main_Random), ("initials", HP_Random.only_initials),
                 ("all_tests", HP_Random.all_tests)]
     for name, alg in reversed(planners):
-        import gc
-        gc.collect()
-        start = time.time()
         print name
-        print  alg(ei)
-        print time.time() - start
+        print get_results_from_mdp(ei,alg)
 
 
 if __name__ == "__main__":

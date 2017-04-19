@@ -2,6 +2,7 @@ __author__ = 'amir'
 import LRTDPModule
 import random
 import Diagnoser.ExperimentInstance
+import time
 
 
 
@@ -14,9 +15,9 @@ class LrtdpState(object):
         """
         self.experimentInstance = experimentInstance
         self.approach = approach
-        self.isSolved=self.isTerminal()
+        self.isSolved=self.terminal_or_allReach()
         self.value = float('inf')
-        if self.isSolved:
+        if self.isTerminal():
             self.value = 0
         self.simulationCount = 0
 
@@ -29,14 +30,21 @@ class LrtdpState(object):
     def addTest(self,ind):
         return Diagnoser.ExperimentInstance.addTests(self.experimentInstance, ind)
 
-    def greedyAction(self):
-        return random.choice(self.getGreedyActions())
+    def greedyAction(self, treshold = 1):
+        return random.choice(self.getGreedyActions(treshold))
 
-    def getGreedyActions(self):
+    def getGreedyActions(self, treshold = 1):
         optionals, probabilities = self.experimentInstance.get_optionals_probabilities_by_approach(self.approach)
+        filtered_actions = []
+        probabilities_sum = 0.0
+        for a, p in sorted(zip(optionals, probabilities)):
+            probabilities_sum += p
+            filtered_actions.append(a)
+            if probabilities_sum > treshold:
+                break
         minVal = float('inf')
         result = []
-        for action in optionals:
+        for action in filtered_actions:
             q = self.qValue(action)
             if q < minVal:
                 minVal = q
@@ -44,8 +52,7 @@ class LrtdpState(object):
             elif q == minVal:
                 result.append(action)
         if minVal == float('inf'):
-            p = max(probabilities)
-            result = [a for (a, prob) in zip(optionals, probabilities) if prob == p]
+            return filtered_actions
         return result
 
     def getNextStateDist(self,action):
@@ -57,6 +64,8 @@ class LrtdpState(object):
         for next,prob in nextStateDist:
             if prob == 0:
                 continue
+            if next.value == float('inf'):
+                return float('inf')
             q += prob * next.value
         return q
 
@@ -77,7 +86,10 @@ class LrtdpState(object):
     #     return  self.simulate_next_state(self.experimentInstance.hp_next())
 
     def residual(self, action):
-        return abs(self.value - self.qValue(action))
+        q = self.qValue(action)
+        if q == float('inf'):
+            return float('inf')
+        return abs(self.value - q)
 
     def needsSimulaton(self):
         return self.simulationCount==0

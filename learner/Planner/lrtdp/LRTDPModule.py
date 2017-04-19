@@ -2,17 +2,20 @@ __author__ = 'amir'
 
 import Planner.lrtdp.lrtdpState
 import Diagnoser.ExperimentInstance
+import time
 
 states={}
 epsilon=0
 iterations=0
+greedy_action_treshold=1
 experimentInstance=None
 approach = "uniform"
 
-def setVars(experimentInstanceArg, epsilonArg, iterationsArg, approachArg):
-    global experimentInstance,epsilon, iterations, approach
+def setVars(experimentInstanceArg, epsilonArg, iterationsArg, greedy_action_tresholdArg, approachArg):
+    global experimentInstance,epsilon, iterations, greedy_action_treshold, approach
     epsilon=epsilonArg
     iterations=iterationsArg
+    greedy_action_treshold = greedy_action_tresholdArg
     experimentInstance=experimentInstanceArg
     approach = approachArg
 
@@ -45,8 +48,8 @@ def lrtdp():
     global iterations
     state = create_start_state()
     steps = 0
+    clean()
     while not state.isTerminal() and not state.AllTestsReached():
-        clean()
         for i in xrange(iterations):
             if state.isSolved:
                 break
@@ -55,9 +58,9 @@ def lrtdp():
             break
         steps += 1
         action = state.greedyAction()
+        print "action, time:", action, time.time()
         ei = Diagnoser.ExperimentInstance.addTests(state.experimentInstance, action)
         state = generateState(ei)
-        print "action: ", action
     precision, recall = state.experimentInstance.calc_precision_recall()
     return precision, recall, steps, repr(state)
 
@@ -67,7 +70,7 @@ def runLrtdpTrial(state):
         visited.append(state)
         if state.isTerminal():
             break
-        a = state.greedyAction()
+        a = state.greedyAction(greedy_action_treshold)
         state.update(a)
         state = state.simulate_next_state(a)
     while visited:
@@ -79,15 +82,15 @@ def checkSolved(s):
     global epsilon
     rv=True
     open = []
-    closed = []
+    closed = {}
     if not s.isSolved:
         open.append(s)
     while open:
         state = open.pop()
-        closed.append(state)
         if state.AllTestsReached():
             continue
         a = state.greedyAction()
+        closed[state] = a
         if state.residual(a) > epsilon:
             rv = False
             break
@@ -99,10 +102,9 @@ def checkSolved(s):
         for c in closed:
             c.isSolved = True
     else:
-        while closed:
-            c = closed.pop()
+        for c in closed:
             if not c.AllTestsReached():
-                c.update(c.greedyAction())
+                c.update(closed[c])
     return rv
 
 def evaluatePolicy():
@@ -114,8 +116,6 @@ def evaluatePolicy():
         ei = Diagnoser.ExperimentInstance.addTests(ei, action)
         state = generateState(ei)
         steps = steps + 1
-        precision, recall = ei.calc_precision_recall()
-
     precision, recall = ei.calc_precision_recall()
     return precision, recall, steps, repr(ei)
 
