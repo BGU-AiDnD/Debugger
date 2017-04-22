@@ -47,7 +47,7 @@ def timeout(timeout):
 def mkOneDir(dir):
     if not os.path.isdir(dir):
             os.mkdir(dir)
-#@timeout(3600)
+@timeout(3600)
 def get_results_from_mdp(ei, alg):
     gc.collect()
     start = time.time()
