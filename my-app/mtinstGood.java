@@ -76,7 +76,7 @@ public class MyInstrumenter implements ClassFileTransformer {
 			changeFile.append("public static synchronized void changefile(java.lang.String newName){\n");
 			changeFile.append("if(TestsTraces.fileName==null){\n");
 			changeFile.append("long time= System.currentTimeMillis();\n");
-			changeFile.append("TestsTraces.fileName=\"..\\\\..\\\\traces\\\\Trace_\"+newName+\"_\"+time+\".txt\";\n");
+			changeFile.append("TestsTraces.fileName=\"..\\\\..\\\\DebuggerTests\\\\Trace_\"+newName+\"_\"+time+\".txt\";\n");
 			changeFile.append("System.out.println(\"changed! \" +TestsTraces.fileName);\n");
 			changeFile.append("}\n");
 			
@@ -369,7 +369,7 @@ public static void injectToMethod(ClassLoader loader, ProtectionDomain protectio
 		changeFile.append("public static synchronized void changefile(java.lang.String newName){\n");
 		changeFile.append("if("+injectedClassName+".fileName==null){\n");
 		changeFile.append("long time= System.currentTimeMillis();\n");
-		changeFile.append(""+injectedClassName+".fileName=\"..\\\\..\\\\traces\\\\Trace_\"+newName+\"_\"+time+\".txt\";\n");
+		changeFile.append(""+injectedClassName+".fileName=\"..\\\\..\\\\DebuggerTests\\\\Trace_\"+newName+\"_\"+time+\".txt\";\n");
 		changeFile.append("System.out.println(\"changed! \" +"+injectedClassName+".fileName);\n");
 		changeFile.append("}\n");
 		

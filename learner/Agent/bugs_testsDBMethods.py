@@ -311,7 +311,7 @@ def basicBuild(workingDir,ver,startDate,EndDate):
 
     methodsDict={}
     packPath=wekaMethods.pathPackCsv.projectPathPacks(gitPath)
-    filesDict = testsDBConcatinationMany(testDb, os.path.join(workingDir,"traces\\"), "", filesDict,methodsDict,packPath)
+    filesDict = testsDBConcatinationMany(testDb, os.path.join(workingDir,"DebuggerTests\\"), "", filesDict,methodsDict,packPath)
     filesDict = bugsDBFiles(testDb, dbData, filesDict,startDate,EndDate)
     filesDict = bugsDBFilesMostModified(testDb, dbData, filesDict,startDate,EndDate)
     bugsDBMethods(testDb, dbData, filesDict,startDate,EndDate)

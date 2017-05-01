@@ -101,10 +101,10 @@ public class MyInstrumenter implements ClassFileTransformer {
 			//changeFile.append("if(TestsTraces.fileName==null){\n");
 			changeFile.append("long time= System.currentTimeMillis();\n");
 			changeFile.append("String name=newName;\n");
-			changeFile.append("String namePre=\"..\\\\..\\\\traces\\\\Trace_\"+name;\n");
+			changeFile.append("String namePre=\"..\\\\..\\\\DebuggerTests\\\\Trace_\"+name;\n");
 			changeFile.append("boolean check =TestsTraces.fileName!=null && namePre.equals(TestsTraces.fileName.substring(0, TestsTraces.fileName.lastIndexOf(\"_\")));\n");
 			changeFile.append("if( check){ return; }\n");
-			changeFile.append("TestsTraces.fileName=\"..\\\\..\\\\traces\\\\Trace_\"+name+\"_\"+time+\".txt\";\n");
+			changeFile.append("TestsTraces.fileName=\"..\\\\..\\\\DebuggerTests\\\\Trace_\"+name+\"_\"+time+\".txt\";\n");
 			changeFile.append("File f=new File(TestsTraces.fileName.substring(0, TestsTraces.fileName.lastIndexOf(\"\\\\\")));\n");
 			//changeFile.append("f=new File(f.getPath());\n");
 			//changeFile.append("System.out.println(\"dir: \" +f.getPath());\n");
