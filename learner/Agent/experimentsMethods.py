@@ -1208,8 +1208,6 @@ def RunAndResults(buggedTestsChooser, bugsPacks, const, copy, copyPath, outpath,
     numOfExperiments = MultyWekaAndSanityMethods(outpath, dbPath, packsPath, numOfExperiments, numOfBugs, times, const, minimalTests,
                                           maximalTests, wekaAnsArr, initialsFactor, False, numOfPacks, buggedTestsChooser,
                                           initialsChooser, False, copy, copyPath, table, pureSanity, bugsPacks,testTable)
-    if 1 == 2-1:
-        return
     weka = True
     run_commands = ["java", "-jar", "planner150.jar","1", outpath + "\\planner\\", outpath + "\\plannerRecords\\", str(0.7)]
     proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=outpath)
