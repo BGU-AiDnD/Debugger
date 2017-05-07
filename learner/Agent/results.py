@@ -502,6 +502,11 @@ def recordsOne(i, j, k,instancesPath,retCode,file):
     steps_avg=steps_avg/ln
     return precision_avg, recall_avg,steps_avg,initials,tests
 
+def division(a, b):
+    # define division a/0 = 0
+    if b == 0:
+        return 0
+    return  a /b
 
 def records_i_j(i, j,instancesPath,experiments,retCode,file,exps,bug_f_start):
 
@@ -534,7 +539,9 @@ def records_i_j(i, j,instancesPath,experiments,retCode,file,exps,bug_f_start):
         files_avg=files_avg+filesCount
         bugged_avg=bugged_avg+buggedCount
 
-    return precision_avg/len(exps), recall_avg/len(exps),steps_avg/len(exps),initials_avg/len(exps),tests_avg/len(exps),medianLines,files_avg/len(exps),bugged_avg/len(exps)
+    return division(precision_avg, len(exps)), division(recall_avg, len(exps)),division(steps_avg, len(exps)), \
+           division(initials_avg, len(exps)),division(tests_avg, len(exps)),medianLines,division(files_avg, len(exps)), \
+           division(bugged_avg, len(exps))
 
 
 def planner_recordes( outputFile,medoutputFile,instancesPath,experiments,retCode,weka,exps):
