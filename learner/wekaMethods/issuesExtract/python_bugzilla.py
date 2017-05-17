@@ -1,6 +1,7 @@
 __author__ = 'amir'
 import bugzilla
 import csv
+import os
 from time import mktime
 import datetime
 
@@ -33,6 +34,8 @@ def get_all_bugs(url, product):
     return map(get_bug_data, bugs)
 
 def write_bugs_csv(csv_bug_file, url, product=None):
+    if "xmlrpc" not  in url:
+        url += "/xmlrpc.cgi"
     lines=[["id", "product", "component", "assigned_to", "status", "resolution", "reporter", "last_change_time", "version", "target_milestone", "platform", "op_sys", "priority", "severity", "summary", "keywords", "creation_time", "blocks", "depends_on", "Duplicate Of", "cc"]]
     bugs = get_all_bugs(url, product)
     lines.extend(bugs)
@@ -41,6 +44,8 @@ def write_bugs_csv(csv_bug_file, url, product=None):
         writer.writerows(lines)
 
 if __name__ == "__main__":
-    # write_bugs_csv("C:\Temp\\AntBugs.csv", "bz.apache.org/bugzilla/xmlrpc.cgi", "Ant")
+    write_bugs_csv("C:\Temp\\AntBugs.csv", "bz.apache.org/bugzilla/xmlrpc.cgi", "Ant")
+    write_bugs_csv("C:\Temp\\POI.csv", "bz.apache.org/bugzilla/xmlrpc.cgi", "POI")
+    write_bugs_csv("C:\Temp\\CDT.csv", "bugs.eclipse.org/bugs/xmlrpc.cgi", "CDT")
     # write_bugs_csv("C:\Temp\\mozilla.csv", "bugzilla.mozilla.org/xmlrpc.cgi", "Ant")
-    write_bugs_csv("C:\Temp\\redhat.csv", "bugzilla.redhat.com/xmlrpc.cgi", "Security Response")
+    # write_bugs_csv("C:\Temp\\redhat.csv", "bugzilla.redhat.com/xmlrpc.cgi", "Security Response")

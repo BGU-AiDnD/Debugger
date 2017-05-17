@@ -1,6 +1,9 @@
 __author__ = 'amir'
 import os
 from datetime import datetime
+import tempfile
+import wekaMethods.issuesExtract.python_bugzilla
+
 # markers names:
 VERSIONS_MARKER = "versions"
 VERSION_TEST_MARKER = "test_version"
@@ -41,7 +44,7 @@ def globalConfig(confFile):
 
 def configure(confFile):
     lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
-    vers, gitPath,bugs, workingDir="","","",""
+    vers, gitPath,bugzilla_url, bugzilla_product, workingDir="","","","",""
     for x in lines:
         if x.startswith("workingDir"):
             v=x.split("=")[1]
@@ -49,15 +52,20 @@ def configure(confFile):
         if x.startswith("git"):
             v=x.split("=")[1]
             gitPath=v
-        if x.startswith("bugs"):
+        if x.startswith("bugzilla_product"):
             v=x.split("=")[1]
-            bugs=v
+            bugzilla_product=v
+        if x.startswith("bugzilla_url"):
+            v=x.split("=")[1]
+            bugzilla_url=v
         if x.startswith("vers"):
             v=x.split("=")[1]
             v=v.split("(")[1]
             v=v.split(")")[0]
             vers=v.split(",")
     init_configuration(workingDir)
+    bugs = tempfile.mkstemp(suffix=".csv")[1]
+    wekaMethods.issuesExtract.python_bugzilla.write_bugs_csv(bugs, bugzilla_url, bugzilla_product)
     return [v.lstrip() for v in vers], gitPath,bugs, workingDir
 
 
