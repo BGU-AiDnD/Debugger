@@ -161,12 +161,12 @@ def bugsTable(BugsFile,max):
         if len(r[7])==len('09/01/09'):
             r[7]= datetime.datetime.strptime(r[7],"%d/%m/%y")
         else:
-            r[7]= datetime.datetime.strptime(r[7],"%d/%m/%Y %H:%M")
+            r[7]= datetime.datetime.strptime(r[7],"%d/%m/%Y %H:%M:%S")
         #r[7]= datetime.datetime.strptime(r[7],"%d/%m/%y")
         if len(r[16])==len('09/01/09'):
             r[16]= datetime.datetime.strptime(r[16],"%d/%m/%y")
         else:
-            r[16]= datetime.datetime.strptime(r[16],"%d/%m/%Y %H:%M")
+            r[16]= datetime.datetime.strptime(r[16],"%d/%m/%Y %H:%M:%S")
         #r[16]= datetime.datetime.strptime(r[16],"%d/%m/%y")
         bugsIds.append(r[0])
         all_bugs.append(r)
@@ -607,6 +607,12 @@ def buildOneTimeCommits(versPath,dbsPath,bugsPath,add,max,vers, CodeDir,MethodsP
     buildBasicAllVers(vers,dates,versPath,CodeDir,dbsPath, bugsPath,MethodsParsed,changeFile)
     logfile.write("after BuildRepo "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
+
+def bugs_test(bugsPath):
+    BugsFile = open(bugsPath, "r")
+    allBugs, bugsIds = bugsTable(BugsFile, max)
+    packPath = pathPackCsv.projectPathPacks(r"C:\Users\User\Downloads\antWorking4\vers\ANT_183\repo")
+    docs = docXml.build("C:\Users\User\Downloads\antWorking4\vers\ANT_183\Jdoc2", packPath, max)
 
 
 if __name__ == "__main__":

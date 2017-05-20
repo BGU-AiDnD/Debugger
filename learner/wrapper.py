@@ -671,7 +671,8 @@ if __name__ == '__main__':
     current_dir = os.path.dirname(os.path.realpath(__file__))
     globalConf = os.path.realpath(os.path.join(current_dir, "../globalConf.txt"))
     if len(sys.argv) == 1:
-        Planner.planningExperiments.test()
+        # Planner.planningExperiments.test()
+        wekaMethods.buildDB.bugs_test(r"C:\Temp\AntBugs.csv")
         # import Diagnoser.Barinel
         # Diagnoser.Barinel.test()
     else:
