@@ -66,8 +66,6 @@ def Mkdirs(workingDir,vers):
     mkOneDir(testedVer)
     weka=os.path.join(workingDir,"weka")
     mkOneDir(weka)
-    weka=os.path.join(workingDir,"weka_known_features")
-    mkOneDir(weka)
     markers=os.path.join(workingDir,"markers")
     mkOneDir(markers)
     for v in vers:
@@ -408,7 +406,7 @@ def ArticleFeaturesMostFiles(workingDir,outArffTrain,outArffTest,tempFile,outCsv
     BuildWekaModel(weka,outArffTrain,outArffTest,NamesFile,outCsv,"methods_"+"Most",wekaJar)
 
 def append_families_indices(workingDir,wekaJar, fam_one_path, buggedType,component,indices):
-    weka=os.path.join(workingDir,"weka_known_features")
+    weka=os.path.join(workingDir,"weka")
     instance_name = component+"_"+buggedType+"_known"
     outArffTrain = os.path.join(weka, instance_name + "_Appended.arff")
     outArffTest = os.path.join(weka, instance_name + "_Only.arff")
@@ -607,7 +605,7 @@ def reportProjectData(confFile,globalConfFile):
 def wrapperExperiments(confFile,globalConfFile):
     vers, gitPath,bugsPath, workingDir= utilsConf.configure(confFile)
     docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath = utilsConf.globalConfig(globalConfFile)
-    weka=os.path.join(workingDir,"weka_known_features")
+    weka=os.path.join(workingDir,"weka")
     testDb = os.path.join( workingDir , "testsBugsMethods.db")
     vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
     testDb=Agent.bugs_testsDBMethods.basicBuild(workingDir,vers[-2],dates[-2],dates[-1])

@@ -17,8 +17,8 @@ import docXml, source_Monitor
 import utilsConf
 
 
-def BugNum(stri):
-    s = stri.lower().replace(":","").replace("#","").replace("-","").split()
+def get_bug_num_from_comit_text(commit_text):
+    s = commit_text.lower().replace(":", "").replace("#", "").replace("-", "").split()
     ans = "0"
     for x in s:
         ans="0"
@@ -96,7 +96,6 @@ def commTablelight(bugs,commits ,max):
             continue
         commiter_date=  datetime.datetime.fromtimestamp(comm.committed_date).strftime('%Y-%m-%d %H:%M:%S')
         author_date=  datetime.datetime.fromtimestamp(comm.authored_date).strftime('%Y-%m-%d %H:%M:%S')
-        #x = (comm.committer.name).encode('ascii').decode("ISO-8859-1")
         name=unicodedata.normalize('NFKD', comm.committer.name).encode('ascii','ignore')
         committer= str(name)
         author= str(comm.author.name.encode('ascii','ignore'))
@@ -120,15 +119,15 @@ def commitsAndBugs(repo,bugsIds,max):
     i = 0
     am=0
     for git_commit in repo.iter_commits():
-        a = False
-        summ = git_commit.summary
-        for x in list(summ):
+        found = False
+        commit_text = git_commit.summary
+        for x in list(commit_text):
             if (x in list("1234567890")):
-                num = BugNum(summ)
-                a = (num in bugsIds)
+                optional_bug_id = get_bug_num_from_comit_text(commit_text)
+                found = (optional_bug_id in bugsIds)
                 break
-        if (a):
-            bugs[i] = num
+        if (found):
+            bugs[i] = optional_bug_id
         else:
             bugs[i] = 0
         commits[i] = git_commit
