@@ -407,7 +407,7 @@ def ArticleFeaturesMostFiles(workingDir,outArffTrain,outArffTest,tempFile,outCsv
 
 def append_families_indices(workingDir,wekaJar, fam_one_path, buggedType,component,indices):
     weka=os.path.join(workingDir,"weka")
-    instance_name = component+"_"+buggedType+"_known"
+    instance_name = component+"_"+buggedType
     outArffTrain = os.path.join(weka, instance_name + "_Appended.arff")
     outArffTest = os.path.join(weka, instance_name + "_Only.arff")
     tempFile= os.path.join(weka, instance_name + "_TMP.arff")
@@ -416,15 +416,15 @@ def append_families_indices(workingDir,wekaJar, fam_one_path, buggedType,compone
         for ind in indices[1:]:
             arffFile=os.path.join(fam_one_path,str(ind)+name)
             mergeArffs(train,arffFile,tempFile)
-    trainingFile,testingFile,NamesFile, outCsv=BuildMLFiles(weka,buggedType,component + "_known")
+    trainingFile,testingFile,NamesFile, outCsv=BuildMLFiles(weka,buggedType,component)
     BuildWekaModel(weka,outArffTrain,outArffTest,NamesFile,outCsv,instance_name,wekaJar)
 
 
 
 def filesExperiments(workingDir,weka,packsPath,utilsPath, randNum):
     for buggedType in ["All","Most"]:
-        outPath = os.path.join(workingDir, "experiments_known\\files_" + buggedType+randNum)
-        outCsv=os.path.join(weka,buggedType+"_out_files_known.csv")
+        outPath = os.path.join(workingDir, "experiments\\files_" + buggedType+randNum)
+        outCsv=os.path.join(weka,buggedType+"_out_files.csv")
         Agent.experimentsMethods.RunExperiments(os.path.join(workingDir,"testsBugsMethods.db"), outPath,packsPath,outCsv,"File",buggedType,utilsPath)
         #ExcelReport(os.path.join(outPath,"barinelOptA.csv"),os.path.join(outPath,"barinel.xlsx"),"barinel")
         #ExcelReport(os.path.join(outPath,"plannerResall.csv"),os.path.join(outPath,"planner.xlsx"),"planner")
@@ -440,8 +440,8 @@ def filesExperiments(workingDir,weka,packsPath,utilsPath, randNum):
 def methodsExperiments(workingDir,weka,packsPath,utilsPath,randNum):
     #for buggedType in ["All","Most"]:
     for buggedType in ["Most"]:
-        outPath = os.path.join(workingDir, "experiments_known\\methods" + buggedType+randNum)
-        outCsv=os.path.join(weka,buggedType+"_out_methods_known.csv")
+        outPath = os.path.join(workingDir, "experiments\\methods" + buggedType+randNum)
+        outCsv=os.path.join(weka,buggedType+"_out_methods.csv")
         Agent.experimentsMethods.RunExperiments(os.path.join(workingDir,"testsBugsMethods.db"), outPath,packsPath,outCsv,"method",buggedType,utilsPath)
         #ExcelReport(os.path.join(outPath,"barinelOptA.csv"),os.path.join(outPath,"barinel.xlsx"),"barinel")
         #ExcelReport(os.path.join(outPath,"plannerResall.csv"),os.path.join(outPath,"planner.xlsx"),"planner")
