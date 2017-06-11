@@ -1,8 +1,6 @@
 __author__ = 'amir'
 import os
 from datetime import datetime
-import tempfile
-import wekaMethods.issuesExtract.python_bugzilla
 
 # markers names:
 VERSIONS_MARKER = "versions"
@@ -20,6 +18,7 @@ BLAME_FEATURES_MARKER = "blame_features"
 TEST_DB_MARKER = "test_db_features"
 PACKS_FILE_MARKER = "packs_file_features"
 LEARNER_PHASE_FILE = "learner_phase_file"
+ISSUE_TRACKER_FILE = "issue_tracker_file"
 
 conf = None
 
@@ -44,7 +43,8 @@ def globalConfig(confFile):
 
 def configure(confFile):
     lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
-    vers, gitPath,bugzilla_url, bugzilla_product, workingDir="","","","",""
+    vers, gitPath,issue_tracker_url, issue_tracker_product, workingDir="","","","",""
+    issue_tracker = "bugzilla"
     for x in lines:
         if x.startswith("workingDir"):
             v=x.split("=")[1]
@@ -52,21 +52,22 @@ def configure(confFile):
         if x.startswith("git"):
             v=x.split("=")[1]
             gitPath=v
-        if x.startswith("bugzilla_product"):
+        if x.startswith("issue_tracker_product_name"):
             v=x.split("=")[1]
-            bugzilla_product=v
-        if x.startswith("bugzilla_url"):
+            issue_tracker_product=v
+        if x.startswith("issue_tracker_url"):
             v=x.split("=")[1]
-            bugzilla_url=v
+            issue_tracker_url=v
+        if x.startswith("issue_tracker"):
+            v=x.split("=")[1]
+            issue_tracker=v
         if x.startswith("vers"):
             v=x.split("=")[1]
             v=v.split("(")[1]
             v=v.split(")")[0]
             vers=v.split(",")
     init_configuration(workingDir)
-    bugs = tempfile.mkstemp(suffix=".csv")[1]
-    wekaMethods.issuesExtract.python_bugzilla.write_bugs_csv(bugs, bugzilla_url, bugzilla_product)
-    return [v.lstrip() for v in vers], gitPath,bugs, workingDir
+    return [v.lstrip() for v in vers], gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir
 
 
 def configureExperiments(confFile):
@@ -110,6 +111,12 @@ class Marker:
         with open(self.marker_path, "wb") as f:
             f.write("start time: " + str(datetime.now()) + "\n")
 
+    def error(self, error_msg):
+        with open(self.marker_path, "ab") as f:
+            f.write("failed\n")
+            f.write("error msg : {0}\n".format(error_msg))
+        exit()
+
     def finish(self):
         with open(self.marker_path, "ab") as f:
             f.write("finish time: " + str(datetime.now()) + "\n")
@@ -131,7 +138,11 @@ def marker_decorator(marker):
             ans = None
             if not get_configuration().get_marker(marker).is_exists():
                 get_configuration().get_marker(marker).start()
-                ans = func(*args, **kwargs)
+                try:
+                    ans = func(*args, **kwargs)
+                except Exception as e:
+                    get_configuration().get_marker(marker).error(e.message)
+                    return
                 get_configuration().get_marker(marker).finish()
             return ans
         return f

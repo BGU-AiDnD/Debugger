@@ -4,11 +4,11 @@ import jira
 import csv
 import unicodedata
 import datetime
-
+import utilsConf
 
 #ID	Product	Component	Assigned To	Status	Resolution	Reporter	Last Modified	Version	Milestone	Hardware	OS	Priority	Severity	Summary	Keywords	Submit Date	Blocks	Depends On	Duplicate Of	CC
 def issueAnalyze(issue):
-    Id=issue.id
+    Id=issue.key.split("-")[1]
     Product=str(issue.fields.project)
     Component=",".join([x.name for x in issue.fields.components])
     Assigned_To="NONE"
@@ -18,9 +18,11 @@ def issueAnalyze(issue):
     Resolution=str(issue.fields.resolution)
     Reporter=str(issue.fields.reporter.name)
     Last_Modified=str(issue.fields.updated)[:10]
-    Last_Modified=datetime.datetime.strptime(Last_Modified,'%Y-%m-%d').date().strftime("%d/%m/%y")
+    Last_Modified=datetime.datetime.strptime(Last_Modified,'%Y-%m-%d').date().strftime('%d/%m/%Y %H:%M:%S')
 
-    Version=",".join([v.name for v in issue.fields.versions])
+    Version = ""
+    if hasattr(issue.fields, 'versions'):
+        Version=",".join([v.name for v in getattr(issue.fields, 'versions')])
     Milestone=",".join([v.name for v in issue.fields.fixVersions])
     Hardware=str("")
     OS=""
@@ -37,48 +39,37 @@ def issueAnalyze(issue):
     Summary=Summary.replace("\n"," ")
     Keywords=str(issue.fields.labels)
     Submit_Date=str(issue.fields.created)[:10]
-    Submit_Date=datetime.datetime.strptime(Submit_Date,'%Y-%m-%d').date().strftime("%d/%m/%y")
+    Submit_Date=datetime.datetime.strptime(Submit_Date,'%Y-%m-%d').date().strftime('%d/%m/%Y %H:%M:%S')
     Blocks=str("")
     Depends_On=str("")
     Duplicate_Of=""#,".join([v.name for v in issue.fields.issuelinks])
     CC=str("")
     return [Id,Product,Component,Assigned_To,Status,Resolution,Reporter,Last_Modified,Version,Milestone,Hardware,OS,Priority,Severity,Summary,Keywords,Submit_Date,Blocks,Depends_On,Duplicate_Of,CC]
 
-
-def jiraIssues(url,query,maxResults,outFile):
+@utilsConf.marker_decorator(utilsConf.ISSUE_TRACKER_FILE)
+def jiraIssues(outFile , url, project_name, bunch = 100):
     jiraE = jira.JIRA(url)
     allIssues=[]
-    counter=0
-    lines=[["ID","Product","Component","Assigned To","Status","Resolution","Reporter","Last Modified","Version","Milestone","Hardware","OS","Priority","Severity","Summary","Keywords","Submit Date","Blocks","Depends On","Duplicate Of","CC"]]
-    while counter<maxResults:
-        issues = jiraE.search_issues(query, maxResults=100,startAt=counter)
+    extracted_issues = 0
+    lines = [
+        ["id", "product", "component", "assigned_to", "status", "resolution", "reporter", "last_change_time", "version",
+         "target_milestone", "platform", "op_sys", "priority", "severity", "summary", "keywords", "creation_time",
+         "blocks", "depends_on", "Duplicate Of", "cc"]]
+    while True:
+        issues = jiraE.search_issues("project={0}".format(project_name), maxResults=bunch, startAt=extracted_issues)
         allIssues.extend(issues)
-        counter=counter+100
-    print(len(allIssues))
+        extracted_issues=extracted_issues+bunch
+        print extracted_issues, len(allIssues)
+        if len(issues) < bunch :
+            break
+    print len(allIssues)
     for issue in allIssues:
         analyze = issueAnalyze(issue)
         lines.append(analyze)
     f=open(outFile,"wb")
-    #f.writelines([",".join(x) for x in lines])
     writer=csv.writer(f)
     writer.writerows(lines)
     f.close()
 
-"""
-jiraIssues("https://java.net/jira",'project=JERSEY',2900,"C:\projs\\jerseyBugs.csv")
-exit()
-jiraIssues('https://issues.apache.org/jira','project=KARAF',3800,"C:\projs\\karaf\\karafBugs.csv")
-exit()
-
-jiraE = jira.JIRA('https://issues.apache.org/jira')
-
-issues = jiraE.search_issues('project=KARAF')
-print issues[0].fields
-
-
-issue = jiraE.issue('JRA-9')
-print issue.fields.project.key             # 'JRA'
-print issue.fields.issuetype.name          # 'New Feature'
-print issue.fields.reporter.displayName    # 'Mike Cannon-Brookes [Atlassian]'
-
-"""
+if __name__ == "__main__":
+    jiraIssues("C:\\temp\\CASSANDRA2.csv", "https://issues.apache.org/jira",'CASSANDRA')

@@ -53,7 +53,7 @@ def data_to_csv(out_file, gitPath, BugsFile):
     commits = get_data(gitPath, BugsFile)
     with open(out_file, "wb") as f:
         writer = csv.writer(f)
-        writer.writerows([c.to_csv() for c in commits])
+        writer.writerows([c.to_list() for c in commits])
 
 if __name__ == "__main__":
-    data_to_csv(r"C:\Temp\AntNLP.csv", r"C:\Users\User\Downloads\antWorking5\repo", "C:\Temp\\AntBugs.csv")
+    data_to_csv(r"C:\Temp\CASSANDRA_NLP.csv", r"C:\Users\User\Downloads\cassandra", "C:\Temp\\CASSANDRA2.csv")

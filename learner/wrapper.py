@@ -7,6 +7,7 @@ import subprocess
 import datetime
 import shutil
 import csv
+import tempfile
 from random import randint
 import git
 
@@ -18,6 +19,7 @@ import wekaMethods.patchsBuild
 import wekaMethods.wekaAccuracy
 import wekaMethods.issuesExtract.github_import
 import wekaMethods.issuesExtract.jira_import
+import wekaMethods.issuesExtract.python_bugzilla
 import Agent.bugs_testsDBMethods
 import Agent.experimentsMethods
 import report
@@ -438,8 +440,7 @@ def filesExperiments(workingDir,weka,packsPath,utilsPath, randNum):
 
 
 def methodsExperiments(workingDir,weka,packsPath,utilsPath,randNum):
-    #for buggedType in ["All","Most"]:
-    for buggedType in ["Most"]:
+    for buggedType in ["All","Most"]:
         outPath = os.path.join(workingDir, "experiments\\methods" + buggedType+randNum)
         outCsv=os.path.join(weka,buggedType+"_out_methods.csv")
         Agent.experimentsMethods.RunExperiments(os.path.join(workingDir,"testsBugsMethods.db"), outPath,packsPath,outCsv,"method",buggedType,utilsPath)
@@ -465,13 +466,18 @@ def clean(versPath,LocalGitPath):
 
 
 def wrapperLearner(confFile,globalConfFile):
-    vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
-    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath = utilsConf.globalConfig(globalConfFile)
-    versPath, dbadd=Mkdirs(workingDir,vers)
+    vers, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product , workingDir = utilsConf.configure(confFile)
+    docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath = utilsConf.globalConfig(
+        globalConfFile)
+    versPath, dbadd = Mkdirs(workingDir, vers)
+    bugsPath = tempfile.mkstemp(suffix=".csv")[1]
+    if issue_tracker == "bugzilla":
+        wekaMethods.issuesExtract.python_bugzilla.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
+    elif issue_tracker == "jira":
+        wekaMethods.issuesExtract.jira_import.jiraIssues(bugsPath, issue_tracker_url, issue_tracker_product)
     logfile=open(os.path.join(workingDir,"timeLog2.txt"),"wb")
     logfile.write("start "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
-
     vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
     LocalGitPath=os.path.join(workingDir,"repo")
     versionsCreate(gitPath, vers, versPath,LocalGitPath)
@@ -603,7 +609,7 @@ def reportProjectData(confFile,globalConfFile):
 
 
 def wrapperExperiments(confFile,globalConfFile):
-    vers, gitPath,bugsPath, workingDir= utilsConf.configure(confFile)
+    vers, gitPath, issue_tracker, issue_tracker_url, issue_tracker_product, workingDir = utilsConf.configure(confFile)
     docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath = utilsConf.globalConfig(globalConfFile)
     weka=os.path.join(workingDir,"weka")
     testDb = os.path.join( workingDir , "testsBugsMethods.db")

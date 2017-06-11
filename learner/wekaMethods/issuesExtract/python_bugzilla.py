@@ -1,9 +1,9 @@
 __author__ = 'amir'
 import bugzilla
 import csv
-import os
 from time import mktime
 import datetime
+import utilsConf
 
 
 BUG_STATUS = ['UNCONFIRMED', 'CONFIRMED', 'IN_PROGRESS', 'NEEDINFO', 'RESOLVED', 'VERIFIED', 'FIXED', 'INVALID',
@@ -33,6 +33,7 @@ def get_all_bugs(url, product):
             bugs.extend(bzapi.query(bzapi.build_query(product=p, component=component)))
     return map(get_bug_data, bugs)
 
+@utilsConf.marker_decorator(utilsConf.ISSUE_TRACKER_FILE)
 def write_bugs_csv(csv_bug_file, url, product=None):
     if "xmlrpc" not  in url:
         url += "/xmlrpc.cgi"
