@@ -47,6 +47,9 @@ def mkOneDir(dir):
     if not os.path.isdir(dir):
             os.mkdir(dir)
 
+def version_to_dir_name(version):
+    return version.replace("\\", "_").replace("/", "_")
+
 def Mkdirs(workingDir,vers):
     mkOneDir(workingDir)
     #shutil.copyfile("C:\projs\\xml-doclet-1.0.4-jar-with-dependencies.jar", workingDir + "\\xml-doclet-1.0.4-jar-with-dependencies.jar")
@@ -58,10 +61,10 @@ def Mkdirs(workingDir,vers):
     mkOneDir(experiments)
     experiments=os.path.join(workingDir,"experiments_known")
     mkOneDir(experiments)
-    ver=os.path.join(versPath,"checkAll")
-    mkOneDir(ver)
-    ver=os.path.join(versPath,"checkAllMethodsData")
-    mkOneDir(ver)
+    checkAll=os.path.join(versPath,"checkAll")
+    mkOneDir(checkAll)
+    checkAllMethodsData=os.path.join(versPath,"checkAllMethodsData")
+    mkOneDir(checkAllMethodsData)
     dbadd=os.path.join(workingDir,"dbAdd")
     mkOneDir(dbadd)
     testedVer=os.path.join(workingDir,"testedVer")
@@ -71,36 +74,35 @@ def Mkdirs(workingDir,vers):
     markers=os.path.join(workingDir,"markers")
     mkOneDir(markers)
     for v in vers:
-        ver=os.path.join(versPath,v)
-        mkOneDir(ver)
-        blame=os.path.join(ver,"blame")
+        version=os.path.join(versPath,version_to_dir_name(v))
+        mkOneDir(version)
+        blame=os.path.join(version,"blame")
         mkOneDir(blame)
-        Jdoc2=os.path.join(ver,"Jdoc2")
+        Jdoc2=os.path.join(version,"Jdoc2")
         mkOneDir(Jdoc2)
     return versPath, dbadd
 
-def CopyDirs(gitPath, versPath,vers):
-    for x in vers:
-        path=os.path.join(versPath,x)+"\\"
+def CopyDirs(gitPath, versPath, versions):
+    for version in versions:
+        path=os.path.join(versPath,version_to_dir_name(version))+"\\"
         path=os.path.join(path,"repo")#+"\\"
-        coptSt = "xcopy " + gitPath + " " + path + " /C /e /i /h"
         if not os.path.exists(path):
             shutil.copytree(gitPath, path)
 
 
 def GitRevert(versPath,vers):
-    for x in vers:
-        path=os.path.join(versPath,x)
+    for version in vers:
+        path=os.path.join(versPath,version_to_dir_name(version))
         path=os.path.join(path,"repo")+"\\"
         #run_commands = ["git", "stash"]
         #proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
         #(out, err) = proc.communicate()
 
-        run_commands = ["git", "reset", "-q","--hard", x]
+        run_commands = ["git", "reset", "-q","--hard", version]
         proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
         (out, err) = proc.communicate()
 
-        run_commands = ["git", "revert","--no-commit","--no-edit",  x]
+        run_commands = ["git", "revert","--no-commit","--no-edit",  version]
         proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
         (out, err) = proc.communicate()
 
@@ -109,7 +111,7 @@ def GitRevert(versPath,vers):
         #proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
         #(out, err) = proc.communicate()
 
-        run_commands = ["git", "clean","-f","-d",  x]
+        run_commands = ["git", "clean","-f","-d",  version]
         proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
         (out, err) = proc.communicate()
 
@@ -137,8 +139,8 @@ def OO_features_error_analyze(err):
 
 @utilsConf.marker_decorator(utilsConf.OO_OLD_FEATURES_MARKER)
 def Extract_OO_features_OLD(versPath,vers,docletPath="C:\projs\\xml-doclet-1.0.4-jar-with-dependencies.jar"):
-    for x in vers:
-        verPath=os.path.join(versPath,x)
+    for version in vers:
+        verPath=os.path.join(versPath,version_to_dir_name(version))
         command = """cd /d  """ + verPath + " & for /R .\\repo %f in (*.java) do (call javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath "+docletPath+" -filename %~nxf.xml -private -d .\Jdoc2 %f) "
         #open(os.path.join(verPath,"JdocFunc.txt"),"wt").writelines([x for x in open(os.path.join(verPath,"javaFiles.txt"),"r").readlines() if not "Bad.java" in x ])
         #command = """cd /d  """ + verPath + " & javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath ..\..\\xml-doclet-1.0.4-jar-with-dependencies.jar  -private -d .\Jdoc2 @JdocFunc.txt"
@@ -242,20 +244,20 @@ def blameExecute(  path, pathRepo,ver ):
 
 @utilsConf.marker_decorator(utilsConf.COMPLEXITY_FEATURES_MARKER)
 def Extract_complexity_features(versPath,vers,workingDir,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML):
-    for x in vers:
-        path=os.path.join(versPath,x)
+    for version in vers:
+        path=os.path.join(versPath,version_to_dir_name(version))
         pathRepo=os.path.join(path,"repo")
-        run_commands = ["java", "-jar", checkStyle68, "-c", methodsNamesXML,"javaFile","-o","vers/checkAllMethodsData/"+x+".txt",pathRepo]
+        run_commands = ["java", "-jar", checkStyle68, "-c", methodsNamesXML,"javaFile","-o","vers/checkAllMethodsData/"+version+".txt",pathRepo]
         proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=workingDir)
         (out, err) = proc.communicate()
 
-        checkStyle="cd /d  "+workingDir+ " &  java -jar "+checkStyle57+" -c allChecks.xml -r "+pathRepo+" -f xml -o vers/checkAll/"+x+".xml "
-        run_commands = ["java", "-jar", checkStyle57, "-c", allchecks,"-r",pathRepo,"-f","xml","-o","vers/checkAll/"+x+".xml"]
+        checkStyle="cd /d  "+workingDir+ " &  java -jar "+checkStyle57+" -c allChecks.xml -r "+pathRepo+" -f xml -o vers/checkAll/"+version+".xml "
+        run_commands = ["java", "-jar", checkStyle57, "-c", allchecks,"-r",pathRepo,"-f","xml","-o","vers/checkAll/"+version+".xml"]
         proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=workingDir)
         (out, err) = proc.communicate()
 
-        blameExecute(path, pathRepo,x)
-        SourceMonitorXml(workingDir,x,sourceMonitorEXE)
+        blameExecute(path, pathRepo,version_to_dir_name(version))
+        SourceMonitorXml(workingDir,version_to_dir_name(version),sourceMonitorEXE)
 
 def GitVersInfo(basicPath,repoPath,vers):
     #repoPath="C:\\tomcat\\code\\tomcat8\\"
@@ -481,6 +483,7 @@ def wrapperLearner(confFile,globalConfFile):
     vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
     LocalGitPath=os.path.join(workingDir,"repo")
     versionsCreate(gitPath, vers, versPath,LocalGitPath)
+    vers = map(version_to_dir_name, vers)
     testVerConfig(workingDir,vers[-2],"ant",dates[-2],dates[-1])
     mkOneDir(LocalGitPath)
 

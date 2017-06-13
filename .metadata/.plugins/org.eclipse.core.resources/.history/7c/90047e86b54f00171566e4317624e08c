@@ -1,0 +1,5 @@
+package jacoco_report;
+
+public class CsvReport {
+
+}

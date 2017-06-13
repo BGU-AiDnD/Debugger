@@ -26,19 +26,23 @@ def bugs_data(BugsFile):
         bugsIds.append(row[0])
     return bugsIds
 
+def clean_commit_message(commit_message):
+    if "git-svn-id" in commit_message:
+        return commit_message.split("git-svn-id")[0]
+    return commit_message
 
 def commits_and_Bugs(repo, bugsIds):
-    def get_bug_num_from_comit_text(commit_text):
+    def get_bug_num_from_comit_text(commit_text, bugsIds):
         s = commit_text.lower().replace(":", "").replace("#", "").replace("-", " ").replace("_", " ").split()
         for word in s:
             if word.isdigit():
-                if (len(word) < 8 and len(word) > 4):
+                if word in bugsIds:
                     return word
         return "0"
     commits= []
     for git_commit in repo.iter_commits():
-        commit_text = git_commit.summary
-        commits.append(Commit(git_commit, get_bug_num_from_comit_text(commit_text)))
+        commit_text = clean_commit_message(git_commit.message)
+        commits.append(Commit(git_commit, get_bug_num_from_comit_text(commit_text, bugsIds)))
     return commits
 
 
