@@ -8,15 +8,17 @@ import utilsConf
 
 #ID	Product	Component	Assigned To	Status	Resolution	Reporter	Last Modified	Version	Milestone	Hardware	OS	Priority	Severity	Summary	Keywords	Submit Date	Blocks	Depends On	Duplicate Of	CC
 def issueAnalyze(issue):
+    def to_string(s):
+        return str( unicodedata.normalize('NFKD', s).encode('ascii','ignore'))
     Id=issue.key.split("-")[1]
     Product=str(issue.fields.project)
     Component=",".join([x.name for x in issue.fields.components])
     Assigned_To="NONE"
     if issue.fields.assignee!=None:
-        Assigned_To=str( unicodedata.normalize('NFKD', issue.fields.assignee.name).encode('ascii','ignore'))
+        Assigned_To= to_string(issue.fields.assignee.name)
     Status=str(issue.fields.status)
     Resolution=str(issue.fields.resolution)
-    Reporter=str(issue.fields.reporter.name)
+    Reporter=to_string(issue.fields.reporter.name)
     Last_Modified=str(issue.fields.updated)[:10]
     Last_Modified=datetime.datetime.strptime(Last_Modified,'%Y-%m-%d').date().strftime('%d/%m/%Y %H:%M:%S')
 
@@ -27,7 +29,7 @@ def issueAnalyze(issue):
     Hardware=str("")
     OS=""
     if not None==issue.fields.environment:
-        OS=str(unicodedata.normalize('NFKD', issue.fields.environment).encode('ascii','ignore'))
+        OS=to_string(issue.fields.environment)
         OS=" ".join(OS.split())
     Priority=str("")
     if "priority" in  issue.raw:
@@ -35,7 +37,7 @@ def issueAnalyze(issue):
     Severity=str("")
     if "issuetype"  in  issue.raw:
         Severity=str(issue.raw["issuetype"]["name"])
-    Summary=str(unicodedata.normalize('NFKD', issue.fields.summary).encode('ascii','ignore'))
+    Summary=to_string(issue.fields.summary)
     Summary=Summary.replace("\n"," ")
     Keywords=str(issue.fields.labels)
     Submit_Date=str(issue.fields.created)[:10]
