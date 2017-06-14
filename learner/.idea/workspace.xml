@@ -2,34 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a99ccab5-ef05-47d7-a302-2dc78736cec3" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.core.resources/.projects/Barinel/.markers.snap" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.core.resources/.projects/Barinel/.syncinfo.snap" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.core.resources/.projects/Program_Diagnoser/.markers.snap" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.core.resources/.projects/Program_Diagnoser/.syncinfo.snap" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.core.resources/.projects/jacoco_report/.markers.snap" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.core.resources/.projects/jacoco_report/.syncinfo.snap" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.core.resources/.root/.markers.snap" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.core.resources/.root/7.tree" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.core.resources/7.snap" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.epp.logging.aeri.ide/org.eclipse.epp.logging.aeri.ide.server/http-cache/write.lock" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.jdt.ui/jdt-images/0.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.jdt.ui/jdt-images/1.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.jdt.ui/jdt-images/2.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.jdt.ui/jdt-images/3.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.jdt.ui/jdt-images/4.png" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.metadata/.mylyn/.tasks.xml.zip" afterPath="$PROJECT_DIR$/../.metadata/.mylyn/.tasks.xml.zip" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.metadata/.mylyn/tasks.xml.zip" afterPath="$PROJECT_DIR$/../.metadata/.mylyn/tasks.xml.zip" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.core.resources/.safetable/org.eclipse.core.resources" afterPath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.core.resources/.safetable/org.eclipse.core.resources" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.jdt.core/assumedExternalFilesCache" afterPath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.jdt.core/assumedExternalFilesCache" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.jdt.core/externalFilesCache" afterPath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.jdt.core/externalFilesCache" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.jdt.core/nonChainingJarsCache" afterPath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.jdt.core/nonChainingJarsCache" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.jdt.ui.prefs" afterPath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.jdt.ui.prefs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.e4.workbench/workbench.xmi" afterPath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.e4.workbench/workbench.xmi" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.jdt.debug.ui/dialog_settings.xml" afterPath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.jdt.debug.ui/dialog_settings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.jdt.ui/QualifiedTypeNameHistory.xml" afterPath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.jdt.ui/QualifiedTypeNameHistory.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.jdt.ui/dialog_settings.xml" afterPath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.jdt.ui/dialog_settings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.ui.workbench.texteditor/dialog_settings.xml" afterPath="$PROJECT_DIR$/../.metadata/.plugins/org.eclipse.ui.workbench.texteditor/dialog_settings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wekaMethods/issuesExtract/jira_import.py" afterPath="$PROJECT_DIR$/wekaMethods/issuesExtract/jira_import.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utilsConf.py" afterPath="$PROJECT_DIR$/utilsConf.py" />
     </list>
     <ignored path="eclipse.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -71,11 +44,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="utilsConf.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="utilsConf.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/utilsConf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="952">
-              <caret line="57" column="40" selection-start-line="57" selection-start-column="40" selection-end-line="57" selection-end-column="40" />
+            <state relative-caret-position="410">
+              <caret line="143" column="88" selection-start-line="143" selection-start-column="88" selection-end-line="143" selection-end-column="88" />
               <folding>
                 <element signature="e#20#29#0" expanded="true" />
               </folding>
@@ -88,16 +61,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1054">
               <caret line="64" column="22" selection-start-line="64" selection-start-column="14" selection-end-line="64" selection-end-column="22" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="diagnoserUtils.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Diagnoser/diagnoserUtils.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1785">
-              <caret line="105" column="4" selection-start-line="105" selection-start-column="4" selection-end-line="105" selection-end-column="4" />
               <folding />
             </state>
           </provider>
@@ -123,11 +86,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="jira_import.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="jira_import.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/jira_import.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="282">
-              <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+            <state relative-caret-position="228">
+              <caret line="59" column="28" selection-start-line="59" selection-start-column="28" selection-end-line="59" selection-end-column="28" />
               <folding>
                 <element signature="e#21#32#0" expanded="true" />
               </folding>
@@ -203,11 +166,11 @@
         <option value="$PROJECT_DIR$/Diagnoser/diagnoserUtils.py" />
         <option value="$PROJECT_DIR$/wekaMethods/issuesExtract/jira.py" />
         <option value="$PROJECT_DIR$/wekaMethods/issuesExtract/python_bugzilla.py" />
-        <option value="$PROJECT_DIR$/utilsConf.py" />
         <option value="$PROJECT_DIR$/wekaMethods/buildDB.py" />
         <option value="$PROJECT_DIR$/NLP/commits.py" />
         <option value="$PROJECT_DIR$/wrapper.py" />
         <option value="$PROJECT_DIR$/wekaMethods/issuesExtract/jira_import.py" />
+        <option value="$PROJECT_DIR$/utilsConf.py" />
       </list>
     </option>
   </component>
@@ -244,11 +207,28 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
-        <subPane />
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eclipse" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eclipse" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="learner" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -557,9 +537,10 @@
     <frame x="-7" y="0" width="1370" height="735" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19867061" sideWeight="0.7224959" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19867061" sideWeight="0.7224959" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.509434" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2752" sideWeight="0.49853587" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329653" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2484375" sideWeight="0.6914378" order="1" side_tool="false" content_ui="tabs" />
@@ -572,7 +553,6 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3536" sideWeight="0.49707174" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2752" sideWeight="0.49853587" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3904" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
@@ -682,13 +662,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/OOMethods.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/OOFamiliesMethods.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -1017,16 +990,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utilsConf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="952">
-          <caret line="57" column="40" selection-start-line="57" selection-start-column="40" selection-end-line="57" selection-end-column="40" />
-          <folding>
-            <element signature="e#20#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/NLP/commits.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -1053,12 +1016,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/All_One_create.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1666">
+          <caret line="99" column="29" selection-start-line="99" selection-start-column="29" selection-end-line="99" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/jira_import.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+        <state relative-caret-position="228">
+          <caret line="59" column="28" selection-start-line="59" selection-start-column="28" selection-end-line="59" selection-end-column="28" />
           <folding>
             <element signature="e#21#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utilsConf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="410">
+          <caret line="143" column="88" selection-start-line="143" selection-start-column="88" selection-end-line="143" selection-end-column="88" />
+          <folding>
+            <element signature="e#20#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
