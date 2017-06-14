@@ -59,10 +59,8 @@ def jiraIssues(outFile , url, project_name, bunch = 100):
         issues = jiraE.search_issues("project={0}".format(project_name), maxResults=bunch, startAt=extracted_issues)
         allIssues.extend(issues)
         extracted_issues=extracted_issues+bunch
-        print extracted_issues, len(allIssues)
         if len(issues) < bunch :
             break
-    print len(allIssues)
     for issue in allIssues:
         analyze = issueAnalyze(issue)
         lines.append(analyze)
