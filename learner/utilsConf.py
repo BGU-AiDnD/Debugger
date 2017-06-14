@@ -141,8 +141,8 @@ def marker_decorator(marker):
                 try:
                     ans = func(*args, **kwargs)
                 except Exception as e:
-                    get_configuration().get_marker(marker).error(e.message + " ".join(map(str,e.args)))
-                    return
+                    get_configuration().get_marker(marker).error(e.message)
+                    raise e
                 get_configuration().get_marker(marker).finish()
             return ans
         return f
