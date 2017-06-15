@@ -1,5 +1,6 @@
 __author__ = 'amir'
 import os
+import traceback
 from datetime import datetime
 
 # markers names:
@@ -142,6 +143,7 @@ def marker_decorator(marker):
                     ans = func(*args, **kwargs)
                 except Exception as e:
                     get_configuration().get_marker(marker).error(e.message)
+                    print traceback.print_stack()
                     raise e
                 get_configuration().get_marker(marker).finish()
             return ans
