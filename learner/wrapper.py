@@ -48,7 +48,7 @@ def mkOneDir(dir):
             os.mkdir(dir)
 
 def version_to_dir_name(version):
-    return version.replace("\\", "_").replace("/", "_")
+    return version.replace("\\", "_").replace("/", "_").replace("-", "_").replace(".", "_")
 
 def Mkdirs(workingDir,vers):
     mkOneDir(workingDir)
