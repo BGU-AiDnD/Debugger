@@ -182,6 +182,6 @@ if __name__=="__main__":
     #readMatrixTest()
     #diagnoseTests()
     # instance = readPlanningFile(r"C:\vulnerabilities\ImageMagick_exploited\CVE-2017-5509\fuzzing\matrix.txt")
-    instance = readPlanningFile(r"C:\Temp\examples.txt")
+    instance = readPlanningFile(r"C:\vulnerabilities\ImageMagick_exploited\CVE-2016-7533\fuzzing\dll_diagnosis.txt")
     print instance.calc_precision_recall()
     pass

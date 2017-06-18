@@ -139,12 +139,12 @@ def marker_decorator(marker):
             ans = None
             if not get_configuration().get_marker(marker).is_exists():
                 get_configuration().get_marker(marker).start()
-                try:
-                    ans = func(*args, **kwargs)
-                except Exception as e:
-                    get_configuration().get_marker(marker).error(e.message)
-                    print traceback.print_stack()
-                    raise e
+                # try:
+                ans = func(*args, **kwargs)
+                # except Exception as e:
+                #     get_configuration().get_marker(marker).error(e.message)
+                #     print traceback.print_stack()
+                #     exit()
                 get_configuration().get_marker(marker).finish()
             return ans
         return f
