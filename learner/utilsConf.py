@@ -41,6 +41,8 @@ def globalConfig(confFile):
             sourceMonitorEXE=v
     return docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath
 
+def path_to_long_path(path):
+    return os.path.join("\\\\.\\", path)
 
 def configure(confFile):
     lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
@@ -48,20 +50,15 @@ def configure(confFile):
     issue_tracker = "bugzilla"
     for x in lines:
         if x.startswith("workingDir"):
-            v=x.split("=")[1]
-            workingDir=v
+            workingDir = path_to_long_path(x.split("=")[1])
         if x.startswith("git"):
-            v=x.split("=")[1]
-            gitPath=v
+            gitPath = path_to_long_path(x.split("=")[1])
         if x.startswith("issue_tracker_product_name"):
-            v=x.split("=")[1]
-            issue_tracker_product=v
+            issue_tracker_product = x.split("=")[1]
         if x.startswith("issue_tracker_url"):
-            v=x.split("=")[1]
-            issue_tracker_url=v
+            issue_tracker_url = x.split("=")[1]
         if x.startswith("issue_tracker"):
-            v=x.split("=")[1]
-            issue_tracker=v
+            issue_tracker = x.split("=")[1]
         if x.startswith("vers"):
             v=x.split("=")[1]
             v=v.split("(")[1]
