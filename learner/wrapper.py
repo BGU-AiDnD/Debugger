@@ -484,7 +484,7 @@ def wrapperLearner(confFile,globalConfFile):
     LocalGitPath=os.path.join(workingDir,"repo")
     versionsCreate(gitPath, vers, versPath,LocalGitPath)
     vers_dirs = map(version_to_dir_name, vers)
-    testVerConfig(workingDir,vers[-2],"ant",dates[-2],dates[-1])
+    testVerConfig(workingDir,vers_dirs[-2],"ant",dates[-2],dates[-1])
     mkOneDir(LocalGitPath)
 
     featuresExtract(vers_dirs, vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
