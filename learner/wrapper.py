@@ -286,7 +286,7 @@ def featuresExtract(vers_dirs, vers, versPath, workingDir,LocalGitPath,logfile,d
     logfile.write("after Extract_OO_features "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
 
-    wekaMethods.commsSpaces.create(vers, os.path.join(workingDir, "vers"))
+    wekaMethods.commsSpaces.create(vers_dirs, os.path.join(workingDir, "vers"))
     logfile.write("after commsSpaces "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
 
