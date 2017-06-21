@@ -71,11 +71,8 @@ def EclipseInfo(basicPath):
 
 
 def GitVersInfo(basicPath,repoPath,vers):
-    #repoPath="C:\\tomcat\\code\\tomcat8\\"
     r=git.Repo(repoPath)
-    #vers=["TOMCAT_8_0_4", "TOMCAT_8_0_5", "TOMCAT_8_0_6", "TOMCAT_8_0_7", "TOMCAT_8_0_8", "TOMCAT_8_0_9"]
     wanted=[ x.commit for x in r.tags if x.name in vers]
-    wan=[ (x.commit,x.name) for x in r.tags if x.name in vers]
     commits=[int("".join(list(x.hexsha)[:7]),16) for x in wanted]
     dates=[datetime.datetime.fromtimestamp(x.committed_date).strftime('%Y-%m-%d %H:%M:%S') for x in wanted]
     paths=[os.path.join(basicPath, os.path.join(n, "repo")) for n in vers]
@@ -851,7 +848,7 @@ def All_one(sourcePathTrain,sourcePathTest,oned,alld,packsInds):
         attributeSelect(sourcePathTest,outPathTest,reduce1)
 
 
-def articlesAllpacks(basicPath,repoPath,outDir,vers,buggedType,dbPath):
+def articlesAllpacks(basicPath,repoPath,outDir,vers, vers_dirs,buggedType,dbPath):
     packs=["haelstead","g2","g3","methodsArticles","methodsAdded","hirarcy","fieldsArticles","fieldsAdded","constructorsArticles","constructorsAdded","lastProcess","simpleProcessArticles","simpleProcessAdded","bugs","sourceMonitor","checkStyle","blame"]#,"analyzeComms"]
     #packs=["bugsMethods"]
     bugQ=""
@@ -866,10 +863,10 @@ def articlesAllpacks(basicPath,repoPath,outDir,vers,buggedType,dbPath):
     NamesFile=os.path.join(outDir,buggedType+"_names_files.csv")
     FeaturesClasses,Featuresnames=featuresPacksToClasses(packs)
     attr,lensAttr=objectsAttr(FeaturesClasses)
-    arffCreate(dbPath,FeaturesClasses ,names,dates,bugQ,wanted,trainingFile,testingFile,NamesFile)
+    arffCreate(dbPath,FeaturesClasses ,vers_dirs,dates,bugQ,wanted,trainingFile,testingFile,NamesFile)
     return trainingFile,testingFile,NamesFile,Featuresnames,lensAttr
 
-def articlesAllpacksMethods(basicPath,repoPath,outDir,vers,buggedType,dbPath):
+def articlesAllpacksMethods(basicPath,repoPath,outDir,vers, vers_dirs,buggedType,dbPath):
     packs=["lastProcessMethods","simpleProcessArticlesMethods","simpleProcessAddedMethods","bugsMethods"]#,"analyzeComms"]
     bugQ=""
     wanted='select distinct methodDir from AllMethods order by methodDir'
@@ -883,7 +880,7 @@ def articlesAllpacksMethods(basicPath,repoPath,outDir,vers,buggedType,dbPath):
     NamesFile=os.path.join(outDir,buggedType+"_names_methods.csv")
     FeaturesClasses,Featuresnames=featuresMethodsPacksToClasses(packs)
     attr,lensAttr=objectsAttr(FeaturesClasses)
-    arffCreate(dbPath, FeaturesClasses,names,dates,bugQ,wanted,trainingFile,testingFile,NamesFile)
+    arffCreate(dbPath, FeaturesClasses,vers_dirs,dates,bugQ,wanted,trainingFile,testingFile,NamesFile)
     return trainingFile,testingFile,NamesFile,Featuresnames,lensAttr
 
 

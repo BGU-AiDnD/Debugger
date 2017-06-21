@@ -84,8 +84,7 @@ def Mkdirs(workingDir,vers):
 
 def CopyDirs(gitPath, versPath, versions):
     for version in versions:
-        path=os.path.join(versPath,version_to_dir_name(version))+"\\"
-        path=os.path.join(path,"repo")#+"\\"
+        path=os.path.join(versPath,version_to_dir_name(version), "repo")
         if not os.path.exists(path):
             shutil.copytree(gitPath, path)
 
@@ -360,7 +359,7 @@ def BuildMLFiles(outDir,buggedType,component):
     return trainingFile,testingFile,NamesFile, outCsv
 
 @utilsConf.marker_decorator(utilsConf.ML_MODELS_MARKER)
-def createBuildMLModels(workingDir,gitPath,weka,vers,dbadd,wekaJar,RemoveBat):
+def createBuildMLModels(workingDir, gitPath, weka, vers, vers_dirs, db_dir, wekaJar, RemoveBat):
     for buggedType in ["All","Most"]:
         Bpath=os.path.join(workingDir,buggedType)
         mkOneDir(Bpath)
@@ -368,11 +367,11 @@ def createBuildMLModels(workingDir,gitPath,weka,vers,dbadd,wekaJar,RemoveBat):
         methodsPath=os.path.join(Bpath,"Methods")
         mkOneDir(FilesPath)
         mkOneDir(methodsPath)
-        trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacks(FilesPath,gitPath,weka,vers,buggedType,dbadd)
+        trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacks(FilesPath, gitPath, weka, vers, vers_dirs, buggedType, db_dir)
         trainingFile, testingFile, NamesFile, outCsv=BuildMLFiles(weka,buggedType,"files")
         BuildWekaModel(weka,trainingFile,testingFile,NamesFile,outCsv,"files_"+buggedType,wekaJar)
         # All_One_create.allFamilies(FilesPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
-        trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacksMethods(methodsPath,gitPath,weka,vers,buggedType,dbadd)
+        trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacksMethods(methodsPath, gitPath, weka, vers, vers_dirs, buggedType, db_dir)
         trainingFile, testingFile, NamesFile, outCsv=BuildMLFiles(weka,buggedType,"methods")
         BuildWekaModel(weka,trainingFile,testingFile,NamesFile,outCsv,"methods_"+buggedType,wekaJar)
         # All_One_create.allFamilies(methodsPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
@@ -471,7 +470,8 @@ def wrapperLearner(confFile,globalConfFile):
     vers, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product , workingDir = utilsConf.configure(confFile)
     docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath = utilsConf.globalConfig(
         globalConfFile)
-    versPath, dbadd = Mkdirs(workingDir, vers)
+    versPath, db_dir = Mkdirs(workingDir, vers)
+    vers_dirs = map(version_to_dir_name, vers)
     bugsPath = tempfile.mkstemp(suffix=".csv")[1]
     if issue_tracker == "bugzilla":
         wekaMethods.issuesExtract.python_bugzilla.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
@@ -483,24 +483,18 @@ def wrapperLearner(confFile,globalConfFile):
     vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
     LocalGitPath=os.path.join(workingDir,"repo")
     versionsCreate(gitPath, vers, versPath,LocalGitPath)
-    vers_dirs = map(version_to_dir_name, vers)
     testVerConfig(workingDir,vers_dirs[-2],"ant",dates[-2],dates[-1])
     mkOneDir(LocalGitPath)
-
     featuresExtract(vers_dirs, vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
     logfile.write("after featuresExtract "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
-
     MethodsParsed=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"CheckStyle.txt")
     changeFile=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"Ins_dels.txt")
-    wekaMethods.buildDB.buildOneTimeCommits(versPath,dbadd,bugsPath,False,-1,vers_dirs,"repo",MethodsParsed,changeFile,logfile,dates)
+    wekaMethods.buildDB.buildOneTimeCommits(versPath,db_dir,bugsPath,False,-1,vers_dirs,"repo",MethodsParsed,changeFile,logfile,dates)
     logfile.write("after buildDB "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
-
     weka=os.path.join(workingDir,"weka")
-
-    createBuildMLModels(workingDir,gitPath,weka,vers,dbadd,wekaJar,RemoveBat)
-
+    createBuildMLModels(workingDir,gitPath,weka,vers, vers_dirs,db_dir,wekaJar,RemoveBat)
     utilsConf.get_configuration().get_marker(utilsConf.LEARNER_PHASE_FILE).finish()
 
     # FilesIndices=[[0,14,15],[1,2,3,4,5,6,7,8,9],[10,11,12,16],[13]] #Traditional , OO, process ,Bugs
