@@ -43,7 +43,7 @@ def globalConfig(confFile):
 
 def to_long_path(path):
     drive_letter, other_path = os.path.splitdrive(path)
-    return os.path.join("\\\\?\\" + drive_letter, other_path)
+    return os.path.join(u"\\\\?\\" + drive_letter, other_path)
 
 def configure(confFile):
     lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]

@@ -97,12 +97,20 @@ def GitRevert(versPath,vers):
         #proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
         #(out, err) = proc.communicate()
 
-        run_commands = ["git", "reset", "-q","--hard", version]
-        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
+        run_commands = ["git", "-C", path, "clean", "-fd"]
+        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True)
         (out, err) = proc.communicate()
 
-        run_commands = ["git", "revert","--no-commit","--no-edit",  version]
-        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
+        run_commands = ["git", "-C", path, "checkout", "--", "."]
+        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True)
+        (out, err) = proc.communicate()
+
+        run_commands = ["git", "-C", path, "reset", "-q","--hard", version]
+        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True)
+        (out, err) = proc.communicate()
+
+        run_commands = ["git", "-C", path, "revert","--no-commit","--no-edit",  version]
+        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True)
         (out, err) = proc.communicate()
 
 
@@ -110,8 +118,8 @@ def GitRevert(versPath,vers):
         #proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
         #(out, err) = proc.communicate()
 
-        run_commands = ["git", "clean","-f","-d",  version]
-        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=path)
+        run_commands = ["git", "-C", path, "clean","-f","-d",  version]
+        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True)
         (out, err) = proc.communicate()
 
 def OO_features_error_analyze(err):
