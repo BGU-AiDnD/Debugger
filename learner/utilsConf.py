@@ -23,6 +23,8 @@ ISSUE_TRACKER_FILE = "issue_tracker_file"
 
 conf = None
 
+USE_LONG_PATHS = False
+
 def globalConfig(confFile):
     lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
     current_dir = os.path.dirname(os.path.realpath(__file__))
@@ -41,9 +43,14 @@ def globalConfig(confFile):
             sourceMonitorEXE=v
     return docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath
 
+
+
 def to_long_path(path):
     drive_letter, other_path = os.path.splitdrive(path)
-    return os.path.join(u"\\\\?\\" + drive_letter, other_path)
+    if USE_LONG_PATHS:
+        return os.path.join(u"\\\\?\\" + drive_letter, other_path)
+    else:
+        return path
 
 def configure(confFile):
     lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
