@@ -496,7 +496,7 @@ def wrapperLearner(confFile,globalConfFile):
     LocalGitPath=os.path.join(workingDir,"repo")
     versionsCreate(gitPath, vers, versPath,LocalGitPath)
     testVerConfig(workingDir,vers_dirs[-2],"ant",dates[-2],dates[-1])
-    download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product)
+    bugsPath = download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product)
     mkOneDir(LocalGitPath)
     featuresExtract(vers_dirs, vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
     logfile.write("after featuresExtract "+ str(datetime.datetime.now())+"\n")
