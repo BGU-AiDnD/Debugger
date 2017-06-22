@@ -473,6 +473,15 @@ def clean(versPath,LocalGitPath):
     shutil.rmtree(versPath, ignore_errors=True)
     shutil.rmtree(LocalGitPath, ignore_errors=True)
 
+def download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product):
+    bugsPath = tempfile.mktemp(suffix=".csv")
+    if issue_tracker == "bugzilla":
+        wekaMethods.issuesExtract.python_bugzilla.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
+    elif issue_tracker == "jira":
+        wekaMethods.issuesExtract.jira_import.jiraIssues(bugsPath, issue_tracker_url, issue_tracker_product)
+    return bugsPath
+
+
 
 def wrapperLearner(confFile,globalConfFile):
     vers, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product , workingDir = utilsConf.configure(confFile)
@@ -480,11 +489,6 @@ def wrapperLearner(confFile,globalConfFile):
         globalConfFile)
     versPath, db_dir = Mkdirs(workingDir, vers)
     vers_dirs = map(version_to_dir_name, vers)
-    bugsPath = tempfile.mkstemp(suffix=".csv")[1]
-    if issue_tracker == "bugzilla":
-        wekaMethods.issuesExtract.python_bugzilla.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
-    elif issue_tracker == "jira":
-        wekaMethods.issuesExtract.jira_import.jiraIssues(bugsPath, issue_tracker_url, issue_tracker_product)
     logfile=open(os.path.join(workingDir,"timeLog2.txt"),"wb")
     logfile.write("start "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
@@ -492,6 +496,7 @@ def wrapperLearner(confFile,globalConfFile):
     LocalGitPath=os.path.join(workingDir,"repo")
     versionsCreate(gitPath, vers, versPath,LocalGitPath)
     testVerConfig(workingDir,vers_dirs[-2],"ant",dates[-2],dates[-1])
+    download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product)
     mkOneDir(LocalGitPath)
     featuresExtract(vers_dirs, vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
     logfile.write("after featuresExtract "+ str(datetime.datetime.now())+"\n")
