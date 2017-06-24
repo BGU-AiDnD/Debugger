@@ -621,10 +621,11 @@ def reportProjectData(confFile,globalConfFile):
 def wrapperExperiments(confFile,globalConfFile):
     vers, gitPath, issue_tracker, issue_tracker_url, issue_tracker_product, workingDir = utilsConf.configure(confFile)
     docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath = utilsConf.globalConfig(globalConfFile)
+    vers_dirs = map(version_to_dir_name, vers)
     weka=os.path.join(workingDir,"weka")
     testDb = os.path.join( workingDir , "testsBugsMethods.db")
     vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
-    testDb=Agent.bugs_testsDBMethods.basicBuild(workingDir,vers[-2],dates[-2],dates[-1])
+    testDb=Agent.bugs_testsDBMethods.basicBuild(workingDir,vers_dirs[-2],dates[-2],dates[-1])
     packsPath = os.path.join(workingDir, "packs.txt")
     Agent.experimentsMethods.packFileCreate(testDb,1,-1, packsPath)
     rnd = str(randint(0,900))

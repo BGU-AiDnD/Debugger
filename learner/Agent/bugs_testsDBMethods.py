@@ -305,6 +305,7 @@ def createTables(dbPath):
 def basicBuild(workingDir,ver,startDate,EndDate):
     testDb = os.path.join( workingDir , "testsBugsMethods.db")
     dbData =os.path.join( workingDir ,"dbAdd\\"+ver+".db")
+    print dbData
     gitPath=os.path.join( workingDir , "vers\\"+ver+"\\repo")
     filesDict = filesDB(dbData, workingDir+"allFiles.txt")
     createTables(testDb)
