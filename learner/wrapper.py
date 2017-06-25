@@ -27,6 +27,7 @@ import All_One_create
 import wekaMethods.ParseWekaOutput
 import Planner.planningExperiments
 import Planner.Planning_Results
+import NLP.commits
 
 """
 resources :
@@ -497,6 +498,7 @@ def wrapperLearner(confFile,globalConfFile):
     versionsCreate(gitPath, vers, versPath,LocalGitPath)
     testVerConfig(workingDir,vers_dirs[-2],"ant",dates[-2],dates[-1])
     bugsPath = download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product)
+    NLP.commits.data_to_csv(os.path.join(workingDir, "NLP_data.csv"), gitPath, bugsPath)
     mkOneDir(LocalGitPath)
     featuresExtract(vers_dirs, vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
     logfile.write("after featuresExtract "+ str(datetime.datetime.now())+"\n")
