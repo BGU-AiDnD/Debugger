@@ -111,7 +111,7 @@ class Marker:
         self.marker_path = path
 
     def is_exists(self):
-        os.path.isfile(self.marker_path)
+        return os.path.isfile(self.marker_path)
 
     def start(self):
         with open(self.marker_path, "wb") as f:
