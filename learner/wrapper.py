@@ -247,7 +247,7 @@ def blameExecute(  path, pathRepo,ver ):
     blameO3 = os.path.join(path, "javaFiles.txt")
     blameO1 = os.path.join(path, "blame.txt")
     open(blameO1, "wb").write("".join([x.replace(pathRepo + "\\", "") for x in open(blameO3, "r")]))
-    blame = """D: & cd """ + pathRepo + " & " + doBlame
+    blame = """ cd /d """ + pathRepo + " & " + doBlame
     os.system(blame)
 
 @utilsConf.marker_decorator(utilsConf.COMPLEXITY_FEATURES_MARKER)
