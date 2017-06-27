@@ -235,7 +235,6 @@ def SourceMonitorXml(workingDir,ver,sourceMonitorEXE):
 
 
 
-@utilsConf.marker_decorator(utilsConf.BLAME_FEATURES_MARKER)
 def blameExecute(  path, pathRepo,ver ):
     blameWrite=" & dir /b /s *.java > ..\\javaFiles.txt"
     doBlame="for /F   %f in (../blame.txt) do (git blame --show-stats --score-debug -p --line-porcelain -l  "+ver+"  %f > ..\\blame\%~nxf)"
