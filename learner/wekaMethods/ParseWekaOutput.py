@@ -15,7 +15,7 @@ def Parse(file):
             for title in titles:
                 dict[c][title]=0
         return dict
-    ind=lines.index('=== Detailed Accuracy By Class ===\n')
+    ind = [i for i, x in enumerate(lines) if x == "=== Detailed Accuracy By Class ===\n"][-1]
     details=[x.lstrip().replace("Weighted Avg.","").split() for x in lines[ind+3: ind+6]]
     details[0]=details[0][:-1]
     details[1]=details[1][:-1]

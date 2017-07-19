@@ -4,6 +4,8 @@ __author__ = 'amir'
 
 import csv
 import Barinel
+import sys
+import os
 
 
 class FullMatrix:
@@ -178,10 +180,30 @@ def readPlannerTest():
     #     print fm.matrix[i]
 
 
+def calc_result_fo_planning_file(planning_file, out_file):
+    global instance
+    instance = readPlanningFile(planning_file)
+    precision, recall = instance.calc_precision_recall()
+    csv_output = [["precision", "recall"], [precision, recall]]
+    print precision, recall
+    with open(out_file, "wb") as f:
+        writer = csv.writer(f)
+        writer.writerows(csv_output)
+
+
+def dll_diagnosis(matrix_file_name="dll_diagnosis.txt", result_file_name="dll_diagnosis_result.txt"):
+    for dir_name in ["CVE-2016-7531", "CVE-2016-7533", "CVE-2016-7535", "CVE-2016-7906", "CVE-2016-8866",
+                     "CVE-2016-9556", "CVE-2017-5506", "CVE-2017-5508", "CVE-2017-5509", "CVE-2017-5510",
+                     "CVE-2017-5511"]:
+        fuzzing_dir = os.path.join(r"C:\vulnerabilities\ImageMagick_exploited", dir_name, "fuzzing")
+        planning_file = os.path.join(fuzzing_dir, matrix_file_name)
+        out_file = os.path.join(fuzzing_dir, result_file_name)
+        print planning_file
+        try:
+            calc_result_fo_planning_file(planning_file, out_file)
+        except:
+            print "failed"
+
+
 if __name__=="__main__":
-    #readMatrixTest()
-    #diagnoseTests()
-    # instance = readPlanningFile(r"C:\vulnerabilities\ImageMagick_exploited\CVE-2017-5509\fuzzing\matrix.txt")
-    instance = readPlanningFile(r"C:\vulnerabilities\ImageMagick_exploited\CVE-2016-7533\fuzzing\dll_diagnosis.txt")
-    print instance.calc_precision_recall()
-    pass
+    dll_diagnosis("function_diagnosis_matrix.txt", "function_diagnosis_result.txt")
