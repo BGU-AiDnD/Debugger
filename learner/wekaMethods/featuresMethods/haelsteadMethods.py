@@ -1,9 +1,10 @@
 __author__ = 'amir'
 
 from wekaMethods.articles import *
-#from articles import wekaMethods.articles.sqlToAttributes
+import wekaMethods.articles.sqlToAttributes
+import featureExtractorBase
 
-class haelsteadMethods:
+class haelsteadMethods(featureExtractorBase.FeatureExtractorBase):
     def get_attributes(self):
         return [( "Operators_count", "NUMERIC"), ( "Operands_count", "NUMERIC"),
                 ( "Distinct_operators", "NUMERIC"), ("Distinct_operands", "NUMERIC"), ("Program_length", "NUMERIC"),

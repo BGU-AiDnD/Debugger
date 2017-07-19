@@ -5,9 +5,10 @@ import networkx
 import wekaMethods.articles
 from collections import Counter
 import numpy
+import featureExtractorBase
 
 best_features=[9,10,11,12,15,17,19,20,21,24,26,53,54,55,56,59,61,63,64,65,68,70,75,76,77,78,81,83,85,86,87,90,92,93,94,96,97,103,113,114,115,116,117,118,119,120,130,132,133,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,152,153,72,134,151,155]
-class OOMethods:
+class OOMethods(featureExtractorBase.FeatureExtractorBase):
     def get_attributesOLD(self):
         return [('exception',['true','false']) ,('abstract',['true','false']) ,('serializable',['true','false']) ,
                 ( "methods_Count", "NUMERIC"),( "methods_override", "NUMERIC"),( "methods_private_Count", "NUMERIC"),

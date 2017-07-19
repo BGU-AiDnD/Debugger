@@ -2,15 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a99ccab5-ef05-47d7-a302-2dc78736cec3" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NLP/diagnosis_using_nlp.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NLP/metrics.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NLP/nlp_model.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NLP/parse_diagnoser_output.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/result_parsing/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/result_parsing/journal_2016.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wekaMethods/featuresMethods/featureExtractorBase.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Diagnoser/diagnoserUtils.py" afterPath="$PROJECT_DIR$/Diagnoser/diagnoserUtils.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wekaMethods/ParseWekaOutput.py" afterPath="$PROJECT_DIR$/wekaMethods/ParseWekaOutput.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wekaMethods/featuresMethods/OOFamiliesMethods.py" afterPath="$PROJECT_DIR$/wekaMethods/featuresMethods/OOFamiliesMethods.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wekaMethods/featuresMethods/OOMethods.py" afterPath="$PROJECT_DIR$/wekaMethods/featuresMethods/OOMethods.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wekaMethods/featuresMethods/analyzeCommsMethods.py" afterPath="$PROJECT_DIR$/wekaMethods/featuresMethods/analyzeCommsMethods.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wekaMethods/featuresMethods/analyzeLastMethods.py" afterPath="$PROJECT_DIR$/wekaMethods/featuresMethods/analyzeLastMethods.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wekaMethods/featuresMethods/blameMethods.py" afterPath="$PROJECT_DIR$/wekaMethods/featuresMethods/blameMethods.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wekaMethods/featuresMethods/checkStyleMethods.py" afterPath="$PROJECT_DIR$/wekaMethods/featuresMethods/checkStyleMethods.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wekaMethods/featuresMethods/haelsteadMethods.py" afterPath="$PROJECT_DIR$/wekaMethods/featuresMethods/haelsteadMethods.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wekaMethods/featuresMethods/processMethods.py" afterPath="$PROJECT_DIR$/wekaMethods/featuresMethods/processMethods.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wekaMethods/featuresMethods/processMethodsFamilies.py" afterPath="$PROJECT_DIR$/wekaMethods/featuresMethods/processMethodsFamilies.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wekaMethods/featuresMethods/sourceMonitorMethods.py" afterPath="$PROJECT_DIR$/wekaMethods/featuresMethods/sourceMonitorMethods.py" />
     </list>
     <ignored path="eclipse.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,108 +33,118 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="journal_2016.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/result_parsing/journal_2016.py">
+      <file leaf-file-name="analyzeCommsMethods.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/analyzeCommsMethods.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="986">
-              <caret line="61" column="31" selection-start-line="61" selection-start-column="12" selection-end-line="61" selection-end-column="31" />
+            <state relative-caret-position="68">
+              <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="analyzeLastMethods.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/analyzeLastMethods.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="27" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
               <folding>
-                <element signature="e#0#9#0" expanded="true" />
+                <element signature="e#21#55#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="diagnosis_using_nlp.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/NLP/diagnosis_using_nlp.py">
+      <file leaf-file-name="blameMethods.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/blameMethods.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="77" column="32" selection-start-line="77" selection-start-column="32" selection-end-line="77" selection-end-column="32" />
+            <state relative-caret-position="66">
+              <caret line="4" column="27" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
               <folding>
-                <element signature="e#0#9#0" expanded="true" />
+                <element signature="e#21#55#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Barinel.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Diagnoser/Barinel.py">
+      <file leaf-file-name="checkStyleMethods.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/checkStyleMethods.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="32">
-              <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="similarity.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Planner/similarity.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="planningExperiments.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Planner/planningExperiments.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1162">
-              <caret line="65" column="47" selection-start-line="65" selection-start-column="47" selection-end-line="65" selection-end-column="47" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ntpath.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Anaconda2/Lib/ntpath.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3417">
-              <caret line="208" column="0" selection-start-line="208" selection-start-column="0" selection-end-line="208" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="nlp_model.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/NLP/nlp_model.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="164">
-              <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+            <state relative-caret-position="68">
+              <caret line="4" column="27" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
               <folding>
-                <element signature="e#0#22#0" expanded="true" />
+                <element signature="e#21#55#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ExperimentInstance.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Diagnoser/ExperimentInstance.py">
+      <file leaf-file-name="haelsteadMethods.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/haelsteadMethods.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="166">
-              <caret line="261" column="14" selection-start-line="261" selection-start-column="14" selection-end-line="261" selection-end-column="14" />
+            <state relative-caret-position="51">
+              <caret line="3" column="27" selection-start-line="3" selection-start-column="27" selection-end-line="3" selection-end-column="27" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="diagnoserUtils.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Diagnoser/diagnoserUtils.py">
+      <file leaf-file-name="OOFamiliesMethods.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/OOFamiliesMethods.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="149">
-              <caret line="185" column="32" selection-start-line="185" selection-start-column="24" selection-end-line="185" selection-end-column="32" />
-              <folding />
+            <state relative-caret-position="119">
+              <caret line="7" column="27" selection-start-line="7" selection-start-column="27" selection-end-line="7" selection-end-column="27" />
+              <folding>
+                <element signature="e#21#55#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="metrics.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/NLP/metrics.py">
+      <file leaf-file-name="OOMethods.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/OOMethods.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="38" selection-start-line="0" selection-start-column="38" selection-end-line="0" selection-end-column="38" />
-              <folding />
+            <state relative-caret-position="119">
+              <caret line="7" column="27" selection-start-line="7" selection-start-column="27" selection-end-line="7" selection-end-column="27" />
+              <folding>
+                <element signature="e#21#55#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="processMethods.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/processMethods.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="27" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
+              <folding>
+                <element signature="e#21#55#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="processMethodsFamilies.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/processMethodsFamilies.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="65">
+              <caret line="4" column="27" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
+              <folding>
+                <element signature="e#21#55#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sourceMonitorMethods.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/sourceMonitorMethods.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="6" column="27" selection-start-line="6" selection-start-column="27" selection-end-line="6" selection-end-column="27" />
+              <folding>
+                <element signature="e#21#55#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -162,8 +175,6 @@
         <option value="$PROJECT_DIR$/Diagnoser/PSO.py" />
         <option value="$PROJECT_DIR$/wekaMethods/features/OO.py" />
         <option value="$PROJECT_DIR$/wekaMethods/features/OOFamilies.py" />
-        <option value="$PROJECT_DIR$/wekaMethods/featuresMethods/OOMethods.py" />
-        <option value="$PROJECT_DIR$/wekaMethods/featuresMethods/OOFamiliesMethods.py" />
         <option value="$PROJECT_DIR$/wekaMethods/wekaAccuracy.py" />
         <option value="$PROJECT_DIR$/Diagnoser/LightPSO.py" />
         <option value="$PROJECT_DIR$/Planner/HP_Random.py" />
@@ -198,6 +209,17 @@
         <option value="$PROJECT_DIR$/NLP/nlp_model.py" />
         <option value="$PROJECT_DIR$/NLP/diagnosis_using_nlp.py" />
         <option value="$PROJECT_DIR$/Diagnoser/diagnoserUtils.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/featuresMethods/featureExtractorBase.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/featuresMethods/analyzeCommsMethods.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/featuresMethods/analyzeLastMethods.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/featuresMethods/blameMethods.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/featuresMethods/checkStyleMethods.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/featuresMethods/haelsteadMethods.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/featuresMethods/OOFamiliesMethods.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/featuresMethods/OOMethods.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/featuresMethods/processMethods.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/featuresMethods/processMethodsFamilies.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/featuresMethods/sourceMonitorMethods.py" />
       </list>
     </option>
   </component>
@@ -265,7 +287,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Planner" />
+              <option name="myItemId" value="wekaMethods" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -279,7 +301,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Diagnoser" />
+              <option name="myItemId" value="wekaMethods" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="featuresMethods" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -737,90 +763,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Planner/pomcp/DIAGNOSER.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-113">
-          <caret line="43" column="20" selection-start-line="43" selection-start-column="20" selection-end-line="43" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Planner/pomcp/MCTS.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="33" column="35" selection-start-line="33" selection-start-column="35" selection-end-line="33" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Planner/mcts/actionNode.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="9" column="21" selection-start-line="9" selection-start-column="21" selection-end-line="9" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Planner/mcts/InstanceNode.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="18" column="27" selection-start-line="18" selection-start-column="27" selection-end-line="18" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Planner/mcts/mcts.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="18" column="37" selection-start-line="18" selection-start-column="37" selection-end-line="18" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Planner/mcts/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="14" column="36" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lrtdp_checker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="8" column="32" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Planner/lrtdp/LRTDPModule.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1224">
-          <caret line="72" column="19" selection-start-line="72" selection-start-column="19" selection-end-line="72" selection-end-column="19" />
-          <folding>
-            <element signature="e#21#52#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Planner/lrtdp/lrtdpState.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="32" column="20" selection-start-line="32" selection-start-column="8" selection-end-line="32" selection-end-column="20" />
-          <folding>
-            <element signature="e#20#38#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Agent/results.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9197">
-          <caret line="543" column="42" selection-start-line="543" selection-start-column="42" selection-end-line="543" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/gh_issues_import.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/github_import.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1156">
@@ -1054,7 +996,7 @@
         <state relative-caret-position="986">
           <caret line="61" column="31" selection-start-line="61" selection-start-column="12" selection-end-line="61" selection-end-column="31" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1132,6 +1074,110 @@
         <state relative-caret-position="149">
           <caret line="185" column="32" selection-start-line="185" selection-start-column="24" selection-end-line="185" selection-end-column="32" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/featureExtractorBase.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="53" selection-start-line="15" selection-start-column="53" selection-end-line="15" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/analyzeCommsMethods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/analyzeLastMethods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="27" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
+          <folding>
+            <element signature="e#21#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/blameMethods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="4" column="27" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
+          <folding>
+            <element signature="e#21#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/checkStyleMethods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="27" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
+          <folding>
+            <element signature="e#21#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/haelsteadMethods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="27" selection-start-line="3" selection-start-column="27" selection-end-line="3" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/OOFamiliesMethods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="27" selection-start-line="7" selection-start-column="27" selection-end-line="7" selection-end-column="27" />
+          <folding>
+            <element signature="e#21#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/OOMethods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="27" selection-start-line="7" selection-start-column="27" selection-end-line="7" selection-end-column="27" />
+          <folding>
+            <element signature="e#21#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/processMethods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="27" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
+          <folding>
+            <element signature="e#21#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/processMethodsFamilies.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="65">
+          <caret line="4" column="27" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
+          <folding>
+            <element signature="e#21#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/sourceMonitorMethods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="27" selection-start-line="6" selection-start-column="27" selection-end-line="6" selection-end-column="27" />
+          <folding>
+            <element signature="e#21#55#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -4,7 +4,9 @@ from wekaMethods.articles import *
 import wekaMethods.articles
 import numpy
 from collections import Counter
-class sourceMonitorMethods:
+import featureExtractorBase
+
+class sourceMonitorMethods(featureExtractorBase.FeatureExtractorBase):
     def get_attributes(self):
         return [("Lines" ,"NUMERIC"),("Statements" ,"NUMERIC"),
     ("Percent_Branch_Statements" ,"NUMERIC"),

@@ -2,8 +2,10 @@ __author__ = 'amir'
 
 from wekaMethods.articles import *
 import wekaMethods.articles
+import featureExtractorBase
+
 best_features=[7,15,19,1,23,16,63,22,30,6,2,31,54,62,4,55,27,11,17,26,67,10,35,47,51,24,20,8,48,34,59,66,49,58,52,32]
-class checkStyleMethods:
+class checkStyleMethods(featureExtractorBase.FeatureExtractorBase):
     def get_attributesOLD(self):
         return [("McCabe" , "NUMERIC"),
     ("fanOut" , "NUMERIC"),

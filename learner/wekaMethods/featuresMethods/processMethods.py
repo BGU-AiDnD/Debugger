@@ -2,8 +2,9 @@ __author__ = 'amir'
 
 from wekaMethods.articles import *
 import wekaMethods.articles
+import featureExtractorBase
 
-class processMethods:
+class processMethods(featureExtractorBase.FeatureExtractorBase):
     def get_attributes(self):
         return [( "tot_changes", "NUMERIC"), ( "sum_insert", "NUMERIC"),
                 ( "sum_delets", "NUMERIC"),( "count_insert", "NUMERIC"),
