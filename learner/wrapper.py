@@ -180,7 +180,7 @@ def Extract_OO_features(versPath,vers,docletPath="..\..\\xml-doclet-1.0.4-jar-wi
 # GENERATE Jdoc
 
 
-@utilsConf.marker_decorator(utilsConf.SOURCE_MONITOR_FEATURES_MARKER)
+#@utilsConf.marker_decorator(utilsConf.SOURCE_MONITOR_FEATURES_MARKER)
 def SourceMonitorXml(workingDir,ver,sourceMonitorEXE):
     bat="\""+sourceMonitorEXE+"\" /C sourceMonitor.xml "
     versParh=os.path.join(workingDir,"vers")
