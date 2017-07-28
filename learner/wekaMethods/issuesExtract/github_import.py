@@ -9,7 +9,9 @@ import datetime
 
 #ID	Product	Component	Assigned To	Status	Resolution	Reporter	Last Modified	Version	Milestone	Hardware	OS	Priority	Severity	Summary	Keywords	Submit Date	Blocks	Depends On	Duplicate Of	CC
 def issueAnalyze(issue,product,component):
-    Id=str(issue.id)
+    def nice_time(time):
+        return datetime.datetime.strptime(time, '%Y-%m-%d').date().strftime('%d/%m/%Y %H:%M:%S')
+    Id=str(issue.number)
     Product=str(product)
     Component=str(component)
     Assigned_To=str(issue.assignee)
@@ -18,8 +20,7 @@ def issueAnalyze(issue,product,component):
     Reporter=str(issue.user)
     Last_Modified=str(issue.updated_at)
     Last_Modified=Last_Modified.split(" ")[0]
-    print Last_Modified
-    Last_Modified=datetime.datetime.strptime(Last_Modified,'%Y-%m-%d').date().strftime("%d/%m/%y")
+    Last_Modified=nice_time(Last_Modified)
     Version=""
     Milestone=str(issue.milestone)
     Hardware=""
@@ -33,7 +34,7 @@ def issueAnalyze(issue,product,component):
     Submit_Date=str(issue.created_at)
     Submit_Date=Submit_Date.split(" ")[0]
     #print Submit_Date
-    Submit_Date=datetime.datetime.strptime(Submit_Date,'%Y-%m-%d').date().strftime("%d/%m/%y")
+    Submit_Date=nice_time(Submit_Date)
     Blocks=""
     Depends_On=""
     Duplicate_Of=""#,".join([v.name for v in issue.fields.issuelinks])
@@ -41,18 +42,19 @@ def issueAnalyze(issue,product,component):
     return [Id,Product,Component,Assigned_To,Status,Resolution,Reporter,Last_Modified,Version,Milestone,Hardware,OS,Priority,Severity,Summary,Keywords,Submit_Date,Blocks,Depends_On,Duplicate_Of,CC]
 
 
-def GithubIssues(url,owner,repo,outFile):
-    gh=github3.GitHub()
+def GithubIssues(outFile, owner,repo):
+    gh=github3.GitHub("amir9979@gmail.com", "192837465a")
     lines=[["ID","Product","Component","Assigned To","Status","Resolution","Reporter","Last Modified","Version","Milestone","Hardware","OS","Priority","Severity","Summary","Keywords","Submit Date","Blocks","Depends On","Duplicate Of","CC"]]
     allIssues= gh.iter_repo_issues(owner,repo,state="all")
-    #print(len(allIssues))
     for issue in allIssues:
         analyze = issueAnalyze(issue,repo,repo)
         lines.append(analyze)
-    f=open(outFile,"wb")
-    writer=csv.writer(f)
-    writer.writerows(lines)
-    f.close()
+    with  open(outFile,"wb") as f:
+        writer=csv.writer(f)
+        writer.writerows(lines)
+
+if __name__ == "__main__":
+    GithubIssues(r"C:\temp\orientBugs.csv", "orientechnologies", "orientdb")
 
 """
 

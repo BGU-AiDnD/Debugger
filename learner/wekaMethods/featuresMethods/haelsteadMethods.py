@@ -1,7 +1,7 @@
 __author__ = 'amir'
 
 from wekaMethods.articles import *
-import wekaMethods.articles.sqlToAttributes
+import wekaMethods.articles
 import featureExtractorBase
 
 class haelsteadMethods(featureExtractorBase.FeatureExtractorBase):

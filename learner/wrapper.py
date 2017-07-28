@@ -310,19 +310,15 @@ def versionsCreate(gitPath, vers, versPath,LocalGitPath):
 
 
 def gitInfoToCsv(gitPath,outFile):
-        #repoPath="C:\\tomcat\\code\\tomcat8\\"
     r=git.Repo(gitPath)
-    #vers=["TOMCAT_8_0_4", "TOMCAT_8_0_5", "TOMCAT_8_0_6", "TOMCAT_8_0_7", "TOMCAT_8_0_8", "TOMCAT_8_0_9"]
     wanted=[ x.commit for x in r.tags ]
-    vers=r.tags
     dates=[datetime.datetime.fromtimestamp(x.committed_date).strftime('%Y-%m-%d %H:%M:%S') for x in wanted if type(x)==git.Commit]
     lines=[["ver","date"]]
-    for v,d in zip(vers,dates):
+    for v,d in zip(r.tags,dates):
         lines.append([v,d])
-    f=open(outFile,"wb")
-    writer=csv.writer(f)
-    writer.writerows(lines)
-    f.close()
+    with open(outFile,"wb") as f:
+        writer=csv.writer(f)
+        writer.writerows(lines)
 
 
 
@@ -479,6 +475,8 @@ def download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product):
         wekaMethods.issuesExtract.python_bugzilla.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
     elif issue_tracker == "jira":
         wekaMethods.issuesExtract.jira_import.jiraIssues(bugsPath, issue_tracker_url, issue_tracker_product)
+    elif issue_tracker == "github":
+        wekaMethods.issuesExtract.github_import.GithubIssues(bugsPath, issue_tracker_url, issue_tracker_product)
     return bugsPath
 
 
@@ -497,7 +495,7 @@ def wrapperLearner(confFile,globalConfFile):
     versionsCreate(gitPath, vers, versPath,LocalGitPath)
     testVerConfig(workingDir,vers_dirs[-2],"ant",dates[-2],dates[-1])
     bugsPath = download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product)
-    NLP.commits.data_to_csv(os.path.join(workingDir, "NLP_data.csv"), gitPath, bugsPath)
+    # NLP.commits.data_to_csv(os.path.join(workingDir, "NLP_data.csv"), gitPath, bugsPath)
     mkOneDir(LocalGitPath)
     featuresExtract(vers_dirs, vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
     logfile.write("after featuresExtract "+ str(datetime.datetime.now())+"\n")
@@ -686,6 +684,7 @@ def wrapper(confFile):
 if __name__ == '__main__':
     current_dir = os.path.dirname(os.path.realpath(__file__))
     globalConf = os.path.realpath(os.path.join(current_dir, "../globalConf.txt"))
+    csv.field_size_limit(sys.maxsize)
     if len(sys.argv) == 1:
         # Planner.planningExperiments.test()
         wekaMethods.buildDB.bugs_test(r"C:\Temp\AntBugs.csv")

@@ -148,6 +148,8 @@ def bugsTable(BugsFile,max):
             if(len(lst)>0 and  lst[0]=="="):
                 lst=lst[2:(len(lst)-1)]
             r.append(str(lst))
+        if len(r) < 16:
+            continue
         if len(r[7])==len('09/01/09'):
             r[7]= datetime.datetime.strptime(r[7],"%d/%m/%y")
         else:
@@ -178,15 +180,15 @@ def allFiles(path,max):
 
 
 def BuildRepo(gitPath, bugsPath,MethodsParsed,changeFile,max ):
-    BugsFile = open(bugsPath, "r")
+    BugsFile = open(bugsPath, "rb")
     repo = git.Repo(gitPath)
     allBugs,bugsIds=bugsTable(BugsFile,max)
-    print("finish bugs")
+    print "finish bugs", bugsIds
     allMethods,filesRows=patchsBuild.analyzeCheckStyle(MethodsParsed,changeFile)
     #allMethods=patchsBuild.checkStyleCreateDict(MethodsParsed)
-    print("finish methods")
     #allCommits,allFilesCommits,commitsBugsDict=commTable(bugs,commits,max)
     allCommits,commitsBugsDict=commTablelight(commits_and_Bugs(repo, bugsIds))
+    print "commitsBugsDict", commitsBugsDict
     allMethodsCommits=[]
     allFilesCommits=[]
     i=0
@@ -604,6 +606,18 @@ def bugs_test(bugsPath):
 
 
 if __name__ == "__main__":
+    import tempfile
+    import wekaMethods.issuesExtract.github_import
+    import sys
+    csv.field_size_limit(sys.maxsize)
+    bugsPath = tempfile.mktemp(suffix=".csv")
+    wekaMethods.issuesExtract.github_import.GithubIssues(bugsPath, "orientechnologies", "orientdb")
+    a,bugsIds = bugsTable(open(bugsPath, "rb"), -1)
+    print bugsIds
+    repo = git.Repo("C:\Users\User\Downloads\orientdb")
+    commits = commits_and_Bugs(repo, bugsIds)
+    allCommits, commitsBugsDict = commTablelight(commits)
+    print "commitsBugsDict", commitsBugsDict
     vers=('CDT_8_0_1','CDT_8_0_2', 'CDT_8_1_0','CDT_8_1_1','CDT_8_1_2' )
     #build("C:\GitHub\\vers","C:\GitHub\\vers\\dbP","C:\GitHub\\CDT-MORE-DATA.csv",False,30,vers,"org.eclipse.cdt")
     #build("C:\GitHub\\vers","C:\GitHub\\vers\\dbAdd\\done2","C:\GitHub\\CDT-MORE-DATA.csv",True,-1,vers,"org.eclipse.cdt")

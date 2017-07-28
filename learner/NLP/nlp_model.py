@@ -27,7 +27,7 @@ def get_item_list(flag):
 def find_simialrity(a, b, model):
     return model.similarity(a, b)
 
-def build_model(file_name, iteration = 100, window = 1000, min_count = 3, size = 40, workers = 16):
+def build_model(file_name, iteration = 10, window = 1000, min_count = 3, size = 40, workers = 16):
     global data
     data = pd.read_csv(file_name, usecols=[1, 2], names=['Bug', 'Files'])
     data = data[~data.Files.isnull()]
@@ -38,7 +38,7 @@ def build_model(file_name, iteration = 100, window = 1000, min_count = 3, size =
       # size of window context
       # minimun instances of the same item
       # parallelism
-    hs = 0  # hierarchical softmax
+    hs = 1  # hierarchical softmax
     negative = 15  # number of negative sampling per postive sample
     # sample = 1e-2 #sample the data per frequency
     return gensim.models.word2vec.Word2Vec(get_item_list(only_bug), iter=iteration, size=size, window=window,

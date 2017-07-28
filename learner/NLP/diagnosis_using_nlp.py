@@ -74,7 +74,7 @@ class NLP_Diagnosis(Diagnosis):
         similarity_factor = 1.0
         for ind, comp_a in enumerate(self.diagnosis):
             for comp_b in self.diagnosis[ind + 1:]:
-                similarity_factor *= self.nlp_data.similarity(comp_a, comp_b)
+                similarity_factor *= self.nlp_data.score(comp_a, comp_b)
         return similarity_factor
 
     def get_probability(self, alpha = 0.0):
@@ -116,6 +116,7 @@ class NLP_Diagnosis_Results(Diagnosis_Results):
 similarities = read_nlp_data(r"C:\Users\User\Downloads\ANT_cosine_similarity.csv")
 results_dir = r"C:\Users\User\Dropbox\For ori\ant\files_All867"
 model = nlp_model.build_model(r"C:\Temp\Ant_for_NLP.csv")
+model.save(r'C:\temp\temp_model')
 out_file = r"C:\temp\nlp_diagnosis.csv"
 out_lines = [["file", "alpha", "diagnosis_precision", "diagnosis_recall", "nlp_precision", "nlp_recall"]]
 for experiment_instance in glob.glob(os.path.join(results_dir, METADATA_DIR, "*")):

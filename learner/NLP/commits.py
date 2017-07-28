@@ -17,7 +17,7 @@ class Commit(object):
 
 def bugs_data(BugsFile):
     bugsIds=[]
-    reader = csv.reader(open(BugsFile))
+    reader = csv.reader(open(BugsFile, "rb"))
     index=0
     for row in reader:# iterates the rows of the file in orders
         index=index+1
@@ -42,6 +42,7 @@ def commits_and_Bugs(repo, bugsIds):
     commits= []
     for git_commit in repo.iter_commits():
         commit_text = clean_commit_message(git_commit.message)
+        print commit_text , get_bug_num_from_comit_text(commit_text, bugsIds)
         commits.append(Commit(git_commit, get_bug_num_from_comit_text(commit_text, bugsIds)))
     return commits
 
@@ -60,4 +61,6 @@ def data_to_csv(out_file, gitPath, BugsFile):
         writer.writerows([c.to_list() for c in commits])
 
 if __name__ == "__main__":
-    data_to_csv(r"C:\Temp\CASSANDRA_NLP.csv", r"C:\Users\User\Downloads\cassandra", "C:\Temp\\CASSANDRA2.csv")
+    import sys
+    csv.field_size_limit(sys.maxsize)
+    data_to_csv(r"C:\Temp\NLP.csv", r"C:\Users\User\Downloads\orientdb", r"C:\Users\User\AppData\Local\Temp\tmpwbfvow.csv")

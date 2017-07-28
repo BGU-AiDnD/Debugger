@@ -857,6 +857,7 @@ def articlesAllpacks(basicPath,repoPath,outDir,vers, vers_dirs,buggedType,dbPath
         bugQ='select distinct name,"bugged"  from commitedfiles where bugId<>0  and name like "%.java" and name not like "%test%" and commiter_date>="' + str("STARTDATE")+ '"' + '  and commiter_date<="' + str("ENDDATE")+ '" and not exists (select comments.commitid,comments.name from comments where comments.commitid=Commitedfiles.commitid and comments.name=Commitedfiles.name) ' + ' group by name'
     if (buggedType=="Most"):
         bugQ='select distinct name,"bugged"  from (select Commitedfiles.bugId as bugId,Commitedfiles.name as name  from Commitedfiles , (select max(lines) as l, Commitedfiles.bugId as bugId from Commitedfiles where Commitedfiles.name like "%.java" and name not like "%test%" and commiter_date>="' + str("STARTDATE")+ '"' + '  and commiter_date<="' + str("ENDDATE") +"and not exists (select comments.commitid,comments.name from comments where comments.commitid=Commitedfiles.commitid and comments.name=Commitedfiles.name) " + '" group by bugId) as T where Commitedfiles.lines=T.l and Commitedfiles.bugId=T.bugId) where bugId<>0  group by name'
+    print "bugQ", bugQ
     names,paths,dates,commits=GitVersInfo(basicPath,repoPath,vers)
     trainingFile=os.path.join(outDir,buggedType+"_training_files.arff")
     testingFile=os.path.join(outDir,buggedType+"_testing_files.arff")
