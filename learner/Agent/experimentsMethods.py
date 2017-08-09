@@ -1013,7 +1013,9 @@ def MultyWekaAndSanity(outPath,dbPath,packsPath,numOfExperiments,numOfBugsARR,ti
                 exportPlanner(outPlanner,priors,allBugged,allFiles,allTests,outcomes,initials,initialsChooser)
     return expIND
 
-def MultyWekaAndSanityMethods(outPath,dbPath,packsPath,numOfExperiments,numOfBugsARR,timesArr,const,minimalTests,maximalTests,wekaAnsArr,initialsFactor,order,numOfPacks,buggedTestsChooser,initialsChooser,notRand,copybool,copyPath,buggedTable,pureSanity, bugsPacks,testTable):
+def MultyWekaAndSanityMethods(outPath,dbPath,packsPath,numOfExperiments,numOfBugsARR,timesArr,const,minimalTests,
+                              maximalTests,wekaAnsArr,initialsFactor,order,numOfPacks,buggedTestsChooser,initialsChooser
+                              ,notRand,copybool,copyPath,buggedTable,pureSanity, bugsPacks,testTable):
     #priorsByFiles=priorsFromWeka(dbPath,wekaAns)
     exp=-1
     conf_file = outPath+"conf.txt"
@@ -1386,7 +1388,7 @@ def eclipse():
     packsPath="C:\\GitHub\\agent\\PacksFiltered.txt"
     wekaBase="C:\\GitHub\\experiments\\wekOut\\"
     numOfExperiments=10
-    numOfPacks=1
+    numOfPacks=5
     numOfrepeats=1
     numOfBugs=[2]
     times=[25,40,70,100,130]
@@ -1483,6 +1485,7 @@ def RunExperiments(dbPath,outPath,packsPath,wekaPath,Unit,buggedType,utilsPath):
     numOfExperiments=20
     numOfPacks=1
     times=[25,40,70,100,130, 180]
+    times=[10,20,30,40]
     const=0.05
     minimalTests=25
     maximalTests=250
@@ -1508,10 +1511,10 @@ def RunExperiments(dbPath,outPath,packsPath,wekaPath,Unit,buggedType,utilsPath):
     dirStruct(outPath)
     copySTMS(outPath,utilsPath)
     bugs = allPackBugs(dbPath, 1  , packsPath,numOfExperiments,True,table)
-    bugsPacks=[choosePackBug(bugs, 2,False,10,[])for x in range(numOfExperiments)]
+    bugsPacks=[choosePackBug(bugs, 2,False,3,[])for _ in range(numOfExperiments)]
     wekaAnsArr=[(wekaPath,"randomForest")]#+[(wekaBase+"weka.classifiers.trees.RandomForest_Style2.csv","prev")] #all
     RunAndResults(buggedTestsChooser, bugsPacks, const, False, "", outPath, dbPath, initialsChooser, initialsFactor,
-              maximalTests, minimalTests, [2], numOfExperiments, numOfPacks, packsPath, pureSanity, table ,
+              maximalTests, minimalTests, [1], numOfExperiments, numOfPacks, packsPath, pureSanity, table ,
               times,  wekaAnsArr,testTable)
 
 @utilsConf.marker_decorator(utilsConf.PACKS_FILE_MARKER)

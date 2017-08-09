@@ -179,13 +179,16 @@ def readPlannerTest():
     # for i in range(len(fm.error)):
     #     print fm.matrix[i]
 
+def write_diagnoses_file(out_file):
+    pass
+
 
 def calc_result_fo_planning_file(planning_file, out_file):
     global instance
     instance = readPlanningFile(planning_file)
     precision, recall = instance.calc_precision_recall()
     csv_output = [["precision", "recall"], [precision, recall]]
-    print precision, recall
+    print instance.count_different_cases() , precision, recall
     with open(out_file, "wb") as f:
         writer = csv.writer(f)
         writer.writerows(csv_output)
@@ -206,4 +209,4 @@ def dll_diagnosis(matrix_file_name="dll_diagnosis.txt", result_file_name="dll_di
 
 
 if __name__=="__main__":
-    dll_diagnosis("function_diagnosis_matrix.txt", "function_diagnosis_result.txt")
+    dll_diagnosis("function_diagnosis_matrix.txt", "function_diagnosis_result.csv")

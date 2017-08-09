@@ -271,6 +271,14 @@ class ExperimentInstance:
                 precision_accum=precision_accum+precision
         return precision_accum,recall_accum
 
+    def count_different_cases(self):
+        """
+        :return: the number of different test cases in the diagnosis
+        """
+        optional_tests = map( lambda enum: enum[1],filter(lambda enum: enum[0] in self.initial_tests, enumerate(pool)))
+        return len(set(map(str, optional_tests)))
+
+
     def __repr__(self):
         return repr(self.initial_tests)+"-"+repr([ind for ind,x in enumerate(self.error) if x==1])
 

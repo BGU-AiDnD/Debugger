@@ -41,11 +41,14 @@ def parse_dir(project_dir, class_to_show):
             arff_file = os.path.join(project_dir, "{0}_testing_{1}.arff".format(bug_type, granularity))
             d = Parse(results_filename)[class_to_show]
             d.update(class_distribution(arff_file))
+            d["project"]= os.path.basename(project_dir)
+            d["bug_type"]= bug_type
+            d["granularity"]= granularity
             data["{0}: {1}_{2}".format(os.path.basename(project_dir), bug_type, granularity)] = d
     return data
 
 
-metrics = ["TP Rate", "FP Rate", "Precision", "Recall", " F-Measure", "MCC", "ROC Area", "PRC Area", 'bugged', "valid"]
+metrics = ["project", "bug_type", "granularity", "TP Rate", "FP Rate", "Precision", "Recall", " F-Measure", "MCC", "ROC Area", "PRC Area", 'bugged', "valid"]
 headers = ["configuration"] + metrics
 
 
@@ -58,8 +61,8 @@ def to_list(dir_dict):
 
 lines = [headers]
 for project in ["poi", "ant", "cdt", "orient"]:
-    lines.extend(to_list(parse_dir(r"C:\Temp\weka\final\{0}".format(project), "bugged")))
-with open(r"C:\Temp\weka\final\data_bugged.csv", "wb") as f:
+    lines.extend(to_list(parse_dir(r"C:\Temp\weka\final\{0}".format(project), "both")))
+with open(r"C:\Temp\weka\final\data_bugged2.csv", "wb") as f:
     writer = csv.writer(f)
     writer.writerows(lines)
 

@@ -684,7 +684,7 @@ def wrapper(confFile):
 if __name__ == '__main__':
     current_dir = os.path.dirname(os.path.realpath(__file__))
     globalConf = os.path.realpath(os.path.join(current_dir, "../globalConf.txt"))
-    csv.field_size_limit(sys.maxsize)
+    csv.field_size_limit(int(sys.maxsize))
     if len(sys.argv) == 1:
         # Planner.planningExperiments.test()
         wekaMethods.buildDB.bugs_test(r"C:\Temp\AntBugs.csv")
