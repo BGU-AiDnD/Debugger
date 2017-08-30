@@ -43,7 +43,7 @@ def issueAnalyze(issue,product,component):
 
 
 def GithubIssues(outFile, owner,repo):
-    gh=github3.GitHub("amir9979@gmail.com", "192837465a")
+    gh=github3.GitHub()
     lines=[["ID","Product","Component","Assigned To","Status","Resolution","Reporter","Last Modified","Version","Milestone","Hardware","OS","Priority","Severity","Summary","Keywords","Submit Date","Blocks","Depends On","Duplicate Of","CC"]]
     allIssues= gh.iter_repo_issues(owner,repo,state="all")
     for issue in allIssues:
@@ -54,7 +54,8 @@ def GithubIssues(outFile, owner,repo):
         writer.writerows(lines)
 
 if __name__ == "__main__":
-    GithubIssues(r"C:\temp\orientBugs.csv", "orientechnologies", "orientdb")
+    # GithubIssues(r"C:\temp\orientBugs.csv", "orientechnologies", "orientdb")
+    GithubIssues(r"C:\temp\JodaOrg2.csv", "JodaOrg", "joda-time")
 
 """
 

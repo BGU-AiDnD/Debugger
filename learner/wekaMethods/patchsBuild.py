@@ -466,7 +466,7 @@ def analyzeCheckStyle(checkOut,changeFile):
     return ans,filesRows
 
 
-@utilsConf.marker_decorator(utilsConf.PATCHS_FEATURES_MARKER)
+# @utilsConf.marker_decorator(utilsConf.PATCHS_FEATURES_MARKER)
 def do_all(workingDir,checkStyle68,methodNameLines):
     patchD=workingDir+"\\patch"
     commitsFiles=workingDir+"\\commitsFiles"
@@ -483,7 +483,8 @@ def do_all(workingDir,checkStyle68,methodNameLines):
 
 
 if __name__ == '__main__':
-    do_all(r"C:\Users\User\Downloads\antWorking\repo", r"C:\Users\User\Documents\GitHub\Debugger\utils\checkstyle-6.8-SNAPSHOT-all.jar", r"C:\Users\User\Documents\GitHub\Debugger\utils\methodNameLines.xml")
+    do_all(r"C:\Users\User\Downloads\poi", r"C:\Users\User\Documents\GitHub\Debugger\utils\checkstyle-6.8-SNAPSHOT-all.jar", r"C:\Users\User\Documents\GitHub\Debugger\utils\methodNameLines.xml")
+    exit()
     patch_file = r"C:\Users\User\Downloads\antWorking\repo\patch\12906-adapting-code-and-tests-since-Apt-is-not-available-.patch"
     patch_file = r"C:\Users\User\Downloads\antWorking\repo\patch\2125-Fix-up-packaging-of-bzip-utilities.patch"
     f=open(patch_file, "wb")

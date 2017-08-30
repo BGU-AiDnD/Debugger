@@ -304,7 +304,7 @@ def do_all(workingDir):
     os.system("c: & cd "+workingDir+" & git format-patch --root -o patch --function-context --unified=9000")
     buildPatchs(patchD,commitsFiles)
     checkOut=commitsFiles+"\\CheckStyle.txt"
-    #RunCheckStyle(commitsFiles,checkOut)
+    RunCheckStyle(commitsFiles,checkOut)
     allComms=analyzeCheckStyle(checkOut)
     #DbAdd(dbPath,allComms)
     return allComms
@@ -315,6 +315,6 @@ if __name__ == '__main__':
     #build("C:\GitHub\\try\org.eclipse.cdt")
     #build("C:\\tomcat\code\\try\\tomcat8","C:\\tomcat\code\\try\\tomcat8")
     #do_all("C:\projs\\antWorking\\antC")
-    do_all("C:\\projs\\poi2Working\\poi")
+    do_all("C:\Users\User\Downloads\poi")
     #mkDirs("C:\projs\\antWorking\\antC\CommitsFiles","amir")
     #oneFile("C:\projs\\antWorking\\antC\CommitsFiles\\282f346ca230a8dec8d1956af05fcc9d511ad672\\0007-Misc-doc-scoping-style-and-error-recovery-issues.patch","C:\projs\\antWorking\\antC\CommitsFiles\\amir")

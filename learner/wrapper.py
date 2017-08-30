@@ -485,6 +485,7 @@ def wrapperLearner(confFile,globalConfFile):
     vers, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product , workingDir = utilsConf.configure(confFile)
     docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath = utilsConf.globalConfig(
         globalConfFile)
+    bugsPath = download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product)
     versPath, db_dir = Mkdirs(workingDir, vers)
     vers_dirs = map(version_to_dir_name, vers)
     logfile=open(os.path.join(workingDir,"timeLog2.txt"),"wb")
@@ -494,7 +495,6 @@ def wrapperLearner(confFile,globalConfFile):
     LocalGitPath=os.path.join(workingDir,"repo")
     versionsCreate(gitPath, vers, versPath,LocalGitPath)
     testVerConfig(workingDir,vers_dirs[-2],"ant",dates[-2],dates[-1])
-    bugsPath = download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product)
     # NLP.commits.data_to_csv(os.path.join(workingDir, "NLP_data.csv"), gitPath, bugsPath)
     mkOneDir(LocalGitPath)
     featuresExtract(vers_dirs, vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
