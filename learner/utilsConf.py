@@ -20,6 +20,7 @@ TEST_DB_MARKER = "test_db_features"
 PACKS_FILE_MARKER = "packs_file_features"
 LEARNER_PHASE_FILE = "learner_phase_file"
 ISSUE_TRACKER_FILE = "issue_tracker_file"
+ERROR_FILE = "error_file"
 
 conf = None
 

@@ -682,21 +682,28 @@ def wrapper(confFile):
     clean(versPath,LocalGitPath)
 
 if __name__ == '__main__':
-    current_dir = os.path.dirname(os.path.realpath(__file__))
-    globalConf = os.path.realpath(os.path.join(current_dir, "../globalConf.txt"))
-    csv.field_size_limit(sys.maxint)
-    if len(sys.argv) == 1:
-        # Planner.planningExperiments.test()
-        wekaMethods.buildDB.bugs_test(r"C:\Temp\AntBugs.csv")
-        # import Diagnoser.Barinel
-        # Diagnoser.Barinel.test()
-    else:
-        print(sys.argv[1], globalConf)
-        if sys.argv[2]=="learn":
-            wrapperLearner(sys.argv[1], globalConf)
-        elif sys.argv[2]=="experiments":
-            wrapperExperiments(sys.argv[1], globalConf)
-        elif sys.argv[2]=="planning":
-            wrapper_planning(sys.argv[1], globalConf)
-        elif sys.argv[2]=="all_planning":
-            Planner.planningExperiments.planning_for_project(sys.argv[1])
+    try:
+        current_dir = os.path.dirname(os.path.realpath(__file__))
+        globalConf = os.path.realpath(os.path.join(current_dir, "../globalConf.txt"))
+        csv.field_size_limit(sys.maxint)
+        if len(sys.argv) == 1:
+            # Planner.planningExperiments.test()
+            wekaMethods.buildDB.bugs_test(r"C:\Temp\AntBugs.csv")
+            # import Diagnoser.Barinel
+            # Diagnoser.Barinel.test()
+        else:
+            print(sys.argv[1], globalConf)
+            if sys.argv[2]=="learn":
+                wrapperLearner(sys.argv[1], globalConf)
+            elif sys.argv[2]=="experiments":
+                wrapperExperiments(sys.argv[1], globalConf)
+            elif sys.argv[2]=="planning":
+                wrapper_planning(sys.argv[1], globalConf)
+            elif sys.argv[2]=="all_planning":
+                Planner.planningExperiments.planning_for_project(sys.argv[1])
+    except Exception as e:
+        vers, gitPath, issue_tracker, issue_tracker_url, issue_tracker_product, workingDir = utilsConf.configure(
+            sys.argv[1])
+        import traceback
+        utilsConf.get_configuration().get_marker(utilsConf.ERROR_FILE).error(e.message + "\n" + traceback.print_stack())
+
