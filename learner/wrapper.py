@@ -485,8 +485,8 @@ def wrapperLearner(confFile,globalConfFile):
     vers, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product , workingDir = utilsConf.configure(confFile)
     docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath = utilsConf.globalConfig(
         globalConfFile)
-    bugsPath = download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product)
     versPath, db_dir = Mkdirs(workingDir, vers)
+    bugsPath = download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product)
     vers_dirs = map(version_to_dir_name, vers)
     logfile=open(os.path.join(workingDir,"timeLog2.txt"),"wb")
     logfile.write("start "+ str(datetime.datetime.now())+"\n")
@@ -702,8 +702,7 @@ if __name__ == '__main__':
             elif sys.argv[2]=="all_planning":
                 Planner.planningExperiments.planning_for_project(sys.argv[1])
     except Exception as e:
-        vers, gitPath, issue_tracker, issue_tracker_url, issue_tracker_product, workingDir = utilsConf.configure(
-            sys.argv[1])
         import traceback
-        utilsConf.get_configuration().get_marker(utilsConf.ERROR_FILE).error(e.message + "\n" + traceback.print_stack())
+        utilsConf.get_configuration().get_marker(utilsConf.ERROR_FILE).error(e.message + "\n")
+        traceback.print_stack()
 

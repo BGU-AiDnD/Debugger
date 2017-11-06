@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a99ccab5-ef05-47d7-a302-2dc78736cec3" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utilsConf.py" afterPath="$PROJECT_DIR$/utilsConf.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wrapper.py" afterPath="$PROJECT_DIR$/wrapper.py" />
     </list>
     <ignored path="eclipse.iws" />
@@ -27,8 +26,8 @@
       <file leaf-file-name="wrapper.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/wrapper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="458">
-              <caret line="707" column="119" selection-start-line="707" selection-start-column="119" selection-end-line="707" selection-end-column="119" />
+            <state relative-caret-position="99">
+              <caret line="685" column="4" selection-start-line="685" selection-start-column="4" selection-end-line="685" selection-end-column="4" />
               <folding />
             </state>
           </provider>
@@ -37,7 +36,7 @@
       <file leaf-file-name="bugs_testsDBMethods.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Agent/bugs_testsDBMethods.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="320">
+            <state relative-caret-position="5253">
               <caret line="314" column="72" selection-start-line="314" selection-start-column="62" selection-end-line="314" selection-end-column="72" />
               <folding />
             </state>
@@ -109,8 +108,8 @@
       <file leaf-file-name="utilsConf.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utilsConf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="146" column="28" selection-start-line="146" selection-start-column="28" selection-end-line="146" selection-end-column="51" />
+            <state relative-caret-position="185">
+              <caret line="130" column="21" selection-start-line="130" selection-start-column="4" selection-end-line="130" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -236,6 +235,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -302,7 +302,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1139,7 +1138,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Agent/bugs_testsDBMethods.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
+        <state relative-caret-position="5253">
           <caret line="314" column="72" selection-start-line="314" selection-start-column="62" selection-end-line="314" selection-end-column="72" />
           <folding />
         </state>
@@ -1147,16 +1146,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/utilsConf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="146" column="28" selection-start-line="146" selection-start-column="28" selection-end-line="146" selection-end-column="51" />
+        <state relative-caret-position="185">
+          <caret line="130" column="21" selection-start-line="130" selection-start-column="4" selection-end-line="130" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wrapper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="458">
-          <caret line="707" column="119" selection-start-line="707" selection-start-column="119" selection-end-line="707" selection-end-column="119" />
+        <state relative-caret-position="99">
+          <caret line="685" column="4" selection-start-line="685" selection-start-column="4" selection-end-line="685" selection-end-column="4" />
           <folding />
         </state>
       </provider>
