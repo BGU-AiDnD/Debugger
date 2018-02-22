@@ -690,7 +690,7 @@ if __name__ == '__main__':
             # Planner.planningExperiments.test()
             wekaMethods.buildDB.bugs_test(r"C:\Temp\AntBugs.csv")
             # import Diagnoser.Barinel
-            # Diagnoser.Barinel.test()
+            # Diagnoser.Barinel.test() 
         else:
             print(sys.argv[1], globalConf)
             if sys.argv[2]=="learn":
