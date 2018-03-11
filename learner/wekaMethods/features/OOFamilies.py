@@ -483,7 +483,7 @@ class OOFamilies:
         g.add_edges_from(edges)
         degs = g.out_degree()
         degsIN = g.in_degree()
-        succ = networkx.bfs_successors(g, 'root')
+        succ = dict(networkx.bfs_successors(g, 'root'))
         for s in succ:
             succ[s] = len(succ[s])
         paths = networkx.single_source_dijkstra_path(g, 'root')

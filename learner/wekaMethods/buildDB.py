@@ -4,6 +4,7 @@ __author__ = 'Amir-pc'
 import sqlite3
 import git
 import csv
+import gc
 import git.objects.tree
 import os
 import datetime
@@ -395,31 +396,30 @@ def BuildAll(gitPath, dbPath,bugsPath ,JavaDocPath, sourceMonitorFiles,sourceMon
 #BuildAll("C:\Users\Amir-pc\Documents\GitHub\org.eclipse.cdt", "C:\Users\Amir-pc\Documents\GitHub\Aapart1.db","C:\Users\Amir-pc\Documents\GitHub\\CDT-MORE-DATA.csv","C:/Users/Amir-pc/Documents/GitHub/Jdoc/*.xml","C:\Users\Amir-pc\Documents\GitHub\\source1.csv","C:\Users\Amir-pc\Documents\GitHub\\source1_methods.csv",30)
 
 
+def get_values_str(num):
+    return "".join(["(", (",".join(['?'] * num)), ")"])
 
-def BuildAllOneTimeCommits(gitPath, dbPath ,JavaDocPath, sourceMonitorFiles,sourceMonitorMethods,checkStyle,checkStyleMethods,blamePath,date,add, max,CodeDir):
+
+def insert_values_into_table(connection, table_name, values):
+    c = connection.cursor()
+    c.executemany("INSERT INTO {0} VALUES {1}".format(table_name, get_values_str(len(values[0]))), values)
+    connection.commit()
+    del values
+    gc.collect()
+
+
+def BuildAllOneTimeCommits(git_path, dbPath, JavaDocPath, sourceMonitorFiles, sourceMonitorMethods, checkStyle, checkStyleMethods, blamePath, date, add, max, CodeDir):
     conn = sqlite3.connect(dbPath)
     conn.text_factory = str
     c = conn.cursor()
     createTables(c,add)
-    methods=checkReport.analyzeCheckStyle(checkStyleMethods,gitPath)
-    c.executemany("INSERT INTO AllMethods VALUES (?,?,?,?,?)", methods)
-    conn.commit()
+    insert_values_into_table(conn, "AllMethods", checkReport.analyzeCheckStyle(checkStyleMethods, git_path))
     if(not add):
-        #basicBuildOneTimeCommits( c, conn, gitPath, max,commits, commitedFiles,allMethodsCommits, bugs)
-        hael=commentedCodeDetector.buildHael(gitPath,max)
-        c.executemany("INSERT INTO haelsTfiles VALUES (?, ?, ?, ?, ?, ?, ?,?, ?, ?)", hael)
-        conn.commit()
-
+        insert_values_into_table(conn, "haelsTfiles", commentedCodeDetector.buildHael(git_path, max))
         SourceFiles,SourceMethods= source_Monitor.build(sourceMonitorFiles,sourceMonitorMethods,max)
-        c.executemany("INSERT INTO JAVAfiles VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", SourceFiles)
-        conn.commit()
-        metData=[met for met in SourceMethods if len(met)==6]
-        c.executemany("INSERT INTO Sourcemethods VALUES (?,?,?,?,?,?)", metData)
-        # can add source and methods
-        conn.commit()
-
-        packPath=pathPackCsv.projectPathPacks(gitPath)
-        docs= docXml.build(JavaDocPath,packPath,max)
+        insert_values_into_table(conn, "JAVAfiles", SourceFiles)
+        insert_values_into_table(conn, "Sourcemethods", [met for met in SourceMethods if len(met)==6])
+        docs= docXml.build(JavaDocPath,pathPackCsv.projectPathPacks(git_path),max)
         # can add all javadoc options
         valsData=[]
         methodData=[]
@@ -432,22 +432,15 @@ def BuildAllOneTimeCommits(gitPath, dbPath ,JavaDocPath, sourceMonitorFiles,sour
                 methodData.extend(all_methods)
                 fieldData.extend(all_fields)
                 consData.extend(all_cons)
-        c.executemany("INSERT INTO classes VALUES (?,?,?,?,?,?,?,?,?,?,?)", valsData)
-        c.executemany("INSERT INTO methods VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", methodData)
-        c.executemany("INSERT INTO fields VALUES (?,?,?,?,?,?,?,?,?,?)", fieldData)
-        c.executemany("INSERT INTO constructors VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", consData)
-        blames=blameParse.blameBuild(blamePath,date,max)
-        c.executemany("INSERT INTO blameExtends VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", blames)
-        conn.commit()
-        comp = checkReport.fileRead(checkStyle,max,False,CodeDir)
-        c.executemany("INSERT INTO checkStyleExtends VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",comp)
-        conn.commit()
+        insert_values_into_table(conn, "classes", valsData)
+        insert_values_into_table(conn, "methods", methodData)
+        insert_values_into_table(conn, "fields", fieldData)
+        insert_values_into_table(conn, "constructors", consData)
+        insert_values_into_table(conn, "blameExtends", blameParse.blameBuild(blamePath,date,max))
+        insert_values_into_table(conn, "checkStyleExtends", checkReport.fileRead(checkStyle,max,False,CodeDir))
         SourceFiles,SourceMethods= source_Monitor.build(sourceMonitorFiles,sourceMonitorMethods,max)
-        c.executemany("INSERT INTO JAVAfilesFix VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", SourceFiles)
-        conn.commit()
-        metData=[met for met in SourceMethods if len(met)==6]
-        c.executemany("INSERT INTO SourcemethodsFix VALUES (?,?,?,?,?,?)", metData)
-        conn.commit()
+        insert_values_into_table(conn, "JAVAfilesFix", SourceFiles)
+        insert_values_into_table(conn, "SourcemethodsFix", [met for met in SourceMethods if len(met)==6])
     conn.close()
 #BuildAll("C:\Users\Amir-pc\Documents\GitHub\org.eclipse.cdt", "C:\Users\Amir-pc\Documents\GitHub\Aapart1.db","C:\Users\Amir-pc\Documents\GitHub\\CDT-MORE-DATA.csv","C:/Users/Amir-pc/Documents/GitHub/Jdoc/*.xml","C:\Users\Amir-pc\Documents\GitHub\\source1.csv","C:\Users\Amir-pc\Documents\GitHub\\source1_methods.csv",30)
 
@@ -581,10 +574,10 @@ def buildBasicAllVers(vers,dates,versPath,CodeDir,dbsPath, bugsPath,MethodsParse
         conn.close()
 
 @utilsConf.marker_decorator(utilsConf.DB_BUILD_MARKER)
-def buildOneTimeCommits(versPath,dbsPath,bugsPath,add,max,vers, CodeDir,MethodsParsed,changeFile,logfile,dates):
+def buildOneTimeCommits(versPath,dbsPath,bugsPath,add,max,vers, CodeDir,MethodsParsed,changeFile,logfile,dates, git_path):
     for ver,date in zip(vers,dates):
+        gc.collect()
         Path=versPath+"\\"+ver
-        gitPath=Path+"\\"+ CodeDir
         dbPath=dbsPath+"\\"+ver+".db"
         JavaDocPath=Path+"\\Jdoc2"
         sourceMonitorFiles=Path+"\\"+ver+".csv"
@@ -592,7 +585,7 @@ def buildOneTimeCommits(versPath,dbsPath,bugsPath,add,max,vers, CodeDir,MethodsP
         checkStyle=versPath+"\\checkAll\\"+ver+".xml"
         checkStyleMethods=versPath+"\\checkAllMethodsData\\"+ver+".txt"
         blamePath=Path+"\\blame"
-        BuildAllOneTimeCommits(gitPath, dbPath ,JavaDocPath, sourceMonitorFiles,sourceMonitorMethods,checkStyle,checkStyleMethods,blamePath,date,add, max,CodeDir)
+        BuildAllOneTimeCommits(git_path, dbPath ,JavaDocPath, sourceMonitorFiles,sourceMonitorMethods,checkStyle,checkStyleMethods,blamePath,date,add, max,CodeDir)
         createIndexes(dbPath)
     buildBasicAllVers(vers,dates,versPath,CodeDir,dbsPath, bugsPath,MethodsParsed,changeFile)
     logfile.write("after BuildRepo "+ str(datetime.datetime.now())+"\n")

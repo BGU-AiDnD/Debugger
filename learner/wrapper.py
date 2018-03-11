@@ -502,7 +502,7 @@ def wrapperLearner(confFile,globalConfFile):
     logfile.flush()
     MethodsParsed=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"CheckStyle.txt")
     changeFile=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"Ins_dels.txt")
-    wekaMethods.buildDB.buildOneTimeCommits(versPath,db_dir,bugsPath,False,-1,vers_dirs,"repo",MethodsParsed,changeFile,logfile,dates)
+    wekaMethods.buildDB.buildOneTimeCommits(versPath,db_dir,bugsPath,False,-1,vers_dirs,"repo",MethodsParsed,changeFile,logfile,dates, gitPath)
     logfile.write("after buildDB "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
     weka=os.path.join(workingDir,"weka")
@@ -682,7 +682,7 @@ def wrapper(confFile):
     clean(versPath,LocalGitPath)
 
 if __name__ == '__main__':
-    try:
+    # try:
         current_dir = os.path.dirname(os.path.realpath(__file__))
         globalConf = os.path.realpath(os.path.join(current_dir, "../globalConf.txt"))
         csv.field_size_limit(sys.maxint)
@@ -701,8 +701,8 @@ if __name__ == '__main__':
                 wrapper_planning(sys.argv[1], globalConf)
             elif sys.argv[2]=="all_planning":
                 Planner.planningExperiments.planning_for_project(sys.argv[1])
-    except Exception as e:
-        import traceback
-        utilsConf.get_configuration().get_marker(utilsConf.ERROR_FILE).error(e.message + "\n")
-        traceback.print_stack()
+    # except Exception as e:
+    #     import traceback
+    #     utilsConf.get_configuration().get_marker(utilsConf.ERROR_FILE).error(e.message + "\n")
+    #     traceback.print_stack()
 

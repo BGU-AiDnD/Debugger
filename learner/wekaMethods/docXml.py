@@ -147,8 +147,7 @@ def removeBadChars(x):
                    unichr(0xd800),unichr(0xdbff),unichr(0xdc00),unichr(0xdfff),
                    unichr(0xd800),unichr(0xdbff),unichr(0xdc00),unichr(0xdfff))
     x = re.sub(RE_XML_ILLEGAL, "?", x)
-    stripped = (c for c in x if 0 < ord(c) < 127)
-    x=''.join(stripped)
+    x = ''.join(filter(lambda c: ord(c) < 127, x))
     x = filter(lambda x: x in string.printable, x)
     #x="".join([ch for ch in x if (ch >= 0x0020 and ch <= 0xD7FF)  or ( ch >= 0xE000 and ch <= 0xFFFD ) or ch == 0x0009 or ch == 0x000A or  ch == 0x000D ])
     x = re.sub(u"[^\x01-\x7f]+",u"",x)
