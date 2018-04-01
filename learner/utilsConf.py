@@ -1,3 +1,4 @@
+LONG_PATH_MAGIC = u"\\\\?\\"
 __author__ = 'amir'
 import os
 import traceback
@@ -24,9 +25,9 @@ ERROR_FILE = "error_file"
 
 conf = None
 
-USE_LONG_PATHS = False
+USE_LONG_PATHS = True
 
-def globalConfig(confFile):
+def globalConfig():
     current_dir = os.path.dirname(os.path.realpath(__file__))
     utilsPath = os.path.realpath(os.path.join(current_dir, "../utils"))
     docletPath = os.path.join(utilsPath, "xml-doclet-1.0.4-jar-with-dependencies.jar")
@@ -40,13 +41,17 @@ def globalConfig(confFile):
     return docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath
 
 
-
 def to_long_path(path):
     drive_letter, other_path = os.path.splitdrive(path)
     if USE_LONG_PATHS:
-        return os.path.join(u"\\\\?\\" + drive_letter, other_path)
+        return os.path.join(LONG_PATH_MAGIC + drive_letter, other_path)
     else:
         return path
+
+
+def to_short_path(path):
+    return path.replace(LONG_PATH_MAGIC, "")
+
 
 def configure(confFile):
     lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]

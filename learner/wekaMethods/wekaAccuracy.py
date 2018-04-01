@@ -45,7 +45,8 @@ def getRates(modelFile):
     fp=[i for i in lines[2].split(" ") if i!=''][1]
     return float(tp),float(fp)
 
-def priorsCreation(namesFile,wekaOutFile,outFile, modelFile):
+
+def priorsCreation(namesFile, wekaOutFile, outFile, modelFile):
     names=[["FileName"]]+[x for x in csv.reader(open(namesFile,"r"))]
     weka=[x for x in csv.reader(open(wekaOutFile,"r"))]
     writer=csv.writer(open(outFile,"wb"))

@@ -103,7 +103,7 @@ def results(projects,transferDir):
 
 def transferLearning(projectsConfs, globalConf,transferDir):
     projectsNamesWeka=[ ConfFileTowekaPathName(x) for x in projectsConfs]
-    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath=utilsConf.globalConfig(globalConf)
+    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath=utilsConf.globalConfig()
     Mkdirs(transferDir,projectsNamesWeka)
     for project in projectsNamesWeka:
         copyArffs(project,transferDir)

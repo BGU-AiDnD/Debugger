@@ -52,10 +52,9 @@ def report(out,repoPath,learningDB,testsDB):
         conn.close()
 
     lines=[["versions","commits","startDate","bugs reported","bugs fixed","java files","methods","tests"],[len(tags),len(commits),firstDate,bugsR,bugsF,files,methods,tests]]
-    f=open(out,"wb")
-    writer=csv.writer(f)
-    writer.writerows(lines)
-    f.close()
+    with open(out, "wb") as f:
+        writer = csv.writer(f)
+        writer.writerows(lines)
 
 
 if __name__ == '__main__':

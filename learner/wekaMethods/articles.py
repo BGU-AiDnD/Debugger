@@ -547,7 +547,7 @@ def arff88PacksMethods(basicPath,i,max,outPath,name,buggedType, packs,names,path
     return data
 
 
-def arffCreate(basicPath, objects,names,dates,bugQ,wanted,trainingFile,testingFile,NamesFile):
+def arffCreate(basicPath, objects, names, dates, bugQ, wanted, trainingFile, testingFile, NamesFile):
     data=[]
     print "start"
     i=0
@@ -556,12 +556,12 @@ def arffCreate(basicPath, objects,names,dates,bugQ,wanted,trainingFile,testingFi
     while (i+1<len(names)):
         dbpath = os.path.join(basicPath, str(names[i] + ".db"))
         print(dbpath)
-        tag,allNames = arffCreateForTag(dbpath,dates,i, objects,bugQ,wanted)
-        data=data+ tag
+        tag, allNames = arffCreateForTag(dbpath, dates, i, objects, bugQ, wanted)
+        data = data+ tag
         if( i==len(names)-3):
-            writeArff([], trainingFile,"", attr, data)
+            writeArff([], trainingFile, "", attr, data)
         if( i==len(names)-2):
-            writeArff(allNames, testingFile,NamesFile, attr, tag)
+            writeArff(allNames, testingFile, NamesFile, attr, tag)
         i=i+1
     return data
 
@@ -862,10 +862,10 @@ def articlesAllpacks(basicPath,repoPath,outDir,vers, vers_dirs,buggedType,dbPath
     trainingFile=os.path.join(outDir,buggedType+"_training_files.arff")
     testingFile=os.path.join(outDir,buggedType+"_testing_files.arff")
     NamesFile=os.path.join(outDir,buggedType+"_names_files.csv")
-    FeaturesClasses,Featuresnames=featuresPacksToClasses(packs)
-    attr,lensAttr=objectsAttr(FeaturesClasses)
-    arffCreate(dbPath,FeaturesClasses ,vers_dirs,dates,bugQ,wanted,trainingFile,testingFile,NamesFile)
-    return trainingFile,testingFile,NamesFile,Featuresnames,lensAttr
+    FeaturesClasses, Featuresnames=featuresPacksToClasses(packs)
+    attr, lensAttr = objectsAttr(FeaturesClasses)
+    arffCreate(dbPath, FeaturesClasses, vers_dirs, dates, bugQ, wanted, trainingFile, testingFile, NamesFile)
+    return trainingFile, testingFile, NamesFile, Featuresnames, lensAttr
 
 def articlesAllpacksMethods(basicPath,repoPath,outDir,vers, vers_dirs,buggedType,dbPath):
     packs=["lastProcessMethods","simpleProcessArticlesMethods","simpleProcessAddedMethods","bugsMethods"]#,"analyzeComms"]

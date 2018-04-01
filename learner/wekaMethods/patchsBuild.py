@@ -125,7 +125,8 @@ def OneClass(lines, outPath,commitID,change):
     fileName=fileName.replace("/","_")
     if not ".java" in fileName:
         return []
-    if len(lines) >3:
+    fileName = fileName.split('.java')[0] + '.java'
+    if len(lines) > 3:
         # isNew="new file " in lines[1]
         # isdeleted="deleted file " in lines[1]
         # reducedFile=lines[3]
@@ -165,23 +166,16 @@ def OneClass(lines, outPath,commitID,change):
                 delind=delind+1
                 addind=addind+1
 
-        beforeFile="\\\\?\\"+outPath+"\\before\\"+fileName
-        AfterFile="\\\\?\\"+outPath+"\\after\\"+fileName
-        delsIns="\\\\?\\"+outPath+"\\"+fileName+"_deletsIns.txt"
-        bef=open(beforeFile,"w+")
-        bef.writelines(befLines)
-        bef.close()
-        af=open(AfterFile,"w+")
-        af.writelines(afterLines)
-        af.close()
-        f=open(delsIns,"w+")
-        f.writelines(["deleted\n",str(deletedInds)+"\n","added\n",str(addedInds)])
-        f.close()
+        beforeFile = os.path.join(outPath, "before", fileName)
+        AfterFile = os.path.join(outPath, "after", fileName)
+        delsIns = os.path.join(outPath, fileName + "_deletsIns.txt")
+        with open(beforeFile,"w+") as bef:
+            bef.writelines(befLines)
+        with open(AfterFile, "w+") as after:
+            after.writelines(afterLines)
+        with open(delsIns, "w+") as f:
+            f.writelines(["deleted\n",str(deletedInds)+"\n","added\n",str(addedInds)])
         change.write(fileName+"@"+str(commitID)+"@"+str(deletedInds)+"@"+str(addedInds)+"\n")
-        #methodsData=FileToMethods(beforeFile,AfterFile,deletedInds,addedInds, outPath+"\\parser\\"+fileName,commitID)
-        #ans.extend(methodsData)
-
-
 
 
 def oneFile(PatchFile, outDir,change):
@@ -190,15 +184,13 @@ def oneFile(PatchFile, outDir,change):
     if len(lines)==0:
         return []
     commitSha=lines[0].split()[1] # line 0 word 1
-    commitID=int("".join(list(commitSha)[:7]),16)
-    commitID=str(commitID)
     commitID=str(commitSha)
-    mkDirs(outDir,commitID)
+    mkDirs(outDir, commitID)
     inds=[lines.index(l) for l in lines if "diff --git" in l]+[len(lines)] #lines that start with diff --git
     shutil.copyfile(PatchFile, outDir+"\\"+commitID+"\\"+PatchFile.split("\\")[-1])
     for i in range(len(inds)-1):
         OneClass(lines[inds[i]:inds[i+1]],outDir+"\\"+commitID,commitID,change)
-    return  commitSha
+    return commitSha
 
 
 
@@ -467,18 +459,18 @@ def analyzeCheckStyle(checkOut,changeFile):
 
 
 # @utilsConf.marker_decorator(utilsConf.PATCHS_FEATURES_MARKER)
-def do_all(workingDir,checkStyle68,methodNameLines):
-    patchD=workingDir+"\\patch"
-    commitsFiles=workingDir+"\\commitsFiles"
-    changedFile=workingDir+"\\commitsFiles\\Ins_dels.txt"
+def do_all(workingDir, checkStyle68, methodNameLines):
+    patchD = os.path.join(workingDir, "patch")
+    commitsFiles = os.path.join(workingDir, "commitsFiles")
+    changedFile = os.path.join(workingDir, "commitsFiles", "Ins_dels.txt")
     mkdir(patchD)
     mkdir(commitsFiles)
     run_commands = "git format-patch --root -o patch --function-context --unified=9000".split()
-    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=workingDir)
-    (out, err) = proc.communicate()
-    buildPatchs(patchD,commitsFiles,changedFile)
-    checkOut=commitsFiles+"\\CheckStyle.txt"
-    RunCheckStyle(commitsFiles,checkOut,checkStyle68,methodNameLines)
+    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(workingDir))
+    proc.communicate()
+    buildPatchs(patchD, commitsFiles, changedFile)
+    checkOut = os.path.join(commitsFiles, "CheckStyle.txt")
+    RunCheckStyle(commitsFiles, checkOut, checkStyle68, methodNameLines)
 
 
 

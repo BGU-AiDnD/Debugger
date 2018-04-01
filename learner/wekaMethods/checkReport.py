@@ -341,7 +341,7 @@ def fileRead(file_path, max1, isAnalyze, CodeDir):
                 continue
         return ans
 
-def checkStyleCreateDict(lines,repoPath):
+def checkStyleCreateDict(lines, repoPath):
     methods={}
     for o in lines:
         if o == "":
@@ -354,41 +354,26 @@ def checkStyleCreateDict(lines,repoPath):
         name, begin, end = data.split("@")
         fileName = file[len(repoPath)+1:]
         methodDir = fileName + "$" + name
-        if not methodDir in methods:
-            methods[methodDir] = {}
-        if not "methodName" in methods[methodDir]:
-            methods[methodDir]["methodName"] = name
-        if not "fileName" in methods[methodDir]:
-            methods[methodDir]["fileName"] = fileName
-        if not "beginLine" in methods[methodDir]:
-            methods[methodDir]["beginLine"] = begin
-        if not "EndLine" in methods[methodDir]:
-            methods[methodDir]["EndLine"] = end
+        methods.setdefault(methodDir, {})
+        methods[methodDir].setdefault("methodName", name)
+        methods[methodDir].setdefault("fileName", fileName)
+        methods[methodDir].setdefault("beginLine", begin)
+        methods[methodDir].setdefault("EndLine", end)
     return methods
 
 
-def analyzeCheckStyle(checkOut,repoPath):
-    f=open(checkOut,"r")
-    lines=f.readlines()
-    f.close()
-    lines=lines[1:-3]
-    ans=[]
-    methods=checkStyleCreateDict(lines,repoPath)
-    for methodDir  in methods:
-        begin=0
-        end=0
-        fileName=""
-        methodName=""
-        if "fileName" in methods[methodDir]:
-            fileName=methods[methodDir]["fileName"]
-        if "methodName" in methods[methodDir]:
-            methodName=methods[methodDir]["methodName"]
-        if "beginLine" in methods[methodDir]:
-            begin=methods[methodDir]["beginLine"]
-        if "EndLine" in methods[methodDir]:
-            end=methods[methodDir]["EndLine"]
-        row=[methodDir,fileName,methodName,str(begin),str(end)]
-        ans.append(row)
+def analyzeCheckStyle(checkOut, repoPath):
+    lines = []
+    with open(checkOut, 'r') as f:
+        lines = f.readlines()[1:-3]
+    ans = []
+    methods = checkStyleCreateDict(lines, repoPath)
+    for methodDir in methods:
+        fileName = methods[methodDir].get('fileName', '')
+        methodName = methods[methodDir].get('methodName', '')
+        begin = methods[methodDir].get('beginLine', 0)
+        end = methods[methodDir].get('EndLine', 0)
+        ans.append([methodDir, fileName, methodName, str(begin), str(end)])
     return ans
 
 

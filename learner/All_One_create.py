@@ -14,16 +14,13 @@ def arff_build(attributes, data,desc,relation):
     return dict
 
 
-def write_to_arff(data,filename):
-    f = open(filename, 'w')
-    f.write(arff.dumps(data))
-    f.close()
+def write_to_arff(data, filename):
+    with open(filename, 'w') as f:
+        f.write(arff.dumps(data))
 
 def load_arff(filename):
-    f = open(filename, 'r')
-    arf= arff.loads(f.read())
-    f.close()
-    return arf
+    with open(filename, 'r') as f:
+        return arff.loads(f.read())
 
 
 def attributeSelect(sourceFile, outFile,inds):

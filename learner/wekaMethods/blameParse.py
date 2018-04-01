@@ -178,11 +178,15 @@ def maxCheck(x):
     if x!=[]:
         m=max(x)
     return m
+
+
 def minCheck(x):
     m=0
-    if x!=[]:
-        m=min(x)
+    if x != []:
+        m = min(x)
     return m
+
+
 def blameBuild(blamePath,prevVersionCommitterTime,max):
     docs=[]
     lst= glob.glob(blamePath+"/*.java")

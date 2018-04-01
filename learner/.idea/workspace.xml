@@ -2,16 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a99ccab5-ef05-47d7-a302-2dc78736cec3" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/All_One_create.py" afterPath="$PROJECT_DIR$/All_One_create.py" />
+      <change beforePath="$PROJECT_DIR$/diffAnalyze/patchsBuild.py" afterPath="$PROJECT_DIR$/diffAnalyze/patchsBuild.py" />
+      <change beforePath="$PROJECT_DIR$/report.py" afterPath="$PROJECT_DIR$/report.py" />
+      <change beforePath="$PROJECT_DIR$/transferLearning.py" afterPath="$PROJECT_DIR$/transferLearning.py" />
+      <change beforePath="$PROJECT_DIR$/utilsConf.py" afterPath="$PROJECT_DIR$/utilsConf.py" />
+      <change beforePath="$PROJECT_DIR$/wekaMethods/articles.py" afterPath="$PROJECT_DIR$/wekaMethods/articles.py" />
+      <change beforePath="$PROJECT_DIR$/wekaMethods/blameParse.py" afterPath="$PROJECT_DIR$/wekaMethods/blameParse.py" />
       <change beforePath="$PROJECT_DIR$/wekaMethods/buildDB.py" afterPath="$PROJECT_DIR$/wekaMethods/buildDB.py" />
       <change beforePath="$PROJECT_DIR$/wekaMethods/checkReport.py" afterPath="$PROJECT_DIR$/wekaMethods/checkReport.py" />
+      <change beforePath="$PROJECT_DIR$/wekaMethods/commsSpaces.py" afterPath="$PROJECT_DIR$/wekaMethods/commsSpaces.py" />
       <change beforePath="$PROJECT_DIR$/wekaMethods/docXml.py" afterPath="$PROJECT_DIR$/wekaMethods/docXml.py" />
-      <change beforePath="$PROJECT_DIR$/wekaMethods/features/OO.py" afterPath="$PROJECT_DIR$/wekaMethods/features/OO.py" />
-      <change beforePath="$PROJECT_DIR$/wekaMethods/features/OOFamilies.py" afterPath="$PROJECT_DIR$/wekaMethods/features/OOFamilies.py" />
-      <change beforePath="$PROJECT_DIR$/wekaMethods/featuresMethods/OOFamiliesMethods.py" afterPath="$PROJECT_DIR$/wekaMethods/featuresMethods/OOFamiliesMethods.py" />
-      <change beforePath="$PROJECT_DIR$/wekaMethods/featuresMethods/OOMethods.py" afterPath="$PROJECT_DIR$/wekaMethods/featuresMethods/OOMethods.py" />
+      <change beforePath="$PROJECT_DIR$/wekaMethods/patchsBuild.py" afterPath="$PROJECT_DIR$/wekaMethods/patchsBuild.py" />
+      <change beforePath="$PROJECT_DIR$/wekaMethods/source_Monitor.py" afterPath="$PROJECT_DIR$/wekaMethods/source_Monitor.py" />
+      <change beforePath="$PROJECT_DIR$/wekaMethods/wekaAccuracy.py" afterPath="$PROJECT_DIR$/wekaMethods/wekaAccuracy.py" />
       <change beforePath="$PROJECT_DIR$/wrapper.py" afterPath="$PROJECT_DIR$/wrapper.py" />
     </list>
     <ignored path="eclipse.iws" />
@@ -34,9 +39,41 @@
       <file leaf-file-name="wrapper.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wrapper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="164">
-              <caret line="504" column="37" lean-forward="false" selection-start-line="504" selection-start-column="37" selection-end-line="504" selection-end-column="37" />
+            <state relative-caret-position="288">
+              <caret line="271" column="63" lean-forward="false" selection-start-line="271" selection-start-column="63" selection-end-line="271" selection-end-column="63" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="patchsBuild.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/wekaMethods/patchsBuild.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="262">
+              <caret line="468" column="102" lean-forward="false" selection-start-line="468" selection-start-column="102" selection-end-line="468" selection-end-column="102" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="experimentsMethods.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Agent/experimentsMethods.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="177">
+              <caret line="1411" column="41" lean-forward="true" selection-start-line="1411" selection-start-column="41" selection-end-line="1411" selection-end-column="41" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="patchsBuild.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/diffAnalyze/patchsBuild.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="290" column="0" lean-forward="false" selection-start-line="288" selection-start-column="0" selection-end-line="290" selection-end-column="0" />
+              <folding>
+                <element signature="e#20#33#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -44,21 +81,39 @@
       <file leaf-file-name="checkReport.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wekaMethods/checkReport.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="310">
-              <caret line="143" column="38" lean-forward="false" selection-start-line="143" selection-start-column="38" selection-end-line="143" selection-end-column="38" />
+            <state relative-caret-position="263">
+              <caret line="376" column="14" lean-forward="true" selection-start-line="376" selection-start-column="14" selection-end-line="376" selection-end-column="14" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="OOMethods.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/OOMethods.py">
+      <file leaf-file-name="source_Monitor.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wekaMethods/source_Monitor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="90" column="30" lean-forward="false" selection-start-line="90" selection-start-column="30" selection-end-line="90" selection-end-column="30" />
-              <folding>
-                <element signature="e#21#55#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="195">
+              <caret line="26" column="20" lean-forward="true" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="articles.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wekaMethods/articles.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="261">
+              <caret line="862" column="56" lean-forward="false" selection-start-line="862" selection-start-column="56" selection-end-line="862" selection-end-column="56" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="metricsCSV.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/metricsCSV.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -66,8 +121,8 @@
       <file leaf-file-name="buildDB.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wekaMethods/buildDB.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="434">
-              <caret line="439" column="76" lean-forward="false" selection-start-line="439" selection-start-column="76" selection-end-line="439" selection-end-column="76" />
+            <state relative-caret-position="259">
+              <caret line="617" column="83" lean-forward="false" selection-start-line="617" selection-start-column="83" selection-end-line="617" selection-end-column="83" />
               <folding>
                 <element signature="e#25#39#0" expanded="true" />
               </folding>
@@ -75,63 +130,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pathPackCsv.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wekaMethods/pathPackCsv.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="31" column="54" lean-forward="false" selection-start-line="31" selection-start-column="54" selection-end-line="31" selection-end-column="54" />
-              <folding>
-                <element signature="e#22#31#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="docXml.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wekaMethods/docXml.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="141" column="12" lean-forward="false" selection-start-line="141" selection-start-column="12" selection-end-line="141" selection-end-column="12" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="utilsConf.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utilsConf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="18" column="30" lean-forward="true" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="OOFamilies.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wekaMethods/features/OOFamilies.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="134">
-              <caret line="485" column="55" lean-forward="false" selection-start-line="485" selection-start-column="55" selection-end-line="485" selection-end-column="55" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="OO.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/wekaMethods/features/OO.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="134">
-              <caret line="90" column="55" lean-forward="false" selection-start-line="90" selection-start-column="55" selection-end-line="90" selection-end-column="55" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="OOFamiliesMethods.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/OOFamiliesMethods.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="142">
-              <caret line="485" column="55" lean-forward="false" selection-start-line="485" selection-start-column="55" selection-end-line="485" selection-end-column="55" />
+            <state relative-caret-position="271">
+              <caret line="37" column="19" lean-forward="false" selection-start-line="37" selection-start-column="4" selection-end-line="37" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -149,17 +152,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>pathPackCsv</find>
-      <find>gitPath</find>
-      <find>versionsCreate</find>
-      <find>buildOneTimeCommits</find>
-      <find>BuildAllOneTimeCommits</find>
-      <find>gc</find>
+      <find>Extract_complexity_features</find>
+      <find>insert_values_into_table(conn, &quot;classes&quot;, valsData)</find>
+      <find>javadoc</find>
+      <find>Extract_OO_features</find>
+      <find>testingfiles_All</find>
+      <find>files</find>
+      <find>cwd=</find>
+      <find>weka=[x for x in csv.reader(open(wekaOutFile,&quot;r&quot;))]</find>
+      <find>priorsCreation</find>
+      <find>testing</find>
+      <find>arffCreate</find>
+      <find>BuildMLFiles</find>
       <find>createBuildMLModels</find>
-      <find>packPath</find>
-      <find>get_attributesbest</find>
-      <find>hirarcy</find>
-      <find>bfs_s</find>
+      <find>BuildWekaModel</find>
+      <find>source_methods</find>
+      <find>source_files</find>
+      <find>checkReport.analyzeCheckStyle(checkStyleMethods, git_path)</find>
+      <find>checkstyle</find>
+      <find>commitsFiles</find>
+      <find>docs</find>
+      <find>subprocess.Popen</find>
+      <find>checkstyle-6.8-SNAPSHOT</find>
+      <find>C:\projs</find>
+      <find>globalConfig</find>
+      <find>c:\projs</find>
+      <find>c:\proj</find>
+      <find>Extract_OO_features_OLD</find>
+      <find>Cop</find>
+      <find>shutil.copy</find>
+      <find>do_all</find>
     </findStrings>
   </component>
   <component name="FindManager">
@@ -173,12 +195,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Planner/similarity.py" />
-        <option value="$PROJECT_DIR$/Diagnoser/TF.py" />
-        <option value="$PROJECT_DIR$/Planner/domain_knowledge.py" />
-        <option value="$PROJECT_DIR$/Planner/mcts/InstanceNode.py" />
-        <option value="$PROJECT_DIR$/Planner/mcts/main.py" />
-        <option value="$PROJECT_DIR$/Planner/mcts/actionNode.py" />
         <option value="$PROJECT_DIR$/Planner/mcts/mcts.py" />
         <option value="$PROJECT_DIR$/Planner/lrtdp/LRTDPModule.py" />
         <option value="$PROJECT_DIR$/Planner/lrtdp/lrtdpState.py" />
@@ -202,7 +218,6 @@
         <option value="$PROJECT_DIR$/wekaMethods/featuresMethods/processMethodsFamilies.py" />
         <option value="$PROJECT_DIR$/wekaMethods/featuresMethods/sourceMonitorMethods.py" />
         <option value="$PROJECT_DIR$/wekaMethods/featuresMethods/haelsteadMethods.py" />
-        <option value="$PROJECT_DIR$/wekaMethods/articles.py" />
         <option value="$PROJECT_DIR$/NLP/commits.py" />
         <option value="$PROJECT_DIR$/NLP/nlp_model.py" />
         <option value="$PROJECT_DIR$/NLP/diagnosis_using_nlp.py" />
@@ -211,19 +226,26 @@
         <option value="$PROJECT_DIR$/Diagnoser/diagnoserUtils.py" />
         <option value="$PROJECT_DIR$/result_parsing/journal_2016.py" />
         <option value="$PROJECT_DIR$/setup.py" />
-        <option value="$PROJECT_DIR$/diffAnalyze/patchsBuild.py" />
-        <option value="$PROJECT_DIR$/wekaMethods/patchsBuild.py" />
         <option value="$PROJECT_DIR$/wekaMethods/issuesExtract/github_import.py" />
-        <option value="$PROJECT_DIR$/utilsConf.py" />
         <option value="$PROJECT_DIR$/wekaMethods/pathPackCsv.py" />
-        <option value="$PROJECT_DIR$/wrapper.py" />
-        <option value="$PROJECT_DIR$/wekaMethods/docXml.py" />
-        <option value="$PROJECT_DIR$/wekaMethods/buildDB.py" />
-        <option value="$PROJECT_DIR$/wekaMethods/checkReport.py" />
         <option value="$PROJECT_DIR$/wekaMethods/featuresMethods/OOMethods.py" />
         <option value="$PROJECT_DIR$/wekaMethods/featuresMethods/OOFamiliesMethods.py" />
         <option value="$PROJECT_DIR$/wekaMethods/features/OOFamilies.py" />
         <option value="$PROJECT_DIR$/wekaMethods/features/OO.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/blameParse.py" />
+        <option value="$PROJECT_DIR$/All_One_create.py" />
+        <option value="$PROJECT_DIR$/report.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/commsSpaces.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/buildDB.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/docXml.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/wekaAccuracy.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/articles.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/source_Monitor.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/checkReport.py" />
+        <option value="$PROJECT_DIR$/utilsConf.py" />
+        <option value="$PROJECT_DIR$/diffAnalyze/patchsBuild.py" />
+        <option value="$PROJECT_DIR$/wrapper.py" />
+        <option value="$PROJECT_DIR$/wekaMethods/patchsBuild.py" />
       </list>
     </option>
   </component>
@@ -275,7 +297,7 @@
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyIntegratedToolsModulesConfigurable" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
-    <property name="SearchEverywhereHistoryKey" value="oofamil&#9;FILE&#9;file://C:/Users/amirelm/Documents/GitHub/Debugger/learner/wekaMethods/features/OOFamilies.py&#10;oometh&#9;FILE&#9;file://C:/Users/amirelm/Documents/GitHub/Debugger/learner/wekaMethods/featuresMethods/OOMethods.py&#10;buildOneTimeCommits&#9;null&#9;null&#10;BuildAllOneTimeCommits&#9;null&#9;null&#10;utilsconf&#9;FILE&#9;file://C:/Users/amirelm/Documents/GitHub/Debugger/learner/utilsConf.py&#10;buildDB&#9;FILE&#9;file://C:/Users/User/Documents/GitHub/Debugger/learner/wekaMethods/buildDB.py&#10;haelsteadMethods&#9;FILE&#9;file://C:/Users/User/Documents/GitHub/Debugger/learner/wekaMethods/featuresMethods/haelsteadMethods.py&#10;diagn&#9;FILE&#9;file://C:/Users/User/Documents/GitHub/Debugger/learner/Diagnoser/diagnoserUtils.py&#10;all&#9;FILE&#9;file://C:/Users/User/Documents/GitHub/Debugger/learner/transferAllOne.py&#10;comms&#9;FILE&#9;file://C:/Users/User/Documents/GitHub/Debugger/learner/wekaMethods/commsSpaces.py&#10;pathPackCsv.py&#9;FILE&#9;file://C:/Users/User/Documents/GitHub/Debugger/learner/wekaMethods/pathPackCsv.py&#10;bugzi&#9;FILE&#9;file://C:/Users/User/Documents/GitHub/Debugger/learner/wekaMethods/issuesExtract/python_bugzilla.py" />
+    <property name="SearchEverywhereHistoryKey" value="source_monitor&#9;null&#9;null&#10;comments&#9;null&#9;null&#10;patchsBuild&#9;FILE&#9;file://C:/Users/amirelm/Documents/GitHub/Debugger/learner/diffAnalyze/patchsBuild.py&#10;insert_values_into_table&#9;null&#9;null&#10;commsSpaces&#9;null&#9;null&#10;oofamil&#9;FILE&#9;file://C:/Users/amirelm/Documents/GitHub/Debugger/learner/wekaMethods/features/OOFamilies.py&#10;oometh&#9;FILE&#9;file://C:/Users/amirelm/Documents/GitHub/Debugger/learner/wekaMethods/featuresMethods/OOMethods.py&#10;buildOneTimeCommits&#9;null&#9;null&#10;BuildAllOneTimeCommits&#9;null&#9;null&#10;utilsconf&#9;FILE&#9;file://C:/Users/amirelm/Documents/GitHub/Debugger/learner/utilsConf.py&#10;buildDB&#9;FILE&#9;file://C:/Users/User/Documents/GitHub/Debugger/learner/wekaMethods/buildDB.py&#10;haelsteadMethods&#9;FILE&#9;file://C:/Users/User/Documents/GitHub/Debugger/learner/wekaMethods/featuresMethods/haelsteadMethods.py&#10;diagn&#9;FILE&#9;file://C:/Users/User/Documents/GitHub/Debugger/learner/Diagnoser/diagnoserUtils.py&#10;all&#9;FILE&#9;file://C:/Users/User/Documents/GitHub/Debugger/learner/transferAllOne.py&#10;comms&#9;FILE&#9;file://C:/Users/User/Documents/GitHub/Debugger/learner/wekaMethods/commsSpaces.py&#10;pathPackCsv.py&#9;FILE&#9;file://C:/Users/User/Documents/GitHub/Debugger/learner/wekaMethods/pathPackCsv.py&#10;bugzi&#9;FILE&#9;file://C:/Users/User/Documents/GitHub/Debugger/learner/wekaMethods/issuesExtract/python_bugzilla.py" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -305,7 +327,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.github_import">
+  <component name="RunManager" selected="Python.wrapper">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -429,7 +451,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="learner" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/wrapper.py" />
-      <option name="PARAMETERS" value="&quot;C:\Users\User\Downloads\Time1.txt&quot; learn" />
+      <option name="PARAMETERS" value="C:\amirelm\apache_projects\accumulo.txt learn" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -537,8 +559,8 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.github_import" />
-        <item index="1" class="java.lang.String" itemvalue="Python.wrapper" />
+        <item index="0" class="java.lang.String" itemvalue="Python.wrapper" />
+        <item index="1" class="java.lang.String" itemvalue="Python.github_import" />
         <item index="2" class="java.lang.String" itemvalue="Python.patchsBuild (1)" />
         <item index="3" class="java.lang.String" itemvalue="Python.patchsBuild" />
         <item index="4" class="java.lang.String" itemvalue="Python.journal_2016" />
@@ -568,13 +590,13 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21911764" sideWeight="0.7224959" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.509434" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27331188" sideWeight="0.49853587" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.392" sideWeight="0.49707174" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27009645" sideWeight="0.49853587" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39067525" sideWeight="0.49707174" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329653" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2484375" sideWeight="0.6914378" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3280757" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33123028" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33118972" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -666,23 +688,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/wekaMethods/buildDB.py</url>
-          <line>596</line>
+          <line>594</line>
           <option name="timeStamp" value="273" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/wrapper.py</url>
-          <line>264</line>
+          <line>229</line>
           <option name="timeStamp" value="335" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/wrapper.py</url>
-          <line>499</line>
-          <option name="timeStamp" value="337" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/wrapper.py</url>
-          <line>238</line>
-          <option name="timeStamp" value="339" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <condition expression="similarity_factor &gt; 1 or similarity_factor &lt; 0" language="Python" />
@@ -702,7 +714,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/wekaMethods/buildDB.py</url>
-          <line>612</line>
+          <line>610</line>
           <option name="timeStamp" value="365" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -712,18 +724,23 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/wrapper.py</url>
-          <line>472</line>
-          <option name="timeStamp" value="369" />
+          <line>210</line>
+          <option name="timeStamp" value="377" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/utilsConf.py</url>
-          <line>60</line>
-          <option name="timeStamp" value="371" />
+          <url>file://$PROJECT_DIR$/wrapper.py</url>
+          <line>202</line>
+          <option name="timeStamp" value="378" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/utilsConf.py</url>
-          <line>70</line>
-          <option name="timeStamp" value="372" />
+          <url>file://$PROJECT_DIR$/wrapper.py</url>
+          <line>201</line>
+          <option name="timeStamp" value="379" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/wrapper.py</url>
+          <line>485</line>
+          <option name="timeStamp" value="381" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -736,54 +753,60 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="374" />
+      <option name="time" value="382" />
     </breakpoint-manager>
     <watches-manager />
   </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>str(&quot;cd /d  &quot;+ utilsConf.to_short_path(weka) +&quot; &amp; java -Xmx2024m  -cp &quot;+utilsConf.to_short_path(wekaJar)+&quot; weka.Run &quot; +algorithm+ &quot; -x 10 -d .\\model.model -t &quot;+training+&quot; &gt; training&quot;+name+&quot;.txt&quot;)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>run_commands</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>(out, err) = proc.communicate()</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>print run_commands</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>run_commands = [sourceMonitorEXE, &quot;/C&quot;, xmlPath]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>proc.communicate()</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(verDir))</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>p.communicate()</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>p = subprocess.Popen(blame_commands, stdout=subprocess.PIPE, shell=True, cwd=pathRepo.replace('\\\\?\\',''))</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/transferAllOne.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1649">
-          <caret line="103" column="29" lean-forward="false" selection-start-line="103" selection-start-column="29" selection-end-line="103" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/report.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="901">
-          <caret line="56" column="20" lean-forward="false" selection-start-line="56" selection-start-column="11" selection-end-line="56" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/NLP/metrics.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="38" lean-forward="false" selection-start-line="0" selection-start-column="38" selection-end-line="0" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda2/Lib/ntpath.py" />
-    <entry file="file://$PROJECT_DIR$/Planner/planningExperiments.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1162">
-          <caret line="65" column="47" lean-forward="false" selection-start-line="65" selection-start-column="47" selection-end-line="65" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Diagnoser/planning_example/choose_best.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/analyzeCommsMethods.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/analyzeLastMethods.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -868,13 +891,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wekaMethods/articles.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14195">
-          <caret line="859" column="22" lean-forward="false" selection-start-line="859" selection-start-column="22" selection-end-line="859" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/NLP/nlp_model.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="459">
@@ -896,13 +912,6 @@
           <folding>
             <element signature="e#0#9#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wekaMethods/wekaAccuracy.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="765">
-          <caret line="47" column="4" lean-forward="false" selection-start-line="47" selection-start-column="4" selection-end-line="47" selection-end-column="4" />
         </state>
       </provider>
     </entry>
@@ -972,13 +981,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Agent/experimentsMethods.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-621">
-          <caret line="1384" column="11" lean-forward="false" selection-start-line="1384" selection-start-column="4" selection-end-line="1384" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -1001,22 +1003,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wekaMethods/patchsBuild.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8024">
-          <caret line="479" column="39" lean-forward="false" selection-start-line="479" selection-start-column="29" selection-end-line="479" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/diffAnalyze/patchsBuild.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5117">
-          <caret line="307" column="30" lean-forward="false" selection-start-line="307" selection-start-column="13" selection-end-line="307" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/github_import.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1035,71 +1021,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wekaMethods/pathPackCsv.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="31" column="54" lean-forward="false" selection-start-line="31" selection-start-column="54" selection-end-line="31" selection-end-column="54" />
-          <folding>
-            <element signature="e#22#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wekaMethods/docXml.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="141" column="12" lean-forward="false" selection-start-line="141" selection-start-column="12" selection-end-line="141" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wrapper.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="164">
-          <caret line="504" column="37" lean-forward="false" selection-start-line="504" selection-start-column="37" selection-end-line="504" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wekaMethods/buildDB.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="434">
-          <caret line="439" column="76" lean-forward="false" selection-start-line="439" selection-start-column="76" selection-end-line="439" selection-end-column="76" />
-          <folding>
-            <element signature="e#25#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wekaMethods/checkReport.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="143" column="38" lean-forward="false" selection-start-line="143" selection-start-column="38" selection-end-line="143" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utilsConf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="18" column="30" lean-forward="true" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/OOMethods.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
+        <state relative-caret-position="1445">
           <caret line="90" column="30" lean-forward="false" selection-start-line="90" selection-start-column="30" selection-end-line="90" selection-end-column="30" />
           <folding>
-            <element signature="e#21#55#0" expanded="true" />
+            <element signature="e#21#55#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wekaMethods/featuresMethods/OOFamiliesMethods.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
+        <state relative-caret-position="8160">
           <caret line="485" column="55" lean-forward="false" selection-start-line="485" selection-start-column="55" selection-end-line="485" selection-end-column="55" />
           <folding />
         </state>
@@ -1107,7 +1041,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/wekaMethods/features/OOFamilies.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
+        <state relative-caret-position="8177">
           <caret line="485" column="55" lean-forward="false" selection-start-line="485" selection-start-column="55" selection-end-line="485" selection-end-column="55" />
           <folding />
         </state>
@@ -1115,8 +1049,156 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/wekaMethods/features/OO.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
-          <caret line="90" column="55" lean-forward="false" selection-start-line="90" selection-start-column="55" selection-end-line="90" selection-end-column="55" />
+        <state relative-caret-position="1513">
+          <caret line="93" column="35" lean-forward="false" selection-start-line="93" selection-start-column="35" selection-end-line="93" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/blameParse.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3111">
+          <caret line="189" column="27" lean-forward="false" selection-start-line="189" selection-start-column="27" selection-end-line="189" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/All_One_create.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="24" column="0" lean-forward="true" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/report.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="55" column="17" lean-forward="false" selection-start-line="55" selection-start-column="17" selection-end-line="55" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/diffAnalyze/comments.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="127" column="0" lean-forward="false" selection-start-line="127" selection-start-column="0" selection-end-line="127" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/commsSpaces.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="26" column="106" lean-forward="false" selection-start-line="26" selection-start-column="93" selection-end-line="26" selection-end-column="106" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/pathPackCsv.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="130">
+          <caret line="27" column="4" lean-forward="false" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/docXml.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="221" column="34" lean-forward="false" selection-start-line="221" selection-start-column="34" selection-end-line="221" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/wekaAccuracy.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="48" column="30" lean-forward="false" selection-start-line="48" selection-start-column="30" selection-end-line="48" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/metricsCSV.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/articles.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="862" column="56" lean-forward="false" selection-start-line="862" selection-start-column="56" selection-end-line="862" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/source_Monitor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="26" column="20" lean-forward="true" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/checkReport.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="263">
+          <caret line="376" column="14" lean-forward="true" selection-start-line="376" selection-start-column="14" selection-end-line="376" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/buildDB.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="259">
+          <caret line="617" column="83" lean-forward="false" selection-start-line="617" selection-start-column="83" selection-end-line="617" selection-end-column="83" />
+          <folding>
+            <element signature="e#25#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utilsConf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="37" column="19" lean-forward="false" selection-start-line="37" selection-start-column="4" selection-end-line="37" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Agent/experimentsMethods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="1411" column="41" lean-forward="true" selection-start-line="1411" selection-start-column="41" selection-end-line="1411" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/diffAnalyze/patchsBuild.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="290" column="0" lean-forward="false" selection-start-line="288" selection-start-column="0" selection-end-line="290" selection-end-column="0" />
+          <folding>
+            <element signature="e#20#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wrapper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="271" column="63" lean-forward="false" selection-start-line="271" selection-start-column="63" selection-end-line="271" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wekaMethods/patchsBuild.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="262">
+          <caret line="468" column="102" lean-forward="false" selection-start-line="468" selection-start-column="102" selection-end-line="468" selection-end-column="102" />
           <folding />
         </state>
       </provider>

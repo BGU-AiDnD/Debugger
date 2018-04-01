@@ -1,10 +1,8 @@
 __author__ = 'amir'
-
-
-import sys
+import shutil
 import os
 import glob
-import comments
+import utilsConf
 import re
 import subprocess
 import sqlite3
@@ -149,44 +147,32 @@ def OneClass(lines, outPath,commitID):
         #ans.extend(methodsData)
 
 
-
-
 def oneFile(PatchFile, outDir):
-    f=open(PatchFile,'r')
-    lines=f.readlines()
-    if len(lines)==0:
+    lines = []
+    with open(PatchFile) as f:
+        lines = f.readlines()
+    if len(lines) == 0:
         return []
     commitID=lines[0].split()[1] # line 0 word 1
-    commitID=int("".join(list(commitID)[:7]),16)
-    commitID=str(commitID)
-    mkDirs(outDir,commitID)
-    inds=[lines.index(l) for l in lines if "diff --git" in l]+[len(lines)] #lines that start with diff --git
-    CopyStatement = "cmd /x /c \"c: & copy " + PatchFile+"  " + outDir+"\\"+commitID+"\\"+PatchFile.split("\\")[-1]+"\""
-    os.system(CopyStatement)
+    commitID=str(int("".join(list(commitID)[:7]), 16))
+    mkDirs(outDir, commitID)
+    inds = [ind for ind, l in lines if "diff --git" in l] + [len(lines)] #lines that start with diff --git
+    shutil.copy(PatchFile, os.path.join(outDir, commitID, os.path.basename(PatchFile)))
     for i in range(len(inds)-1):
-        OneClass(lines[inds[i]:inds[i+1]],outDir+"\\"+commitID,commitID)
+        OneClass(lines[inds[i]:inds[i+1]], os.path.join(outDir, commitID), commitID)
 
-
-#oneFile("C:\GitHub\\try\org.eclipse.cdt\\0244-Rename-DebugConfiguration-to-avoid-duplicate-names.patch","C:\GitHub\\try\org.eclipse.cdt\\p")
-
-
-
-def buildPatchs(Path,outDir):
-    lst= glob.glob(Path+"/*.patch")
-    i=0
-    if not os.path.isdir(outDir):
-        os.mkdir(outDir)
-    allComms=[]
-    for doc in lst:
-        print doc
-        i=i+1
-        comm=oneFile(doc,outDir)
-        allComms.extend(comm)
-    return allComms
 
 def mkdir(d):
     if not os.path.isdir(d):
         os.mkdir(d)
+
+
+def buildPatchs(Path,outDir):
+    mkdir(outDir)
+    allComms = []
+    for doc in glob.glob(os.path.join(Path, "*.patch")):
+        allComms.extend(oneFile(doc, outDir))
+    return allComms
 
 
 def DbAdd(dbPath,allComms):
@@ -200,7 +186,6 @@ def DbAdd(dbPath,allComms):
     conn.close()
 
 def RunCheckStyle(workingDir,outPath):
-    print(  "java  -jar  C:\projs\checkstyle-6.8-SNAPSHOT-all.jar   -c  C:\projs\methodNameLines.xml javaFile -o " +outPath+"  "+workingDir)
     os.system(  "java  -jar  C:\projs\checkstyle-6.8-SNAPSHOT-all.jar   -c  C:\projs\methodNameLines.xml javaFile -o " +outPath+"  "+workingDir)
 
 def detectFromConf(lines,lineInd):
@@ -296,17 +281,20 @@ def analyzeCheckStyle(checkOut):
 
 
 def do_all(workingDir):
-    patchD=workingDir+"\\patch"
-    commitsFiles=workingDir+"\\commitsFiles"
-    #dbPath=workingDir+"\\commitsMethods.db"
+    patchD = os.path.join(workingDir, "patch")
+    commitsFiles = os.path.join(workingDir, "commitsFiles")
     mkdir(patchD)
     mkdir(commitsFiles)
-    os.system("c: & cd "+workingDir+" & git format-patch --root -o patch --function-context --unified=9000")
-    buildPatchs(patchD,commitsFiles)
-    checkOut=commitsFiles+"\\CheckStyle.txt"
-    RunCheckStyle(commitsFiles,checkOut)
-    allComms=analyzeCheckStyle(checkOut)
-    #DbAdd(dbPath,allComms)
+    run_commands = ["git", "format-patch", "--root", "-o", "patch", "--function-context", "--unified=9000"]
+    p = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(workingDir))
+    p.communicate()
+    buildPatchs(patchD, commitsFiles)
+    checkOut = os.path.join(commitsFiles, "CheckStyle.txt")
+    run_commands = ["java", "-jar", utilsConf.globalConfig()[3], "-c", utilsConf.globalConfig()[5], "javaFile", "-o", checkOut, commitsFiles]
+    p = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                         cwd=utilsConf.to_short_path(workingDir))
+    p.communicate()
+    allComms = analyzeCheckStyle(checkOut)
     return allComms
 
 

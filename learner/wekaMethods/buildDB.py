@@ -416,18 +416,16 @@ def BuildAllOneTimeCommits(git_path, dbPath, JavaDocPath, sourceMonitorFiles, so
     insert_values_into_table(conn, "AllMethods", checkReport.analyzeCheckStyle(checkStyleMethods, git_path))
     if(not add):
         insert_values_into_table(conn, "haelsTfiles", commentedCodeDetector.buildHael(git_path, max))
-        SourceFiles,SourceMethods= source_Monitor.build(sourceMonitorFiles,sourceMonitorMethods,max)
+        SourceFiles, SourceMethods= source_Monitor.build(sourceMonitorFiles, sourceMonitorMethods, max)
         insert_values_into_table(conn, "JAVAfiles", SourceFiles)
-        insert_values_into_table(conn, "Sourcemethods", [met for met in SourceMethods if len(met)==6])
-        docs= docXml.build(JavaDocPath,pathPackCsv.projectPathPacks(git_path),max)
+        insert_values_into_table(conn, "Sourcemethods", [met for met in SourceMethods if len(met)== 6])
         # can add all javadoc options
         valsData=[]
         methodData=[]
         fieldData=[]
         consData=[]
-        for doc in docs:
-            for clss in doc:
-                vals,all_methods,all_fields,all_cons=clss
+        for doc in docXml.build(JavaDocPath, pathPackCsv.projectPathPacks(git_path), max):
+            for vals, all_methods, all_fields, all_cons in doc:
                 valsData.append(vals)
                 methodData.extend(all_methods)
                 fieldData.extend(all_fields)

@@ -208,15 +208,11 @@ def xmlRead_OLD(doc,packPath):
     return all_classes
 
 
-def build(JavaDocPath,packPath,max):
+def build(JavaDocPath, packPath, max):
     docs=[]
     lst= glob.glob(JavaDocPath+"/*.xml")
-    i=0
     for doc in lst:
-        if (i==max):
-            break
-        i=i+1
-        r=xmlRead_OLD(doc,packPath)
+        r=xmlRead_OLD(doc, packPath)
         if r!=-1:
             docs.append(r)
     return docs
