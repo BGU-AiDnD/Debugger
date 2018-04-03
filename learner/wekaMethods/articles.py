@@ -335,47 +335,42 @@ def arff88_ByTag_ObjectsMethods(dbpath,dates,commits,i, isTest,max,buggedType,ob
     return files_dict.values(),files_dict.keys()
 
 
-def arffCreateForTag(dbpath,dates,i, objects,bugQuery,wanted):
-    print dates,i,dbpath
-    print dates,i,dbpath
-    prev_date=dates[i-1]
-    start_date=dates[i]
-    end_date=dates[i+1]
-    print dbpath
+def arffCreateForTag(dbpath, dates, i, objects, bugQuery, wanted):
+    prev_date = dates[i-1]
+    start_date = dates[i]
+    end_date = dates[i+1]
     conn = sqlite3.connect(dbpath)
     conn.text_factory = str
     c = conn.cursor()
-    files_dict={}
     createIndex(c, conn)
-    #wanted_files='select distinct methodDir from AllMethods'
+    files_dict = {}
     for row in c.execute(wanted):
         name=Agent.pathTopack.pathToPack(row[0])
-        files_dict[name]=[]
-    #print(files_dict.keys())
-    #exit()
-    for o in objects:
-        o.get_features(c, files_dict,prev_date,start_date,end_date)
-        #a=0
-    bugQ=bugQuery.replace("STARTDATE",str(start_date))
-    bugQ=bugQ.replace("ENDDATE",str(end_date))
-   # if (buggedType=="Most"):
-  #      bugQ = 'select CommitedMethods.methodDir,"bugged"  from CommitedMethods , (select max(lines) as l, bugId from CommitedMethods where methodDir like "%.java%" and commiter_date>="'+str(start_date)+'"  and commiter_date<="'+str(end_date)+'" and bugId<>0 group by bugId) as T where CommitedMethods.lines=T.l and CommitedMethods.bugId=T.bugId group by methodDir'
- #   if (buggedType=="All"):
-#        bugQ='select distinct methodDir,"bugged"  from commitedMethods where bugId<>0  and methodDir like "%.java%" and methodDir not like "%test%" and commiter_date>="' + str(start_date)+ '"' + '  and commiter_date<="' + str(end_date)+ '" ' + ' group by methodDir'
-    files_hasBug={}
-    for f in files_dict.keys():
-        files_hasBug[f]=["valid"]
-    print bugQ
-    for row in c.execute(bugQ):
-        name=Agent.pathTopack.pathToPack(row[0])
-        if(name in files_hasBug):
-            bug="bugged"
-            files_hasBug[name]=[bug]
-    for f in files_hasBug:
-        #print files_hasBug[f]
-        files_dict[f]=files_dict[f]+files_hasBug[f]
+        files_dict[name] = []
     conn.close()
-    return files_dict.values(),files_dict.keys()
+    for o in objects:
+        conn = sqlite3.connect(dbpath)
+        conn.text_factory = str
+        c = conn.cursor()
+        o.get_features(c, files_dict, prev_date, start_date, end_date)
+        conn.close()
+    bugQ = bugQuery.replace("STARTDATE", str(start_date))
+    bugQ = bugQ.replace("ENDDATE", str(end_date))
+    files_hasBug = {}
+    for f in files_dict.keys():
+        files_hasBug[f] = ["valid"]
+    conn = sqlite3.connect(dbpath)
+    conn.text_factory = str
+    c = conn.cursor()
+    createIndex(c, conn)
+    for row in c.execute(bugQ):
+        name = Agent.pathTopack.pathToPack(row[0])
+        if name in files_hasBug:
+            files_hasBug[name] = ["bugged"]
+    conn.close()
+    for f in files_hasBug:
+        files_dict[f] = files_dict[f] + files_hasBug[f]
+    return files_dict.values(), files_dict.keys()
 
 
 def past_att():
@@ -549,7 +544,6 @@ def arff88PacksMethods(basicPath,i,max,outPath,name,buggedType, packs,names,path
 
 def arffCreate(basicPath, objects, names, dates, bugQ, wanted, trainingFile, testingFile, NamesFile):
     data=[]
-    print "start"
     i=0
     attr,lens=objectsAttr(objects)
     print "attr",len(attr),attr

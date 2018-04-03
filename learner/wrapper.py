@@ -124,7 +124,7 @@ def OO_features_error_analyze(err):
 
 
 @utilsConf.marker_decorator(utilsConf.OO_OLD_FEATURES_MARKER)
-def Extract_OO_features_OLD(versPath,vers,docletPath):
+def Extract_OO_features_OLD(versPath, vers, docletPath):
     for version in vers:
         verPath=os.path.join(versPath,version_to_dir_name(version))
         command = """cd /d  """ + utilsConf.to_short_path(verPath) + " & for /R .\\repo %f in (*.java) do (call javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath "+utilsConf.to_short_path(docletPath)+" -filename %~nxf.xml -private -d .\Jdoc2 %f) "
@@ -446,6 +446,7 @@ def clean(versPath,LocalGitPath):
     shutil.rmtree(versPath, ignore_errors=True)
     shutil.rmtree(LocalGitPath, ignore_errors=True)
 
+
 def download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product):
     bugsPath = tempfile.mktemp(suffix=".csv")
     if issue_tracker == "bugzilla":
@@ -457,11 +458,9 @@ def download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product):
     return bugsPath
 
 
-
-def wrapperLearner(confFile,globalConfFile):
+def wrapperLearner(confFile):
     vers, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product , workingDir = utilsConf.configure(confFile)
-    docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath = utilsConf.globalConfig(
-        globalConfFile)
+    docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath = utilsConf.globalConfig()
     versPath, db_dir = Mkdirs(workingDir, vers)
     bugsPath = download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product)
     vers_dirs = map(version_to_dir_name, vers)
@@ -670,7 +669,7 @@ if __name__ == '__main__':
         else:
             print(sys.argv[1], globalConf)
             if sys.argv[2]=="learn":
-                wrapperLearner(sys.argv[1], globalConf)
+                wrapperLearner(sys.argv[1])
             elif sys.argv[2]=="experiments":
                 wrapperExperiments(sys.argv[1], globalConf)
             elif sys.argv[2]=="planning":
