@@ -1,9 +1,10 @@
-LONG_PATH_MAGIC = u"\\\\?\\"
 __author__ = 'amir'
 import os
 import traceback
 from datetime import datetime
+import logging
 
+LONG_PATH_MAGIC = u"\\\\?\\"
 # markers names:
 VERSIONS_MARKER = "versions"
 VERSION_TEST_MARKER = "test_version"
@@ -55,7 +56,7 @@ def to_short_path(path):
 
 def configure(confFile):
     lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
-    vers, gitPath,issue_tracker_url, issue_tracker_product, workingDir="","","","",""
+    versions, gitPath,issue_tracker_url, issue_tracker_product, workingDir="","","","",""
     issue_tracker = "bugzilla"
     for x in lines:
         if x.startswith("workingDir"):
@@ -72,14 +73,15 @@ def configure(confFile):
             v=x.split("=")[1]
             v=v.split("(")[1]
             v=v.split(")")[0]
-            vers=v.split(",")
-    init_configuration(workingDir)
-    return [v.lstrip() for v in vers], gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir
+            versions=v.split(",")
+    versions = [v.lstrip() for v in versions]
+    init_configuration(workingDir, versions)
+    return versions, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir
 
 
 def configureExperiments(confFile):
     lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
-    vers, gitPath,bugs, workingDir="","","",""
+    versions, gitPath,bugs, workingDir="","","",""
     for x in lines:
         if x.startswith("workingDir"):
             v=x.split("=")[1]
@@ -94,12 +96,14 @@ def configureExperiments(confFile):
             v=x.split("=")[1]
             v=v.split("(")[1]
             v=v.split(")")[0]
-            vers=v.split(",")
-    return [v.lstrip() for v in vers], gitPath,bugs, workingDir
+            versions=v.split(",")
+    return [v.lstrip() for v in versions], gitPath,bugs, workingDir
 
-class Configuration:
-    def __init__(self, workingDir):
+class Configuration(object):
+    def __init__(self, workingDir, versions):
         self.markers_dir = os.path.join(workingDir,"markers")
+        self.versions = versions
+        logging.basicConfig(filename=os.path.join(workingDir,"log.log"), level=logging.DEBUG)
 
     def get_marker_path(self, marker):
         return os.path.join(self.markers_dir, marker)
@@ -107,7 +111,7 @@ class Configuration:
     def get_marker(self, marker):
         return Marker(self.get_marker_path(marker))
 
-class Marker:
+class Marker(object):
     def __init__(self, path):
         self.marker_path = path
 
@@ -116,7 +120,9 @@ class Marker:
 
     def start(self):
         with open(self.marker_path, "wb") as f:
-            f.write("start time: " + str(datetime.now()) + "\n")
+            log_line = "start time: " + str(datetime.now()) + "\n"
+            f.write(log_line)
+            logging.info('writing to %s: %s', self.marker_path, log_line)
 
     def error(self, error_msg):
         with open(self.marker_path, "ab") as f:
@@ -126,12 +132,14 @@ class Marker:
 
     def finish(self):
         with open(self.marker_path, "ab") as f:
-            f.write("finish time: " + str(datetime.now()) + "\n")
+            log_line = "finish time: " + str(datetime.now()) + "\n"
+            f.write(log_line)
+            logging.info('writing to %s: %s', self.marker_path ,log_line)
 
-def init_configuration(workingDir):
+def init_configuration(workingDir, versions):
     global conf
     assert(conf is None)
-    conf = Configuration(workingDir)
+    conf = Configuration(workingDir, versions)
 
 def get_configuration():
     return conf
