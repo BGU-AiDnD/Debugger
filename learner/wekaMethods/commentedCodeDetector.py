@@ -470,15 +470,11 @@ def main(javaFile):
 
 #main("C:\Users\Amir-pc\Documents\GitHub\yossi\org.eclipse.cdt.debug.edc\src\org\eclipse\cdt\debug\edc\IEDCConstants.java")
 
-def buildHael(path,max):
+def buildHael(path):
     acc=[]
-    i=0
     pathLen=len(path)+1 # one for the \
     for root, dirs, files in os.walk(path): # Walk directory tree
-        if(i == max):
-            break
         for f in files:
-            i=i+1
             os_path_join = os.path.join(root, f)
             split___ = os_path_join.split(".")
             if( split___ [len(split___)-1]=="java"):
@@ -486,9 +482,3 @@ def buildHael(path,max):
                 row = [path_join] + main(os_path_join)
                 acc=acc+[row]
     return acc
-    #return docs
-    #conn.commit()
-
-#hae= buildHael("C:\Users\Amir-pc\Documents\GitHub\yossi",-1)
-#for h in hae:
-    #print(len(h[0]))

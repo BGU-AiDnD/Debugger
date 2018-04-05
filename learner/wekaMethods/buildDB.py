@@ -348,7 +348,7 @@ def BuildAll(gitPath, dbPath,bugsPath ,JavaDocPath, sourceMonitorFiles,sourceMon
      #   conn.commit()
     if(not add):
         basicBuild(bugsPath, c, checkStyle, conn, gitPath, max)
-        SourceFiles,SourceMethods= source_Monitor.build(sourceMonitorFiles,sourceMonitorMethods,max)
+        SourceFiles,SourceMethods= source_Monitor.build(sourceMonitorFiles,sourceMonitorMethods)
         for file in SourceFiles:
             c.execute("INSERT INTO JAVAfiles VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", file)
         conn.commit()
@@ -383,7 +383,7 @@ def BuildAll(gitPath, dbPath,bugsPath ,JavaDocPath, sourceMonitorFiles,sourceMon
         for f in comp:
             c.execute("INSERT INTO checkStyleExtends VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",f)
         conn.commit()
-        SourceFiles,SourceMethods= source_Monitor.build(sourceMonitorFiles,sourceMonitorMethods,max)
+        SourceFiles,SourceMethods= source_Monitor.build(sourceMonitorFiles,sourceMonitorMethods)
         for file in SourceFiles:
             c.execute("INSERT INTO JAVAfilesFix VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", file)
         conn.commit()
@@ -415,10 +415,9 @@ def BuildAllOneTimeCommits(git_path, dbPath, JavaDocPath, sourceMonitorFiles, so
     createTables(c,add)
     insert_values_into_table(conn, "AllMethods", checkReport.analyzeCheckStyle(checkStyleMethods, git_path))
     if(not add):
-        insert_values_into_table(conn, "haelsTfiles", commentedCodeDetector.buildHael(git_path, max))
-        SourceFiles, SourceMethods= source_Monitor.build(sourceMonitorFiles, sourceMonitorMethods, max)
-        insert_values_into_table(conn, "JAVAfiles", SourceFiles)
-        insert_values_into_table(conn, "Sourcemethods", [met for met in SourceMethods if len(met)== 6])
+        insert_values_into_table(conn, "haelsTfiles", commentedCodeDetector.buildHael(git_path))
+        insert_values_into_table(conn, "JAVAfiles", source_Monitor.source_files(sourceMonitorFiles))
+        insert_values_into_table(conn, "Sourcemethods", source_Monitor.source_methods(sourceMonitorMethods))
         # can add all javadoc options
         valsData=[]
         methodData=[]
@@ -434,11 +433,10 @@ def BuildAllOneTimeCommits(git_path, dbPath, JavaDocPath, sourceMonitorFiles, so
         insert_values_into_table(conn, "methods", methodData)
         insert_values_into_table(conn, "fields", fieldData)
         insert_values_into_table(conn, "constructors", consData)
-        insert_values_into_table(conn, "blameExtends", blameParse.blameBuild(blamePath,date,max))
-        insert_values_into_table(conn, "checkStyleExtends", checkReport.fileRead(checkStyle,max,False,CodeDir))
-        SourceFiles,SourceMethods= source_Monitor.build(sourceMonitorFiles,sourceMonitorMethods,max)
-        insert_values_into_table(conn, "JAVAfilesFix", SourceFiles)
-        insert_values_into_table(conn, "SourcemethodsFix", [met for met in SourceMethods if len(met)==6])
+        insert_values_into_table(conn, "blameExtends", blameParse.blameBuild(blamePath, date, max))
+        insert_values_into_table(conn, "checkStyleExtends", checkReport.fileRead(checkStyle, max, False, CodeDir))
+        insert_values_into_table(conn, "JAVAfilesFix", source_Monitor.source_files(sourceMonitorFiles))
+        insert_values_into_table(conn, "SourcemethodsFix", source_Monitor.source_methods(sourceMonitorMethods))
     conn.close()
 #BuildAll("C:\Users\Amir-pc\Documents\GitHub\org.eclipse.cdt", "C:\Users\Amir-pc\Documents\GitHub\Aapart1.db","C:\Users\Amir-pc\Documents\GitHub\\CDT-MORE-DATA.csv","C:/Users/Amir-pc/Documents/GitHub/Jdoc/*.xml","C:\Users\Amir-pc\Documents\GitHub\\source1.csv","C:\Users\Amir-pc\Documents\GitHub\\source1_methods.csv",30)
 

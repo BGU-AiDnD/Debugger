@@ -239,7 +239,7 @@ def DbAdd(dbPath,allComms):
 
 def RunCheckStyle(workingDir,outPath,checkStyle68,methodNameLines):
     run_commands = ["java" ,"-jar" ,checkStyle68 ,"-c" ,methodNameLines ,"javaFile" ,"-o",outPath,workingDir]
-    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True)
+    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     (out, err) = proc.communicate()
 
 def detectFromConf(lines,lineInd):
