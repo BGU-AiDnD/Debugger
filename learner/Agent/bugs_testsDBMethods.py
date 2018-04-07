@@ -1,4 +1,3 @@
-
 __author__ = 'amir'
 
 import sqlite3
@@ -7,6 +6,12 @@ import os
 import wekaMethods.pathPackCsv
 from xml.dom import minidom
 import utilsConf
+
+ALL_FILES_BUGS_QUERY = 'select bugId,name from Commitedfiles where bugId<>0  and name like "%.java" and commiter_date>="{START_DATE}" and commiter_date<="{END_DATE}" order by bugId'
+ALL_METHODS_BUGS_QUERY = 'select bugId,methodDir from CommitedMethods where bugId<>0  and methodDir like "%.java%" and commiter_date>="{START_DATE}" and commiter_date<="{END_DATE}" order by bugId'
+MOST_MODIFIED_FILES_BUGS_QUERY = 'select Commitedfiles.bugId,Commitedfiles.name  from Commitedfiles , (select max(lines) as l, bugId from Commitedfiles where name like "%.java" and commiter_date>="{START_DATE}" and commiter_date<="{END_DATE}" group by bugId) as T where Commitedfiles.lines=T.l and Commitedfiles.bugId=T.bugId'
+MOST_MODIFIED_METHODS_BUGS_QUERY = 'select CommitedMethods.bugId,CommitedMethods.methodDir  from CommitedMethods , (select max(lines) as l, bugId from CommitedMethods where methodDir like "%.java%" and commiter_date>="{START_DATE}" and commiter_date<="{END_DATE}" group by bugId) as T where CommitedMethods.lines=T.l and CommitedMethods.bugId=T.bugId'
+
 
 # dir /b /s /O:d >f.txt
 #for /f %a in (f.txt) do ( type %a >com.txt)
@@ -44,7 +49,7 @@ def concatenate(tracesPath, outFile):
     f.close()
 
 
-def testsDBConcatinationMany(dbPath, tracesPath , tests,filesDict,methodsDict,packPath):
+def testsDBConcatinationMany(dbPath, tracesPath, filesDict, packPath):
     concatFile = os.path.join(tracesPath, "tracesConcat.txt")
     concatenate(tracesPath,concatFile)
     conn = sqlite3.connect(dbPath)
@@ -100,117 +105,41 @@ def testsDBConcatinationMany(dbPath, tracesPath , tests,filesDict,methodsDict,pa
     return filesDict
 
 
-
-
-def bugsDBFiles(dbPath,cdtDb,filesDict,startingDate,endDate):
+def bugsDBFiles(dbPath, cdtDb, filesDict, startingDate, endDate, bugs_query=ALL_FILES_BUGS_QUERY, bugs_table='buggedFiles'):
     conn = sqlite3.connect(dbPath)
     conn.text_factory = str
     c = conn.cursor()
     conn2 = sqlite3.connect(cdtDb)
     conn2.text_factory = str
     c2 = conn2.cursor()
-    bug_id = 'select bugId,name from Commitedfiles where bugId<>0  and name like "%.java" and commiter_date>="'+startingDate+'"  and commiter_date<="'+endDate+'" order by bugId'
+    bug_id = bugs_query.format(START_DATE=startingDate, END_DATE=endDate)
     rows=c2.execute(bug_id)
     for r in rows:
         name=r[1]
         if not (".java" in name):
             continue
-        fileInd=-90
+        fileInd = -1
         if(name in filesDict ):
             fileInd=filesDict[name]
         else:
             filesDict[name]=len(filesDict)
             fileInd=filesDict[name]
-        c.execute("INSERT INTO buggedFiles VALUES (?,?,?,?)",[r[0],name,fileInd,name])
+        c.execute("INSERT INTO {BUGS_TABLE} VALUES (?,?,?,?)".format(BUGS_TABLE=bugs_table),[r[0],name,fileInd,name])
     conn.commit()
     conn.close()
     return filesDict
 
-def bugsDBFilesMostModified(dbPath,cdtDb,filesDict,startingDate,endDate):
-    conn = sqlite3.connect(dbPath)
-    conn.text_factory = str
-    c = conn.cursor()
-    conn2 = sqlite3.connect(cdtDb)
-    conn2.text_factory = str
-    c2 = conn2.cursor()
-    bug_id = 'select Commitedfiles.bugId,Commitedfiles.name  from Commitedfiles , (select max(lines) as l, bugId from Commitedfiles where name like "%.java" and commiter_date>="'+startingDate+'"  and commiter_date<="'+endDate+'" group by bugId) as T where Commitedfiles.lines=T.l and Commitedfiles.bugId=T.bugId'
-
-    rows=c2.execute(bug_id)
-    for r in rows:
-        name=r[1]
-        if not (".java" in name):
-            continue
-        fileInd=-90
-        if(name in filesDict ):
-            fileInd=filesDict[name]
-        else:
-            filesDict[name]=len(filesDict)
-            fileInd=filesDict[name]
-        c.execute("INSERT INTO buggedFilesMostModified VALUES (?,?,?,?)",[r[0],name,fileInd,name])
-    conn.commit()
-    conn.close()
-    return filesDict
-
-
-
-def bugsDBMethods(dbPath,cdtDb,filesDict,startingDate,endDate):
-    conn = sqlite3.connect(dbPath)
-    conn.text_factory = str
-    c = conn.cursor()
-    conn2 = sqlite3.connect(cdtDb)
-    conn2.text_factory = str
-    c2 = conn2.cursor()
-    bug_id = 'select bugId,methodDir from CommitedMethods where bugId<>0  and methodDir like "%.java%" and commiter_date>="'+startingDate+'"  and commiter_date<="'+endDate+'" order by bugId'
-    rows=c2.execute(bug_id)
-    for r in rows:
-        name=r[1]
-        if not (".java" in name):
-            continue
-        fileInd=-90
-        c.execute("INSERT INTO buggedMethods VALUES (?,?,?,?)",[r[0],name,fileInd,name])
-    conn.commit()
-    conn.close()
-    return filesDict
-
-def bugsDBMethodsMostModified(dbPath,cdtDb,filesDict,startingDate,endDate):
-    conn = sqlite3.connect(dbPath)
-    conn.text_factory = str
-    c = conn.cursor()
-    conn2 = sqlite3.connect(cdtDb)
-    conn2.text_factory = str
-    c2 = conn2.cursor()
-    bug_id = 'select CommitedMethods.bugId,CommitedMethods.methodDir  from CommitedMethods , (select max(lines) as l, bugId from CommitedMethods where methodDir like "%.java%" and commiter_date>="'+startingDate+'"  and commiter_date<="'+endDate+'" group by bugId) as T where CommitedMethods.lines=T.l and CommitedMethods.bugId=T.bugId'
-
-    rows=c2.execute(bug_id)
-    for r in rows:
-        name=r[1]
-        if not (".java" in name):
-            continue
-        fileInd=-90
-        c.execute("INSERT INTO buggedMethodsMostModified VALUES (?,?,?,?)",[r[0],name,fileInd,name])
-    conn.commit()
-    conn.close()
-    return filesDict
-
-
-
-def filesDB(cdtDb,out):
-    conn2 = sqlite3.connect(cdtDb)
-    conn2.text_factory = str
-    c2 = conn2.cursor()
-    names=[]
-    filesDict={}
-    ind=0
-    for row in c2.execute(str('select distinct name from haelsTfiles order by name')):
-        name=row[0]
-        filesDict[name]=ind
-        name=name+"\n"
-        ind=ind+1
-        names.append(name)
-    f=open(out,"wb")
-    f.writelines(names)
-    f.close()
-    return filesDict
+def filesDB(gitPath,out):
+    pathLen = len(gitPath) + 1  # one for the \
+    files_list = []
+    for root, dirs, files in os.walk(gitPath): # Walk directory tree
+        for f in files:
+            full_path = os.path.join(root, f)
+            if( os.path.splitext(full_path)[1]=="java"):
+                files_list.append("".join(list(full_path)[pathLen:]))
+    with open(out,"wb") as f:
+        f.writelines(files_list)
+    return dict(map(reversed, enumerate(sorted(files_list))))
 
 def FilesNamesIdsToDB(dbPath,allFilesPath):
     f=open(allFilesPath,"r")
@@ -231,57 +160,26 @@ def createIndexes(dbPath):
     conn = sqlite3.connect(dbPath)
     conn.text_factory = str
     c = conn.cursor()
-    index_createA=' CREATE INDEX IF NOT EXISTS testsFiles_name ON testsFiles (fileName)'
-    c.execute(index_createA)
-    conn.commit()
-    index_createA=' CREATE INDEX IF NOT EXISTS testsFiles_namename ON testsFiles (name)'
-    c.execute(index_createA)
-    conn.commit()
-    index_createA=' CREATE INDEX IF NOT EXISTS buggedFiles_name ON buggedFiles (fileName)'
-    c.execute(index_createA)
-    conn.commit()
-    index_createA=' CREATE INDEX IF NOT EXISTS buggedFilesMostModified_name ON buggedFilesMostModified (fileName)'
-    c.execute(index_createA)
-    conn.commit()
-    index_createA=' CREATE INDEX IF NOT EXISTS buggedFiles_BugId ON buggedFiles (BugId)'
-    c.execute(index_createA)
-    conn.commit()
-    index_createA=' CREATE INDEX IF NOT EXISTS buggedFiles_name ON buggedFiles (name)'
-    c.execute(index_createA)
-    conn.commit()
-    index_createA=' CREATE INDEX IF NOT EXISTS buggedFilesMostModified_BugId ON buggedFilesMostModified (BugId)'
-    c.execute(index_createA)
-    conn.commit()
-    index_createA=' CREATE INDEX IF NOT EXISTS buggedFilesMostModified_name ON buggedFilesMostModified (name)'
-    c.execute(index_createA)
-    conn.commit()
-    indexA="CREATE INDEX IF NOT EXISTS MethodsNames ON testsMethods (methodName)"
-    c.execute(indexA)
-    conn.commit()
-    indexA="CREATE INDEX IF NOT EXISTS MethodsNames_name ON testsMethods (name)"
-    c.execute(indexA)
-    conn.commit()
-    indexA="CREATE INDEX IF NOT EXISTS MethodsTests ON testsMethods (Test)"
-    c.execute(indexA)
-    conn.commit()
-    indexA="CREATE INDEX IF NOT EXISTS MethodsBugged ON buggedMethods (BugId)"
-    c.execute(indexA)
-    conn.commit()
-    indexA="CREATE INDEX IF NOT EXISTS Methods_methodDir ON buggedMethods (methodDir)"
-    c.execute(indexA)
-    conn.commit()
-    indexA="CREATE INDEX IF NOT EXISTS Methods_name ON buggedMethods (name)"
-    c.execute(indexA)
-    conn.commit()
-    indexA="CREATE INDEX IF NOT EXISTS Methods_buggedMethodsMostModified ON buggedMethodsMostModified (BugId)"
-    c.execute(indexA)
-    conn.commit()
-    indexA="CREATE INDEX IF NOT EXISTS buggedMethodsMostModified_methodDir ON buggedMethodsMostModified (methodDir)"
-    c.execute(indexA)
-    conn.commit()
-    indexA="CREATE INDEX IF NOT EXISTS buggedMethodsMostModified_name ON buggedMethodsMostModified (name)"
-    c.execute(indexA)
-    conn.commit()
+    def execute_index(index):
+        c.execute(index)
+        conn.commit()
+    execute_index(' CREATE INDEX IF NOT EXISTS testsFiles_name ON testsFiles (fileName)')
+    execute_index(' CREATE INDEX IF NOT EXISTS testsFiles_namename ON testsFiles (name)')
+    execute_index(' CREATE INDEX IF NOT EXISTS buggedFiles_name ON buggedFiles (fileName)')
+    execute_index(' CREATE INDEX IF NOT EXISTS buggedFilesMostModified_name ON buggedFilesMostModified (fileName)')
+    execute_index(' CREATE INDEX IF NOT EXISTS buggedFiles_BugId ON buggedFiles (BugId)')
+    execute_index(' CREATE INDEX IF NOT EXISTS buggedFiles_name ON buggedFiles (name)')
+    execute_index(' CREATE INDEX IF NOT EXISTS buggedFilesMostModified_BugId ON buggedFilesMostModified (BugId)')
+    execute_index(' CREATE INDEX IF NOT EXISTS buggedFilesMostModified_name ON buggedFilesMostModified (name)')
+    execute_index("CREATE INDEX IF NOT EXISTS MethodsNames ON testsMethods (methodName)")
+    execute_index("CREATE INDEX IF NOT EXISTS MethodsNames_name ON testsMethods (name)")
+    execute_index("CREATE INDEX IF NOT EXISTS MethodsTests ON testsMethods (Test)")
+    execute_index("CREATE INDEX IF NOT EXISTS MethodsBugged ON buggedMethods (BugId)")
+    execute_index("CREATE INDEX IF NOT EXISTS Methods_methodDir ON buggedMethods (methodDir)")
+    execute_index("CREATE INDEX IF NOT EXISTS Methods_name ON buggedMethods (name)")
+    execute_index("CREATE INDEX IF NOT EXISTS Methods_buggedMethodsMostModified ON buggedMethodsMostModified (BugId)")
+    execute_index("CREATE INDEX IF NOT EXISTS buggedMethodsMostModified_methodDir ON buggedMethodsMostModified (methodDir)")
+    execute_index("CREATE INDEX IF NOT EXISTS buggedMethodsMostModified_name ON buggedMethodsMostModified (name)")
     conn.close()
 
 
@@ -302,23 +200,18 @@ def createTables(dbPath):
 
 
 @utilsConf.marker_decorator(utilsConf.TEST_DB_MARKER)
-def basicBuild(workingDir,ver,startDate,EndDate):
+def basicBuild(workingDir, ver, startDate, EndDate):
     testDb = os.path.join( workingDir , "testsBugsMethods.db")
-    dbData =os.path.join( workingDir ,"dbAdd\\"+ver+".db")
-    print dbData
-    gitPath=os.path.join( workingDir , "vers\\"+ver+"\\repo")
-    filesDict = filesDB(dbData, workingDir+"allFiles.txt")
+    dbData = os.path.join( workingDir ,"dbAdd", ver+".db")
+    gitPath = os.path.join( workingDir , "vers", ver, "repo")
+    filesDict = filesDB(gitPath, os.path.join(workingDir, "allFiles.txt"))
     createTables(testDb)
-
-    methodsDict={}
-    packPath=wekaMethods.pathPackCsv.projectPathPacks(gitPath)
-    filesDict = testsDBConcatinationMany(testDb, os.path.join(workingDir,"DebuggerTests\\"), "", filesDict,methodsDict,packPath)
-    filesDict = bugsDBFiles(testDb, dbData, filesDict,startDate,EndDate)
-    filesDict = bugsDBFilesMostModified(testDb, dbData, filesDict,startDate,EndDate)
-    bugsDBMethods(testDb, dbData, filesDict,startDate,EndDate)
-    bugsDBMethodsMostModified(testDb, dbData, filesDict,startDate,EndDate)
-
-    FilesNamesIdsToDB(testDb, workingDir+"allFiles.txt")
     createIndexes(testDb)
-
+    packPath = wekaMethods.pathPackCsv.projectPathPacks(gitPath)
+    filesDict = testsDBConcatinationMany(testDb, os.path.join(workingDir,"DebuggerTests"),filesDict, packPath)
+    filesDict = bugsDBFiles(testDb, dbData, filesDict, startDate, EndDate, ALL_FILES_BUGS_QUERY, 'buggedFiles')
+    filesDict = bugsDBFiles(testDb, dbData, filesDict, startDate, EndDate, MOST_MODIFIED_FILES_BUGS_QUERY, 'buggedFilesMostModified')
+    filesDict = bugsDBFiles(testDb, dbData, filesDict, startDate, EndDate, ALL_METHODS_BUGS_QUERY, 'buggedMethods')
+    filesDict = bugsDBFiles(testDb, dbData, filesDict, startDate, EndDate, MOST_MODIFIED_METHODS_BUGS_QUERY, 'buggedMethodsMostModified')
+    FilesNamesIdsToDB(testDb, os.path.join(workingDir, "allFiles.txt"))
     return testDb

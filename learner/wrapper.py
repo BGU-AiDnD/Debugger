@@ -239,9 +239,7 @@ def Extract_complexity_features(versPath,vers_dirs, vers,workingDir,sourceMonito
         blameExecute(path, pathRepo, version_name)
 
 def GitVersInfo(basicPath,repoPath,vers):
-    #repoPath="C:\\tomcat\\code\\tomcat8\\"
     r=git.Repo(repoPath)
-    #vers=["TOMCAT_8_0_4", "TOMCAT_8_0_5", "TOMCAT_8_0_6", "TOMCAT_8_0_7", "TOMCAT_8_0_8", "TOMCAT_8_0_9"]
     if vers==[]:
         wanted=[ x.commit for x in r.tags ]
         vers=r.tags
@@ -592,12 +590,11 @@ def reportProjectData(confFile,globalConfFile):
     report.report(reportCsv,LocalGitPath,lastVer,testsDB)
 
 
-def wrapperExperiments(confFile,globalConfFile):
+def wrapperExperiments(confFile):
     vers, gitPath, issue_tracker, issue_tracker_url, issue_tracker_product, workingDir = utilsConf.configure(confFile)
     docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath = utilsConf.globalConfig()
     vers_dirs = map(version_to_dir_name, vers)
     weka=os.path.join(workingDir,"weka")
-    testDb = os.path.join( workingDir , "testsBugsMethods.db")
     vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
     testDb=Agent.bugs_testsDBMethods.basicBuild(workingDir,vers_dirs[-2],dates[-2],dates[-1])
     packsPath = os.path.join(workingDir, "packs.txt")
@@ -671,7 +668,7 @@ if __name__ == '__main__':
             if sys.argv[2]=="learn":
                 wrapperLearner(sys.argv[1])
             elif sys.argv[2]=="experiments":
-                wrapperExperiments(sys.argv[1], globalConf)
+                wrapperExperiments(sys.argv[1])
             elif sys.argv[2]=="planning":
                 wrapper_planning(sys.argv[1], globalConf)
             elif sys.argv[2]=="all_planning":

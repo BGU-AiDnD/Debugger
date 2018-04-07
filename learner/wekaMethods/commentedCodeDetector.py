@@ -456,17 +456,11 @@ def unzero(v):
     
 def main(javaFile):
     regularLines = None
-    comments = None
-    
     with open(javaFile, 'r') as f:
         source = f.read().splitlines()
-        (regularLines, comments) = CommentFilter().filterComments(source)
-    #print(regularLines)
+        regularLines, comments = CommentFilter().filterComments(source)
     fullFileMetrics = Halstead(regularLines)
-    #Halstead.printStatistics([fullFileMetrics.getValuesVector()])
     return fullFileMetrics.getValuesVector()
-   # for comment in comments:
-    #    analyzeComment(comment, regularLines, args)
 
 #main("C:\Users\Amir-pc\Documents\GitHub\yossi\org.eclipse.cdt.debug.edc\src\org\eclipse\cdt\debug\edc\IEDCConstants.java")
 
@@ -475,10 +469,9 @@ def buildHael(path):
     pathLen=len(path)+1 # one for the \
     for root, dirs, files in os.walk(path): # Walk directory tree
         for f in files:
-            os_path_join = os.path.join(root, f)
-            split___ = os_path_join.split(".")
-            if( split___ [len(split___)-1]=="java"):
-                path_join = "".join(list(os_path_join)[pathLen:])
-                row = [path_join] + main(os_path_join)
+            full_path = os.path.join(root, f)
+            if( os.path.splitext(full_path)[1]=="java"):
+                path_join = "".join(list(full_path)[pathLen:])
+                row = [path_join] + main(full_path)
                 acc=acc+[row]
     return acc
