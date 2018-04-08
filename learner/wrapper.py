@@ -408,15 +408,6 @@ def filesExperiments(workingDir,weka,packsPath,utilsPath, randNum):
         outPath = os.path.join(workingDir, "experiments\\files_" + buggedType+randNum)
         outCsv=os.path.join(weka,buggedType+"_out_files.csv")
         Agent.experimentsMethods.RunExperiments(os.path.join(workingDir,"testsBugsMethods.db"), outPath,packsPath,outCsv,"File",buggedType,utilsPath)
-        #ExcelReport(os.path.join(outPath,"barinelOptA.csv"),os.path.join(outPath,"barinel.xlsx"),"barinel")
-        #ExcelReport(os.path.join(outPath,"plannerResall.csv"),os.path.join(outPath,"planner.xlsx"),"planner")
-    #create weka allfiles
-    #create weka most modified
-    #buildModels
-    #packs file
-    #run experiments allFiles
-    #run experiments modified
-
 
 
 def methodsExperiments(workingDir,weka,packsPath,utilsPath,randNum):
@@ -424,8 +415,13 @@ def methodsExperiments(workingDir,weka,packsPath,utilsPath,randNum):
         outPath = os.path.join(workingDir, "experiments\\methods" + buggedType+randNum)
         outCsv=os.path.join(weka,buggedType+"_out_methods.csv")
         Agent.experimentsMethods.RunExperiments(os.path.join(workingDir,"testsBugsMethods.db"), outPath,packsPath,outCsv,"method",buggedType,utilsPath)
-        #ExcelReport(os.path.join(outPath,"barinelOptA.csv"),os.path.join(outPath,"barinel.xlsx"),"barinel")
-        #ExcelReport(os.path.join(outPath,"plannerResall.csv"),os.path.join(outPath,"planner.xlsx"),"planner")
+
+def Experiments(workingDir,weka,packsPath,utilsPath,randNum):
+    for buggedType, granularity in zip(["All", "Most"], ["File", "Method"]):
+        outPath = os.path.join(workingDir, "experiments\\files_" + buggedType + randNum)
+        outCsv = os.path.join(weka, buggedType + "_out_{GRANULARITY}.csv".format(GRANULARITY=granularity))
+        Agent.experimentsMethods.RunExperiments(os.path.join(workingDir, "testsBugsMethods.db"), outPath, packsPath,
+                                                outCsv, granularity, buggedType, utilsPath)
 
 @utilsConf.marker_decorator(utilsConf.VERSION_TEST_MARKER)
 def testVerConfig(workingDir,ver,antOrPom,startDate,endDate):
@@ -601,8 +597,7 @@ def wrapperExperiments(confFile):
     Agent.experimentsMethods.packFileCreate(testDb,1,-1, packsPath)
     rnd = str(randint(0,900))
     print rnd
-    filesExperiments(workingDir,weka,packsPath,utilsPath,rnd)
-    methodsExperiments(workingDir,weka,packsPath,utilsPath,rnd)
+    Experiments(workingDir,weka,packsPath,utilsPath,rnd)
 
 def wrapper_planning(confFile,globalConfFile):
     pass

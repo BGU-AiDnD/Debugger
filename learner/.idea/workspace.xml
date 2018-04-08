@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a99ccab5-ef05-47d7-a302-2dc78736cec3" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Agent/bugs_testsDBMethods.py" afterPath="$PROJECT_DIR$/Agent/bugs_testsDBMethods.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wekaMethods/commentedCodeDetector.py" afterPath="$PROJECT_DIR$/wekaMethods/commentedCodeDetector.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Agent/experimentsMethods.py" afterPath="$PROJECT_DIR$/Agent/experimentsMethods.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wrapper.py" afterPath="$PROJECT_DIR$/wrapper.py" />
     </list>
     <ignored path="eclipse.iws" />
@@ -26,21 +23,36 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="wrapper.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="wrapper.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/wrapper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="9724">
-              <caret line="598" column="40" selection-start-line="598" selection-start-column="40" selection-end-line="598" selection-end-column="40" />
+            <state relative-caret-position="192">
+              <caret line="418" column="4" selection-start-line="418" selection-start-column="4" selection-end-line="418" selection-end-column="4" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="bugs_testsDBMethods.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="experimentsMethods.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Agent/experimentsMethods.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-7449">
+              <caret line="646" column="0" selection-start-line="646" selection-start-column="0" selection-end-line="646" selection-end-column="0" />
+              <folding>
+                <element signature="e#21#34#0" expanded="true" />
+                <element signature="e#5917#7885#0" expanded="false" />
+                <element signature="e#7992#9355#0" expanded="false" />
+                <element signature="e#9404#10418#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bugs_testsDBMethods.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Agent/bugs_testsDBMethods.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="490">
-              <caret line="217" column="0" selection-start-line="217" selection-start-column="0" selection-end-line="217" selection-end-column="0" />
+            <state relative-caret-position="402">
+              <caret line="211" column="4" selection-start-line="211" selection-start-column="4" selection-end-line="211" selection-end-column="4" />
               <folding>
                 <element signature="e#2137#3990#0" expanded="false" />
               </folding>
@@ -86,18 +98,6 @@
             <state relative-caret-position="3995">
               <caret line="242" column="35" selection-start-line="242" selection-start-column="35" selection-end-line="242" selection-end-column="35" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="patchsBuild.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/diffAnalyze/patchsBuild.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4828">
-              <caret line="290" column="0" selection-start-line="288" selection-start-column="0" selection-end-line="290" selection-end-column="0" />
-              <folding>
-                <element signature="e#20#33#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -214,7 +214,6 @@
         <option value="$PROJECT_DIR$/NLP/commits.py" />
         <option value="$PROJECT_DIR$/NLP/nlp_model.py" />
         <option value="$PROJECT_DIR$/NLP/diagnosis_using_nlp.py" />
-        <option value="$PROJECT_DIR$/Agent/experimentsMethods.py" />
         <option value="$PROJECT_DIR$/Diagnoser/ExperimentInstance.py" />
         <option value="$PROJECT_DIR$/Diagnoser/diagnoserUtils.py" />
         <option value="$PROJECT_DIR$/result_parsing/journal_2016.py" />
@@ -239,9 +238,10 @@
         <option value="$PROJECT_DIR$/wekaMethods/articles.py" />
         <option value="$PROJECT_DIR$/wekaMethods/source_Monitor.py" />
         <option value="$PROJECT_DIR$/wekaMethods/features/sourceMonitor.py" />
-        <option value="$PROJECT_DIR$/wrapper.py" />
         <option value="$PROJECT_DIR$/wekaMethods/commentedCodeDetector.py" />
         <option value="$PROJECT_DIR$/Agent/bugs_testsDBMethods.py" />
+        <option value="$PROJECT_DIR$/wrapper.py" />
+        <option value="$PROJECT_DIR$/Agent/experimentsMethods.py" />
       </list>
     </option>
   </component>
@@ -612,6 +612,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21815519" sideWeight="0.7224959" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.509434" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26971608" sideWeight="0.49853587" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329653" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2484375" sideWeight="0.6914378" order="1" side_tool="false" content_ui="tabs" />
@@ -624,7 +625,6 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39067525" sideWeight="0.49707174" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26971608" sideWeight="0.49853587" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33118972" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
@@ -761,7 +761,7 @@
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/wrapper.py</url>
-          <line>481</line>
+          <line>477</line>
           <option name="timeStamp" value="381" />
         </line-breakpoint>
       </breakpoints>
@@ -1107,19 +1107,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Agent/experimentsMethods.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23817">
-          <caret line="1411" column="41" selection-start-line="1411" selection-start-column="41" selection-end-line="1411" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/diffAnalyze/patchsBuild.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4828">
           <caret line="290" column="0" selection-start-line="288" selection-start-column="0" selection-end-line="290" selection-end-column="0" />
           <folding>
-            <element signature="e#20#33#0" expanded="true" />
+            <element signature="e#20#33#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1168,14 +1161,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wrapper.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9724">
-          <caret line="598" column="40" selection-start-line="598" selection-start-column="40" selection-end-line="598" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wekaMethods/buildDB.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="7089">
@@ -1196,11 +1181,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Agent/bugs_testsDBMethods.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="490">
-          <caret line="217" column="0" selection-start-line="217" selection-start-column="0" selection-end-line="217" selection-end-column="0" />
+        <state relative-caret-position="402">
+          <caret line="211" column="4" selection-start-line="211" selection-start-column="4" selection-end-line="211" selection-end-column="4" />
           <folding>
             <element signature="e#2137#3990#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Agent/experimentsMethods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-7449">
+          <caret line="646" column="0" selection-start-line="646" selection-start-column="0" selection-end-line="646" selection-end-column="0" />
+          <folding>
+            <element signature="e#21#34#0" expanded="true" />
+            <element signature="e#5917#7885#0" expanded="false" />
+            <element signature="e#7992#9355#0" expanded="false" />
+            <element signature="e#9404#10418#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wrapper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="418" column="4" selection-start-line="418" selection-start-column="4" selection-end-line="418" selection-end-column="4" />
+          <folding />
         </state>
       </provider>
     </entry>
