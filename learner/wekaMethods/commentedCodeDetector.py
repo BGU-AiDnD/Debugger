@@ -470,7 +470,7 @@ def buildHael(path):
     for root, dirs, files in os.walk(path): # Walk directory tree
         for f in files:
             full_path = os.path.join(root, f)
-            if os.path.splitext(full_path)[1]=="java":
+            if os.path.splitext(full_path)[1]==".java":
                 path_join = "".join(list(full_path)[pathLen:])
                 row = [path_join] + main(full_path)
                 acc=acc+[row]

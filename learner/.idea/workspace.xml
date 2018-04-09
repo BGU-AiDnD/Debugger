@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a99ccab5-ef05-47d7-a302-2dc78736cec3" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/utilsConf.py" afterPath="$PROJECT_DIR$/utilsConf.py" />
       <change beforePath="$PROJECT_DIR$/wekaMethods/commentedCodeDetector.py" afterPath="$PROJECT_DIR$/wekaMethods/commentedCodeDetector.py" />
-      <change beforePath="$PROJECT_DIR$/wekaMethods/issuesExtract/jira_import.py" afterPath="$PROJECT_DIR$/wekaMethods/issuesExtract/jira_import.py" />
-      <change beforePath="$PROJECT_DIR$/wrapper.py" afterPath="$PROJECT_DIR$/wrapper.py" />
     </list>
     <ignored path="eclipse.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -111,21 +107,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="utilsConf.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="utilsConf.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/utilsConf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="193">
-              <caret line="83" column="42" lean-forward="false" selection-start-line="83" selection-start-column="42" selection-end-line="83" selection-end-column="42" />
+            <state relative-caret-position="51">
+              <caret line="6" column="20" lean-forward="true" selection-start-line="6" selection-start-column="20" selection-end-line="6" selection-end-column="27" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="commentedCodeDetector.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="commentedCodeDetector.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wekaMethods/commentedCodeDetector.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="472" column="53" lean-forward="true" selection-start-line="472" selection-start-column="53" selection-end-line="472" selection-end-column="53" />
+            <state relative-caret-position="207">
+              <caret line="471" column="45" lean-forward="false" selection-start-line="471" selection-start-column="45" selection-end-line="471" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -1150,14 +1146,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utilsConf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="193">
-          <caret line="83" column="42" lean-forward="false" selection-start-line="83" selection-start-column="42" selection-end-line="83" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wekaMethods/issuesExtract/jira_import.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -1178,8 +1166,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/wekaMethods/commentedCodeDetector.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="472" column="53" lean-forward="true" selection-start-line="472" selection-start-column="53" selection-end-line="472" selection-end-column="53" />
+        <state relative-caret-position="207">
+          <caret line="471" column="45" lean-forward="false" selection-start-line="471" selection-start-column="45" selection-end-line="471" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utilsConf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="6" column="20" lean-forward="true" selection-start-line="6" selection-start-column="20" selection-end-line="6" selection-end-column="27" />
           <folding />
         </state>
       </provider>
