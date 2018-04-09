@@ -57,42 +57,36 @@ def testsDBConcatinationMany(dbPath, tracesPath, filesDict, packPath):
     conn = sqlite3.connect(dbPath)
     conn.text_factory = str
     c = conn.cursor()
-    f=open(concatFile,"r")
     testsRows=[]
     testsMethodsRows=[]
     testsFilesRowsDict={}
-    testName=""
-    for line in f:
-        if "\\Trace_" in line:
-            testName=line.split("\\")
-            testName=testName[len(testName)-1]
-            testName=testName.split(".txt")[0]
-            testsRows.append([testName])
-            conn.commit()
-            continue
-        else:
-            s=line.split(" ")
-            if(len(s)==0):
-                break
-            if(len(s)!=3):
-                continue
-
-            s=s[2]
-            trace=s.split("\n")[0]
-            trace=trace.split("\r")[0]
-            spl=trace.split("@")
-            methodName=spl[1]
-            fileName=spl[0]
-            if "$" in fileName:
-                fileName=fileName.split("$")[0]
-            if fileName not in packPath:
-                continue
-            fileName=packPath[fileName]
-            methodName=fileName+"$"+methodName
-            testsMethodsRows.append([testName,methodName,fileName,methodName])
-            if not testName in testsFilesRowsDict:
-                testsFilesRowsDict[testName]=set()
-            testsFilesRowsDict[testName].add(fileName)
+    testName = ""
+    with open(concatFile) as f:
+        for line in f:
+            if "\\Trace_" in line:
+                 # here is the test name
+                testName = line.split('\\Trace_')[1].split('.txt')[0].split('_')[0]
+                testsRows.append([testName])
+                conn.commit()
+            else:
+                # just another trace
+                splitted_line = line.split()
+                if(len(splitted_line)==0):
+                    break
+                if(len(splitted_line)!=3):
+                    continue
+                trace=splitted_line[2].strip()
+                fileName, methodName = trace.split("@")
+                if "$" in fileName:
+                    fileName = fileName.split("$")[0]
+                if fileName not in packPath:
+                    continue
+                fileName = packPath[fileName]
+                methodName = fileName+"$"+methodName
+                testsMethodsRows.append([testName,methodName,fileName,methodName])
+                if not testName in testsFilesRowsDict:
+                    testsFilesRowsDict[testName]=set()
+                testsFilesRowsDict[testName].add(fileName)
     testsFilesRows=[]
     for testName in testsFilesRowsDict:
         for fileName in testsFilesRowsDict[testName]:
@@ -212,7 +206,7 @@ def get_tests_results(repo_dir):
                 result = 'error'
             if type(case.result) is Failure:
                 result = 'failure'
-            outcomes["{classname}.{name}".format(classname=case.classname, name=case.name)] = result
+            outcomes["{classname}@{name}".format(classname=case.classname, name=case.name)] = result
     return outcomes
 
 
@@ -234,18 +228,18 @@ def add_tests_outcome_to_db(testDb, repo_dir):
 
 @utilsConf.marker_decorator(utilsConf.TEST_DB_MARKER)
 def basicBuild(workingDir, ver, startDate, EndDate):
-    testDb = os.path.join( workingDir , "testsBugsMethods.db")
-    dbData = os.path.join( workingDir ,"dbAdd", ver+".db")
-    gitPath = os.path.join( workingDir , "vers", ver, "repo")
+    testDb = os.path.join(workingDir, "testsBugsMethods.db")
+    dbData = os.path.join(workingDir,"dbAdd", ver + ".db")
+    gitPath = os.path.join(workingDir, "vers", ver, "repo")
     filesDict = filesDB(gitPath, os.path.join(workingDir, "allFiles.txt"))
     createTables(testDb)
     createIndexes(testDb)
+    add_tests_outcome_to_db(testDb, os.path.join( workingDir, "testedVer", "repo"))
     packPath = wekaMethods.pathPackCsv.projectPathPacks(gitPath)
-    filesDict = testsDBConcatinationMany(testDb, os.path.join(workingDir,"DebuggerTests"),filesDict, packPath)
+    filesDict = testsDBConcatinationMany(testDb, os.path.join(workingDir, "DebuggerTests"),filesDict, packPath)
     filesDict = bugsDBFiles(testDb, dbData, filesDict, startDate, EndDate, ALL_FILES_BUGS_QUERY, 'buggedFiles')
     filesDict = bugsDBFiles(testDb, dbData, filesDict, startDate, EndDate, MOST_MODIFIED_FILES_BUGS_QUERY, 'buggedFilesMostModified')
     filesDict = bugsDBFiles(testDb, dbData, filesDict, startDate, EndDate, ALL_METHODS_BUGS_QUERY, 'buggedMethods')
     filesDict = bugsDBFiles(testDb, dbData, filesDict, startDate, EndDate, MOST_MODIFIED_METHODS_BUGS_QUERY, 'buggedMethodsMostModified')
-    add_tests_outcome_to_db()
     FilesNamesIdsToDB(testDb, os.path.join(workingDir, "allFiles.txt"))
     return testDb
