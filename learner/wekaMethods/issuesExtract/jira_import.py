@@ -18,7 +18,9 @@ def issueAnalyze(issue):
         Assigned_To= to_string(issue.fields.assignee.name)
     Status=str(issue.fields.status)
     Resolution=str(issue.fields.resolution)
-    Reporter=to_string(issue.fields.reporter.name)
+    Reporter = ""
+    if issue.fields.reporter is not None:
+        Reporter = to_string(issue.fields.reporter.name)
     Last_Modified=str(issue.fields.updated)[:10]
     Last_Modified=datetime.datetime.strptime(Last_Modified,'%Y-%m-%d').date().strftime('%d/%m/%Y %H:%M:%S')
 

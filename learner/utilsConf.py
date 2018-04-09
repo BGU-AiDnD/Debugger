@@ -75,8 +75,9 @@ def configure(confFile):
             v=v.split(")")[0]
             versions=v.split(",")
     versions = [v.lstrip() for v in versions]
+    versPath, db_dir = Mkdirs(workingDir, versions)
     init_configuration(workingDir, versions)
-    return versions, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir
+    return versions, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir
 
 
 def configureExperiments(confFile):
@@ -99,11 +100,42 @@ def configureExperiments(confFile):
             versions=v.split(",")
     return [v.lstrip() for v in versions], gitPath,bugs, workingDir
 
+
+def version_to_dir_name(version):
+    return version.replace("\\", "_").replace("/", "_").replace("-", "_").replace(".", "_")
+
+
+def mkOneDir(dir):
+    if not os.path.isdir(dir):
+            os.mkdir(dir)
+
+
+def Mkdirs(workingDir, vers):
+    mkOneDir(workingDir)
+    map(lambda dir_name: mkOneDir(os.path.join(workingDir, dir_name)), ["", "vers", "experiments", "experiments_known",
+                                                                        "dbAdd", "testedVer", "weka", "markers"])
+    versPath=os.path.join(workingDir,"vers")
+    mkOneDir(versPath)
+    checkAll=os.path.join(versPath,"checkAll")
+    mkOneDir(checkAll)
+    checkAllMethodsData=os.path.join(versPath,"checkAllMethodsData")
+    mkOneDir(checkAllMethodsData)
+    for v in vers:
+        version=os.path.join(versPath, version_to_dir_name(v))
+        mkOneDir(version)
+        blame=os.path.join(version,"blame")
+        mkOneDir(blame)
+        Jdoc2=os.path.join(version,"Jdoc2")
+        mkOneDir(Jdoc2)
+    return versPath, os.path.join(workingDir, "dbAdd")
+
 class Configuration(object):
     def __init__(self, workingDir, versions):
         self.markers_dir = os.path.join(workingDir,"markers")
         self.versions = versions
-        logging.basicConfig(filename=os.path.join(workingDir,"log.log"), level=logging.DEBUG)
+        log_path = os.path.join(to_short_path(workingDir), "log.log")
+        # open(log_path, "wb").close()
+        logging.basicConfig(filename=log_path, level=logging.DEBUG)
 
     def get_marker_path(self, marker):
         return os.path.join(self.markers_dir, marker)
