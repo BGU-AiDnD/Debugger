@@ -5,13 +5,15 @@ import glob
 import os
 import wekaMethods.pathPackCsv
 from xml.dom import minidom
+from junitparser import JUnitXml, junitparser
+from junitparser.junitparser import Error, Failure
 import utilsConf
 
 ALL_FILES_BUGS_QUERY = 'select bugId,name from Commitedfiles where bugId<>0  and name like "%.java" and commiter_date>="{START_DATE}" and commiter_date<="{END_DATE}" order by bugId'
 ALL_METHODS_BUGS_QUERY = 'select bugId,methodDir from CommitedMethods where bugId<>0  and methodDir like "%.java%" and commiter_date>="{START_DATE}" and commiter_date<="{END_DATE}" order by bugId'
 MOST_MODIFIED_FILES_BUGS_QUERY = 'select Commitedfiles.bugId,Commitedfiles.name  from Commitedfiles , (select max(lines) as l, bugId from Commitedfiles where name like "%.java" and commiter_date>="{START_DATE}" and commiter_date<="{END_DATE}" group by bugId) as T where Commitedfiles.lines=T.l and Commitedfiles.bugId=T.bugId'
 MOST_MODIFIED_METHODS_BUGS_QUERY = 'select CommitedMethods.bugId,CommitedMethods.methodDir  from CommitedMethods , (select max(lines) as l, bugId from CommitedMethods where methodDir like "%.java%" and commiter_date>="{START_DATE}" and commiter_date<="{END_DATE}" group by bugId) as T where CommitedMethods.lines=T.l and CommitedMethods.bugId=T.bugId'
-
+SURFIRE_DIR_NAME = 'surefire-reports'
 
 # dir /b /s /O:d >f.txt
 #for /f %a in (f.txt) do ( type %a >com.txt)
@@ -65,7 +67,7 @@ def testsDBConcatinationMany(dbPath, tracesPath, filesDict, packPath):
             testName=line.split("\\")
             testName=testName[len(testName)-1]
             testName=testName.split(".txt")[0]
-            testsRows.append([testName,0])
+            testsRows.append([testName])
             conn.commit()
             continue
         else:
@@ -97,7 +99,7 @@ def testsDBConcatinationMany(dbPath, tracesPath, filesDict, packPath):
             testsFilesRows.append([testName,fileName,fileName])
     c.executemany("INSERT INTO testsFiles VALUES (?,?,?)", testsFilesRows)
     conn.commit()
-    c.executemany("INSERT INTO tests VALUES (?,?)", testsRows)
+    c.executemany("INSERT INTO tests VALUES (?)", testsRows)
     conn.commit()
     c.executemany("INSERT INTO testsMethods VALUES (?,?,?,?)", testsMethodsRows)
     conn.commit()
@@ -188,7 +190,8 @@ def createTables(dbPath):
     conn.text_factory = str
     c = conn.cursor()
     c.execute('''CREATE TABLE testsMethods (Test text, methodName text,  fileName text , name text   )''')
-    c.execute('''CREATE TABLE tests (Test text, outcome INT )''')
+    c.execute('''CREATE TABLE tests (Test text)''')
+    c.execute('''CREATE TABLE testsOutcomes (Test text, outcome text )''')
     c.execute('''CREATE TABLE testsFiles (Test text, fileName text , name text )''')
     c.execute('''CREATE TABLE buggedFiles (BugId INT, fileName text, fileID INT, name text )''')
     c.execute('''CREATE TABLE buggedFilesMostModified (BugId INT, fileName text, fileID INT, name text )''')
@@ -198,6 +201,36 @@ def createTables(dbPath):
     conn.commit()
     conn.close()
 
+
+def get_tests_results(repo_dir):
+    surefire_reports = get_surefire_files(repo_dir)
+    outcomes = {}
+    for report in surefire_reports:
+        for case in JUnitXml.fromfile(report):
+            result = 'pass'
+            if type(case.result) is Error:
+                result = 'error'
+            if type(case.result) is Failure:
+                result = 'failure'
+            outcomes["{classname}.{name}".format(classname=case.classname, name=case.name)] = result
+    return outcomes
+
+
+def get_surefire_files(repo_dir):
+    surefire_files = []
+    for root, _, files in os.walk(repo_dir):
+        for name in files:
+            if name.endswith('.xml') and os.path.basename(root) == SURFIRE_DIR_NAME:
+                surefire_files.append(os.path.join(root, name))
+    return surefire_files
+
+def add_tests_outcome_to_db(testDb, repo_dir):
+    conn = sqlite3.connect(testDb)
+    conn.text_factory = str
+    c = conn.cursor()
+    c.executemany("INSERT INTO testsOutcomes VALUES (?, ?)", get_tests_results(repo_dir).items())
+    conn.commit()
+    conn.close()
 
 @utilsConf.marker_decorator(utilsConf.TEST_DB_MARKER)
 def basicBuild(workingDir, ver, startDate, EndDate):
@@ -213,5 +246,6 @@ def basicBuild(workingDir, ver, startDate, EndDate):
     filesDict = bugsDBFiles(testDb, dbData, filesDict, startDate, EndDate, MOST_MODIFIED_FILES_BUGS_QUERY, 'buggedFilesMostModified')
     filesDict = bugsDBFiles(testDb, dbData, filesDict, startDate, EndDate, ALL_METHODS_BUGS_QUERY, 'buggedMethods')
     filesDict = bugsDBFiles(testDb, dbData, filesDict, startDate, EndDate, MOST_MODIFIED_METHODS_BUGS_QUERY, 'buggedMethodsMostModified')
+    add_tests_outcome_to_db()
     FilesNamesIdsToDB(testDb, os.path.join(workingDir, "allFiles.txt"))
     return testDb
