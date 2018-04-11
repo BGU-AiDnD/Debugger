@@ -208,7 +208,7 @@ def xmlRead_OLD(doc,packPath):
     return all_classes
 
 
-def build(JavaDocPath, packPath, max):
+def build(JavaDocPath, packPath):
     docs=[]
     lst= glob.glob(JavaDocPath+"/*.xml")
     for doc in lst:
