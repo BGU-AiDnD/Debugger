@@ -26,8 +26,10 @@ import report
 import wekaMethods.ParseWekaOutput
 import Planner.Planning_Results
 from utilsConf import Mkdirs, version_to_dir_name, mkOneDir
-from SFL_diagnoser.Diagnoser.diagnoserUtils import readPlanningFile, write_planning_file
-
+try:
+    from SFL_diagnoser.Diagnoser.diagnoserUtils import readPlanningFile, write_planning_file
+except:
+    pass
 """
 resources :
 git
@@ -389,7 +391,7 @@ def RealDIagnosis(workingDir, weka):
         testTable, bugs_table = Agent.experimentsMethods.EXPERIMETS_TABLES[granularity][buggedType]
         weka_csv = os.path.join(weka, buggedType + "_out_{GRANULARITY}.csv".format(GRANULARITY=granularity))
         priors = Agent.experimentsMethods.read_weka_csv(weka_csv)
-        write_planning_file()
+        # write_planning_file()
 
 @utilsConf.marker_decorator(utilsConf.VERSION_TEST_MARKER)
 def testVerConfig(workingDir,ver,antOrPom,startDate,endDate):
