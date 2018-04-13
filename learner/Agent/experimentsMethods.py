@@ -712,23 +712,8 @@ def getAllpacks(packsPath):
 
 
 def priorsFromWeka(dbPathTests,wekaAns,FileNames,allFiles):
-    wekaPriors={}
     filesPriors={}
-    first=0
-    with open(wekaAns,"r") as f:
-        reader=csv.reader(f)
-        for l in reader:
-            if(first==0):
-                first=1
-                continue
-            prior=l[5]
-            if( "*" in prior):
-                prior="".join(list(prior[1:]))
-            prior=float(prior)
-            if(l[3]=="2:no") or (l[3]=="2:valid") :
-                #prior=1-prior
-                prior=prior
-            wekaPriors[l[0]]=prior+0.01
+    wekaPriors = read_weka_csv(wekaAns)
     if FileNames==[]:
         conn = sqlite3.connect(dbPathTests)
         conn.text_factory = str
@@ -748,8 +733,26 @@ def priorsFromWeka(dbPathTests,wekaAns,FileNames,allFiles):
                 filesPriors[ind]=0.01
             else:
                 filesPriors[ind]=wekaPriors[name]
-    return  filesPriors
+    return filesPriors
 
+
+def read_weka_csv(wekaAns):
+    wekaPriors = {}
+    first = 0
+    with open(wekaAns, "r") as f:
+        reader = csv.reader(f)
+        for l in reader:
+            if (first == 0):
+                first = 1
+                continue
+            prior = l[5]
+            if ("*" in prior):
+                prior = "".join(list(prior[1:]))
+            prior = float(prior)
+            if (l[3] == "2:no") or (l[3] == "2:valid"):
+                prior = prior
+            wekaPriors[l[0]] = prior + 0.01
+    return wekaPriors
 
 
 def allPackBugs(dbPath, numOfBugs, packsPath,numOfExperiments,weka,table="buggedFiles"):

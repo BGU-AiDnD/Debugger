@@ -26,6 +26,7 @@ import report
 import wekaMethods.ParseWekaOutput
 import Planner.Planning_Results
 from utilsConf import Mkdirs, version_to_dir_name, mkOneDir
+from SFL_diagnoser.Diagnoser.diagnoserUtils import readPlanningFile, write_planning_file
 
 """
 resources :
@@ -86,7 +87,7 @@ def OO_features_error_analyze(err):
 def Extract_OO_features_OLD(versPath, vers, docletPath):
     for version in vers:
         verPath=os.path.join(versPath, version_to_dir_name(version))
-        command = """cd /d  """ + utilsConf.to_short_path(verPath) + " & for /R .\\repo %f in (*.java) do (call javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath "+utilsConf.to_short_path(docletPath)+" -filename %~nxf.xml -private -d .\Jdoc2 %f) "
+        command = """cd /d  """ + utilsConf.to_short_path(verPath) + " & for /R .\\repo %f in (*.java) do (call javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath "+utilsConf.to_short_path(docletPath)+" -filename %~nxf.xml -private -d .\Jdoc2 %f >NUL 2>NUL)"
         os.system(command)
 # GENERATE Jdoc
 
@@ -378,9 +379,17 @@ def methodsExperiments(workingDir,weka,packsPath,utilsPath,randNum):
 def Experiments(workingDir,weka,packsPath,utilsPath,randNum):
     for buggedType, granularity in zip(["All", "Most"], ["File", "Method"]):
         outPath = os.path.join(workingDir, "experiments\\files_" + buggedType + randNum)
-        outCsv = os.path.join(weka, buggedType + "_out_{GRANULARITY}.csv".format(GRANULARITY=granularity))
+        weka_csv = os.path.join(weka, buggedType + "_out_{GRANULARITY}.csv".format(GRANULARITY=granularity))
         Agent.experimentsMethods.RunExperiments(os.path.join(workingDir, "testsBugsMethods.db"), outPath, packsPath,
-                                                outCsv, granularity, buggedType, utilsPath)
+                                                weka_csv, granularity, buggedType, utilsPath)
+
+def RealDIagnosis(workingDir, weka):
+    testDb = os.path.join(workingDir, "testsBugsMethods.db")
+    for buggedType, granularity in zip(["All", "Most"], ["File", "Method"]):
+        testTable, bugs_table = Agent.experimentsMethods.EXPERIMETS_TABLES[granularity][buggedType]
+        weka_csv = os.path.join(weka, buggedType + "_out_{GRANULARITY}.csv".format(GRANULARITY=granularity))
+        priors = Agent.experimentsMethods.read_weka_csv(weka_csv)
+        write_planning_file()
 
 @utilsConf.marker_decorator(utilsConf.VERSION_TEST_MARKER)
 def testVerConfig(workingDir,ver,antOrPom,startDate,endDate):
@@ -555,7 +564,8 @@ def wrapperExperiments(confFile):
     Agent.experimentsMethods.packFileCreate(testDb,1,-1, packsPath)
     rnd = str(randint(0,900))
     print rnd
-    Experiments(workingDir,weka,packsPath,utilsPath,rnd)
+    Experiments(workingDir, weka,packsPath,utilsPath,rnd)
+    RealDIagnosis(workingDir, weka)
 
 def wrapper_planning(confFile,globalConfFile):
     pass

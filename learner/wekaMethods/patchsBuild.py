@@ -120,9 +120,9 @@ def OneClass(lines, outPath,commitID,change):
     fileName=lines[0].split()
     if len(fileName)<3:
         return []
-    fileName=lines[0].split()[2]
-    fileName=fileName[2:]
-    fileName=fileName.replace("/","_")
+    fileName = lines[0].split()[2]
+    fileName = fileName[2:]
+    fileName = os.path.normpath(fileName).replace(os.path.sep,"_")
     if not ".java" in fileName:
         return []
     fileName = fileName.split('.java')[0] + '.java'
@@ -165,16 +165,12 @@ def OneClass(lines, outPath,commitID,change):
                 befLines.append(replaced)
                 delind=delind+1
                 addind=addind+1
-
-        beforeFile = os.path.join(outPath, "before", fileName)
-        AfterFile = os.path.join(outPath, "after", fileName)
-        delsIns = os.path.join(outPath, fileName + "_deletsIns.txt")
-        with open(beforeFile,"w+") as bef:
+        with open(os.path.join(outPath, "before", fileName), "wb") as bef:
             bef.writelines(befLines)
-        with open(AfterFile, "w+") as after:
+        with open(os.path.join(outPath, "after", fileName), "wb") as after:
             after.writelines(afterLines)
-        with open(delsIns, "w+") as f:
-            f.writelines(["deleted\n",str(deletedInds)+"\n","added\n",str(addedInds)])
+        with open(os.path.join(outPath, fileName + "_deletsIns.txt"), "wb") as f:
+            f.writelines(["deleted\n", str(deletedInds)+"\n","added\n", str(addedInds)])
         change.write(fileName+"@"+str(commitID)+"@"+str(deletedInds)+"@"+str(addedInds)+"\n")
 
 
