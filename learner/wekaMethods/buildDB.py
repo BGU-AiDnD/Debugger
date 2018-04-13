@@ -155,7 +155,7 @@ def bugsTable(bugs_path):
             if len(r) < 16:
                 continue
             r[7] = fix_date(r[7])
-            r[16] = fix_date(r[17])
+            r[16] = fix_date(r[16])
             bugsIds.append(r[0])
             all_bugs.append(r)
         return all_bugs, bugsIds

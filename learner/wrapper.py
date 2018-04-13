@@ -411,21 +411,20 @@ def clean(versPath,LocalGitPath):
     shutil.rmtree(LocalGitPath, ignore_errors=True)
 
 
-def download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product):
-    bugsPath = tempfile.mktemp(suffix=".csv")
+def download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product, bugsPath):
     if issue_tracker == "bugzilla":
         wekaMethods.issuesExtract.python_bugzilla.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
     elif issue_tracker == "jira":
         wekaMethods.issuesExtract.jira_import.jiraIssues(bugsPath, issue_tracker_url, issue_tracker_product)
     elif issue_tracker == "github":
         wekaMethods.issuesExtract.github_import.GithubIssues(bugsPath, issue_tracker_url, issue_tracker_product)
-    return bugsPath
 
 
 def wrapperLearner(confFile):
     vers, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir = utilsConf.configure(confFile)
     docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath = utilsConf.globalConfig()
-    bugsPath = download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product)
+    bugsPath = os.path.join(workingDir, "bugs.csv")
+    download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product, bugsPath)
     vers_dirs = map(version_to_dir_name, vers)
     logfile = open(os.path.join(workingDir,"timeLog2.txt"),"wb")
     logfile.write("start "+ str(datetime.datetime.now())+"\n")
