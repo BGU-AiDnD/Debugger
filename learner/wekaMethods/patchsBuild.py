@@ -354,7 +354,7 @@ def checkStyleCreateDictDebug(lines,Ids,insides ):
     return methods
 
 
-def checkStyleCreateDict(lines ,changesDict):
+def checkStyleCreateDict(lines, changesDict):
     methods={}
     for o in lines:
         if o == "":

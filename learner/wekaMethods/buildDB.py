@@ -419,17 +419,17 @@ def BuildAllOneTimeCommits(git_path, dbPath, JavaDocPath, sourceMonitorFiles, so
         insert_values_into_table(conn, "JAVAfiles", source_Monitor.source_files(sourceMonitorFiles))
         insert_values_into_table(conn, "Sourcemethods", source_Monitor.source_methods(sourceMonitorMethods))
         # can add all javadoc options
-        valsData=[]
-        methodData=[]
-        fieldData=[]
-        consData=[]
-        for doc in docXml.build(JavaDocPath, pathPackCsv.projectPathPacks(git_path), max):
-            for vals, all_methods, all_fields, all_cons in doc:
-                valsData.append(vals)
+        classes_data = []
+        methodData = []
+        fieldData = []
+        consData = []
+        for doc in docXml.build(JavaDocPath, pathPackCsv.projectPathPacks(git_path)):
+            for classes, all_methods, all_fields, all_cons in doc:
+                classes_data.append(classes)
                 methodData.extend(all_methods)
                 fieldData.extend(all_fields)
                 consData.extend(all_cons)
-        insert_values_into_table(conn, "classes", valsData)
+        insert_values_into_table(conn, "classes", classes_data)
         insert_values_into_table(conn, "methods", methodData)
         insert_values_into_table(conn, "fields", fieldData)
         insert_values_into_table(conn, "constructors", consData)
