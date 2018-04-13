@@ -187,22 +187,12 @@ def minCheck(x):
     return m
 
 
-def blameBuild(blamePath,prevVersionCommitterTime,max):
+def blameBuild(blamePath,prevVersionCommitterTime):
     docs=[]
     lst= glob.glob(blamePath+"/*.java")
-    i=0
     for doc in lst:
         print doc
-        if (i==max):
-            break
-        i=i+1
-        x=fileParse(doc,prevVersionCommitterTime)
+        x=fileParse(doc, prevVersionCommitterTime)
         if x!=0:
             docs.append(x)
     return docs
-
-if __name__ == "__main__":
-    prevVersionCommitterTime='2012-06-10 23:45:00'
-    f="C:\projs\\ant11Working\\vers\ANT_170_B1\\blame\Junk9.java"
-    print f
-    fileParse(f,prevVersionCommitterTime)

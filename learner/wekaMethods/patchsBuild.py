@@ -254,127 +254,32 @@ def readDataFile(Dfile):
     return deleted,insertions
 
 
-def checkStyleCreateDict2(lines ):
-    methods={}
-    for o in lines:
-        if o == "":
+def checkStyleCreateDict(checkOut, changesDict):
+    methods = {}
+    lines = []
+    with open(checkOut, "r") as f:
+        lines = f.readlines()[1:-3]
+    for line in lines:
+        if line == "":
             continue
-        if not "@" in o:
+        if not "@" in line:
             continue
-        file, data = o.split(" ")
-        file=file.split(".java")[0]+".java"
+        if not len(line.split(" ")) == 2:
+            # case of error
+            continue
+        file, data = line.split(" ")
+        file = file.split(".java")[0]+".java"
+        fileNameSplited = file.split(os.path.sep)
+        fileName = fileNameSplited[-1].replace("_", os.path.sep)
+        commitID = fileNameSplited[fileNameSplited.index("commitsFiles") + 1]
         key = ""
         inds = []
         dataFile=""
         if "before" in file:
             key = "deletions"
             dataFile = file.replace("before\\", "")+"_deletsIns.txt"
-            deleted, insertions = readDataFile(dataFile)
-            inds = deleted
-        if "after" in file:
-            key = "insertions"
-            dataFile = file.replace("after\\", "")+"_deletsIns.txt"
-            deleted, insertions = readDataFile(dataFile)
-            inds = insertions
-        name, begin, end = data.split("@")
-        rng = [str(x) for x in range(int(begin)-1, int(end) )]
-        both=[x for x in inds if x in rng]
-        keyChange = len(both)
-        if keyChange==0:
-            continue
-        fileNameSplited = file.split("\\")
-        fileName = fileNameSplited[-1].replace("_", "\\")
-        commitID = fileNameSplited[fileNameSplited.index("commitsFiles") + 1]
-        methodDir = fileName + "$" + name
-        if not methodDir in methods:
-            methods[methodDir] = {}
-        methods[methodDir][key] = keyChange
-        if not "methodName" in methods[methodDir]:
-            methods[methodDir]["methodName"] = name
-        if not "fileName" in methods[methodDir]:
-            methods[methodDir]["fileName"] = fileName
-        if not "commitID" in methods[methodDir]:
-            methods[methodDir]["commitID"] = commitID
-    return methods
-
-
-
-def checkStyleCreateDictDebug(lines,Ids,insides ):
-    methods={}
-    insideCounter=set()
-    for o in lines:
-        if o == "":
-            continue
-        if not "@" in o:
-            continue
-        file, data = o.split(" ")
-        file=file.split(".java")[0]+".java"
-        fileNameSplited = file.split("\\")
-        commitID = fileNameSplited[fileNameSplited.index("commitsFiles") + 1]
-        if Ids !=[]:
-            if not commitID in Ids:
+            if not (fileName, commitID) in changesDict:
                 continue
-        if commitID in insides:
-            insideCounter.add(commitID)
-        key = ""
-        inds = []
-        dataFile=""
-        if "before" in file:
-            key = "deletions"
-            dataFile = file.replace("before\\", "")+"_deletsIns.txt"
-            deleted, insertions = readDataFile(dataFile)
-            inds = deleted
-        if "after" in file:
-            key = "insertions"
-            dataFile = file.replace("after\\", "")+"_deletsIns.txt"
-            deleted, insertions = readDataFile(dataFile)
-            inds = insertions
-        name, begin, end = data.split("@")
-        rng = [str(x) for x in range(int(begin)-1, int(end) )]
-        both=[x for x in inds if x in rng]
-        keyChange = len(both)
-        if keyChange==0:
-            continue
-        fileNameSplited = file.split("\\")
-        fileName = fileNameSplited[-1].replace("_", "\\")
-        methodDir = fileName + "$" + name
-        tup=(methodDir,commitID)
-        if tup in methods and methods[tup]["commitID"]!= commitID:
-            print "bug!!!!"
-        if not tup in methods:
-            methods[tup] = {}
-        methods[tup][key] = keyChange
-        if not "methodName" in methods[tup]:
-            methods[tup]["methodName"] = name
-        if not "fileName" in methods[tup]:
-            methods[tup]["fileName"] = fileName
-        if not "commitID" in methods[tup]:
-            methods[tup]["commitID"] = commitID
-    print "insideCounter",len(insideCounter)
-    return methods
-
-
-def checkStyleCreateDict(lines, changesDict):
-    methods={}
-    for o in lines:
-        if o == "":
-            continue
-        if not "@" in o:
-            continue
-        file, data = o.split(" ")
-        file=file.split(".java")[0]+".java"
-        fileNameSplited = file.split("\\")
-        fileName = fileNameSplited[-1].replace("_", "\\")
-        commitID = fileNameSplited[fileNameSplited.index("commitsFiles") + 1]
-        key = ""
-        inds = []
-        dataFile=""
-        if "before" in file:
-            key = "deletions"
-            dataFile = file.replace("before\\", "")+"_deletsIns.txt"
-            #deleted, insertions = readDataFile(dataFile)
-            if not (fileName,commitID) in changesDict:
-				continue
             deleted, insertions = changesDict[(fileName,commitID)]
             inds = deleted
         if "after" in file:
@@ -382,20 +287,17 @@ def checkStyleCreateDict(lines, changesDict):
             dataFile = file.replace("after\\", "")+"_deletsIns.txt"
             #deleted, insertions = readDataFile(dataFile)
             if not (fileName,commitID) in changesDict:
-				continue
+                continue
             deleted, insertions = changesDict[(fileName,commitID)]
             inds = insertions
         name, begin, end = data.split("@")
-        rng = [str(x) for x in range(int(begin)-1, int(end) )]
-        both=[x for x in inds if x in rng]
+        rng = map(str, range(int(begin)-1, int(end)))
+        both = filter(lambda x: x in rng, inds)
         keyChange = len(both)
-        if keyChange==0:
+        if keyChange == 0:
             continue
-        fileNameSplited = file.split("\\")
-        fileName = fileNameSplited[-1].replace("_", "\\")
-        commitID = fileNameSplited[fileNameSplited.index("commitsFiles") + 1]
         methodDir = fileName + "$" + name
-        tup=(methodDir,commitID)
+        tup = (methodDir, commitID)
         if not tup in methods:
             methods[tup] = {}
         methods[tup][key] = keyChange
@@ -406,52 +308,33 @@ def checkStyleCreateDict(lines, changesDict):
         if not "commitID" in methods[tup]:
             methods[tup]["commitID"] = commitID
     return methods
+
 
 def readChangesFile(change):
-    f=open(change,"r")
-    lines=[x.split("\n")[0] for x in f.readlines()]
-    f.close()
-    dict={}
-    rows=[]
-    for x in lines:
-        fileName,commitSha,dels,Ins=x.split("@")
-        fileName=fileName.replace("_", "\\")
-        dels=[x.lstrip() for x in dels.replace("[","").replace("]","").split(",")]
-        Ins=[x.lstrip() for x in Ins.replace("[","").replace("]","").split(",")]
-        dict[(fileName,commitSha)]=[dels,Ins]
-        rows.append([fileName,commitSha,str(len(dels)),str(len(Ins)),str(len(dels)+len(Ins))])
-    return dict,rows
+    dict = {}
+    rows = []
+    with open(change, "r") as f:
+        for line in f:
+            fileName, commitSha, dels, Ins = line.strip().split("@")
+            fileName = fileName.replace("_", os.path.sep)
+            dict[(fileName, commitSha)] = [eval(dels), eval(Ins)]
+            rows.append(map(str, [fileName,commitSha, len(dels), len(Ins), len(dels)+len(Ins)]))
+    return dict, rows
 
 
-
-def analyzeCheckStyle(checkOut,changeFile):
-    f=open(checkOut,"r")
-    lines=f.readlines()
-    f.close()
-    lines=lines[1:-3]
-    ans=[]
-    changesDict,filesRows=readChangesFile(changeFile)
-    methods=checkStyleCreateDict(lines,changesDict)
-    for tup  in methods:
-        methodDir,comm=tup
-        dels=0
-        ins=0
-        fileName=""
-        methodName=""
-        commitID=""
-        if "deletions" in methods[tup]:
-            dels=methods[tup]["deletions"]
-        if "insertions" in methods[tup]:
-            ins=methods[tup]["insertions"]
-        if "fileName" in methods[tup]:
-            fileName=methods[tup]["fileName"]
-        if "methodName" in methods[tup]:
-            methodName=methods[tup]["methodName"]
-        if "commitID" in methods[tup]:
-            commitID=methods[tup]["commitID"]
-        row=[commitID,methodDir,fileName,methodName,str(dels),str(ins),str(dels+ins)]
-        ans.append(row)
-    return ans,filesRows
+def analyzeCheckStyle(checkOut, changeFile):
+    changesDict, filesRows = readChangesFile(changeFile)
+    methods = checkStyleCreateDict(checkOut, changesDict)
+    ans = []
+    for tup in methods:
+        methodDir = tup[0]
+        dels = methods[tup].getdefault("deletions", 0)
+        ins = methods[tup].getdefault("insertions", 0)
+        fileName = methods[tup].getdefault("fileName", "")
+        methodName = methods[tup].getdefault("methodName", "")
+        commitID = methods[tup].getdefault("commitID", "")
+        ans.append(map(str, [commitID, methodDir, fileName, methodName, dels, ins, dels+ins]))
+    return ans, filesRows
 
 
 # @utilsConf.marker_decorator(utilsConf.PATCHS_FEATURES_MARKER)
@@ -467,32 +350,3 @@ def do_all(workingDir, checkStyle68, methodNameLines):
     buildPatchs(patchD, commitsFiles, changedFile)
     checkOut = os.path.join(commitsFiles, "CheckStyle.txt")
     RunCheckStyle(commitsFiles, checkOut, checkStyle68, methodNameLines)
-
-
-
-if __name__ == '__main__':
-    do_all(r"C:\Users\User\Downloads\poi", r"C:\Users\User\Documents\GitHub\Debugger\utils\checkstyle-6.8-SNAPSHOT-all.jar", r"C:\Users\User\Documents\GitHub\Debugger\utils\methodNameLines.xml")
-    exit()
-    patch_file = r"C:\Users\User\Downloads\antWorking\repo\patch\12906-adapting-code-and-tests-since-Apt-is-not-available-.patch"
-    patch_file = r"C:\Users\User\Downloads\antWorking\repo\patch\2125-Fix-up-packaging-of-bzip-utilities.patch"
-    f=open(patch_file, "wb")
-    oneFile(patch_file,r"C:\Users\User\Downloads\\p",f)
-
-    #build("C:\GitHub\\try\org.eclipse.cdt")
-    #build("C:\\tomcat\code\\try\\tomcat8","C:\\tomcat\code\\try\\tomcat8")
-    #do_all("C:\projs\\antWorking\\antC")
-    #do_all("C:\\projs\\poi2Working\\poi")
-    #do_all("C:\\projs\\grizMasterWorking\\repo")
-    #do_all("C:\projs\ptry\\repo")
-    """
-    ans,filesRows=analyzeCheckStyle("C:\projs\ptry\\repo\commitsFiles\\CheckStyle.txt","C:\projs\ptry\\repo\commitsFiles\\Ins_dels.txt")
-    s=set()
-    for f in filesRows:
-        s.add(f[1])
-    print len(s), len(filesRows)
-    """
-    #debugPatchs("C:\\projs\\ant5Working\\repo\patch","C:\\projs\\ant5Working\\repo\patchHeads.txt")
-    #buildPatchs("C:\\projs\\grizMasterWorking\\repo\\patch","C:\\projs\\grizMasterWorking\\repo\\commitsFiles2")
-    #buildPatchs("C:\\projs\\grizMasterWorking\\repo\\patch","C:\\projs\\grizMasterWorking\\repo\\commitsFiles2")
-    #mkDirs("C:\projs\\antWorking\\antC\CommitsFiles","amir")
-    #oneFile("C:\projs\\antWorking\\antC\CommitsFiles\\282f346ca230a8dec8d1956af05fcc9d511ad672\\0007-Misc-doc-scoping-style-and-error-recovery-issues.patch","C:\projs\\antWorking\\antC\CommitsFiles\\amir")

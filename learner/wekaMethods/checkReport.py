@@ -122,9 +122,8 @@ def stat(lst):
     return len(lst),sum(lst),numpy.mean(lst),numpy.median(lst),numpy.var(lst),max(lst),min(lst), 1==len(counts)
 
 
-def fileRead(file_path, max1, isAnalyze, CodeDir):
+def fileRead(file_path, isAnalyze, CodeDir):
     with open(file_path) as doc:
-        couner=0
         lines=[]
         ans=[]
         x=0
@@ -145,12 +144,8 @@ def fileRead(file_path, max1, isAnalyze, CodeDir):
                     if(not ".java" in name):
                         continue
                     s=name.split('\\')
-                    name='\\'.join(s[s.index(CodeDir)+1:])
+                    name = '\\'.join(s[s.index(CodeDir)+1:])
                     errors=files[i].getElementsByTagName("error")
-                    if couner==max1:
-                        return ans
-                    couner=couner+1
-
                     mccab=[]
                     fanOut=[]
                     NPath=[]
@@ -342,7 +337,7 @@ def fileRead(file_path, max1, isAnalyze, CodeDir):
         return ans
 
 def checkStyleCreateDict(lines, repoPath):
-    methods={}
+    methods = {}
     for o in lines:
         if o == "":
             continue
@@ -375,9 +370,3 @@ def analyzeCheckStyle(checkOut, repoPath):
         end = methods[methodDir].get('EndLine', 0)
         ans.append([methodDir, fileName, methodName, str(begin), str(end)])
     return ans
-
-
-
-if __name__ == "__main__":
-    ans= analyzeCheckStyle("C:\projs\poi2Working\\vers\checkAllMethodsData\\REL_3_7.txt","C:\projs\poi2Working\\vers\\REL_3_7\\repo")
-    #fileRead("C:\projs\\antWorking\\vers\checkAll\\ANT_170.xml",-1,False,"repo")

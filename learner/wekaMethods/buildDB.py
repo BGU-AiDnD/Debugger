@@ -14,7 +14,8 @@ import commentedCodeDetector
 import pathPackCsv
 import unicodedata
 import patchsBuild
-import docXml, source_Monitor
+import docXml
+import source_Monitor
 import utilsConf
 
 
@@ -130,68 +131,51 @@ def commits_and_Bugs(repo, bugsIds):
         commits.append(Commit(git_commit, get_bug_num_from_comit_text(commit_text, bugsIds)))
     return commits
 
-def bugsTable(BugsFile,max):
-    # Create table
-    all_bugs=[]
-    bugsIds=[]
-    reader = csv.reader(BugsFile)
-    # creates the reader object
-    am=0
-    for row in reader:# iterates the rows of the file in orders
-        am=am+1
-        if(am==1):
-            continue
-        if(am==max):
-            break
-        r=[]
-        for x in row:
-            lst=x
-            if(len(lst)>0 and  lst[0]=="="):
-                lst=lst[2:(len(lst)-1)]
-            r.append(str(lst))
-        if len(r) < 16:
-            continue
-        if len(r[7])==len('09/01/09'):
-            r[7]= datetime.datetime.strptime(r[7],"%d/%m/%y")
-        else:
-            r[7]= datetime.datetime.strptime(r[7],"%d/%m/%Y %H:%M:%S")
-        #r[7]= datetime.datetime.strptime(r[7],"%d/%m/%y")
-        if len(r[16])==len('09/01/09'):
-            r[16]= datetime.datetime.strptime(r[16],"%d/%m/%y")
-        else:
-            r[16]= datetime.datetime.strptime(r[16],"%d/%m/%Y %H:%M:%S")
-        #r[16]= datetime.datetime.strptime(r[16],"%d/%m/%y")
-        bugsIds.append(r[0])
-        all_bugs.append(r)
-    #conn.commit()
-    return all_bugs,bugsIds
 
-def allFiles(path,max):
+def bugsTable(bugs_path):
+    # Create table
+    all_bugs = []
+    bugsIds = []
+
+    def fix_date(date):
+        if len(date) == len('09/01/09'):
+            return datetime.datetime.strptime(date, "%d/%m/%y")
+        return datetime.datetime.strptime(date, "%d/%m/%Y %H:%M:%S")
+    with open(bugs_path, "rb") as BugsFile:
+        # creates the reader object
+        for row in csv.reader(BugsFile)[1:]:# iterates the rows of the file in orders
+            r = []
+            for x in row:
+                lst=x
+                if(len(lst)>0 and  lst[0]=="="):
+                    lst=lst[2:(len(lst)-1)]
+                r.append(str(lst))
+            if len(r) < 16:
+                continue
+            r[7] = fix_date(r[7])
+            r[16] = fix_date(r[17])
+            bugsIds.append(r[0])
+            all_bugs.append(r)
+        return all_bugs, bugsIds
+
+
+def allFiles(path):
     acc=[]
-    i=0
-    pathLen=len(path)+1 # one for the \
+    pathLen = len(path)+1 # one for the \
     for root, dirs, files in os.walk(path): # Walk directory tree
-        if(i == max):
-            break
         for f in files:
-            i=i+1
             path_join = "".join(list(os.path.join(root, f))[pathLen:])
-            acc=acc+[path_join]
+            acc.append(path_join)
     return acc
 
 
-def BuildRepo(gitPath, bugsPath,MethodsParsed,changeFile,max ):
-    BugsFile = open(bugsPath, "rb")
+def BuildRepo(gitPath, bugsPath, MethodsParsed, changeFile):
     repo = git.Repo(gitPath)
-    allBugs,bugsIds=bugsTable(BugsFile,max)
-    print "finish bugs", bugsIds
-    allMethods,filesRows=patchsBuild.analyzeCheckStyle(MethodsParsed,changeFile)
-    #allMethods=patchsBuild.checkStyleCreateDict(MethodsParsed)
-    #allCommits,allFilesCommits,commitsBugsDict=commTable(bugs,commits,max)
-    allCommits,commitsBugsDict=commTablelight(commits_and_Bugs(repo, bugsIds))
-    print "commitsBugsDict", commitsBugsDict
-    allMethodsCommits=[]
-    allFilesCommits=[]
+    allBugs, bugsIds = bugsTable(bugsPath)
+    allMethods, filesRows = patchsBuild.analyzeCheckStyle(MethodsParsed, changeFile)
+    allCommits, commitsBugsDict = commTablelight(commits_and_Bugs(repo, bugsIds))
+    allMethodsCommits = []
+    allFilesCommits = []
     i=0
     for m in allMethods:
         if not m[0] in commitsBugsDict:
@@ -210,7 +194,6 @@ def BuildRepo(gitPath, bugsPath,MethodsParsed,changeFile,max ):
         bug,commiterDate,sha,CommitId=commitsBugsDict[m[1]]
         r=[0]+m+[bug,commiterDate,CommitId]
         allFilesCommits.append(r)
-    print("finish commits")
     return (allCommits,allFilesCommits,allMethodsCommits,allBugs,allFilesCommits)
 
 
@@ -276,136 +259,26 @@ def createTables(c,add):
         c.execute(
             '''CREATE TABLE SourcemethodsFix (File_Name text, Method text ,Complexity	INT, Statements INT, 	Maximum_Depth	INT, Calls INT)''')
 
-
-
-
-def basicBuild(bugsPath, c, checkStyle, conn, gitPath, max):
-    files = allFiles(gitPath, max)
-    # add files to table files
-    i = 0
-    data=[]
-    for f in files:
-        data.append((i, f))
-        i = i + 1
-    c.execute("INSERT INTO files VALUES (?,?)", data)
-    conn.commit()
-    commits, commitedFiles, bugs = BuildRepo(gitPath, bugsPath, max)
-    c.execute("INSERT INTO commits VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)", commits)
-    # can add commits and bugs to table and commited
-    conn.commit()
-    for bug in bugs:
-        c.execute("INSERT INTO bugs VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", bug)
-    conn.commit()
-    commited = []
-    for file in commitedFiles:
-        file_ = file[0]
-        files_index = -1
-        if (file_ in files):
-            files_index = files.index(file_)
-        t = files_index,
-        commited.append(t + file)
-    for comFile in commited:
-        c.execute("INSERT INTO Commitedfiles VALUES (?,?,?,?,?,?,?,?)", comFile)
-    conn.commit()
-    hael=commentedCodeDetector.buildHael(gitPath,max)
-    for h in hael:
-        c.execute("INSERT INTO haelsTfiles VALUES (?, ?, ?, ?, ?, ?, ?,?, ?, ?)", h)
-    conn.commit()
-
-
-def basicBuildOneTimeCommits( c, conn, gitPath, max,commits, commitedFiles,allMethodsCommits, bugs):
-    files = allFiles(gitPath, max)
-    i = 0
-    data=[]
-    for f in files:
-        data.append((i, f))
-        i = i + 1
-    c.executemany("INSERT INTO files VALUES (?,?)", data)
-    conn.commit()
-    c.executemany("INSERT INTO commits VALUES (?,?,?,?,?,?,?,?,?,?)", commits)
-    conn.commit()
-    c.executemany("INSERT INTO bugs VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", bugs)
-    conn.commit()
-    commited = []
-    for file in commitedFiles:
-        commited.append(file)
-    c.executemany("INSERT INTO Commitedfiles VALUES (?,?,?,?,?,?,?,?,?)", commited)
-    conn.commit()
-    c.executemany("INSERT INTO commitedMethods VALUES (?,?,?,?,?,?,?,?,?,?)", allMethodsCommits)
-    conn.commit()
-
-
-
-def BuildAll(gitPath, dbPath,bugsPath ,JavaDocPath, sourceMonitorFiles,sourceMonitorMethods,checkStyle,blamePath,date,add, max,CodeDir):
-    conn = sqlite3.connect(dbPath)
-    conn.text_factory = str
-    c = conn.cursor()
-    createTables(c,add)
-    BugsFile=open(bugsPath,"r")
-    bugs=bugsTable(BugsFile,max)
-    #for bug in bugs:
-        #c.execute("INSERT INTO bugsFix VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", bug)
-     #   conn.commit()
-    if(not add):
-        basicBuild(bugsPath, c, checkStyle, conn, gitPath, max)
-        SourceFiles,SourceMethods= source_Monitor.build(sourceMonitorFiles,sourceMonitorMethods)
-        for file in SourceFiles:
-            c.execute("INSERT INTO JAVAfiles VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", file)
-        conn.commit()
-        for met in SourceMethods:
-            if len(met)!=6:
-                continue
-            c.execute("INSERT INTO Sourcemethods VALUES (?,?,?,?,?,?)", met)
-        # can add source and methods
-        conn.commit()
-
-        packPath=pathPackCsv.projectPathPacks(gitPath)
-        docs= docXml.build(JavaDocPath,packPath,max)
-        # can add all javadoc options
-        for doc in docs:
-            for clss in doc:
-                vals,all_methods,all_fields,all_cons=clss
-                c.execute("INSERT INTO classes VALUES (?,?,?,?,?,?,?,?,?,?,?)", vals)
-                for method in all_methods:
-                    c.execute("INSERT INTO methods VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", method)
-                for field in all_fields:
-                    c.execute("INSERT INTO fields VALUES (?,?,?,?,?,?,?,?,?,?)", field)
-                for cons in all_cons:
-                    c.execute("INSERT INTO constructors VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", cons)
-        blames=blameParse.blameBuild(blamePath,date,max)
-        for blame in blames:
-             c.execute("INSERT INTO blameExtends VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", blame)
-        conn.commit()
-        #blames=blameParse.blameBuild(blamePath,date,max)
-        #for blame in blames:
-         #    c.execute("INSERT INTO blame VALUES (?,?,?,?,?,?,?,?,?,?,?)", blame)
-        comp = checkReport.fileRead(checkStyle,max,False,CodeDir)
-        for f in comp:
-            c.execute("INSERT INTO checkStyleExtends VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",f)
-        conn.commit()
-        SourceFiles,SourceMethods= source_Monitor.build(sourceMonitorFiles,sourceMonitorMethods)
-        for file in SourceFiles:
-            c.execute("INSERT INTO JAVAfilesFix VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", file)
-        conn.commit()
-        for met in SourceMethods:
-            if len(met)!=6:
-                continue
-            c.execute("INSERT INTO SourcemethodsFix VALUES (?,?,?,?,?,?)", met)
-        conn.commit()
-    conn.close()
-#BuildAll("C:\Users\Amir-pc\Documents\GitHub\org.eclipse.cdt", "C:\Users\Amir-pc\Documents\GitHub\Aapart1.db","C:\Users\Amir-pc\Documents\GitHub\\CDT-MORE-DATA.csv","C:/Users/Amir-pc/Documents/GitHub/Jdoc/*.xml","C:\Users\Amir-pc\Documents\GitHub\\source1.csv","C:\Users\Amir-pc\Documents\GitHub\\source1_methods.csv",30)
-
-
-def get_values_str(num):
-    return "".join(["(", (",".join(['?'] * num)), ")"])
-
-
 def insert_values_into_table(connection, table_name, values):
+
+    def get_values_str(num):
+        return "".join(["(", (",".join(['?'] * num)), ")"])
     c = connection.cursor()
     c.executemany("INSERT INTO {0} VALUES {1}".format(table_name, get_values_str(len(values[0]))), values)
     connection.commit()
     del values
     gc.collect()
+
+
+def basicBuildOneTimeCommits(dbPath, gitPath, commits, commitedFiles,allMethodsCommits, bugs):
+    conn = sqlite3.connect(dbPath)
+    conn.text_factory = str
+    insert_values_into_table(conn, 'files', list(enumerate(allFiles(gitPath))))
+    insert_values_into_table(conn, 'commits', commits)
+    insert_values_into_table(conn, 'bugs', bugs)
+    insert_values_into_table(conn, 'Commitedfiles', commitedFiles)
+    insert_values_into_table(conn, 'commitedMethods', allMethodsCommits)
+    conn.close()
 
 
 def BuildAllOneTimeCommits(git_path, dbPath, JavaDocPath, sourceMonitorFiles, sourceMonitorMethods, checkStyle, checkStyleMethods, blamePath, date, add, max, CodeDir):
@@ -433,193 +306,74 @@ def BuildAllOneTimeCommits(git_path, dbPath, JavaDocPath, sourceMonitorFiles, so
         insert_values_into_table(conn, "methods", methodData)
         insert_values_into_table(conn, "fields", fieldData)
         insert_values_into_table(conn, "constructors", consData)
-        insert_values_into_table(conn, "blameExtends", blameParse.blameBuild(blamePath, date, max))
-        insert_values_into_table(conn, "checkStyleExtends", checkReport.fileRead(checkStyle, max, False, CodeDir))
+        insert_values_into_table(conn, "blameExtends", blameParse.blameBuild(blamePath, date))
+        insert_values_into_table(conn, "checkStyleExtends", checkReport.fileRead(checkStyle, False, CodeDir))
         insert_values_into_table(conn, "JAVAfilesFix", source_Monitor.source_files(sourceMonitorFiles))
         insert_values_into_table(conn, "SourcemethodsFix", source_Monitor.source_methods(sourceMonitorMethods))
     conn.close()
-#BuildAll("C:\Users\Amir-pc\Documents\GitHub\org.eclipse.cdt", "C:\Users\Amir-pc\Documents\GitHub\Aapart1.db","C:\Users\Amir-pc\Documents\GitHub\\CDT-MORE-DATA.csv","C:/Users/Amir-pc/Documents/GitHub/Jdoc/*.xml","C:\Users\Amir-pc\Documents\GitHub\\source1.csv","C:\Users\Amir-pc\Documents\GitHub\\source1_methods.csv",30)
+
 
 def createIndexes(dbPath):
     conn = sqlite3.connect(dbPath)
     conn.text_factory = str
     c = conn.cursor()
-    index_createA=' CREATE INDEX IF NOT EXISTS commits_id ON commits (ID)'
-    c.execute(index_createA)
-    conn.commit()
-    index_createA=' CREATE INDEX IF NOT EXISTS commits_commiter_date ON commits (commiter_date)'
-    c.execute(index_createA)
-    conn.commit()
-    index_createA=' CREATE INDEX IF NOT EXISTS bugs_id ON bugs (ID)'
-    c.execute(index_createA)
-    conn.commit()
-    index_createA=' CREATE INDEX IF NOT EXISTS bugsFix_id ON bugsFix (ID)'
-    c.execute(index_createA)
-    conn.commit()
-    index_createB=' CREATE INDEX IF NOT EXISTS commitedFiles_Commitid ON commitedfiles (commitid)'
-    c.execute(index_createB)
-    conn.commit()
-    index_createB=' CREATE INDEX IF NOT EXISTS commitedFiles_commiter_date ON commitedfiles (commiter_date)'
-    c.execute(index_createB)
-    conn.commit()
-    index_createB=' CREATE INDEX IF NOT EXISTS commitedFiles_bugId ON commitedfiles (bugId)'
-    c.execute(index_createB)
-    conn.commit()
-    index_createC='  CREATE INDEX IF NOT EXISTS commitedFiles_Name ON commitedfiles (name)'
-    c.execute(index_createC)
-    conn.commit()
-    index_createD='  CREATE INDEX IF NOT EXISTS JAVAfiles_Name ON JAVAfiles (name)'
-    c.execute(index_createD)
-    conn.commit()
-    index_createD='  CREATE INDEX IF NOT EXISTS Sourcemethods_fileName ON Sourcemethods (File_Name)'
-    c.execute(index_createD)
-    conn.commit()
-    index_createD='  CREATE INDEX IF NOT EXISTS JAVAfilesFix_Name ON JAVAfilesFix (name)'
-    c.execute(index_createD)
-    conn.commit()
-    index_createD='  CREATE INDEX IF NOT EXISTS SourcemethodsFix_fileName ON SourcemethodsFix (File_Name)'
-    c.execute(index_createD)
-    conn.commit()
-    index_createD='  CREATE INDEX IF NOT EXISTS classes_Name ON classes (name)'
-    c.execute(index_createD)
-    conn.commit()
-    index_createD='  CREATE INDEX IF NOT EXISTS constructors_className ON constructors (className)'
-    c.execute(index_createD)
-    conn.commit()
-    index_createD='  CREATE INDEX IF NOT EXISTS methods_className ON methods (className)'
-    c.execute(index_createD)
-    conn.commit()
-    index_createD='  CREATE INDEX IF NOT EXISTS fields_className ON fields (className)'
-    c.execute(index_createD)
-    conn.commit()
-    index_createD='  CREATE INDEX IF NOT EXISTS checkStyle_name ON checkStyle (name)'
-    c.execute(index_createD)
-    conn.commit()
-    index_createD='  CREATE INDEX IF NOT EXISTS checkStyleExtends_name ON checkStyleExtends (name)'
-    c.execute(index_createD)
-    conn.commit()
-    #index_createD='  CREATE INDEX IF NOT EXISTS blame_name ON blame (name)'
-    #c.execute(index_createD)
-    conn.commit()
-    index_createD='  CREATE INDEX IF NOT EXISTS blameExtends_name ON blameExtends (name)'
-    c.execute(index_createD)
-    index_createD='  CREATE INDEX IF NOT EXISTS AllMethods_methodDir ON AllMethods (methodDir)'
-    c.execute(index_createD)
-    conn.commit()
-    index_createD='  CREATE INDEX IF NOT EXISTS commitedMethods_methodDir ON commitedMethods (methodDir)'
-    c.execute(index_createD)
-    conn.commit()
-    index_createD='  CREATE INDEX IF NOT EXISTS commitedMethods_commitID ON commitedMethods (commitID)'
-    c.execute(index_createD)
-    conn.commit()
-    index_createD='  CREATE INDEX IF NOT EXISTS AllMethods_fileName ON AllMethods (fileName)'
-    c.execute(index_createD)
-    conn.commit()
-    index_createD='  CREATE INDEX IF NOT EXISTS commitedMethods_fileName ON commitedMethods (fileName)'
-    c.execute(index_createD)
-    conn.commit()
-    index_createD='  CREATE INDEX IF NOT EXISTS commitedMethods_methodName ON commitedMethods (methodName)'
-    c.execute(index_createD)
-    conn.commit()
-    index_createD='  CREATE INDEX IF NOT EXISTS commitedMethods_bugId ON commitedMethods (bugId)'
-    c.execute(index_createD)
-    conn.commit()
-    index_createD='  CREATE INDEX IF NOT EXISTS commitedMethods_commiter_date ON commitedMethods (commiter_date)'
-    c.execute(index_createD)
-    conn.commit()
+
+    def create_index(index):
+        c.execute(index)
+        conn.commit()
+    create_index('CREATE INDEX IF NOT EXISTS commits_id ON commits (ID)')
+    create_index('CREATE INDEX IF NOT EXISTS commits_commiter_date ON commits (commiter_date)')
+    create_index('CREATE INDEX IF NOT EXISTS bugs_id ON bugs (ID)')
+    create_index('CREATE INDEX IF NOT EXISTS bugsFix_id ON bugsFix (ID)')
+    create_index('CREATE INDEX IF NOT EXISTS commitedFiles_Commitid ON commitedfiles (commitid)')
+    create_index('CREATE INDEX IF NOT EXISTS commitedFiles_commiter_date ON commitedfiles (commiter_date)')
+    create_index('CREATE INDEX IF NOT EXISTS commitedFiles_bugId ON commitedfiles (bugId)')
+    create_index('CREATE INDEX IF NOT EXISTS commitedFiles_Name ON commitedfiles (name)')
+    create_index('CREATE INDEX IF NOT EXISTS JAVAfiles_Name ON JAVAfiles (name)')
+    create_index('CREATE INDEX IF NOT EXISTS Sourcemethods_fileName ON Sourcemethods (File_Name)')
+    create_index('CREATE INDEX IF NOT EXISTS JAVAfilesFix_Name ON JAVAfilesFix (name)')
+    create_index('CREATE INDEX IF NOT EXISTS SourcemethodsFix_fileName ON SourcemethodsFix (File_Name)')
+    create_index('CREATE INDEX IF NOT EXISTS classes_Name ON classes (name)')
+    create_index('CREATE INDEX IF NOT EXISTS constructors_className ON constructors (className)')
+    create_index('CREATE INDEX IF NOT EXISTS methods_className ON methods (className)')
+    create_index('CREATE INDEX IF NOT EXISTS fields_className ON fields (className)')
+    create_index('CREATE INDEX IF NOT EXISTS checkStyle_name ON checkStyle (name)')
+    create_index('CREATE INDEX IF NOT EXISTS checkStyleExtends_name ON checkStyleExtends (name)')
+    create_index('CREATE INDEX IF NOT EXISTS blameExtends_name ON blameExtends (name)')
+    create_index('CREATE INDEX IF NOT EXISTS AllMethods_methodDir ON AllMethods (methodDir)')
+    create_index('CREATE INDEX IF NOT EXISTS commitedMethods_methodDir ON commitedMethods (methodDir)')
+    create_index('CREATE INDEX IF NOT EXISTS commitedMethods_commitID ON commitedMethods (commitID)')
+    create_index('CREATE INDEX IF NOT EXISTS AllMethods_fileName ON AllMethods (fileName)')
+    create_index('CREATE INDEX IF NOT EXISTS commitedMethods_fileName ON commitedMethods (fileName)')
+    create_index('CREATE INDEX IF NOT EXISTS commitedMethods_methodName ON commitedMethods (methodName)')
+    create_index('CREATE INDEX IF NOT EXISTS commitedMethods_bugId ON commitedMethods (bugId)')
+    create_index('CREATE INDEX IF NOT EXISTS commitedMethods_commiter_date ON commitedMethods (commiter_date)')
     conn.close()
-
-def names_dates():
-    return [ ('CDT_8_0_1', '2011-09-15'), ('CDT_8_0_2', '2012-02-11'), ('CDT_8_1_0', '2012-06-10'), ('CDT_8_1_1', '2012-09-17'), ('CDT_8_1_2', '2013-02-14'), ('CDT_8_2_0', '2013-06-12')]
-
-def build(versPath,dbsPath,bugsPath,add,max,vers, CodeDir):
-
-    #vers=('CDT_8_0_2', 'CDT_8_1_0','CDT_8_1_1','CDT_8_1_2' )
-    #vers= ('CDT_3_0',  'CDT_4_0_0',  'CDT_5_0_0',  'CDT_6_0_0',  'CDT_7_0_0',  'CDT_8_0_0')
-    #vers= (  'CDT_5_0_0',  'CDT_6_0_0',  'CDT_7_0_0',  'CDT_8_0_0')
-    #commsSpaces.create(vers,versPath)
-    dates =[i1[1] for i1 in names_dates()]
-    for ver,date in zip(vers,dates):
-        print ver
-        Path=versPath+"\\"+ver
-        gitPath=Path+"\\"+ CodeDir
-        dbPath=dbsPath+"\\"+ver+".db"
-        JavaDocPath=Path+"\\Jdoc2"
-        sourceMonitorFiles=Path+"\\"+ver+".csv"
-        sourceMonitorMethods=Path+"\\"+ver+"_methods.csv"
-        checkStyle=versPath+"\\checkAll\\"+ver+".xml"
-        blamePath=Path+"\\blame"
-        print( dbPath)
-        BuildAll(gitPath, dbPath,bugsPath ,JavaDocPath, sourceMonitorFiles,sourceMonitorMethods,checkStyle,blamePath,date,add, max,CodeDir)
-        createIndexes(dbPath)
 
 
 def buildBasicAllVers(vers,dates,versPath,CodeDir,dbsPath, bugsPath,MethodsParsed,changeFile):
-    ver=vers[-1]
-    Path=versPath+"\\"+ver
-    gitPath=Path+"\\"+ CodeDir
-    commits, commitedFiles,allMethodsCommits, bugs,allFilesCommitsPatch = BuildRepo(gitPath, bugsPath,MethodsParsed,changeFile, max)
+    gitPath = os.path.join(versPath, vers[-1], CodeDir)
+    commits, commitedFiles, allMethodsCommits, bugs, allFilesCommitsPatch = BuildRepo(gitPath, bugsPath, MethodsParsed, changeFile)
     for ver,date in zip(vers,dates):
-        Path=versPath+"\\"+ver
-        gitPath=Path+"\\"+ CodeDir
-        dbPath=dbsPath+"\\"+ver+".db"
-        conn = sqlite3.connect(dbPath)
-        conn.text_factory = str
-        c = conn.cursor()
-        basicBuildOneTimeCommits( c, conn, gitPath, max,commits, commitedFiles,allMethodsCommits, bugs)
-        conn.close()
+        gitPath = os.path.join(versPath, ver, CodeDir)
+        dbPath = os.path.join(dbsPath, ver+".db")
+        basicBuildOneTimeCommits(dbPath, gitPath, commits, commitedFiles, allMethodsCommits, bugs)
+
 
 @utilsConf.marker_decorator(utilsConf.DB_BUILD_MARKER)
 def buildOneTimeCommits(versPath,dbsPath,bugsPath,add,max,vers, CodeDir,MethodsParsed,changeFile,logfile,dates, git_path):
     for ver,date in zip(vers,dates):
         gc.collect()
-        Path=versPath+"\\"+ver
-        dbPath=dbsPath+"\\"+ver+".db"
-        JavaDocPath=Path+"\\Jdoc2"
-        sourceMonitorFiles=Path+"\\"+ver+".csv"
-        sourceMonitorMethods=Path+"\\"+ver+"_methods.csv"
-        checkStyle=versPath+"\\checkAll\\"+ver+".xml"
-        checkStyleMethods=versPath+"\\checkAllMethodsData\\"+ver+".txt"
-        blamePath=Path+"\\blame"
-        BuildAllOneTimeCommits(git_path, dbPath ,JavaDocPath, sourceMonitorFiles,sourceMonitorMethods,checkStyle,checkStyleMethods,blamePath,date,add, max,CodeDir)
+        Path = os.path.join(versPath, ver)
+        dbPath = os.path.join(dbsPath, ver+".db")
+        JavaDocPath = os.path.join(Path, "Jdoc2")
+        sourceMonitorFiles = os.path.join(Path, ver+".csv")
+        sourceMonitorMethods = os.path.join(Path, ver+"_methods.csv")
+        checkStyle = os.path.join(versPath, "checkAll", ver+".xml")
+        checkStyleMethods = os.path.join(versPath, "checkAllMethodsData", ver+".txt")
+        blamePath = os.path.join(Path, "blame")
+        BuildAllOneTimeCommits(git_path, dbPath, JavaDocPath, sourceMonitorFiles,sourceMonitorMethods,checkStyle,checkStyleMethods,blamePath,date,add, max,CodeDir)
         createIndexes(dbPath)
     buildBasicAllVers(vers,dates,versPath,CodeDir,dbsPath, bugsPath,MethodsParsed,changeFile)
     logfile.write("after BuildRepo "+ str(datetime.datetime.now())+"\n")
     logfile.flush()
-
-def bugs_test(bugsPath):
-    BugsFile = open(bugsPath, "r")
-    allBugs, bugsIds = bugsTable(BugsFile, max)
-    packPath = pathPackCsv.projectPathPacks(r"C:\Users\User\Downloads\antWorking4\vers\ANT_183\repo")
-    docs = docXml.build("C:\Users\User\Downloads\antWorking4\vers\ANT_183\Jdoc2", packPath, max)
-
-
-if __name__ == "__main__":
-    import tempfile
-    import wekaMethods.issuesExtract.github_import
-    import sys
-    csv.field_size_limit(sys.maxsize)
-    bugsPath = tempfile.mktemp(suffix=".csv")
-    wekaMethods.issuesExtract.github_import.GithubIssues(bugsPath, "orientechnologies", "orientdb")
-    a,bugsIds = bugsTable(open(bugsPath, "rb"), -1)
-    print bugsIds
-    repo = git.Repo("C:\Users\User\Downloads\orientdb")
-    commits = commits_and_Bugs(repo, bugsIds)
-    allCommits, commitsBugsDict = commTablelight(commits)
-    print "commitsBugsDict", commitsBugsDict
-    vers=('CDT_8_0_1','CDT_8_0_2', 'CDT_8_1_0','CDT_8_1_1','CDT_8_1_2' )
-    #build("C:\GitHub\\vers","C:\GitHub\\vers\\dbP","C:\GitHub\\CDT-MORE-DATA.csv",False,30,vers,"org.eclipse.cdt")
-    #build("C:\GitHub\\vers","C:\GitHub\\vers\\dbAdd\\done2","C:\GitHub\\CDT-MORE-DATA.csv",True,-1,vers,"org.eclipse.cdt")
-    vers=('TOMCAT_8_0_4','TOMCAT_8_0_5','TOMCAT_8_0_6','TOMCAT_8_0_7','TOMCAT_8_0_8' )
-    #vers=['TOMCAT_8_0_4']#,'TOMCAT_8_0_5','TOMCAT_8_0_6','TOMCAT_8_0_7','TOMCAT_8_0_8' )
-    #build("C:\\tomcat\\code","C:\\tomcat\\code\\dbAdd","C:\\tomcat\\tomcat_bugs.csv",False,-1,[vers[0]],"tomcat8")
-    BuildRepo("C:\projs\ptry\\repo", "C:\projs\\poiBugs.csv","C:\projs\ptry\\repo\\commitsFiles\\CheckStyle.txt","C:\projs\ptry\\repo\\commitsFiles\\Ins_dels.txt",-1 )
-
-
-
-
-
-
-
-
-

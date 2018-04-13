@@ -569,54 +569,10 @@ def wrapperExperiments(confFile):
     Experiments(workingDir, weka,packsPath,utilsPath,rnd)
     RealDIagnosis(workingDir, weka)
 
+
 def wrapper_planning(confFile,globalConfFile):
     pass
 
-
-def wrapper(confFile):
-    vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
-    versPath, dbadd= Mkdirs(workingDir, vers)
-    logfile=open(os.path.join(workingDir,"timeLog.txt"),"wb")
-    logfile.write("start "+ str(datetime.datetime.now())+"\n")
-    logfile.flush()
-
-    vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
-    LocalGitPath=os.path.join(workingDir,"repo")
-    versionsCreate(gitPath, vers, versPath,LocalGitPath)
-    mkOneDir(LocalGitPath)
-
-    featuresExtract(vers, versPath, workingDir,LocalGitPath,logfile)
-    logfile.write("after featuresExtract "+ str(datetime.datetime.now())+"\n")
-    logfile.flush()
-
-
-    MethodsParsed=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"CheckStyle.txt")
-    changeFile=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"Ins_dels.txt")
-    wekaMethods.buildDB.buildOneTimeCommits(versPath,dbadd,bugsPath,False,-1,vers,"repo",MethodsParsed,changeFile,logfile,dates)
-    logfile.write("after buildDB "+ str(datetime.datetime.now())+"\n")
-    logfile.flush()
-
-
-    testVerConfig(workingDir,vers[-2],"ant",dates[-2],dates[-1])
-    logfile.write("after testVerConfig "+ str(datetime.datetime.now())+"\n")
-    logfile.flush()
-
-    testDb = os.path.join( workingDir , "testsBugsMethods.db")
-    packsPath = os.path.join(workingDir, "packs.txt")
-    Agent.experimentsMethods.packFileCreate(testDb,1,-1, packsPath)
-
-    weka=os.path.join(workingDir,"weka")
-    createBuildMLModels(workingDir,gitPath,weka,vers,dbadd)
-    filesExperiments(workingDir,weka,packsPath)
-    logfile.write("after filesExperiments "+ str(datetime.datetime.now())+"\n")
-    logfile.flush()
-    exit()
-    methodsExperiments(workingDir,weka,packsPath)
-    logfile.write("after methodsExperiments "+ str(datetime.datetime.now())+"\n")
-    logfile.flush()
-
-    logfile.close()
-    clean(versPath,LocalGitPath)
 
 if __name__ == '__main__':
     # try:
