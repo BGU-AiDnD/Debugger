@@ -143,11 +143,13 @@ def bugsTable(bugs_path):
         return datetime.datetime.strptime(date, "%d/%m/%Y %H:%M:%S")
     with open(bugs_path, "rb") as BugsFile:
         # creates the reader object
-        for row in csv.reader(BugsFile)[1:]:# iterates the rows of the file in orders
+        reader = csv.reader(BugsFile)
+        next(reader, None) # skip header
+        for row in reader:# iterates the rows of the file in orders
             r = []
             for x in row:
-                lst=x
-                if(len(lst)>0 and  lst[0]=="="):
+                lst = x
+                if len(lst)>0 and lst[0]=="=" :
                     lst=lst[2:(len(lst)-1)]
                 r.append(str(lst))
             if len(r) < 16:
