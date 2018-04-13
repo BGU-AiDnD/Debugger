@@ -377,8 +377,8 @@ def methodsExperiments(workingDir,weka,packsPath,utilsPath,randNum):
 
 def Experiments(workingDir,weka,packsPath,utilsPath,randNum):
     for buggedType, granularity in zip(["All", "Most"], ["File", "Method"]):
-        outPath = os.path.join(workingDir, "experiments\\files_" + buggedType + randNum)
-        outCsv = os.path.join(weka, buggedType + "_out_{GRANULARITY}.csv".format(GRANULARITY=granularity))
+        outPath = os.path.join(workingDir, "experiments\\files_{0}{1}".format(buggedType, randNum))
+        outCsv = os.path.join(weka, "{BUG_TYPE}_out_{GRANULARITY}.csv".format(BUG_TYPE=buggedType, GRANULARITY=granularity))
         Agent.experimentsMethods.RunExperiments(os.path.join(workingDir, "testsBugsMethods.db"), outPath, packsPath,
                                                 outCsv, granularity, buggedType, utilsPath)
 
