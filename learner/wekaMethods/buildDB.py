@@ -261,6 +261,7 @@ def createTables(c,add):
         c.execute(
             '''CREATE TABLE SourcemethodsFix (File_Name text, Method text ,Complexity	INT, Statements INT, 	Maximum_Depth	INT, Calls INT)''')
 
+
 def insert_values_into_table(connection, table_name, values):
 
     def get_values_str(num):
@@ -268,7 +269,6 @@ def insert_values_into_table(connection, table_name, values):
     c = connection.cursor()
     c.executemany("INSERT INTO {0} VALUES {1}".format(table_name, get_values_str(len(values[0]))), values)
     connection.commit()
-    del values
     gc.collect()
 
 

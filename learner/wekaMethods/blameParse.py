@@ -89,12 +89,12 @@ def intCheck(s):
 
 def fileParse(file, prevVersionCommitterTime):
     prevVersionCommitterTime=time.mktime(time.strptime(prevVersionCommitterTime,'%Y-%m-%d %H:%M:%S'))
-    f=open(file,"r")
-    lines=[l.split('\n')[0] for l in  f.readlines()]
-    if len(lines)==0:
+    lines = []
+    with open(file,"r") as f:
+        lines = [l.strip() for l in f.readlines()]
+    if len(lines) == 0:
         return 0
     commsFile=file.replace("\\blame\\","\\commentsSpaces\\")+".txt"
-    print commsFile
     comms,spaces=commsSpaces.read(commsFile)
     discard=comms+spaces
     inds=[0] # find where line start with "filename " +1
@@ -141,8 +141,6 @@ def fileParse(file, prevVersionCommitterTime):
     commsApproved = set([c for c in timesApproved if c>prevVersionCommitterTime])
     difftimes=list(set(times))
     difftimesApproved=list(set(timesApproved))
-    #print "times",times
-    #print "months",[monthlyDate(x) for x in times]
     groupsApproved=[]
     s=""
     if len(commitsApproved)>0:
@@ -156,7 +154,6 @@ def fileParse(file, prevVersionCommitterTime):
             countS=1
             s=commitsApproved[i]
     groupsApproved.append(countS)
-    #return name,len(set(commits)),len(comms),len(groups),len(set(committers)),stamp(numpy.mean(times)),stamp(numpy.median(times)),stamp(max(times)),stamp(min(times)),numpy.var(times),stamp(most_common(times)),max(times)- min(times),stamp(numpy.mean(difftimes)),stamp(numpy.median(difftimes)),numpy.var(difftimes),
     ret= [name,len(set(commits)),len(comms),len(set(commitsApproved)),len(commsApproved),numBlobs,numPatchs,numCommits]
     ret.extend(list(listStats(times,True))+[maxCheck(times)- minCheck(times)])
     ret.extend(list(countsLines( times)))
@@ -167,11 +164,11 @@ def fileParse(file, prevVersionCommitterTime):
     ret.extend(list(countsLines( timesApproved)))
     ret.extend(list(listStats(difftimesApproved,True))+[maxCheck(difftimesApproved)- minCheck(difftimesApproved)])
     ret.extend(list(countsLines( difftimesApproved)))
-    
     ret.extend(list(commitersFeatures( committersApproved)))
     ret.extend(list(listStats(groups,False)))
     ret.extend(list(listStats(groupsApproved,False)))
     return tuple(ret)
+
 
 def maxCheck(x):
     m=0
@@ -187,12 +184,10 @@ def minCheck(x):
     return m
 
 
-def blameBuild(blamePath,prevVersionCommitterTime):
-    docs=[]
-    lst= glob.glob(blamePath+"/*.java")
-    for doc in lst:
-        print doc
-        x=fileParse(doc, prevVersionCommitterTime)
-        if x!=0:
+def blameBuild(blamePath, prevVersionCommitterTime):
+    docs = []
+    for doc in glob.glob(blamePath+"/*.java"):
+        x = fileParse(doc, prevVersionCommitterTime)
+        if x != 0:
             docs.append(x)
     return docs
