@@ -1,6 +1,8 @@
 __author__ = 'amir'
 import os
 import traceback
+import sys
+import github3
 from datetime import datetime
 import logging
 
@@ -147,8 +149,12 @@ class Marker(object):
     def __init__(self, path):
         self.marker_path = path
 
-    def is_exists(self):
-        return os.path.isfile(self.marker_path)
+    def is_done(self):
+        if os.path.isfile(self.marker_path):
+            with open(self.marker_path) as f:
+                if "finish" in f.read():
+                    return True
+        return False
 
     def start(self):
         with open(self.marker_path, "wb") as f:
@@ -160,7 +166,7 @@ class Marker(object):
         with open(self.marker_path, "ab") as f:
             f.write("failed\n")
             f.write("error msg : {0}\n".format(error_msg))
-        exit()
+            logging.exception("error msg : {0}\n".format(error_msg))
 
     def finish(self):
         with open(self.marker_path, "ab") as f:
@@ -173,8 +179,17 @@ def init_configuration(workingDir, versions):
     assert(conf is None)
     conf = Configuration(workingDir, versions)
 
+
 def get_configuration():
     return conf
+
+
+def post_bug_to_github(etype, value, tb):
+    gh = github3.login('DebuggerIssuesReport', password='DebuggerIssuesReport1') # DebuggerIssuesReport@mail.com
+    repo = gh.repository('amir9979', 'Debugger')
+    issue_body = "".join(['Traceback (most recent call last):\n'] + traceback.format_tb(tb) + traceback.format_exception_only(etype, value))
+    repo.create_issue(title='An Exception occurred', body=issue_body)
+
 
 def marker_decorator(marker):
     """
@@ -183,15 +198,17 @@ def marker_decorator(marker):
     def decorator(func):
         def f(*args, **kwargs):
             ans = None
-            if not get_configuration().get_marker(marker).is_exists():
+            if not get_configuration().get_marker(marker).is_done():
                 get_configuration().get_marker(marker).start()
-                # try:
-                ans = func(*args, **kwargs)
-                # except Exception as e:
-                #     get_configuration().get_marker(marker).error(e.message)
-                #     print traceback.print_stack()
-                #     exit()
-                get_configuration().get_marker(marker).finish()
+                try:
+                    ans = func(*args, **kwargs)
+                    get_configuration().get_marker(marker).finish()
+                except Exception as e:
+                    get_configuration().get_marker(marker).error(e.message)
+                    etype, value, tb = sys.exc_info()
+                    traceback.print_exc()
+                    post_bug_to_github(etype, value, tb)
+                    raise
             return ans
         return f
     return decorator
