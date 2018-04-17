@@ -363,19 +363,28 @@ def buildBasicAllVers(vers,dates,versPath,CodeDir,dbsPath, bugsPath,MethodsParse
 
 
 @utilsConf.marker_decorator(utilsConf.DB_BUILD_MARKER)
-def buildOneTimeCommits(versPath,dbsPath,bugsPath,add,max,vers, CodeDir,MethodsParsed,changeFile,logfile,dates, git_path):
+def buildOneTimeCommits():
+    versPath = utilsConf.get_configuration().versPath
+    db_dir = utilsConf.get_configuration().db_dir
+    vers = utilsConf.get_configuration().vers
+    dates = utilsConf.get_configuration().dates
+    MethodsParsed = utilsConf.get_configuration().MethodsParsed
+    changeFile = utilsConf.get_configuration().changeFile
+    add = False
+    max = -1
+    CodeDir = "repo"
     for ver,date in zip(vers,dates):
         gc.collect()
         Path = os.path.join(versPath, ver)
-        dbPath = os.path.join(dbsPath, ver+".db")
+        dbPath = os.path.join(db_dir, ver + ".db")
         JavaDocPath = os.path.join(Path, "Jdoc2")
         sourceMonitorFiles = os.path.join(Path, ver+".csv")
         sourceMonitorMethods = os.path.join(Path, ver+"_methods.csv")
         checkStyle = os.path.join(versPath, "checkAll", ver+".xml")
         checkStyleMethods = os.path.join(versPath, "checkAllMethodsData", ver+".txt")
         blamePath = os.path.join(Path, "blame")
-        BuildAllOneTimeCommits(git_path, dbPath, JavaDocPath, sourceMonitorFiles,sourceMonitorMethods,checkStyle,checkStyleMethods,blamePath,date,add, max,CodeDir)
+        BuildAllOneTimeCommits(utilsConf.get_configuration().gitPath, dbPath, JavaDocPath,
+                               sourceMonitorFiles, sourceMonitorMethods, checkStyle, checkStyleMethods,
+                               blamePath, date, add, max, CodeDir)
         createIndexes(dbPath)
-    buildBasicAllVers(vers,dates,versPath,CodeDir,dbsPath, bugsPath,MethodsParsed,changeFile)
-    logfile.write("after BuildRepo "+ str(datetime.datetime.now())+"\n")
-    logfile.flush()
+    buildBasicAllVers(vers, dates, versPath, CodeDir, db_dir, utilsConf.get_configuration().bugsPath, MethodsParsed, changeFile)
