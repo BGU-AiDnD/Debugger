@@ -1,31 +1,31 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-import sys
-import os
-import subprocess
-import datetime
-import shutil
 import csv
-import tempfile
+import datetime
+import os
+import shutil
+import subprocess
+import sys
 from random import randint
-import git
 
+import Agent.bugs_testsDBMethods
+import Agent.experimentsMethods
+import Planner.Planning_Results
+import git
+import report
 import utilsConf
+import wekaMethods.ParseWekaOutput
+import wekaMethods.articles
 import wekaMethods.buildDB
 import wekaMethods.commsSpaces
-import wekaMethods.articles
-import wekaMethods.patchsBuild
-import wekaMethods.wekaAccuracy
 import wekaMethods.issuesExtract.github_import
 import wekaMethods.issuesExtract.jira_import
 import wekaMethods.issuesExtract.python_bugzilla
-import Agent.bugs_testsDBMethods
-import Agent.experimentsMethods
-import report
-import wekaMethods.ParseWekaOutput
-import Planner.Planning_Results
-from utilsConf import Mkdirs, version_to_dir_name, mkOneDir
+import wekaMethods.patchsBuild
+import wekaMethods.wekaAccuracy
+from utilsConf import Mkdirs, version_to_dir_name, mkOneDir, versions_info, versionsCreate
+
 try:
     from SFL_diagnoser.Diagnoser.diagnoserUtils import readPlanningFile, write_planning_file
 except:
@@ -43,25 +43,6 @@ workingDir=C:\projs\antWorking
 git=C:\projs\antC
 vers=(ANT_13_B2,ANT_13_MAIN_MERGE4,ANT_MAIN_13_MERGE4)
 """
-
-
-def CopyDirs(gitPath, versPath, versions):
-    for version in versions:
-        path=os.path.join(versPath, version_to_dir_name(version), "repo")
-        if not os.path.exists(path):
-            shutil.copytree(gitPath, path)
-
-
-def GitRevert(versPath,vers):
-    def run_cmd(path, args):
-        proc = subprocess.Popen(["git", "-C", path] + args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-        (out, err) = proc.communicate()
-
-    for version in vers:
-        repo_path = os.path.join(versPath, version_to_dir_name(version), "repo")
-        run_cmd(repo_path, ["clean", "-fd", version])
-        run_cmd(repo_path, ["checkout", '-f', version])
-        run_cmd(repo_path, ["clean", "-fd", version])
 
 def OO_features_error_analyze(err):
     # get all corrupted java files in err
@@ -86,10 +67,10 @@ def OO_features_error_analyze(err):
 
 
 @utilsConf.marker_decorator(utilsConf.OO_OLD_FEATURES_MARKER)
-def Extract_OO_features_OLD(versPath, vers, docletPath):
-    for version in vers:
-        verPath=os.path.join(versPath, version_to_dir_name(version))
-        command = """cd /d  """ + utilsConf.to_short_path(verPath) + " & for /R .\\repo %f in (*.java) do (call javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath "+utilsConf.to_short_path(docletPath)+" -filename %~nxf.xml -private -d .\Jdoc2 %f >NUL 2>NUL)"
+def Extract_OO_features_OLD():
+    for version in utilsConf.get_configuration().vers:
+        verPath = os.path.join(utilsConf.get_configuration().versPath, version_to_dir_name(version))
+        command = """cd /d  """ + utilsConf.to_short_path(verPath) + " & for /R .\\repo %f in (*.java) do (call javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath "+utilsConf.to_short_path(utilsConf.get_configuration().docletPath)+" -filename %~nxf.xml -private -d .\Jdoc2 %f >NUL 2>NUL)"
         os.system(command)
 # GENERATE Jdoc
 
@@ -185,72 +166,29 @@ def blameExecute(path, pathRepo, ver):
 
 
 @utilsConf.marker_decorator(utilsConf.COMPLEXITY_FEATURES_MARKER)
-def Extract_complexity_features(versPath,vers_dirs, vers,workingDir,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML):
-    for version_path, version_name in zip(vers_dirs, vers):
-        path=os.path.join(versPath, version_to_dir_name(version_path))
+def Extract_complexity_features():
+    for version_path, version_name in zip(utilsConf.get_configuration().vers_dirs, utilsConf.get_configuration().vers):
+        path=os.path.join(utilsConf.get_configuration().versPath, version_to_dir_name(version_path))
         pathRepo=os.path.join(path,"repo")
-        SourceMonitorXml(workingDir, version_to_dir_name(version_path), sourceMonitorEXE)
-        run_commands = ["java", "-jar", checkStyle68, "-c", methodsNamesXML,"javaFile","-o","vers/checkAllMethodsData/"+version_path+".txt",pathRepo]
-        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(workingDir))
+        SourceMonitorXml(utilsConf.get_configuration().workingDir, version_to_dir_name(version_path), utilsConf.get_configuration().sourceMonitorEXE)
+        run_commands = ["java", "-jar", utilsConf.get_configuration().checkStyle68, "-c", utilsConf.get_configuration().methodsNamesXML,"javaFile","-o","vers/checkAllMethodsData/"+version_path+".txt",pathRepo]
+        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().workingDir))
         (out, err) = proc.communicate()
 
-        run_commands = ["java", "-jar", checkStyle57, "-c", allchecks,"-r",pathRepo,"-f","xml","-o","vers/checkAll/"+version_path+".xml"]
-        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(workingDir))
+        run_commands = ["java", "-jar", utilsConf.get_configuration().checkStyle57, "-c", utilsConf.get_configuration().allchecks,"-r",pathRepo,"-f","xml","-o","vers/checkAll/"+version_path+".xml"]
+        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().workingDir))
         (out, err) = proc.communicate()
 
         blameExecute(path, pathRepo, version_name)
 
-def GitVersInfo(basicPath,repoPath,vers):
-    r=git.Repo(repoPath)
-    if vers==[]:
-        wanted=[ x.commit for x in r.tags ]
-        vers=r.tags
-    else:
-        wanted=[ x.commit for x in r.tags if x.name in vers]
-    commits=[int("".join(list(x.hexsha)[:7]),16) for x in wanted]
-    dates=[datetime.datetime.fromtimestamp(x.committed_date).strftime('%Y-%m-%d %H:%M:%S') for x in wanted]
-    paths=[os.path.join(basicPath, os.path.join(n, "repo")) for n in vers]
-    return vers,paths,dates,commits
-
-
 # blame
 #checkStyle
 @utilsConf.marker_decorator(utilsConf.FEATURES_MARKER)
-def featuresExtract(vers_dirs, vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML):
-    Extract_complexity_features(versPath, vers_dirs, vers, workingDir,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
-    logfile.write("after Extract_complexity_features "+ str(datetime.datetime.now())+"\n")
-    logfile.flush()
-
-    Extract_OO_features_OLD(versPath, vers,docletPath)
-    logfile.write("after Extract_OO_features "+ str(datetime.datetime.now())+"\n")
-    logfile.flush()
-
-    wekaMethods.commsSpaces.create(vers_dirs, os.path.join(workingDir, "vers"))
-    logfile.write("after commsSpaces "+ str(datetime.datetime.now())+"\n")
-    logfile.flush()
-
-    wekaMethods.patchsBuild.do_all(LocalGitPath, checkStyle68, methodsNamesXML)
-
-
-@utilsConf.marker_decorator(utilsConf.VERSIONS_MARKER)
-def versionsCreate(gitPath, vers, versPath,LocalGitPath):
-    CopyDirs(gitPath, versPath, vers)
-    GitRevert(versPath, vers)
-    if not os.path.exists(LocalGitPath):
-        shutil.copytree(gitPath, LocalGitPath)
-
-
-
-def gitInfoToCsv(gitPath,outFile):
-    r=git.Repo(gitPath)
-    wanted=[ x.commit for x in r.tags ]
-    dates=[datetime.datetime.fromtimestamp(x.committed_date).strftime('%Y-%m-%d %H:%M:%S') for x in wanted if type(x)==git.Commit]
-    lines=[["ver","date"]]
-    for v,d in zip(r.tags,dates):
-        lines.append([v,d])
-    with open(outFile,"wb") as f:
-        writer=csv.writer(f)
-        writer.writerows(lines)
+def featuresExtract():
+    Extract_complexity_features()
+    Extract_OO_features_OLD()
+    wekaMethods.commsSpaces.create(utilsConf.get_configuration().vers_dirs, os.path.join(utilsConf.get_configuration().workingDir, "vers"))
+    wekaMethods.patchsBuild.do_all()
 
 
 def BuildWekaModel(weka, training, testing, namesCsv, outCsv, name, wekaJar):
@@ -267,28 +205,6 @@ def BuildWekaModel(weka, training, testing, namesCsv, outCsv, name, wekaJar):
     wekaMethods.wekaAccuracy.priorsCreation(namesCsv, wekaCsv, outCsv, "")
 
 
-def testing(repoPath,antOrPom):
-    shutil.copyfile("C:\GitHub\\agent\my-app\\agent.jar", repoPath + "\\agent.jar")
-    if antOrPom=="ant":
-        ant = "cd /d  " + repoPath + "  & ant test -keep-going -Dhalt.on.test.failure=\"false\" -Dtest.junit.vmargs=\"-javaagent:agent.jar\""
-        #ant = "cd /d  " + repoPath + "  & ant test -keep-going -Dhalt.on.test.failure=\"false\" -Dpoi.test.locale =\"-Duser.language=en -Duser.country=US -javaagent:agent.jar\""
-        os.system(ant)
-    if antOrPom=="pom":
-        runMvn = "cd /d  " + repoPath + "  & mvn clean install -Dmaven.test.failure.ignore=true -DargLine=\"-javaagent:agent.jar\""
-        exit()
-        os.system(runMvn)
-
-
-    #adjust agent
-    #check mvn or ant
-    #run tests
-
-
-def ExcelReport(csvData,excel,sheet):
-    shutil.copyfile("C:\projs\\"+sheet+".xlsx", excel)
-    os.system("java -jar ExcelChanger.jar "+excel+" "+csvData+" "+sheet)
-
-
 def BuildMLFiles(outDir, buggedType, component):
     trainingFile=os.path.join(outDir,buggedType+"_training_"+component+".arff")
     testingFile=os.path.join(outDir,buggedType+"_testing_"+component+".arff")
@@ -298,21 +214,23 @@ def BuildMLFiles(outDir, buggedType, component):
 
 
 @utilsConf.marker_decorator(utilsConf.ML_MODELS_MARKER)
-def createBuildMLModels(workingDir, gitPath, weka, vers, vers_dirs, db_dir, wekaJar, RemoveBat):
+def createBuildMLModels():
     for buggedType in ["All", "Most"]:
-        Bpath=os.path.join(workingDir, buggedType)
+        Bpath=os.path.join(utilsConf.get_configuration().workingDir, buggedType)
         mkOneDir(Bpath)
         FilesPath=os.path.join(Bpath, "Files")
         methodsPath=os.path.join(Bpath, "Methods")
         mkOneDir(FilesPath)
         mkOneDir(methodsPath)
-        trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacks(FilesPath, gitPath, weka, vers, vers_dirs, buggedType, db_dir)
-        trainingFile, testingFile, NamesFile, outCsv=BuildMLFiles(utilsConf.to_short_path(weka),buggedType,"files")
-        BuildWekaModel(weka,trainingFile,testingFile,NamesFile,outCsv,"files_"+buggedType,wekaJar)
+        trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacks(FilesPath,
+                                                                                                        utilsConf.get_configuration().gitPath, utilsConf.get_configuration().weka, utilsConf.get_configuration().vers, utilsConf.get_configuration().vers_dirs, buggedType, utilsConf.get_configuration().db_dir)
+        trainingFile, testingFile, NamesFile, outCsv=BuildMLFiles(utilsConf.to_short_path(utilsConf.get_configuration().weka),buggedType,"files")
+        BuildWekaModel(utilsConf.get_configuration().weka,trainingFile,testingFile,NamesFile,outCsv,"files_"+buggedType, utilsConf.get_configuration().wekaJar)
         # All_One_create.allFamilies(FilesPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
-        trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacksMethods(methodsPath, gitPath, weka, vers, vers_dirs, buggedType, db_dir)
-        trainingFile, testingFile, NamesFile, outCsv=BuildMLFiles(utilsConf.to_short_path(weka),buggedType,"methods")
-        BuildWekaModel(weka,trainingFile,testingFile,NamesFile,outCsv,"methods_"+buggedType,wekaJar)
+        trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacksMethods(methodsPath,
+                                                                                                               utilsConf.get_configuration().gitPath, utilsConf.get_configuration().weka, utilsConf.get_configuration().vers, utilsConf.get_configuration().vers_dirs, buggedType, utilsConf.get_configuration().db_dir)
+        trainingFile, testingFile, NamesFile, outCsv=BuildMLFiles(utilsConf.to_short_path(utilsConf.get_configuration().weka),buggedType,"methods")
+        BuildWekaModel(utilsConf.get_configuration().weka,trainingFile,testingFile,NamesFile,outCsv,"methods_"+buggedType, utilsConf.get_configuration().wekaJar)
         # All_One_create.allFamilies(methodsPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
 
 
@@ -394,16 +312,11 @@ def RealDIagnosis(workingDir, weka):
         # write_planning_file()
 
 @utilsConf.marker_decorator(utilsConf.VERSION_TEST_MARKER)
-def testVerConfig(workingDir,ver,antOrPom,startDate,endDate):
-    testedVer=os.path.join(workingDir,"testedVer")
-    testedVer=os.path.join(testedVer,"repo")
-    tested=os.path.join(workingDir,"vers")
-    tested=os.path.join(tested,ver)
-    tested=os.path.join(tested,"repo")
-    if not os.path.exists(testedVer):
-        shutil.copytree(tested, testedVer)
-    #testing(testedVer,antOrPom)
-    #Agent.bugs_testsDBMethods.basicBuild(workingDir,ver,startDate,endDate)
+def test_version_create():
+    src = os.path.join(utilsConf.get_configuration().workingDir,"vers", utilsConf.get_configuration().vers[-2], "repo")
+    dst = os.path.join(utilsConf.get_configuration().workingDir,"testedVer", "repo")
+    if not os.path.exists(dst):
+        shutil.copytree(src, dst)
 
 
 def clean(versPath,LocalGitPath):
@@ -411,80 +324,28 @@ def clean(versPath,LocalGitPath):
     shutil.rmtree(LocalGitPath, ignore_errors=True)
 
 
-def download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product, bugsPath):
-    if issue_tracker == "bugzilla":
+def download_bugs():
+    bugsPath = utilsConf.get_configuration().bugsPath
+    issue_tracker_url = utilsConf.get_configuration().issue_tracker_url
+    issue_tracker_product = utilsConf.get_configuration().issue_tracker_product
+    if utilsConf.get_configuration().issue_tracker == "bugzilla":
         wekaMethods.issuesExtract.python_bugzilla.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
-    elif issue_tracker == "jira":
+    elif utilsConf.get_configuration().issue_tracker == "jira":
         wekaMethods.issuesExtract.jira_import.jiraIssues(bugsPath, issue_tracker_url, issue_tracker_product)
-    elif issue_tracker == "github":
+    elif utilsConf.get_configuration().issue_tracker == "github":
         wekaMethods.issuesExtract.github_import.GithubIssues(bugsPath, issue_tracker_url, issue_tracker_product)
 
 
+@utilsConf.marker_decorator(utilsConf.LEARNER_PHASE_FILE)
 def wrapperLearner(confFile):
-    vers, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir = utilsConf.configure(confFile)
-    docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath = utilsConf.globalConfig()
-    bugsPath = os.path.join(workingDir, "bugs.csv")
-    download_bugs(issue_tracker, issue_tracker_url, issue_tracker_product, bugsPath)
-    vers_dirs = map(version_to_dir_name, vers)
-    logfile = open(os.path.join(workingDir,"timeLog2.txt"),"wb")
-    logfile.write("start "+ str(datetime.datetime.now())+"\n")
-    logfile.flush()
-    vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
-    LocalGitPath=os.path.join(workingDir,"repo")
-    versionsCreate(gitPath, vers, versPath,LocalGitPath)
-    testVerConfig(workingDir,vers_dirs[-2],"ant",dates[-2],dates[-1])
+    utilsConf.configure(confFile)
+    download_bugs()
+    test_version_create()
     # NLP.commits.data_to_csv(os.path.join(workingDir, "NLP_data.csv"), gitPath, bugsPath)
-    mkOneDir(LocalGitPath)
-    featuresExtract(vers_dirs, vers, versPath, workingDir,LocalGitPath,logfile,docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML)
-    logfile.write("after featuresExtract "+ str(datetime.datetime.now())+"\n")
-    logfile.flush()
-    MethodsParsed=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"CheckStyle.txt")
-    changeFile=os.path.join(os.path.join(LocalGitPath,"commitsFiles"),"Ins_dels.txt")
-    wekaMethods.buildDB.buildOneTimeCommits(versPath,db_dir,bugsPath,False,-1,vers_dirs,"repo",MethodsParsed,changeFile,logfile,dates, gitPath)
-    logfile.write("after buildDB "+ str(datetime.datetime.now())+"\n")
-    logfile.flush()
-    weka=utilsConf.to_short_path(os.path.join(workingDir,"weka"))
-    createBuildMLModels(workingDir, gitPath, weka, vers, vers_dirs, db_dir, wekaJar, RemoveBat)
-    utilsConf.get_configuration().get_marker(utilsConf.LEARNER_PHASE_FILE).finish()
+    featuresExtract()
+    wekaMethods.buildDB.buildOneTimeCommits()
+    createBuildMLModels()
 
-    # FilesIndices=[[0,14,15],[1,2,3,4,5,6,7,8,9],[10,11,12,16],[13]] #Traditional , OO, process ,Bugs
-    # FilesIndices_all=[indsFamilies(FilesIndices,[[x for x in range(len(FilesIndices)) if x != ind]])[0]  for ind in range(len(FilesIndices))] #Traditional , OO, process ,Bugs
-    # MethodsIndices=[[0],[1],[2,3]]
-    # MethodsIndices_all=[indsFamilies(MethodsIndices,[[x for x in range(len(MethodsIndices)) if x != ind]])[0]  for ind in range(len(MethodsIndices))] #Traditional , OO, process ,Bugs
-    #
-    # for granularity,indicesList_one,indicesList_all in [["Files",FilesIndices ,FilesIndices_all ], ["Methods",MethodsIndices ,MethodsIndices_all]]:
-    #     for Bug_Type in ["All","Most"]:
-    #         baseDir=os.path.join(workingDir,Bug_Type)
-    #         baseDir=os.path.join(baseDir,granularity)
-    #         #for One_or_all,indicesList in [("Fam_one",indicesList_one),("Fam_all",indicesList_all)]:
-    #         for One_or_all,indicesList in [("Fam_all",indicesList_all)]:
-    #             One_or_allDir=os.path.join(baseDir,"Fam_one")
-    #             outDir=os.path.join(baseDir,"ThreeFam_"+One_or_all)
-    #             mkOneDir(outDir)
-    #             shutil.copyfile(os.path.join("D:\\Amir_Almishali\\projs","BuildEval.bat"),os.path.join(outDir,"BuildEval.bat"))
-    #             for ind,indices in enumerate(indicesList):
-    #                 outArffTrain=os.path.join(outDir,str(ind)+"_Appended.arff")
-    #                 TraintempFile=os.path.join(baseDir,str(ind)+"_tempTrain.arff")
-    #                 merge_multiple_arff_file(One_or_allDir,outArffTrain,TraintempFile,[str(x)+"_Appended.arff" for x in indices])
-    #                 #print [str(x)+"_Appended.arff" for x in indices]
-    #                 outArffTest=os.path.join(outDir,str(ind)+"_Only.arff")
-    #                 TesttempFile=os.path.join(baseDir,str(ind)+"_tempTest.arff")
-    #                 #print [str(y)+"_Only.arff" for y in indsFamilies(indicesList,[[x for x in range(len(indicesList)) if x != ind]])[0]]
-    #                 #merge_multiple_arff_file(One_or_allDir,outArffTest,TesttempFile,[str(y)+"_Only.arff" for y in indices])
-    #             #os.system("start /b cmd /x /c \"D: & cd  " + outDir +" &  " + outDir + "\\BuildEval.bat\"")
-    #
-    #
-    # known_indices_files = [0, 3, 5, 6, 8, 11, 14]
-    # known_indices_methods = [0, 2]
-    # for granularity,indices in [["Files",known_indices_files ], ["Methods",known_indices_methods]]:
-    #     for Bug_Type  in ["All","Most"]:
-    #         baseDir=os.path.join(workingDir,Bug_Type)
-    #         baseDir=os.path.join(baseDir,granularity)
-    #         fam_one_path=os.path.join(baseDir,"Fam_one")
-    #         append_families_indices(workingDir,wekaJar, fam_one_path, Bug_Type,granularity,indices)
-    #ArticleFeaturesMostFiles(workingDir,outArffTrain,outArffTest,tempFile,outCsv,wekaJar,[0,3,5,6,8,11,14])
-
-    #allOne types
 
 def comprasionAll(confFile,globalConfFile):
     vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
@@ -559,7 +420,7 @@ def wrapperExperiments(confFile):
     docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath = utilsConf.globalConfig()
     vers_dirs = map(version_to_dir_name, vers)
     weka=os.path.join(workingDir,"weka")
-    vers,paths,dates,commits=GitVersInfo("c:\\",gitPath,vers)
+    vers,paths,dates,commits= versions_info(gitPath, vers)
     testDb=Agent.bugs_testsDBMethods.basicBuild(workingDir,vers_dirs[-2],dates[-2],dates[-1])
     packsPath = os.path.join(workingDir, "packs.txt")
     Agent.experimentsMethods.packFileCreate(testDb,1,-1, packsPath)
@@ -569,32 +430,11 @@ def wrapperExperiments(confFile):
     RealDIagnosis(workingDir, weka)
 
 
-def wrapper_planning(confFile,globalConfFile):
-    pass
-
-
 if __name__ == '__main__':
-    # try:
-        current_dir = os.path.dirname(os.path.realpath(__file__))
-        globalConf = os.path.realpath(os.path.join(current_dir, "../globalConf.txt"))
-        csv.field_size_limit(sys.maxint)
-        if len(sys.argv) == 1:
-            # Planner.planningExperiments.test()
-            wekaMethods.buildDB.bugs_test(r"C:\Temp\AntBugs.csv")
-            # import Diagnoser.Barinel
-            # Diagnoser.Barinel.test()
-        else:
-            print(sys.argv[1], globalConf)
-            if sys.argv[2]=="learn":
-                wrapperLearner(sys.argv[1])
-            elif sys.argv[2]=="experiments":
-                wrapperExperiments(sys.argv[1])
-            elif sys.argv[2]=="planning":
-                wrapper_planning(sys.argv[1], globalConf)
-            elif sys.argv[2]=="all_planning":
-                Planner.planningExperiments.planning_for_project(sys.argv[1])
-    # except Exception as e:
-    #     import traceback
-    #     utilsConf.get_configuration().get_marker(utilsConf.ERROR_FILE).error(e.message + "\n")
-    #     traceback.print_stack()
-
+    csv.field_size_limit(sys.maxint)
+    if sys.argv[2]=="learn":
+        wrapperLearner(sys.argv[1])
+    elif sys.argv[2]=="experiments":
+        wrapperExperiments(sys.argv[1])
+    elif sys.argv[2]=="all_planning":
+        Planner.planningExperiments.planning_for_project(sys.argv[1])

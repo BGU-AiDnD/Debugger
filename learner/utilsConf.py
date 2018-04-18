@@ -1,5 +1,9 @@
 __author__ = 'amir'
+import datetime
+import shutil
+import git
 import os
+import subprocess
 import traceback
 import sys
 import github3
@@ -56,6 +60,44 @@ def to_short_path(path):
     return path.replace(LONG_PATH_MAGIC, "")
 
 
+def versions_info(repoPath, vers):
+    r = git.Repo(repoPath)
+    if vers==[]:
+        wanted = [x.commit for x in r.tags]
+        vers=r.tags
+    else:
+        wanted = [x.commit for x in r.tags if x.name in vers]
+    commits = [int("".join(list(x.hexsha)[:7]), 16) for x in wanted]
+    dates = [datetime.datetime.fromtimestamp(x.committed_date).strftime('%Y-%m-%d %H:%M:%S') for x in wanted]
+    paths = [os.path.join(ver, "repo") for ver in vers]
+    return vers, paths, dates, commits
+
+
+def CopyDirs(gitPath, versPath, versions):
+    for version in versions:
+        path=os.path.join(versPath, version_to_dir_name(version), "repo")
+        if not os.path.exists(path):
+            shutil.copytree(gitPath, path)
+
+
+def GitRevert(versPath,vers):
+    def run_cmd(path, args):
+        proc = subprocess.Popen(["git", "-C", path] + args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        (out, err) = proc.communicate()
+
+    for version in vers:
+        repo_path = os.path.join(versPath, version_to_dir_name(version), "repo")
+        run_cmd(repo_path, ["clean", "-fd", version])
+        run_cmd(repo_path, ["checkout", '-f', version])
+        run_cmd(repo_path, ["clean", "-fd", version])
+
+
+def versionsCreate(gitPath, vers, versPath,LocalGitPath):
+    CopyDirs(gitPath, versPath, vers)
+    GitRevert(versPath, vers)
+    if not os.path.exists(LocalGitPath):
+        shutil.copytree(gitPath, LocalGitPath)
+
 def configure(confFile):
     lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
     versions, gitPath,issue_tracker_url, issue_tracker_product, workingDir="","","","",""
@@ -75,32 +117,32 @@ def configure(confFile):
             v=x.split("=")[1]
             v=v.split("(")[1]
             v=v.split(")")[0]
-            versions=v.split(",")
-    versions = [v.lstrip() for v in versions]
-    versPath, db_dir = Mkdirs(workingDir, versions)
+            versions = v.split(",")
+    versions = [v.strip() for v in versions]
     init_configuration(workingDir, versions)
+    configuration = get_configuration()
+    versPath, db_dir = Mkdirs(workingDir, versions)
+    vers, paths, dates, commits = versions_info(gitPath, versions)
+    docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath = globalConfig()
+    bugsPath = os.path.join(workingDir, "bugs.csv")
+    vers_dirs = map(version_to_dir_name, vers)
+    LocalGitPath = os.path.join(workingDir, "repo")
+    mkOneDir(LocalGitPath)
+    weka_path = to_short_path(os.path.join(workingDir, "weka"))
+    MethodsParsed = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "CheckStyle.txt")
+    changeFile = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "Ins_dels.txt")
+    versionsCreate(gitPath, vers, versPath, LocalGitPath)
+    names_values = [("versPath", versPath), ("db_dir", db_dir), ("vers", vers), ("paths", paths), ("dates", dates),
+                    ("commits", commits), ("docletPath", docletPath), ("sourceMonitorEXE", sourceMonitorEXE),
+                    ("checkStyle57", checkStyle57), ("checkStyle68", checkStyle68), ("allchecks", allchecks),
+                    ("methodsNamesXML", methodsNamesXML), ("wekaJar", wekaJar), ("RemoveBat", RemoveBat),
+                    ("utilsPath", utilsPath), ("versions", versions), ("gitPath", gitPath), ("issue_tracker", issue_tracker),
+                    ("issue_tracker_url", issue_tracker_url), ("issue_tracker_product", issue_tracker_product),
+                    ("workingDir", workingDir), ("bugsPath", bugsPath), ("vers_dirs", vers_dirs),
+                    ("LocalGitPath", LocalGitPath), ("weka_path", weka_path), ("MethodsParsed", MethodsParsed),
+                    ("changeFile", changeFile)]
+    map(lambda name_val: setattr(configuration, name_val[0], name_val[1]), names_values)
     return versions, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir
-
-
-def configureExperiments(confFile):
-    lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
-    versions, gitPath,bugs, workingDir="","","",""
-    for x in lines:
-        if x.startswith("workingDir"):
-            v=x.split("=")[1]
-            workingDir=v
-        if x.startswith("git"):
-            v=x.split("=")[1]
-            gitPath=v
-        if x.startswith("bugs"):
-            v=x.split("=")[1]
-            bugs=v
-        if x.startswith("vers"):
-            v=x.split("=")[1]
-            v=v.split("(")[1]
-            v=v.split(")")[0]
-            versions=v.split(",")
-    return [v.lstrip() for v in versions], gitPath,bugs, workingDir
 
 
 def version_to_dir_name(version):
@@ -136,7 +178,6 @@ class Configuration(object):
         self.markers_dir = os.path.join(workingDir,"markers")
         self.versions = versions
         log_path = os.path.join(to_short_path(workingDir), "log.log")
-        # open(log_path, "wb").close()
         logging.basicConfig(filename=log_path, level=logging.DEBUG)
 
     def get_marker_path(self, marker):
@@ -174,6 +215,7 @@ class Marker(object):
             f.write(log_line)
             logging.info('writing to %s: %s', self.marker_path ,log_line)
 
+
 def init_configuration(workingDir, versions):
     global conf
     assert(conf is None)
@@ -188,7 +230,7 @@ def post_bug_to_github(etype, value, tb):
     gh = github3.login('DebuggerIssuesReport', password='DebuggerIssuesReport1') # DebuggerIssuesReport@mail.com
     repo = gh.repository('amir9979', 'Debugger')
     issue_body = "".join(['Traceback (most recent call last):\n'] + traceback.format_tb(tb) + traceback.format_exception_only(etype, value))
-    repo.create_issue(title='An Exception occurred', body=issue_body)
+    repo.create_issue(title='An Exception occurred', body=issue_body, assignee='amir9979')
 
 
 def marker_decorator(marker):

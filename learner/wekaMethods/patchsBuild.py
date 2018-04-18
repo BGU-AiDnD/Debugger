@@ -338,15 +338,15 @@ def analyzeCheckStyle(checkOut, changeFile):
 
 
 # @utilsConf.marker_decorator(utilsConf.PATCHS_FEATURES_MARKER)
-def do_all(workingDir, checkStyle68, methodNameLines):
-    patchD = os.path.join(workingDir, "patch")
-    commitsFiles = os.path.join(workingDir, "commitsFiles")
-    changedFile = os.path.join(workingDir, "commitsFiles", "Ins_dels.txt")
+def do_all():
+    patchD = os.path.join(utilsConf.get_configuration().LocalGitPath, "patch")
+    commitsFiles = os.path.join(utilsConf.get_configuration().LocalGitPath, "commitsFiles")
+    changedFile = os.path.join(utilsConf.get_configuration().LocalGitPath, "commitsFiles", "Ins_dels.txt")
     mkdir(patchD)
     mkdir(commitsFiles)
     run_commands = "git format-patch --root -o patch --function-context --unified=9000".split()
-    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(workingDir))
+    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().LocalGitPath))
     proc.communicate()
     buildPatchs(patchD, commitsFiles, changedFile)
     checkOut = os.path.join(commitsFiles, "CheckStyle.txt")
-    RunCheckStyle(commitsFiles, checkOut, checkStyle68, methodNameLines)
+    RunCheckStyle(commitsFiles, checkOut, utilsConf.get_configuration().checkStyle68, utilsConf.get_configuration().methodsNamesXML)
