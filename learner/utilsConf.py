@@ -145,6 +145,10 @@ def configure(confFile):
         repo = git.Repo(debugger_base_path)
         logging.info('Debugger HEAD is on commit {0}'.format(str(repo.head.commit)))
         repo.close()
+        repo = git.Repo(gitPath)
+        remotes_urls = reduce(list.__add__, map(lambda r: list(r.urls), repo.remotes))
+        logging.info('remote git at urls {0} and HEAD is on commit {1}'.format(str(remotes_urls),str(repo.head.commit)))
+        repo.close()
     except:
         pass
     names_values = [("versPath", versPath), ("db_dir", db_dir), ("vers", vers), ("paths", paths), ("dates", dates),
