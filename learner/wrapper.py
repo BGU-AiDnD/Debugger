@@ -12,7 +12,7 @@ from random import randint
 import Agent.bugs_testsDBMethods
 import Agent.experimentsMethods
 import Planner.Planning_Results
-import git
+import itertools
 import report
 import utilsConf
 import wekaMethods.ParseWekaOutput
@@ -299,7 +299,7 @@ def weka_csv_to_readable_csv(weka_csv, prediction_csv):
 
 
 def Experiments(workingDir,weka,packsPath,utilsPath,randNum):
-    for buggedType, granularity in zip(["All", "Most"], ["File", "Method"]):
+    for buggedType, granularity in itertools.product(["All", "Most"], ["File", "Method"]):
         outPath = os.path.join(workingDir, "experiments\\files_{0}{1}".format(buggedType, randNum))
         weka_csv = os.path.join(utilsConf.get_configuration().weka_path, "{buggedType}_out_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
         Agent.experimentsMethods.RunExperiments(os.path.join(workingDir, "testsBugsMethods.db"), outPath, packsPath,
@@ -338,7 +338,7 @@ def download_bugs():
         wekaMethods.issuesExtract.github_import.GithubIssues(bugsPath, issue_tracker_url, issue_tracker_product)
 
 def create_web_prediction_results():
-    for buggedType, granularity in zip(["All", "Most"], ["File", "Method"]):
+    for buggedType, granularity in itertools.product(["All", "Most"], ["File", "Method"]):
         weka_csv = os.path.join(utilsConf.get_configuration().weka_path, "{buggedType}_out_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
         prediction_csv = os.path.join(utilsConf.get_configuration().web_prediction_results, "prediction_{buggedType}_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
         weka_csv_to_readable_csv(weka_csv, prediction_csv)
