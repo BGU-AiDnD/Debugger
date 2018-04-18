@@ -37,7 +37,7 @@ def oneFileParser(methods,javaFile,inds,key):
         return
     run_commands = ["java", "-jar", "C:\projs\checkstyle-6.8-SNAPSHOT-all.jar ", "-c", "C:\projs\methodNameLines.xml",
              javaFile]
-    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=r'C:\projs')
+    proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, shell=True,cwd=r'C:\projs')
     (out, err) = proc.communicate()
     out=out.replace("\n","").split("\r")[1:-3]
     fileName=javaFile.split("\\")[-1]
@@ -235,7 +235,7 @@ def DbAdd(dbPath,allComms):
 
 def RunCheckStyle(workingDir,outPath,checkStyle68,methodNameLines):
     run_commands = ["java" ,"-jar" ,checkStyle68 ,"-c" ,methodNameLines ,"javaFile" ,"-o",outPath,workingDir]
-    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     (out, err) = proc.communicate()
 
 def detectFromConf(lines,lineInd):
@@ -345,7 +345,7 @@ def do_all():
     mkdir(patchD)
     mkdir(commitsFiles)
     run_commands = "git format-patch --root -o patch --function-context --unified=9000".split()
-    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().LocalGitPath))
+    proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().LocalGitPath))
     proc.communicate()
     buildPatchs(patchD, commitsFiles, changedFile)
     checkOut = os.path.join(commitsFiles, "CheckStyle.txt")

@@ -82,7 +82,8 @@ def CopyDirs(gitPath, versPath, versions):
 
 def GitRevert(versPath,vers):
     def run_cmd(path, args):
-        proc = subprocess.Popen(["git", "-C", path] + args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        run_commands = ["git", "-C", path] + args
+        proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         (out, err) = proc.communicate()
 
     for version in vers:
@@ -99,7 +100,12 @@ def versionsCreate(gitPath, vers, versPath,LocalGitPath):
         shutil.copytree(gitPath, LocalGitPath)
 
 def configure(confFile):
-    lines =[x.split("\n")[0] for x in open(confFile,"r").readlines()]
+    lines = []
+    full_configure_file = ""
+    with open(confFile,"r") as conf:
+        lines =[x.split("\n")[0] for x in conf.readlines()]
+        conf.seek(0)
+        full_configure_file = conf.read()
     versions, gitPath,issue_tracker_url, issue_tracker_product, workingDir="","","","",""
     issue_tracker = "bugzilla"
     for x in lines:
@@ -149,7 +155,8 @@ def configure(confFile):
                     ("issue_tracker_url", issue_tracker_url), ("issue_tracker_product", issue_tracker_product),
                     ("workingDir", workingDir), ("bugsPath", bugsPath), ("vers_dirs", vers_dirs),
                     ("LocalGitPath", LocalGitPath), ("weka_path", weka_path), ("MethodsParsed", MethodsParsed),
-                    ("changeFile", changeFile), ("debugger_base_path", debugger_base_path), ("web_prediction_results", web_prediction_results)]
+                    ("changeFile", changeFile), ("debugger_base_path", debugger_base_path),
+                    ("web_prediction_results", web_prediction_results), ("full_configure_file", full_configure_file)]
     map(lambda name_val: setattr(configuration, name_val[0], name_val[1]), names_values)
     Mkdirs(workingDir)
     return versions, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir
@@ -195,6 +202,14 @@ class Configuration(object):
 
     def get_marker(self, marker):
         return Marker(self.get_marker_path(marker))
+
+def open_subprocess(args, bufsize=0, executable=None, stdin=None, stdout=None, stderr=None, preexec_fn=None,
+                    close_fds=False, shell=False, cwd=None, env=None, universal_newlines=False,
+                    startupinfo=None, creationflags=0):
+    logging.info('running new process with cmdline {0}'.format(" ".join(args)))
+    return subprocess.Popen(args, bufsize=bufsize, executable=executable, stdin=stdin, stdout=stdout, stderr=stderr,
+                            preexec_fn=preexec_fn, close_fds=close_fds, shell=shell, cwd=cwd, env=env,
+                            universal_newlines=universal_newlines, startupinfo=startupinfo, creationflags=creationflags)
 
 class Marker(object):
     def __init__(self, path):

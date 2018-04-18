@@ -88,11 +88,11 @@ def Extract_OO_features(versPath,vers,docletPath="..\..\\xml-doclet-1.0.4-jar-wi
         if (not os.path.exists(outPath)):
             bads=bads+OO_features_error_analyze(err)
             open(os.path.join(verPath,"JdocFunc.txt"),"wb").writelines([x for x in open(os.path.join(verPath,"javaFiles.txt"),"r").readlines() if x not in bads ])
-            proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,cwd=utilsConf.to_short_path(verPath))
+            proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,cwd=utilsConf.to_short_path(verPath))
             (out, err) = proc.communicate()
             bads=bads+OO_features_error_analyze(err)
             open(os.path.join(verPath,"JdocFunc.txt"),"wb").writelines([x for x in open(os.path.join(verPath,"javaFiles.txt"),"r").readlines() if x not in bads ])
-            proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,cwd=utilsConf.to_short_path(verPath))
+            proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,cwd=utilsConf.to_short_path(verPath))
             (out, err) = proc.communicate()
 # GENERATE Jdoc
 
@@ -142,7 +142,7 @@ def SourceMonitorXml(workingDir, ver, sourceMonitorEXE):
     with open(xmlPath, "wb") as f:
         f.write(xml)
     run_commands = [sourceMonitorEXE, "/C", xmlPath]
-    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     (out, err) = proc.communicate()
 
 
@@ -154,12 +154,12 @@ def blameExecute(path, pathRepo, ver):
             git_file_path = os.path.join(root, name).replace(pathRepo + "\\", "")
             blame_file_path = os.path.abspath(os.path.join(path, 'blame', name))
             blame_commands = ['git', 'blame', '--show-stats', '--score-debug', '-p', '--line-porcelain', '-l', ver, git_file_path]
-            proc = subprocess.Popen(blame_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(pathRepo))
+            proc = utilsConf.open_subprocess(blame_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(pathRepo))
             (out, err) = proc.communicate()
             with open(blame_file_path, "w") as f:
                 f.writelines(out)
     run_commands = ["dir", "/b", "/s", "*.java"]
-    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(pathRepo))
+    proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(pathRepo))
     (out, err) = proc.communicate()
     with open(os.path.join(path, "javaFiles.txt"), "wb") as f:
         f.writelines(out)
@@ -172,11 +172,11 @@ def Extract_complexity_features():
         pathRepo=os.path.join(path,"repo")
         SourceMonitorXml(utilsConf.get_configuration().workingDir, version_to_dir_name(version_path), utilsConf.get_configuration().sourceMonitorEXE)
         run_commands = ["java", "-jar", utilsConf.get_configuration().checkStyle68, "-c", utilsConf.get_configuration().methodsNamesXML,"javaFile","-o","vers/checkAllMethodsData/"+version_path+".txt",pathRepo]
-        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().workingDir))
+        proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().workingDir))
         (out, err) = proc.communicate()
 
         run_commands = ["java", "-jar", utilsConf.get_configuration().checkStyle57, "-c", utilsConf.get_configuration().allchecks,"-r",pathRepo,"-f","xml","-o","vers/checkAll/"+version_path+".xml"]
-        proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().workingDir))
+        proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().workingDir))
         (out, err) = proc.communicate()
 
         blameExecute(path, pathRepo, version_name)

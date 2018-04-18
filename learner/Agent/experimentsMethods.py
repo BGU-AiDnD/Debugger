@@ -1069,11 +1069,11 @@ def RunAndResults(buggedTestsChooser, bugsPacks, const, copy, copyPath, outpath,
                                           initialsChooser, False, copy, copyPath, table, pureSanity, bugsPacks,testTable)
     weka = True
     run_commands = ["java", "-jar", "planner150.jar","1", outpath + "\\planner\\", outpath + "\\plannerRecords\\", str(0.7)]
-    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=outpath)
+    proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, shell=True,cwd=outpath)
     (out, err) = proc.communicate()
 
     run_commands = ["barinelRun.bat"]
-    proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, shell=True,cwd=outpath)
+    proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, shell=True,cwd=outpath)
     (out, err) = proc.communicate()
     types = ["all", "normal", "can't advance"]
     a = 0
