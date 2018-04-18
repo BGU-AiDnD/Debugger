@@ -281,27 +281,31 @@ def append_families_indices(workingDir,wekaJar, fam_one_path, buggedType,compone
     trainingFile,testingFile,NamesFile, outCsv=BuildMLFiles(weka,buggedType,component)
     BuildWekaModel(weka,outArffTrain,outArffTest,NamesFile,outCsv,instance_name,wekaJar)
 
+def weka_csv_to_readable_csv(weka_csv, prediction_csv):
+    out_lines = [["component_name", "fault_probability"]]
+    first = 0
+    with open(weka_csv, "r") as f:
+        reader = csv.reader(f)
+        for l in reader:
+            if (first == 0):
+                first = 1
+                continue
+            component_name = l[0]
+            probability = l[5].replace("*", "")
+            out_lines.append([component_name, probability])
+    with open(prediction_csv, "wb") as f:
+        writer = csv.writer(f)
+        writer.writerows(out_lines)
 
-
-def filesExperiments(workingDir,weka,packsPath,utilsPath, randNum):
-    for buggedType in ["All","Most"]:
-        outPath = os.path.join(workingDir, "experiments\\files_" + buggedType+randNum)
-        outCsv=os.path.join(weka,buggedType+"_out_files.csv")
-        Agent.experimentsMethods.RunExperiments(os.path.join(workingDir,"testsBugsMethods.db"), outPath,packsPath,outCsv,"File",buggedType,utilsPath)
-
-
-def methodsExperiments(workingDir,weka,packsPath,utilsPath,randNum):
-    for buggedType in ["All","Most"]:
-        outPath = os.path.join(workingDir, "experiments\\methods" + buggedType+randNum)
-        outCsv=os.path.join(weka,buggedType+"_out_methods.csv")
-        Agent.experimentsMethods.RunExperiments(os.path.join(workingDir,"testsBugsMethods.db"), outPath,packsPath,outCsv,"method",buggedType,utilsPath)
 
 def Experiments(workingDir,weka,packsPath,utilsPath,randNum):
     for buggedType, granularity in zip(["All", "Most"], ["File", "Method"]):
-        outPath = os.path.join(workingDir, "experiments\\files_" + buggedType + randNum)
-        weka_csv = os.path.join(weka, buggedType + "_out_{GRANULARITY}.csv".format(GRANULARITY=granularity))
+        outPath = os.path.join(workingDir, "experiments\\files_{0}{1}".format(buggedType, randNum))
+        weka_csv = os.path.join(weka, "{buggedType}_out_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
+        prediction_csv = os.path.join(weka, "prediction_{buggedType}_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
         Agent.experimentsMethods.RunExperiments(os.path.join(workingDir, "testsBugsMethods.db"), outPath, packsPath,
                                                 weka_csv, granularity, buggedType, utilsPath)
+        weka_csv_to_readable_csv(weka_csv, prediction_csv)
 
 def RealDIagnosis(workingDir, weka):
     testDb = os.path.join(workingDir, "testsBugsMethods.db")
