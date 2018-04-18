@@ -236,9 +236,9 @@ def get_configuration():
 def post_bug_to_github(etype, value, tb):
     gh = github3.login('DebuggerIssuesReport', password='DebuggerIssuesReport1') # DebuggerIssuesReport@mail.com
     repo = gh.repository('amir9979', 'Debugger')
-    issue_body = "\n".join(["An Exception occurred when running Debugger", "command line is {0}".format(" ".join(sys.argv))])\
+    issue_body = "\n".join(["An Exception occurred while running Debugger:\n", "command line is {0}\n\n".format(" ".join(sys.argv))])\
                  + "".join(['Traceback (most recent call last):\n'] + traceback.format_tb(tb) + traceback.format_exception_only(etype, value))
-    issue = repo.create_issue(title='An Exception occurred', body=issue_body, assignee='amir9979')
+    issue = repo.create_issue(title='An Exception occurred : {0}'.format(value.message), body=issue_body, assignee='amir9979')
     configuration = get_configuration()
     issue.create_comment(body="Configuration is : \n" + "\n".join(map(str, configuration.__dict__.items())))
     with open(logging.root.handlers[0].baseFilename) as logger:
