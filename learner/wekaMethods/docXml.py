@@ -2,6 +2,7 @@ __author__ = 'Amir-pc'
 
 import glob
 import re
+import os
 import string
 from xml.dom import minidom
 import pathPackCsv
@@ -49,46 +50,26 @@ def field(c,className,Dirpath):
     vals=[Dirpath]+[className]+vals+[ret]
     return vals
 
-def classRead(c,packPath):
-    all_methods=[]
-    all_fields=[]
-    all_cons=[]
-    att =c.attributes
-    keys=att.keys()
-    vals=[]
-    for a in att.values():
-        vals=vals+[a.value]
-    superClass=""
-    name=""
-    Dirpath=""
-    if len(vals)>1:
-        name=vals[1]
-    else:
+
+def classRead(class_data, packPath):
+    vals = map(lambda val: val.value, class_data.attributes.values())
+    superClass = ""
+    if len(vals) < 5:
         return ()
-    if len(vals)>4:
-        if vals[4] not in packPath:
-            return ()
-        Dirpath=packPath[vals[4]]
-    else:
+    if vals[4] not in packPath:
         return ()
-    extends=c.getElementsByTagName("class")
-    if(len(extends)>0):
-        extends=extends[0]
-        superClass=extends.attributes.values()[0].value
-    keys=["Dirpath"]+["superClass"]+keys
-    vals=[Dirpath]+[superClass]+vals
-    constructors=c.getElementsByTagName("constructor")
-    for cons in constructors:
-        all_cons.append(constructor(cons,name,Dirpath))
-    methods=c.getElementsByTagName("method")
-    for met in methods:
-        all_methods.append(method(met,name,Dirpath))
-    fields=c.getElementsByTagName("field")
-    for f in fields:
-        all_fields.append(field(f,name,Dirpath))
+    name = vals[1]
+    Dirpath = packPath[vals[4]]
+    extends = class_data.getElementsByTagName("class")
+    if len(extends) > 0:
+        superClass = extends[0].attributes.values()[0].value
+    vals = [Dirpath, superClass] + vals
+    all_cons = map(lambda con: constructor(con, name, Dirpath), class_data.getElementsByTagName("constructor"))
+    all_methods = map(lambda meth: method(meth, name, Dirpath), class_data.getElementsByTagName("method"))
+    all_fields = map(lambda field: field(field, name, Dirpath), class_data.getElementsByTagName("field"))
     for i in range(10-len(vals)):
-        vals=vals+["NONE"]
-    return (vals,all_methods,all_fields,all_cons)
+        vals = vals + ["NONE"]
+    return vals, all_methods, all_fields, all_cons
 
 
 def interfaceRead(c,packPath):
@@ -183,62 +164,32 @@ def xmlRead(doc,packPath):
     return all_classes
 
 
-def xmlRead_OLD(doc,packPath):
-    all_classes=[]
-    f=open(doc,"r")
-    all=removeBadChars("".join(f.readlines()))
-    f.close()
-    xmldoc=minidom.parseString(all)
-    root=xmldoc.getElementsByTagName("root")[0]
-    packs=root.getElementsByTagName("package")
-    if len(packs)==0:
+def xmlRead_OLD(doc, packPath):
+    all_classes = []
+    xmldoc = None
+    with open(doc) as f:
+        xmldoc = minidom.parseString(removeBadChars(f.read()))
+    root = xmldoc.getElementsByTagName("root")[0]
+    packages = root.getElementsByTagName("package")
+    if len(packages) == 0:
         return -1
-    for package in packs:
-        classes= package.getElementsByTagName("class")
-        for i in range(len(classes)):
-            if(i%2==0):
-                classAtt = classRead(classes[i],packPath)
-                if classAtt!=():
+    for package in packages:
+        for ind, class_data in enumerate(package.getElementsByTagName("class")):
+            if ind%2 == 0:
+                classAtt = classRead(class_data, packPath)
+                if classAtt != ():
                     all_classes.append(classAtt)
-        interfaces= package.getElementsByTagName("interface")
-        for i in range(len(interfaces)):
-                classAtt = interfaceRead(interfaces[i],packPath)
-                if classAtt!=():
-                    all_classes.append(classAtt)
+        for interface in package.getElementsByTagName("interface"):
+                interface_data = interfaceRead(interface, packPath)
+                if interface_data != ():
+                    all_classes.append(interface_data)
     return all_classes
 
 
 def build(JavaDocPath, packPath):
-    docs=[]
-    lst= glob.glob(JavaDocPath+"/*.xml")
-    for doc in lst:
-        r=xmlRead_OLD(doc, packPath)
-        if r!=-1:
+    docs = []
+    for doc in glob.glob(os.path.join(JavaDocPath, "*.xml")):
+        r = xmlRead_OLD(doc, packPath)
+        if r != -1 and r != []:
             docs.append(r)
     return docs
-
-
-if __name__ == "__main__":
-    packs = pathPackCsv.projectPathPacks("C:\projs\\ant6Working\\vers\ANT_180\\repo")
-    #print packs.keys()
-    #packs=[]
-    a=build("C:\projs\\ant6Working\\vers\ANT_180\Jdoc2", packs,-1)
-    docs=a
-    valsData=[]
-    methodData=[]
-    fieldData=[]
-    consData=[]
-    for doc in docs:
-        for clss in doc:
-            vals,all_methods,all_fields,all_cons=clss
-            valsData.append(vals)
-            methodData.extend(all_methods)
-            fieldData.extend(all_fields)
-            consData.extend(all_cons)
-    print(len(valsData),len(methodData),len(fieldData),len(consData))
-
-    print len(a[0][0])
-    print len(a[0])
-    print len(a)
-#print "\n".join(build("C:\GitHub\\vers\\CDT_8_0_2\Jdoc2",-1))
-#build("C:\\tomcat\code\TOMCAT_8_0_4\Jdoc2",-1)
