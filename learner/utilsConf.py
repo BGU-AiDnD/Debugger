@@ -229,8 +229,13 @@ def get_configuration():
 def post_bug_to_github(etype, value, tb):
     gh = github3.login('DebuggerIssuesReport', password='DebuggerIssuesReport1') # DebuggerIssuesReport@mail.com
     repo = gh.repository('amir9979', 'Debugger')
-    issue_body = "".join(['Traceback (most recent call last):\n'] + traceback.format_tb(tb) + traceback.format_exception_only(etype, value))
-    repo.create_issue(title='An Exception occurred', body=issue_body, assignee='amir9979')
+    issue_body = "\n".join(["An Exception occurred when running Debugger", "command line is {0}".format(" ".join(sys.argv))])\
+                 + "".join(['Traceback (most recent call last):\n'] + traceback.format_tb(tb) + traceback.format_exception_only(etype, value))
+    issue = repo.create_issue(title='An Exception occurred', body=issue_body, assignee='amir9979')
+    with open(logging.root.handlers[0].get_name()) as logger:
+        issue.create_comment(body=logger.read())
+    configuration = get_configuration()
+    issue.create_comment(body= "Configuration is : \n" + "\n".join(map(str, configuration.__dict__.items())))
 
 
 def marker_decorator(marker):
