@@ -68,7 +68,7 @@ def versions_info(repoPath, vers):
     else:
         wanted = [x.commit for x in r.tags if x.name in vers]
     commits = [int("".join(list(x.hexsha)[:7]), 16) for x in wanted]
-    dates = [datetime.datetime.fromtimestamp(x.committed_date).strftime('%Y-%m-%d %H:%M:%S') for x in wanted]
+    dates = [datetime.fromtimestamp(x.committed_date).strftime('%Y-%m-%d %H:%M:%S') for x in wanted]
     paths = [os.path.join(ver, "repo") for ver in vers]
     return vers, paths, dates, commits
 
@@ -132,6 +132,13 @@ def configure(confFile):
     MethodsParsed = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "CheckStyle.txt")
     changeFile = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "Ins_dels.txt")
     versionsCreate(gitPath, vers, versPath, LocalGitPath)
+    debugger_base_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    try:
+        repo = git.Repo(debugger_base_path)
+        logging.info('Debugger HEAD is on commit {0}'.format(str(repo.head.commit)))
+        repo.close()
+    except:
+        pass
     names_values = [("versPath", versPath), ("db_dir", db_dir), ("vers", vers), ("paths", paths), ("dates", dates),
                     ("commits", commits), ("docletPath", docletPath), ("sourceMonitorEXE", sourceMonitorEXE),
                     ("checkStyle57", checkStyle57), ("checkStyle68", checkStyle68), ("allchecks", allchecks),
@@ -140,7 +147,7 @@ def configure(confFile):
                     ("issue_tracker_url", issue_tracker_url), ("issue_tracker_product", issue_tracker_product),
                     ("workingDir", workingDir), ("bugsPath", bugsPath), ("vers_dirs", vers_dirs),
                     ("LocalGitPath", LocalGitPath), ("weka_path", weka_path), ("MethodsParsed", MethodsParsed),
-                    ("changeFile", changeFile)]
+                    ("changeFile", changeFile), ("debugger_base_path", debugger_base_path)]
     map(lambda name_val: setattr(configuration, name_val[0], name_val[1]), names_values)
     return versions, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir
 
@@ -232,10 +239,10 @@ def post_bug_to_github(etype, value, tb):
     issue_body = "\n".join(["An Exception occurred when running Debugger", "command line is {0}".format(" ".join(sys.argv))])\
                  + "".join(['Traceback (most recent call last):\n'] + traceback.format_tb(tb) + traceback.format_exception_only(etype, value))
     issue = repo.create_issue(title='An Exception occurred', body=issue_body, assignee='amir9979')
-    with open(logging.root.handlers[0].get_name()) as logger:
-        issue.create_comment(body=logger.read())
     configuration = get_configuration()
-    issue.create_comment(body= "Configuration is : \n" + "\n".join(map(str, configuration.__dict__.items())))
+    issue.create_comment(body="Configuration is : \n" + "\n".join(map(str, configuration.__dict__.items())))
+    with open(logging.root.handlers[0].baseFilename) as logger:
+        issue.create_comment(body=logger.read())
 
 
 def marker_decorator(marker):

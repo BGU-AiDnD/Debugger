@@ -337,8 +337,7 @@ def download_bugs():
 
 
 @utilsConf.marker_decorator(utilsConf.LEARNER_PHASE_FILE)
-def wrapperLearner(confFile):
-    utilsConf.configure(confFile)
+def wrapperLearner():
     download_bugs()
     test_version_create()
     # NLP.commits.data_to_csv(os.path.join(workingDir, "NLP_data.csv"), gitPath, bugsPath)
@@ -432,8 +431,9 @@ def wrapperExperiments(confFile):
 
 if __name__ == '__main__':
     csv.field_size_limit(sys.maxint)
-    if sys.argv[2]=="learn":
-        wrapperLearner(sys.argv[1])
+    utilsConf.configure(sys.argv[1])
+    if sys.argv[2] =="learn":
+        wrapperLearner()
     elif sys.argv[2]=="experiments":
         wrapperExperiments(sys.argv[1])
     elif sys.argv[2]=="all_planning":
