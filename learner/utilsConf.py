@@ -121,7 +121,8 @@ def configure(confFile):
     versions = [v.strip() for v in versions]
     init_configuration(workingDir, versions)
     configuration = get_configuration()
-    versPath, db_dir = Mkdirs(workingDir, versions)
+    db_dir = os.path.join(workingDir, "dbAdd")
+    versPath = os.path.join(workingDir, "vers")
     vers, paths, dates, commits = versions_info(gitPath, versions)
     docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath = globalConfig()
     bugsPath = os.path.join(workingDir, "bugs.csv")
@@ -129,6 +130,7 @@ def configure(confFile):
     LocalGitPath = os.path.join(workingDir, "repo")
     mkOneDir(LocalGitPath)
     weka_path = to_short_path(os.path.join(workingDir, "weka"))
+    web_prediction_results = to_short_path(os.path.join(workingDir, "web_prediction_results"))
     MethodsParsed = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "CheckStyle.txt")
     changeFile = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "Ins_dels.txt")
     versionsCreate(gitPath, vers, versPath, LocalGitPath)
@@ -147,8 +149,9 @@ def configure(confFile):
                     ("issue_tracker_url", issue_tracker_url), ("issue_tracker_product", issue_tracker_product),
                     ("workingDir", workingDir), ("bugsPath", bugsPath), ("vers_dirs", vers_dirs),
                     ("LocalGitPath", LocalGitPath), ("weka_path", weka_path), ("MethodsParsed", MethodsParsed),
-                    ("changeFile", changeFile), ("debugger_base_path", debugger_base_path)]
+                    ("changeFile", changeFile), ("debugger_base_path", debugger_base_path), ("web_prediction_results", web_prediction_results)]
     map(lambda name_val: setattr(configuration, name_val[0], name_val[1]), names_values)
+    Mkdirs(workingDir)
     return versions, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir
 
 
@@ -161,24 +164,24 @@ def mkOneDir(dir):
             os.mkdir(dir)
 
 
-def Mkdirs(workingDir, vers):
+def Mkdirs(workingDir):
     mkOneDir(workingDir)
     map(lambda dir_name: mkOneDir(os.path.join(workingDir, dir_name)), ["", "vers", "experiments", "experiments_known",
-                                                                        "dbAdd", "testedVer", "weka", "markers"])
+                                                                        "dbAdd", "testedVer", "weka", "web_prediction_results", "markers"])
     versPath=os.path.join(workingDir,"vers")
     mkOneDir(versPath)
     checkAll=os.path.join(versPath,"checkAll")
     mkOneDir(checkAll)
     checkAllMethodsData=os.path.join(versPath,"checkAllMethodsData")
     mkOneDir(checkAllMethodsData)
-    for v in vers:
+    for v in get_configuration().vers:
         version=os.path.join(versPath, version_to_dir_name(v))
         mkOneDir(version)
         blame=os.path.join(version,"blame")
         mkOneDir(blame)
         Jdoc2=os.path.join(version,"Jdoc2")
         mkOneDir(Jdoc2)
-    return versPath, os.path.join(workingDir, "dbAdd")
+    return versPath
 
 class Configuration(object):
     def __init__(self, workingDir, versions):
