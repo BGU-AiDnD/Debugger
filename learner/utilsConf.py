@@ -240,9 +240,9 @@ def post_bug_to_github(etype, value, tb):
                  + "".join(['Traceback (most recent call last):\n'] + traceback.format_tb(tb) + traceback.format_exception_only(etype, value))
     issue = repo.create_issue(title='An Exception occurred : {0}'.format(value.message), body=issue_body, assignee='amir9979')
     configuration = get_configuration()
-    issue.create_comment(body="Configuration is : \n" + "\n".join(map(str, configuration.__dict__.items())))
     with open(logging.root.handlers[0].baseFilename) as logger:
-        issue.create_comment(body=logger.read())
+        issue.create_comment(body="Configuration is : \n\n" + "\n".join(map(str, configuration.__dict__.items())) +
+                                  "\n\n logger is : \n\n" + logger.read())
 
 
 def marker_decorator(marker):
