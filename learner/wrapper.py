@@ -146,14 +146,14 @@ def SourceMonitorXml(workingDir, ver, sourceMonitorEXE):
     (out, err) = proc.communicate()
 
 
-def blameExecute(path, pathRepo, ver):
+def blameExecute(path, pathRepo, version):
     for root, dirs, files in os.walk(pathRepo):
         for name in files:
             if not os.path.splitext(name)[1].endswith("java"):
                 continue
             git_file_path = os.path.join(root, name).replace(pathRepo + "\\", "")
             blame_file_path = os.path.abspath(os.path.join(path, 'blame', name))
-            blame_commands = ['git', 'blame', '--show-stats', '--score-debug', '-p', '--line-porcelain', '-l', ver, git_file_path]
+            blame_commands = ['git', 'blame', '--show-stats', '--score-debug', '-p', '--line-porcelain', '-l', version, git_file_path]
             proc = utilsConf.open_subprocess(blame_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(pathRepo))
             (out, err) = proc.communicate()
             with open(blame_file_path, "w") as f:
@@ -168,9 +168,8 @@ def blameExecute(path, pathRepo, ver):
 @utilsConf.marker_decorator(utilsConf.COMPLEXITY_FEATURES_MARKER)
 def Extract_complexity_features():
     for version_path, version_name in zip(utilsConf.get_configuration().vers_dirs, utilsConf.get_configuration().vers):
-        path=os.path.join(utilsConf.get_configuration().versPath, version_to_dir_name(version_path))
-        pathRepo=os.path.join(path,"repo")
-        SourceMonitorXml(utilsConf.get_configuration().workingDir, version_to_dir_name(version_path), utilsConf.get_configuration().sourceMonitorEXE)
+        pathRepo=os.path.join(version_path,"repo")
+        SourceMonitorXml(utilsConf.get_configuration().workingDir, version_path, utilsConf.get_configuration().sourceMonitorEXE)
         run_commands = ["java", "-jar", utilsConf.get_configuration().checkStyle68, "-c", utilsConf.get_configuration().methodsNamesXML,"javaFile","-o","vers/checkAllMethodsData/"+version_path+".txt",pathRepo]
         proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().workingDir))
         (out, err) = proc.communicate()
@@ -179,7 +178,7 @@ def Extract_complexity_features():
         proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().workingDir))
         (out, err) = proc.communicate()
 
-        blameExecute(path, pathRepo, version_name)
+        blameExecute(version_path, pathRepo, version_name)
 
 # blame
 #checkStyle
