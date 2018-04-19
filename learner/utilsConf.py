@@ -133,6 +133,7 @@ def configure(confFile):
     docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath = globalConfig()
     bugsPath = os.path.join(workingDir, "bugs.csv")
     vers_dirs = map(version_to_dir_name, vers)
+    vers_paths = map(lambda ver: os.path.join(versPath, ver),vers_dirs)
     LocalGitPath = os.path.join(workingDir, "repo")
     mkOneDir(LocalGitPath)
     weka_path = to_short_path(os.path.join(workingDir, "weka"))
@@ -157,7 +158,7 @@ def configure(confFile):
                     ("methodsNamesXML", methodsNamesXML), ("wekaJar", wekaJar), ("RemoveBat", RemoveBat),
                     ("utilsPath", utilsPath), ("versions", versions), ("gitPath", gitPath), ("issue_tracker", issue_tracker),
                     ("issue_tracker_url", issue_tracker_url), ("issue_tracker_product", issue_tracker_product),
-                    ("workingDir", workingDir), ("bugsPath", bugsPath), ("vers_dirs", vers_dirs),
+                    ("workingDir", workingDir), ("bugsPath", bugsPath), ("vers_dirs", vers_dirs), ("vers_paths", vers_paths),
                     ("LocalGitPath", LocalGitPath), ("weka_path", weka_path), ("MethodsParsed", MethodsParsed),
                     ("changeFile", changeFile), ("debugger_base_path", debugger_base_path),
                     ("web_prediction_results", web_prediction_results), ("full_configure_file", full_configure_file)]
