@@ -197,7 +197,7 @@ class Configuration(object):
     def __init__(self, workingDir, versions):
         self.markers_dir = os.path.join(workingDir,"markers")
         self.versions = versions
-        Mkdirs(workingDir)
+        mkOneDir(workingDir)
         log_path = os.path.join(to_short_path(workingDir), "log.log")
         logging.basicConfig(filename=log_path, level=logging.DEBUG)
 
