@@ -133,7 +133,7 @@ def configure(confFile):
     docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath = globalConfig()
     bugsPath = os.path.join(workingDir, "bugs.csv")
     vers_dirs = map(version_to_dir_name, vers)
-    vers_paths = map(lambda ver: os.path.join(versPath, ver),vers_dirs)
+    vers_paths = map(lambda ver: os.path.join(versPath, ver), vers_dirs)
     LocalGitPath = os.path.join(workingDir, "repo")
     mkOneDir(LocalGitPath)
     weka_path = to_short_path(os.path.join(workingDir, "weka"))
