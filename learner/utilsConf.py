@@ -163,6 +163,7 @@ def configure(confFile):
                     ("changeFile", changeFile), ("debugger_base_path", debugger_base_path),
                     ("web_prediction_results", web_prediction_results), ("full_configure_file", full_configure_file)]
     map(lambda name_val: setattr(configuration, name_val[0], name_val[1]), names_values)
+    Mkdirs(workingDir)
     return versions, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir
 
 
