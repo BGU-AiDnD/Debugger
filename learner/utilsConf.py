@@ -162,7 +162,6 @@ def configure(confFile):
                     ("changeFile", changeFile), ("debugger_base_path", debugger_base_path),
                     ("web_prediction_results", web_prediction_results), ("full_configure_file", full_configure_file)]
     map(lambda name_val: setattr(configuration, name_val[0], name_val[1]), names_values)
-    Mkdirs(workingDir)
     return versions, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir
 
 
@@ -198,6 +197,7 @@ class Configuration(object):
     def __init__(self, workingDir, versions):
         self.markers_dir = os.path.join(workingDir,"markers")
         self.versions = versions
+        Mkdirs(workingDir)
         log_path = os.path.join(to_short_path(workingDir), "log.log")
         logging.basicConfig(filename=log_path, level=logging.DEBUG)
 
