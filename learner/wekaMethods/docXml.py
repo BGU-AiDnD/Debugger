@@ -66,7 +66,7 @@ def classRead(class_data, packPath):
     vals = [Dirpath, superClass] + vals
     all_cons = map(lambda con: constructor(con, name, Dirpath), class_data.getElementsByTagName("constructor"))
     all_methods = map(lambda meth: method(meth, name, Dirpath), class_data.getElementsByTagName("method"))
-    all_fields = map(lambda field: field(field, name, Dirpath), class_data.getElementsByTagName("field"))
+    all_fields = map(lambda field_name: field(field_name, name, Dirpath), class_data.getElementsByTagName("field"))
     for i in range(10-len(vals)):
         vals = vals + ["NONE"]
     return vals, all_methods, all_fields, all_cons
