@@ -315,7 +315,7 @@ def RealDIagnosis(workingDir, weka):
 
 @utilsConf.marker_decorator(utilsConf.VERSION_TEST_MARKER)
 def test_version_create():
-    src = os.path.join(utilsConf.get_configuration().workingDir,"vers", utilsConf.get_configuration().vers[-2], "repo")
+    src = os.path.join(utilsConf.get_configuration().workingDir,"vers", utilsConf.get_configuration().vers_dirs[-2], "repo")
     dst = os.path.join(utilsConf.get_configuration().workingDir,"testedVer", "repo")
     if not os.path.exists(dst):
         shutil.copytree(src, dst)
