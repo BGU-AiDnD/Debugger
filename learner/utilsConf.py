@@ -77,8 +77,9 @@ def CopyDirs(gitPath, versPath, versions):
     for version in versions:
         path=os.path.join(versPath, version_to_dir_name(version), "repo")
         if not os.path.exists(path):
-            run_commands = ["git", "clone", gitPath, path]
-            proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            run_commands = ["git", "clone", to_short_path(gitPath), 'repo']
+            proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                                   cwd=to_short_path(os.path.join(versPath, version_to_dir_name(version))))
             (out, err) = proc.communicate()
 
 
@@ -95,13 +96,13 @@ def GitRevert(versPath,vers):
         run_cmd(repo_path, ["clean", "-fd", version])
 
 
-def versionsCreate(gitPath, vers, versPath, LocalGitPath):
+def versionsCreate(gitPath, vers, versPath, workingDir):
     CopyDirs(gitPath, versPath, vers)
     GitRevert(versPath, vers)
-    if not os.path.exists(LocalGitPath):
-        run_commands = ["git", "clone", gitPath, LocalGitPath]
-        proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-        (out, err) = proc.communicate()
+    run_commands = ["git", "clone", to_short_path(gitPath), 'repo']
+    proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=to_short_path(workingDir))
+    (out, err) = proc.communicate()
+    proc.returncode
 
 
 def configure(confFile):
@@ -145,7 +146,6 @@ def configure(confFile):
     web_prediction_results = to_short_path(os.path.join(workingDir, "web_prediction_results"))
     MethodsParsed = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "CheckStyle.txt")
     changeFile = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "Ins_dels.txt")
-    versionsCreate(gitPath, vers, versPath, LocalGitPath)
     debugger_base_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     try:
         repo = git.Repo(debugger_base_path)
@@ -169,6 +169,7 @@ def configure(confFile):
                     ("web_prediction_results", web_prediction_results), ("full_configure_file", full_configure_file)]
     map(lambda name_val: setattr(configuration, name_val[0], name_val[1]), names_values)
     Mkdirs(workingDir)
+    versionsCreate(gitPath, vers, versPath, workingDir)
     return versions, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir
 
 
