@@ -141,9 +141,7 @@ def SourceMonitorXml(workingDir, ver, sourceMonitorEXE):
     xmlPath = os.path.join(verDir, "sourceMonitor.xml")
     with open(xmlPath, "wb") as f:
         f.write(xml)
-    run_commands = [sourceMonitorEXE, "/C", xmlPath]
-    proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    (out, err) = proc.communicate()
+    return [sourceMonitorEXE, "/C", xmlPath]
 
 
 def blameExecute(path, pathRepo, version):
@@ -156,6 +154,8 @@ def blameExecute(path, pathRepo, version):
             blame_commands = ['git', 'blame', '--show-stats', '--score-debug', '-p', '--line-porcelain', '-l', version, git_file_path]
             proc = utilsConf.open_subprocess(blame_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(pathRepo))
             (out, err) = proc.communicate()
+            if proc.returncode != 0:
+                raise RuntimeError('blame subprocess failed. args: {0}'.format(str(blame_commands)))
             with open(blame_file_path, "w") as f:
                 f.writelines(out)
     run_commands = ["dir", "/b", "/s", "*.java"]
@@ -167,18 +167,26 @@ def blameExecute(path, pathRepo, version):
 
 @utilsConf.marker_decorator(utilsConf.COMPLEXITY_FEATURES_MARKER)
 def Extract_complexity_features():
-    for version_path, version_name in zip(utilsConf.get_configuration().vers_paths, utilsConf.get_configuration().vers_dirs):
+    processes = []
+    for version_path, version_name, git_version in zip(utilsConf.get_configuration().vers_paths, utilsConf.get_configuration().vers_dirs,
+                                                       utilsConf.get_configuration().vers):
         pathRepo=os.path.join(version_path,"repo")
-        SourceMonitorXml(utilsConf.get_configuration().workingDir, version_name, utilsConf.get_configuration().sourceMonitorEXE)
+        run_commands = SourceMonitorXml(utilsConf.get_configuration().workingDir, version_name, utilsConf.get_configuration().sourceMonitorEXE)
+        proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        processes.append((proc, run_commands))
         run_commands = ["java", "-jar", utilsConf.get_configuration().checkStyle68, "-c", utilsConf.get_configuration().methodsNamesXML,"javaFile","-o","vers/checkAllMethodsData/"+version_name+".txt",pathRepo]
         proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().workingDir))
-        (out, err) = proc.communicate()
+        processes.append((proc, run_commands))
 
         run_commands = ["java", "-jar", utilsConf.get_configuration().checkStyle57, "-c", utilsConf.get_configuration().allchecks,"-r",pathRepo,"-f","xml","-o","vers/checkAll/"+version_name+".xml"]
         proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().workingDir))
-        (out, err) = proc.communicate()
+        processes.append((proc, run_commands))
 
-        blameExecute(version_path, pathRepo, version_name)
+        blameExecute(version_path, pathRepo, git_version)
+    for proc, run_commands in processes:
+        proc.communicate()
+        if proc.returncode != 0:
+            raise RuntimeError('subprocess execution failed. args are {0}'.format(str(run_commands)))
 
 # blame
 #checkStyle
