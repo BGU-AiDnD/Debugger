@@ -77,7 +77,9 @@ def CopyDirs(gitPath, versPath, versions):
     for version in versions:
         path=os.path.join(versPath, version_to_dir_name(version), "repo")
         if not os.path.exists(path):
-            shutil.copytree(gitPath, path)
+            run_commands = ["git", "clone", gitPath, path]
+            proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            (out, err) = proc.communicate()
 
 
 def GitRevert(versPath,vers):
@@ -93,11 +95,14 @@ def GitRevert(versPath,vers):
         run_cmd(repo_path, ["clean", "-fd", version])
 
 
-def versionsCreate(gitPath, vers, versPath,LocalGitPath):
+def versionsCreate(gitPath, vers, versPath, LocalGitPath):
     CopyDirs(gitPath, versPath, vers)
     GitRevert(versPath, vers)
     if not os.path.exists(LocalGitPath):
-        shutil.copytree(gitPath, LocalGitPath)
+        run_commands = ["git", "clone", gitPath, LocalGitPath]
+        proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        (out, err) = proc.communicate()
+
 
 def configure(confFile):
     lines = []
@@ -201,6 +206,7 @@ class Configuration(object):
         self.versions = versions
         mkOneDir(workingDir)
         log_path = os.path.join(to_short_path(workingDir), "log.log")
+        os.remove(log_path)
         logging.basicConfig(filename=log_path, level=logging.DEBUG)
 
     def get_marker_path(self, marker):

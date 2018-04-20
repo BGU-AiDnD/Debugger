@@ -155,7 +155,7 @@ def blameExecute(path, pathRepo, version):
             proc = utilsConf.open_subprocess(blame_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(pathRepo))
             (out, err) = proc.communicate()
             if proc.returncode != 0:
-                raise RuntimeError('blame subprocess failed. args: {0}'.format(str(blame_commands)))
+                raise RuntimeError('blame subprocess failed. args: {0}. err is {1}'.format(str(blame_commands), err))
             with open(blame_file_path, "w") as f:
                 f.writelines(out)
     run_commands = ["dir", "/b", "/s", "*.java"]
@@ -184,9 +184,9 @@ def Extract_complexity_features():
 
         blameExecute(version_path, pathRepo, git_version)
     for proc, run_commands in processes:
-        proc.communicate()
+        out, err = proc.communicate()
         if proc.returncode != 0:
-            raise RuntimeError('subprocess execution failed. args are {0}'.format(str(run_commands)))
+            raise RuntimeError('subprocess execution failed. args are {0}. err is {1}'.format(str(run_commands), err))
 
 # blame
 #checkStyle
