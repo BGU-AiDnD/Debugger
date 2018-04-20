@@ -206,7 +206,8 @@ class Configuration(object):
         self.versions = versions
         mkOneDir(workingDir)
         log_path = os.path.join(to_short_path(workingDir), "log.log")
-        os.remove(log_path)
+        if os.path.exists(log_path):
+            os.remove(log_path)
         logging.basicConfig(filename=log_path, level=logging.DEBUG)
 
     def get_marker_path(self, marker):
