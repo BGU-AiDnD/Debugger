@@ -272,21 +272,16 @@ def checkStyleCreateDict(checkOut, changesDict):
         fileNameSplited = file.split(os.path.sep)
         fileName = fileNameSplited[-1].replace("_", os.path.sep)
         commitID = fileNameSplited[fileNameSplited.index("commitsFiles") + 1]
-        if not (fileName, commitID) in changesDict:
+        if not (fileName, commitID) in changesDict.keys():
             continue
         key = ""
         inds = []
-        dataFile=""
+        deleted, insertions = changesDict[(fileName, commitID)]
         if "before" in file:
             key = "deletions"
-            dataFile = file.replace("before\\", "")+"_deletsIns.txt"
-            deleted, insertions = changesDict[(fileName,commitID)]
             inds = deleted
         if "after" in file:
             key = "insertions"
-            dataFile = file.replace("after\\", "")+"_deletsIns.txt"
-            #deleted, insertions = readDataFile(dataFile)
-            deleted, insertions = changesDict[(fileName,commitID)]
             inds = insertions
         name, begin, end = data.split("@")
         rng = map(str, range(int(begin)-1, int(end)))
@@ -326,11 +321,11 @@ def analyzeCheckStyle(checkOut, changeFile):
     all_methods = []
     for tup in methods:
         methodDir = tup[0]
-        dels = methods[tup].getdefault("deletions", 0)
-        ins = methods[tup].getdefault("insertions", 0)
-        fileName = methods[tup].getdefault("fileName", "")
-        methodName = methods[tup].getdefault("methodName", "")
-        commitID = methods[tup].getdefault("commitID", "")
+        dels = methods[tup].setdefault("deletions", 0)
+        ins = methods[tup].setdefault("insertions", 0)
+        fileName = methods[tup].setdefault("fileName", "")
+        methodName = methods[tup].setdefault("methodName", "")
+        commitID = methods[tup].setdefault("commitID", "")
         all_methods.append(map(str, [commitID, methodDir, fileName, methodName, dels, ins, dels+ins]))
     return all_methods, filesRows
 
