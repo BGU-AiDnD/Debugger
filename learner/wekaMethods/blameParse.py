@@ -43,7 +43,6 @@ def listStats(lst,isTime):
     counts= Counter(lst)
     l=len(lst)+0.0
     countsPre=dict([(x,counts[x]/l) for x in counts ])
-    #print countsPre
     p01= sum([countsPre[x] for x in countsPre if countsPre[x]<=0.1])
     p02= sum([countsPre[x] for x in countsPre if countsPre[x]<=0.2])
     p05= sum([countsPre[x] for x in countsPre if countsPre[x]<=0.5])
@@ -65,7 +64,6 @@ def commitersFeatures(lst):
     counts= Counter(lst)
     l=len(lst)+0.0
     countsPre=dict([(x,counts[x]/l) for x in counts ])
-    #print countsPre
     p01= sum([countsPre[x] for x in countsPre if countsPre[x]<=0.1])
     p02= sum([countsPre[x] for x in countsPre if countsPre[x]<=0.2])
     p05= sum([countsPre[x] for x in countsPre if countsPre[x]<=0.5])
@@ -92,6 +90,8 @@ def fileParse(file, prevVersionCommitterTime):
     lines = []
     with open(file,"r") as f:
         lines = [l.strip() for l in f.readlines()]
+        f.seek(0)
+        inds2 = [0] + map(lambda enm: enm[0] + 2, filter(lambda enm: enm[1].startswith('filename'), enumerate(f.readlines())))
     if len(lines) == 0:
         return 0
     commsFile=file.replace("\\blame\\","\\commentsSpaces\\")+".txt"
@@ -115,8 +115,8 @@ def fileParse(file, prevVersionCommitterTime):
     previousCommsApproved=[]
 
     groups=[]
-    for i in range(len(inds)-1):
-        commitId,committer,committerTime,previous,group= oneRecordParse(lines[inds[i]:inds[i+1]])
+    for i in range(len(inds2)-1):
+        commitId,committer,committerTime,previous,group= oneRecordParse(lines[inds2[i]:inds2[i+1]])
         commits.append(commitId)
         if not committer in committers:
             committers[committer]=1

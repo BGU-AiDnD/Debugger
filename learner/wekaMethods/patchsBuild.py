@@ -272,27 +272,25 @@ def checkStyleCreateDict(checkOut, changesDict):
         fileNameSplited = file.split(os.path.sep)
         fileName = fileNameSplited[-1].replace("_", os.path.sep)
         commitID = fileNameSplited[fileNameSplited.index("commitsFiles") + 1]
+        if not (fileName, commitID) in changesDict:
+            continue
         key = ""
         inds = []
         dataFile=""
         if "before" in file:
             key = "deletions"
             dataFile = file.replace("before\\", "")+"_deletsIns.txt"
-            if not (fileName, commitID) in changesDict:
-                continue
             deleted, insertions = changesDict[(fileName,commitID)]
             inds = deleted
         if "after" in file:
             key = "insertions"
             dataFile = file.replace("after\\", "")+"_deletsIns.txt"
             #deleted, insertions = readDataFile(dataFile)
-            if not (fileName,commitID) in changesDict:
-                continue
             deleted, insertions = changesDict[(fileName,commitID)]
             inds = insertions
         name, begin, end = data.split("@")
         rng = map(str, range(int(begin)-1, int(end)))
-        both = filter(lambda x: x in rng, inds)
+        both = filter(lambda x: x in rng, map(str, inds))
         keyChange = len(both)
         if keyChange == 0:
             continue
@@ -325,7 +323,7 @@ def readChangesFile(change):
 def analyzeCheckStyle(checkOut, changeFile):
     changesDict, filesRows = readChangesFile(changeFile)
     methods = checkStyleCreateDict(checkOut, changesDict)
-    ans = []
+    all_methods = []
     for tup in methods:
         methodDir = tup[0]
         dels = methods[tup].getdefault("deletions", 0)
@@ -333,8 +331,8 @@ def analyzeCheckStyle(checkOut, changeFile):
         fileName = methods[tup].getdefault("fileName", "")
         methodName = methods[tup].getdefault("methodName", "")
         commitID = methods[tup].getdefault("commitID", "")
-        ans.append(map(str, [commitID, methodDir, fileName, methodName, dels, ins, dels+ins]))
-    return ans, filesRows
+        all_methods.append(map(str, [commitID, methodDir, fileName, methodName, dels, ins, dels+ins]))
+    return all_methods, filesRows
 
 
 # @utilsConf.marker_decorator(utilsConf.PATCHS_FEATURES_MARKER)

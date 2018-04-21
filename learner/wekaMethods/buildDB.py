@@ -368,8 +368,6 @@ def buildOneTimeCommits():
     db_dir = utilsConf.get_configuration().db_dir
     vers = utilsConf.get_configuration().vers_dirs
     dates = utilsConf.get_configuration().dates
-    MethodsParsed = utilsConf.get_configuration().MethodsParsed
-    changeFile = utilsConf.get_configuration().changeFile
     add = False
     max = -1
     CodeDir = "repo"
@@ -387,4 +385,5 @@ def buildOneTimeCommits():
                                sourceMonitorFiles, sourceMonitorMethods, checkStyle, checkStyleMethods,
                                blamePath, date, add, max, CodeDir)
         createIndexes(dbPath)
-    buildBasicAllVers(vers, dates, versPath, CodeDir, db_dir, utilsConf.get_configuration().bugsPath, MethodsParsed, changeFile)
+    buildBasicAllVers(vers, dates, versPath, CodeDir, db_dir, utilsConf.get_configuration().bugsPath,
+                      utilsConf.get_configuration().MethodsParsed, utilsConf.get_configuration().changeFile)

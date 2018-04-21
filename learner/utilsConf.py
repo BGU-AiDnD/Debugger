@@ -102,7 +102,6 @@ def versionsCreate(gitPath, vers, versPath, workingDir):
     run_commands = ["git", "clone", to_short_path(gitPath), 'repo']
     proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=to_short_path(workingDir))
     (out, err) = proc.communicate()
-    proc.returncode
 
 
 def configure(confFile):

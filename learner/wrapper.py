@@ -186,7 +186,7 @@ def Extract_complexity_features():
     for proc, run_commands in processes:
         out, err = proc.communicate()
         if proc.returncode != 0:
-            raise RuntimeError('subprocess execution failed. args are {0}. err is {1}'.format(str(run_commands), err))
+            RuntimeWarning('subprocess execution failed. args are {0}. err is {1}'.format(str(run_commands), err))
 
 # blame
 #checkStyle
