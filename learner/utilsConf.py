@@ -77,7 +77,10 @@ def CopyDirs(gitPath, versPath, versions):
     for version in versions:
         path=os.path.join(versPath, version_to_dir_name(version), "repo")
         if not os.path.exists(path):
-            shutil.copytree(gitPath, path)
+            run_commands = ["git", "clone", to_short_path(gitPath), 'repo']
+            proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                                   cwd=to_short_path(os.path.join(versPath, version_to_dir_name(version))))
+            (out, err) = proc.communicate()
 
 
 def GitRevert(versPath,vers):
@@ -93,11 +96,13 @@ def GitRevert(versPath,vers):
         run_cmd(repo_path, ["clean", "-fd", version])
 
 
-def versionsCreate(gitPath, vers, versPath,LocalGitPath):
+def versionsCreate(gitPath, vers, versPath, workingDir):
     CopyDirs(gitPath, versPath, vers)
     GitRevert(versPath, vers)
-    if not os.path.exists(LocalGitPath):
-        shutil.copytree(gitPath, LocalGitPath)
+    run_commands = ["git", "clone", to_short_path(gitPath), 'repo']
+    proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=to_short_path(workingDir))
+    (out, err) = proc.communicate()
+
 
 def configure(confFile):
     lines = []
@@ -133,14 +138,13 @@ def configure(confFile):
     docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath = globalConfig()
     bugsPath = os.path.join(workingDir, "bugs.csv")
     vers_dirs = map(version_to_dir_name, vers)
-    vers_paths = map(lambda ver: os.path.join(versPath, ver),vers_dirs)
+    vers_paths = map(lambda ver: os.path.join(versPath, ver), vers_dirs)
     LocalGitPath = os.path.join(workingDir, "repo")
     mkOneDir(LocalGitPath)
     weka_path = to_short_path(os.path.join(workingDir, "weka"))
     web_prediction_results = to_short_path(os.path.join(workingDir, "web_prediction_results"))
     MethodsParsed = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "CheckStyle.txt")
     changeFile = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "Ins_dels.txt")
-    versionsCreate(gitPath, vers, versPath, LocalGitPath)
     debugger_base_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     try:
         repo = git.Repo(debugger_base_path)
@@ -164,6 +168,7 @@ def configure(confFile):
                     ("web_prediction_results", web_prediction_results), ("full_configure_file", full_configure_file)]
     map(lambda name_val: setattr(configuration, name_val[0], name_val[1]), names_values)
     Mkdirs(workingDir)
+    versionsCreate(gitPath, vers, versPath, workingDir)
     return versions, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir
 
 
@@ -201,6 +206,8 @@ class Configuration(object):
         self.versions = versions
         mkOneDir(workingDir)
         log_path = os.path.join(to_short_path(workingDir), "log.log")
+        if os.path.exists(log_path):
+            os.remove(log_path)
         logging.basicConfig(filename=log_path, level=logging.DEBUG)
 
     def get_marker_path(self, marker):

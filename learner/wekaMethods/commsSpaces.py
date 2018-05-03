@@ -35,7 +35,6 @@ def create(vers, Path):
 #create(('CDT_8_0_1', 'CDT_8_0_2', 'CDT_8_1_0', 'CDT_8_1_1', 'CDT_8_1_2' ),"C:\\GitHub\\vers\\" )
 
 def read(file):
-    print file
     if not os.path.isfile(file):
         return [], []
     with open(file) as f:

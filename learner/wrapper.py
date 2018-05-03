@@ -141,9 +141,7 @@ def SourceMonitorXml(workingDir, ver, sourceMonitorEXE):
     xmlPath = os.path.join(verDir, "sourceMonitor.xml")
     with open(xmlPath, "wb") as f:
         f.write(xml)
-    run_commands = [sourceMonitorEXE, "/C", xmlPath]
-    proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    (out, err) = proc.communicate()
+    return [sourceMonitorEXE, "/C", xmlPath]
 
 
 def blameExecute(path, pathRepo, version):
@@ -156,6 +154,8 @@ def blameExecute(path, pathRepo, version):
             blame_commands = ['git', 'blame', '--show-stats', '--score-debug', '-p', '--line-porcelain', '-l', version, git_file_path]
             proc = utilsConf.open_subprocess(blame_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(pathRepo))
             (out, err) = proc.communicate()
+            if proc.returncode != 0:
+                raise RuntimeError('blame subprocess failed. args: {0}. err is {1}'.format(str(blame_commands), err))
             with open(blame_file_path, "w") as f:
                 f.writelines(out)
     run_commands = ["dir", "/b", "/s", "*.java"]
@@ -167,18 +167,26 @@ def blameExecute(path, pathRepo, version):
 
 @utilsConf.marker_decorator(utilsConf.COMPLEXITY_FEATURES_MARKER)
 def Extract_complexity_features():
-    for version_path, version_name in zip(utilsConf.get_configuration().vers_paths, utilsConf.get_configuration().vers):
+    processes = []
+    for version_path, version_name, git_version in zip(utilsConf.get_configuration().vers_paths, utilsConf.get_configuration().vers_dirs,
+                                                       utilsConf.get_configuration().vers):
         pathRepo=os.path.join(version_path,"repo")
-        SourceMonitorXml(utilsConf.get_configuration().workingDir, version_path, utilsConf.get_configuration().sourceMonitorEXE)
-        run_commands = ["java", "-jar", utilsConf.get_configuration().checkStyle68, "-c", utilsConf.get_configuration().methodsNamesXML,"javaFile","-o","vers/checkAllMethodsData/"+version_path+".txt",pathRepo]
+        run_commands = SourceMonitorXml(utilsConf.get_configuration().workingDir, version_name, utilsConf.get_configuration().sourceMonitorEXE)
+        proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        processes.append((proc, run_commands))
+        run_commands = ["java", "-jar", utilsConf.get_configuration().checkStyle68, "-c", utilsConf.get_configuration().methodsNamesXML,"javaFile","-o","vers/checkAllMethodsData/"+version_name+".txt",pathRepo]
         proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().workingDir))
-        (out, err) = proc.communicate()
+        processes.append((proc, run_commands))
 
-        run_commands = ["java", "-jar", utilsConf.get_configuration().checkStyle57, "-c", utilsConf.get_configuration().allchecks,"-r",pathRepo,"-f","xml","-o","vers/checkAll/"+version_path+".xml"]
+        run_commands = ["java", "-jar", utilsConf.get_configuration().checkStyle57, "-c", utilsConf.get_configuration().allchecks,"-r",pathRepo,"-f","xml","-o","vers/checkAll/"+version_name+".xml"]
         proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().workingDir))
-        (out, err) = proc.communicate()
+        processes.append((proc, run_commands))
 
-        blameExecute(version_path, pathRepo, version_name)
+        blameExecute(version_path, pathRepo, git_version)
+    for proc, run_commands in processes:
+        out, err = proc.communicate()
+        if proc.returncode != 0:
+            RuntimeWarning('subprocess execution failed. args are {0}. err is {1}'.format(str(run_commands), err))
 
 # blame
 #checkStyle
@@ -222,14 +230,14 @@ def createBuildMLModels():
         mkOneDir(FilesPath)
         mkOneDir(methodsPath)
         trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacks(FilesPath,
-                                                                                                        utilsConf.get_configuration().gitPath, utilsConf.get_configuration().weka, utilsConf.get_configuration().vers, utilsConf.get_configuration().vers_dirs, buggedType, utilsConf.get_configuration().db_dir)
-        trainingFile, testingFile, NamesFile, outCsv=BuildMLFiles(utilsConf.to_short_path(utilsConf.get_configuration().weka),buggedType,"files")
-        BuildWekaModel(utilsConf.get_configuration().weka,trainingFile,testingFile,NamesFile,outCsv,"files_"+buggedType, utilsConf.get_configuration().wekaJar)
+                                                                                                        utilsConf.get_configuration().gitPath, utilsConf.get_configuration().weka_path, utilsConf.get_configuration().vers, utilsConf.get_configuration().vers_dirs, buggedType, utilsConf.get_configuration().db_dir)
+        trainingFile, testingFile, NamesFile, outCsv=BuildMLFiles(utilsConf.to_short_path(utilsConf.get_configuration().weka_path),buggedType,"files")
+        BuildWekaModel(utilsConf.get_configuration().weka_path,trainingFile,testingFile,NamesFile,outCsv,"files_"+buggedType, utilsConf.get_configuration().wekaJar)
         # All_One_create.allFamilies(FilesPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
         trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacksMethods(methodsPath,
-                                                                                                               utilsConf.get_configuration().gitPath, utilsConf.get_configuration().weka, utilsConf.get_configuration().vers, utilsConf.get_configuration().vers_dirs, buggedType, utilsConf.get_configuration().db_dir)
-        trainingFile, testingFile, NamesFile, outCsv=BuildMLFiles(utilsConf.to_short_path(utilsConf.get_configuration().weka),buggedType,"methods")
-        BuildWekaModel(utilsConf.get_configuration().weka,trainingFile,testingFile,NamesFile,outCsv,"methods_"+buggedType, utilsConf.get_configuration().wekaJar)
+                                                                                                               utilsConf.get_configuration().gitPath, utilsConf.get_configuration().weka_path, utilsConf.get_configuration().vers, utilsConf.get_configuration().vers_dirs, buggedType, utilsConf.get_configuration().db_dir)
+        trainingFile, testingFile, NamesFile, outCsv=BuildMLFiles(utilsConf.to_short_path(utilsConf.get_configuration().weka_path),buggedType,"methods")
+        BuildWekaModel(utilsConf.get_configuration().weka_path,trainingFile,testingFile,NamesFile,outCsv,"methods_"+buggedType, utilsConf.get_configuration().wekaJar)
         # All_One_create.allFamilies(methodsPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
 
 
@@ -337,7 +345,7 @@ def download_bugs():
         wekaMethods.issuesExtract.github_import.GithubIssues(bugsPath, issue_tracker_url, issue_tracker_product)
 
 def create_web_prediction_results():
-    for buggedType, granularity in itertools.product(["All", "Most"], ["File", "Method"]):
+    for buggedType, granularity in itertools.product(["All", "Most"], ["files", "methods"]):
         weka_csv = os.path.join(utilsConf.get_configuration().weka_path, "{buggedType}_out_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
         prediction_csv = os.path.join(utilsConf.get_configuration().web_prediction_results, "prediction_{buggedType}_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
         weka_csv_to_readable_csv(weka_csv, prediction_csv)
