@@ -1,4 +1,5 @@
 REM usage run.bat <code_dir>
+REM add -javaagent:FULL\PATH\TO\jcov.jar=grabber -Xms512m -Xmx1024m to surefire
 call java -jar C:\Users\User\Downloads\jcov-2.0-beta-1\JCOV_BUILD\jcov_2.0\jcov.jar tmplgen -verbose  -abstract on -field on %1
 start java -jar C:\Users\User\Downloads\jcov-2.0-beta-1\JCOV_BUILD\jcov_2.0\jcov.jar grabber -vv -t template.xml -o result.xml -scale
 pushd %1
