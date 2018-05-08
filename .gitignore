@@ -101,3 +101,6 @@ fabric.properties
 
 # Editor-based Rest Client
 .idea/httpRequests
+jcov_runner/result.xml
+jcov_runner/template.xml
+jcov_runner/report/
