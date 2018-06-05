@@ -42,10 +42,11 @@ def issueAnalyze(issue,product,component):
     return [Id,Product,Component,Assigned_To,Status,Resolution,Reporter,Last_Modified,Version,Milestone,Hardware,OS,Priority,Severity,Summary,Keywords,Submit_Date,Blocks,Depends_On,Duplicate_Of,CC]
 
 
-def GithubIssues(outFile, owner,repo):
-    gh=github3.GitHub()
+def GithubIssues(outFile, owner, repo):
+    gh = github3.login('DebuggerIssuesReport', password='DebuggerIssuesReport1')
     lines=[["ID","Product","Component","Assigned To","Status","Resolution","Reporter","Last Modified","Version","Milestone","Hardware","OS","Priority","Severity","Summary","Keywords","Submit Date","Blocks","Depends On","Duplicate Of","CC"]]
-    allIssues= gh.iter_repo_issues(owner,repo,state="all")
+    reporepository = gh.repository(owner, repo)
+    allIssues= reporepository.issues(state='all')
     for issue in allIssues:
         analyze = issueAnalyze(issue,repo,repo)
         lines.append(analyze)
