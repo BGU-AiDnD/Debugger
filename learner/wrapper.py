@@ -477,7 +477,7 @@ if __name__ == '__main__':
         wrapperLearner()
         executeTests()
         utilsConf.export_to_cache()
-    if sys.argv[2] =="learn":
+    elif sys.argv[2] =="learn":
         wrapperLearner()
     elif sys.argv[2]=="experiments":
         wrapperExperiments(sys.argv[1])
