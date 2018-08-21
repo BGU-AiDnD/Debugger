@@ -329,18 +329,23 @@ def get_from_cache():
             return config
     return None
 
+def copy(src, dst):
+    if os.path.isfile(src):
+        shutil.copyfile(src, dst)
+    else:
+        shutil.copytree(src, dst)
 
 def copy_from_cache():
     config = get_from_cache()
     if config is None:
         return None
     for folder in DIRS_CACHE:
-        shutil.copytree(os.path.join(os.path.dirname(config), folder), os.path.join(get_configuration().workingDir, folder))
+        copy(os.path.join(os.path.dirname(config), folder), os.path.join(get_configuration().workingDir, folder))
 
 
 def export_to_cache():
     dir_name = os.path.join(get_configuration().caching_dir, get_configuration().issue_tracker_product)
     mkOneDir(dir_name)
     for folder in DIRS_CACHE:
-        shutil.copytree(os.path.join(get_configuration().workingDir, folder), os.path.join(dir_name, folder))
+        copy(os.path.join(get_configuration().workingDir, folder), os.path.join(dir_name, folder))
 
