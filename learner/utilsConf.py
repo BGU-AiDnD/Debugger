@@ -315,7 +315,7 @@ def marker_decorator(marker):
     return decorator
 
 
-DIRS_CACHE = ['weka', 'web_prediction_results', 'experiments', 'markers']
+DIRS_CACHE = ['weka', 'web_prediction_results', 'experiments', 'markers', 'configuration']
 
 
 def get_from_cache():
@@ -342,5 +342,5 @@ def export_to_cache():
     dir_name = os.path.join(get_configuration().caching_dir, get_configuration().issue_tracker_product)
     mkOneDir(dir_name)
     for folder in DIRS_CACHE:
-        shutil.copytree(os.path.join(get_configuration().workingDir, folder), os.path.join(os.path.dirname(dir_name), folder))
+        shutil.copytree(os.path.join(get_configuration().workingDir, folder), os.path.join(dir_name, folder))
 
