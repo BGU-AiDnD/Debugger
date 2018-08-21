@@ -373,7 +373,7 @@ def load_prediction_file(prediction_path):
 def executeTests():
     tested_repo = os.path.join(utilsConf.get_configuration().workingDir, "testedVer", "repo")
     web_prediction_results = utilsConf.get_configuration().web_prediction_results
-
+    return 
     tracer_path = utilsConf.get_configuration().amir_tracer
     for x in [tested_repo, weka, tracer_path]:
         assert os.path.exists(x)
