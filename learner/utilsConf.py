@@ -322,7 +322,7 @@ def get_from_cache():
     cache = get_configuration().caching_dir
     current_versions = get_configuration().versions
     for config in map(lambda d: os.path.join(cache, d, "configuration"), os.listdir(cache)):
-        full_configure_file, gitPath, issue_tracker, issue_tracker_product, issue_tracker_url, versions, workingDir = utilsConf.read_configuration(config)
+        full_configure_file, gitPath, issue_tracker, issue_tracker_product, issue_tracker_url, versions, workingDir = read_configuration(config)
         if versions == current_versions:
             return config
     return None
