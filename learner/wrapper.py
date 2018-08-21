@@ -2,7 +2,6 @@
 # encoding: utf-8
 
 import csv
-import datetime
 import os
 import shutil
 import subprocess
@@ -24,7 +23,7 @@ import wekaMethods.issuesExtract.jira_import
 import wekaMethods.issuesExtract.python_bugzilla
 import wekaMethods.patchsBuild
 import wekaMethods.wekaAccuracy
-from utilsConf import Mkdirs, version_to_dir_name, mkOneDir, versions_info, versionsCreate
+from utilsConf import Mkdirs, version_to_dir_name, mkOneDir, versions_info
 
 try:
     from SFL_diagnoser.Diagnoser.diagnoserUtils import readPlanningFile, write_planning_file
@@ -361,6 +360,30 @@ def wrapperLearner():
     create_web_prediction_results()
 
 
+def load_prediction_file(prediction_path):
+    predictions = {}
+    with open(prediction_path) as f:
+        lines = list(csv.reader(f))[1:]
+        predictions = dict(
+            map(lambda line: (line[0].replace(".java", "").replace(os.path.sep, ".").replace("").lower(), line[1]), lines))
+    return predictions
+
+
+@utilsConf.marker_decorator(utilsConf.EXECUTE_TESTS)
+def executeTests():
+    tested_repo = os.path.join(utilsConf.get_configuration().workingDir, "testedVer", "repo")
+    web_prediction_results = utilsConf.get_configuration().web_prediction_results
+
+    tracer_path = utilsConf.get_configuration().amir_tracer
+    for x in [tested_repo, weka, tracer_path]:
+        assert os.path.exists(x)
+    predictions = {}
+    with open(prediction_path) as f:
+        lines = list(csv.reader(f))[1:]
+        predictions = dict(
+            map(lambda line: (line[0].replace(".java", "").replace(os.path.sep, ".").lower(), line[1]), lines))
+
+
 def comprasionAll(confFile,globalConfFile):
     vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
     for buggedType in ["All","Most"]:
@@ -447,6 +470,12 @@ def wrapperExperiments(confFile):
 if __name__ == '__main__':
     csv.field_size_limit(sys.maxint)
     utilsConf.configure(sys.argv[1])
+    shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
+    if utilsConf.copy_from_cache() is not None:
+        exit()
+    if len(sys.argv) == 2:
+        wrapperLearner()
+        executeTests()
     if sys.argv[2] =="learn":
         wrapperLearner()
     elif sys.argv[2]=="experiments":

@@ -27,6 +27,7 @@ BLAME_FEATURES_MARKER = "blame_features"
 TEST_DB_MARKER = "test_db_features"
 PACKS_FILE_MARKER = "packs_file_features"
 LEARNER_PHASE_FILE = "learner_phase_file"
+EXECUTE_TESTS = "test_executed"
 ISSUE_TRACKER_FILE = "issue_tracker_file"
 ERROR_FILE = "error_file"
 
@@ -105,37 +106,17 @@ def versionsCreate(gitPath, vers, versPath, workingDir):
 
 
 def configure(confFile):
-    lines = []
-    full_configure_file = ""
-    with open(confFile,"r") as conf:
-        lines =[x.split("\n")[0] for x in conf.readlines()]
-        conf.seek(0)
-        full_configure_file = conf.read()
-    versions, gitPath,issue_tracker_url, issue_tracker_product, workingDir="","","","",""
-    issue_tracker = "bugzilla"
-    for x in lines:
-        if x.startswith("workingDir"):
-            workingDir = to_long_path(x.split("=")[1])
-        if x.startswith("git"):
-            gitPath = to_long_path(x.split("=")[1])
-        if x.startswith("issue_tracker_product_name"):
-            issue_tracker_product = x.split("=")[1]
-        if x.startswith("issue_tracker_url"):
-            issue_tracker_url = x.split("=")[1]
-        if x.startswith("issue_tracker"):
-            issue_tracker = x.split("=")[1]
-        if x.startswith("vers"):
-            v=x.split("=")[1]
-            v=v.split("(")[1]
-            v=v.split(")")[0]
-            versions = v.split(",")
-    versions = [v.strip() for v in versions]
+    full_configure_file, gitPath, issue_tracker, issue_tracker_product, issue_tracker_url, versions, workingDir = read_configuration(confFile)
     init_configuration(workingDir, versions)
     configuration = get_configuration()
     db_dir = os.path.join(workingDir, "dbAdd")
     versPath = os.path.join(workingDir, "vers")
     vers, paths, dates, commits = versions_info(gitPath, versions)
     docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath = globalConfig()
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    utilsPath = os.path.realpath(os.path.join(current_dir, "../utils"))
+    caching_dir = os.path.realpath(os.path.join(current_dir, "../Debugger_cache"))
+    amir_tracer = os.path.join(utilsPath, "uber-tracer-1.0.1-SNAPSHOT.jar")
     bugsPath = os.path.join(workingDir, "bugs.csv")
     vers_dirs = map(version_to_dir_name, vers)
     vers_paths = map(lambda ver: os.path.join(versPath, ver), vers_dirs)
@@ -143,6 +124,7 @@ def configure(confFile):
     mkOneDir(LocalGitPath)
     weka_path = to_short_path(os.path.join(workingDir, "weka"))
     web_prediction_results = to_short_path(os.path.join(workingDir, "web_prediction_results"))
+    configuration_path = to_short_path(os.path.join(workingDir, "configuration"))
     MethodsParsed = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "CheckStyle.txt")
     changeFile = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "Ins_dels.txt")
     debugger_base_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -165,11 +147,41 @@ def configure(confFile):
                     ("workingDir", workingDir), ("bugsPath", bugsPath), ("vers_dirs", vers_dirs), ("vers_paths", vers_paths),
                     ("LocalGitPath", LocalGitPath), ("weka_path", weka_path), ("MethodsParsed", MethodsParsed),
                     ("changeFile", changeFile), ("debugger_base_path", debugger_base_path),
-                    ("web_prediction_results", web_prediction_results), ("full_configure_file", full_configure_file)]
+                    ("web_prediction_results", web_prediction_results), ("full_configure_file", full_configure_file),
+                    ("amir_tracer", amir_tracer), ("configuration_path", configuration_path), ("caching_dir", caching_dir)]
     map(lambda name_val: setattr(configuration, name_val[0], name_val[1]), names_values)
     Mkdirs(workingDir)
     versionsCreate(gitPath, vers, versPath, workingDir)
     return versions, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir
+
+
+def read_configuration(confFile):
+    full_configure_file = ""
+    lines = []
+    with open(confFile, "r") as conf:
+        lines =[x.split("\n")[0] for x in conf.readlines()]
+        conf.seek(0)
+        full_configure_file = conf.read()
+    versions, gitPath, issue_tracker_url, issue_tracker_product, workingDir = "", "", "", "", ""
+    issue_tracker = "bugzilla"
+    for x in lines:
+        if x.startswith("workingDir"):
+            workingDir = to_long_path(x.split("=")[1])
+        if x.startswith("git"):
+            gitPath = to_long_path(x.split("=")[1])
+        if x.startswith("issue_tracker_product_name"):
+            issue_tracker_product = x.split("=")[1]
+        if x.startswith("issue_tracker_url"):
+            issue_tracker_url = x.split("=")[1]
+        if x.startswith("issue_tracker"):
+            issue_tracker = x.split("=")[1]
+        if x.startswith("vers"):
+            v = x.split("=")[1]
+            v = v.split("(")[1]
+            v = v.split(")")[0]
+            versions = v.split(",")
+    versions = [v.strip() for v in versions]
+    return full_configure_file, gitPath, issue_tracker, issue_tracker_product, issue_tracker_url, versions, workingDir
 
 
 def version_to_dir_name(version):
@@ -301,3 +313,32 @@ def marker_decorator(marker):
             return ans
         return f
     return decorator
+
+
+DIRS_CACHE = ['weka', 'web_prediction_results', 'experiments', 'markers']
+
+
+def get_from_cache():
+    cache = get_configuration().caching_dir
+    current_versions = get_configuration().versions
+    for config in map(lambda d: os.path.join(cache, d, "configuration"), os.listdir(cache)):
+        full_configure_file, gitPath, issue_tracker, issue_tracker_product, issue_tracker_url, versions, workingDir = utilsConf.read_configuration(config)
+        if versions == current_versions:
+            return config
+    return None
+
+
+def copy_from_cache():
+    config = get_from_cache()
+    if config is None:
+        return None
+    for folder in DIRS_CACHE:
+        shutil.copytree(os.path.join(os.path.dirname(config), folder), os.path.join(get_configuration().workingDir, folder))
+
+
+def export_to_cache():
+    dir_name = os.path.join(get_configuration().caching_dir, get_configuration().issue_tracker_product)
+    mkOneDir(dir_name)
+    for folder in DIRS_CACHE:
+        shutil.copytree(os.path.join(get_configuration().workingDir, folder), os.path.join(os.path.dirname(dir_name), folder))
+
