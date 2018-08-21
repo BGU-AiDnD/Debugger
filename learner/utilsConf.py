@@ -346,6 +346,7 @@ def copy_from_cache():
         return None
     for folder in DIRS_CACHE:
         copy(os.path.join(os.path.dirname(config), folder), os.path.join(get_configuration().workingDir, folder))
+    return config
 
 
 def export_to_cache():
