@@ -445,15 +445,13 @@ def writeFile(allNames, arffExtension,namesFile, attr, data, name, outPath):
     #f.writelines(allNames)
 
 
-def writeArff(allNames, arffName,namesFile, attr, data):
+def writeArff(allNames, arffName, namesFile, attr, data):
     arff_data = arff_build(attr, data, str([]), "base")
     write_to_arff(arff_data, arffName)
     if namesFile!="":
-        f=open(namesFile,"wb")
-        writer=csv.writer(f)
-        writer.writerows([[a] for a in allNames])
-        f.close()
-    #f.writelines(allNames)
+        with open(namesFile,"wb") as f:
+            writer=csv.writer(f)
+            writer.writerows([[a] for a in allNames])
 
 
 def arff88(basicPath,i,max,outPath,name,buggedType):
@@ -552,9 +550,9 @@ def arffCreate(basicPath, objects, names, dates, bugQ, wanted, trainingFile, tes
         print(dbpath)
         tag, allNames = arffCreateForTag(dbpath, dates, i, objects, bugQ, wanted)
         data = data+ tag
-        if( i==len(names)-3):
+        if i == len(names) - 3:
             writeArff([], trainingFile, "", attr, data)
-        if( i==len(names)-2):
+        if i == len(names) - 2:
             writeArff(allNames, testingFile, NamesFile, attr, tag)
         i=i+1
     return data
@@ -852,11 +850,11 @@ def articlesAllpacks(basicPath,repoPath,outDir,vers, vers_dirs,buggedType,dbPath
     if (buggedType=="Most"):
         bugQ='select distinct name,"bugged"  from (select Commitedfiles.bugId as bugId,Commitedfiles.name as name  from Commitedfiles , (select max(lines) as l, Commitedfiles.bugId as bugId from Commitedfiles where Commitedfiles.name like "%.java" and name not like "%test%" and commiter_date>="' + str("STARTDATE")+ '"' + '  and commiter_date<="' + str("ENDDATE") +"and not exists (select comments.commitid,comments.name from comments where comments.commitid=Commitedfiles.commitid and comments.name=Commitedfiles.name) " + '" group by bugId) as T where Commitedfiles.lines=T.l and Commitedfiles.bugId=T.bugId) where bugId<>0  group by name'
     print "bugQ", bugQ
-    names,paths,dates,commits=GitVersInfo(basicPath,repoPath,vers)
-    trainingFile=os.path.join(outDir,buggedType+"_training_files.arff")
-    testingFile=os.path.join(outDir,buggedType+"_testing_files.arff")
-    NamesFile=os.path.join(outDir,buggedType+"_names_files.csv")
-    FeaturesClasses, Featuresnames=featuresPacksToClasses(packs)
+    names, paths, dates, commits = GitVersInfo(basicPath, repoPath, vers)
+    trainingFile = os.path.join(outDir, buggedType+"_training_files.arff")
+    testingFile = os.path.join(outDir, buggedType+"_testing_files.arff")
+    NamesFile = os.path.join(outDir, buggedType+"_names_files.csv")
+    FeaturesClasses, Featuresnames = featuresPacksToClasses(packs)
     attr, lensAttr = objectsAttr(FeaturesClasses)
     arffCreate(dbPath, FeaturesClasses, vers_dirs, dates, bugQ, wanted, trainingFile, testingFile, NamesFile)
     return trainingFile, testingFile, NamesFile, Featuresnames, lensAttr
