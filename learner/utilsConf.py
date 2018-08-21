@@ -329,11 +329,16 @@ def get_from_cache():
             return config
     return None
 
+
 def copy(src, dst):
     if os.path.isfile(src):
+        if os.path.exists(dst):
+            os.remove(dst)
         shutil.copyfile(src, dst)
     else:
+        shutil.rmtree(dst)
         shutil.copytree(src, dst)
+
 
 def copy_from_cache():
     config = get_from_cache()
