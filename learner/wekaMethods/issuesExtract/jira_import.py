@@ -68,10 +68,9 @@ def jiraIssues(outFile , url, project_name, bunch = 100):
     for issue in allIssues:
         analyze = issueAnalyze(issue)
         lines.append(analyze)
-    f=open(outFile,"wb")
-    writer=csv.writer(f)
-    writer.writerows(lines)
-    f.close()
+    with open(outFile,"wb") as f:
+        writer=csv.writer(f)
+        writer.writerows(lines)
 
 if __name__ == "__main__":
     # jiraIssues("C:\\temp\\CASSANDRA2.csv", "https://issues.apache.org/jira",'CASSANDRA')

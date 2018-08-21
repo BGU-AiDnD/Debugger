@@ -114,31 +114,25 @@ def fixAssert(l):
     return l
 
 
-def OneClass(lines, outPath,commitID,change):
-    if len(lines)==0:
-        return []
-    fileName=lines[0].split()
+def OneClass(diff_lines, outPath, commitID, change):
+    fileName = diff_lines[0].split()
     if len(fileName)<3:
         return []
-    fileName = lines[0].split()[2]
+    fileName = diff_lines[0].split()[2]
     fileName = fileName[2:]
     fileName = os.path.normpath(fileName).replace(os.path.sep,"_")
     if not ".java" in fileName:
         return []
     fileName = fileName.split('.java')[0] + '.java'
-    if len(lines) > 3:
-        # isNew="new file " in lines[1]
-        # isdeleted="deleted file " in lines[1]
-        # reducedFile=lines[3]
-        # addedFile=lines[4]
-        lines=lines[5:]
+    if len(diff_lines) > 3:
+        diff_lines = diff_lines[5:]
         befLines=[]
         afterLines=[]
         deletedInds=[]
         addedInds=[]
         delind=0
         addind=0
-        for l in lines:
+        for l in diff_lines:
             if "\ No newline at end of file" in l:
                 continue
             if "1.9.4.msysgit.2" in l:
@@ -175,21 +169,20 @@ def OneClass(lines, outPath,commitID,change):
 
 
 def oneFile(PatchFile, outDir,change):
-    f=open(PatchFile,'r')
-    lines=f.readlines()
+    with open(PatchFile,'r') as f:
+        lines=f.readlines()
     if len(lines)==0:
         return []
-    commitSha=lines[0].split()[1] # line 0 word 1
-    commitID=str(commitSha)
+    commitSha = lines[0].split()[1] # line 0 word 1
+    commitID = str(commitSha)
     mkDirs(outDir, commitID)
     inds=[lines.index(l) for l in lines if "diff --git" in l]+[len(lines)] #lines that start with diff --git
-    shutil.copyfile(PatchFile, outDir+"\\"+commitID+"\\"+PatchFile.split("\\")[-1])
+    shutil.copyfile(PatchFile, os.path.join(outDir, commitID, os.path.basename(PatchFile)))
     for i in range(len(inds)-1):
-        OneClass(lines[inds[i]:inds[i+1]],outDir+"\\"+commitID,commitID,change)
-    return commitSha
-
-
-
+        diff_lines = lines[inds[i]:inds[i+1]]
+        if len(diff_lines) == 0:
+            continue
+        OneClass(diff_lines, os.path.join(outDir, commitID),commitID,change)
 
 
 def debugPatchs(Path,outFile):
@@ -206,17 +199,10 @@ def debugPatchs(Path,outFile):
 
 
 def buildPatchs(Path,outDir,changedFile):
-    lst= glob.glob(Path+"/*.patch")
-    i=0
-    if not os.path.isdir(outDir):
-        os.mkdir(outDir)
-    allComms=[]
-    change=open(changedFile,"wb")
-    for doc in lst:
-        i=i+1
-        print doc
-        comm=oneFile(doc,outDir,change)
-        allComms.append(comm)
+    mkdir(outDir)
+    with open(changedFile,"wb") as change:
+        for doc in glob.glob(os.path.join(Path,"/*.patch")):
+            oneFile(doc, outDir, change)
 
 def mkdir(d):
     if not os.path.isdir(d):
@@ -233,7 +219,7 @@ def DbAdd(dbPath,allComms):
     conn.commit()
     conn.close()
 
-def RunCheckStyle(workingDir,outPath,checkStyle68,methodNameLines):
+def RunCheckStyle(workingDir, outPath, checkStyle68, methodNameLines):
     run_commands = ["java" ,"-jar" ,checkStyle68 ,"-c" ,methodNameLines ,"javaFile" ,"-o",outPath,workingDir]
     proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     (out, err) = proc.communicate()
