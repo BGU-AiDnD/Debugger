@@ -125,6 +125,7 @@ def configure(confFile):
     weka_path = to_short_path(os.path.join(workingDir, "weka"))
     web_prediction_results = to_short_path(os.path.join(workingDir, "web_prediction_results"))
     configuration_path = to_short_path(os.path.join(workingDir, "configuration"))
+    DebuggerTests = to_short_path(os.path.join(workingDir, "DebuggerTests"))
     MethodsParsed = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "CheckStyle.txt")
     changeFile = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "Ins_dels.txt")
     debugger_base_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -148,7 +149,8 @@ def configure(confFile):
                     ("LocalGitPath", LocalGitPath), ("weka_path", weka_path), ("MethodsParsed", MethodsParsed),
                     ("changeFile", changeFile), ("debugger_base_path", debugger_base_path),
                     ("web_prediction_results", web_prediction_results), ("full_configure_file", full_configure_file),
-                    ("amir_tracer", amir_tracer), ("configuration_path", configuration_path), ("caching_dir", caching_dir)]
+                    ("amir_tracer", amir_tracer), ("configuration_path", configuration_path), ("caching_dir", caching_dir),
+                    ('DebuggerTests', DebuggerTests)]
     map(lambda name_val: setattr(configuration, name_val[0], name_val[1]), names_values)
     Mkdirs(workingDir)
     versionsCreate(gitPath, vers, versPath, workingDir)
@@ -196,7 +198,7 @@ def mkOneDir(dir):
 def Mkdirs(workingDir):
     mkOneDir(workingDir)
     map(lambda dir_name: mkOneDir(os.path.join(workingDir, dir_name)), ["", "vers", "experiments", "experiments_known",
-                                                                        "dbAdd", "testedVer", "weka", "web_prediction_results", "markers"])
+                                                                        "dbAdd", "testedVer", "weka", "web_prediction_results", "markers", "DebuggerTests"])
     versPath=os.path.join(workingDir,"vers")
     mkOneDir(versPath)
     checkAll=os.path.join(versPath,"checkAll")
@@ -336,7 +338,8 @@ def copy(src, dst):
             os.remove(dst)
         shutil.copyfile(src, dst)
     else:
-        shutil.rmtree(dst)
+        if os.path.exists(dst):
+            shutil.rmtree(dst)
         shutil.copytree(src, dst)
 
 
