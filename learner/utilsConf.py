@@ -121,10 +121,13 @@ def configure(confFile):
     vers_dirs = map(version_to_dir_name, vers)
     vers_paths = map(lambda ver: os.path.join(versPath, ver), vers_dirs)
     LocalGitPath = os.path.join(workingDir, "repo")
+    prediction_files = {'files': {'all': 'prediction_All_files.csv', 'most': 'prediction_Most_files.csv'},
+                   'methods': {'all': 'prediction_All_methods.csv', 'most': 'prediction_Most_methods.csv'}}
     mkOneDir(LocalGitPath)
     weka_path = to_short_path(os.path.join(workingDir, "weka"))
     web_prediction_results = to_short_path(os.path.join(workingDir, "web_prediction_results"))
     configuration_path = to_short_path(os.path.join(workingDir, "configuration"))
+    experiments = to_short_path(os.path.join(workingDir, "experiments"))
     DebuggerTests = to_short_path(os.path.join(workingDir, "DebuggerTests"))
     MethodsParsed = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "CheckStyle.txt")
     changeFile = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "Ins_dels.txt")
@@ -150,7 +153,7 @@ def configure(confFile):
                     ("changeFile", changeFile), ("debugger_base_path", debugger_base_path),
                     ("web_prediction_results", web_prediction_results), ("full_configure_file", full_configure_file),
                     ("amir_tracer", amir_tracer), ("configuration_path", configuration_path), ("caching_dir", caching_dir),
-                    ('DebuggerTests', DebuggerTests)]
+                    ('DebuggerTests', DebuggerTests), ('prediction_files', prediction_files), ('experiments', experiments)]
     map(lambda name_val: setattr(configuration, name_val[0], name_val[1]), names_values)
     Mkdirs(workingDir)
     versionsCreate(gitPath, vers, versPath, workingDir)

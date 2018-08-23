@@ -164,10 +164,9 @@ class TestRunner(object):
                     surefire_files.append(os.path.join(root, name))
         return surefire_files
 
+    def get_tests(self):
+        return set(self.tracer.traces.keys()) & set(self.observations.keys())
 
-def run_mvn_on_commits(commits, git_path):
-    for commit in commits:
-        observe_tests(commit, git_path)
 
 def checkout_commit(commit_to_observe, git_path):
     git_commit_path = os.path.join(OBSERVE_PATH, os.path.basename(git_path), commit_to_observe)
