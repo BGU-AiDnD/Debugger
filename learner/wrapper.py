@@ -595,6 +595,12 @@ def create_experiment(test_runner, num_instances=50, tests_per_instance=50, bug_
                 f.write("{0}, {1}".format(precision_avg[key_name] / num_instances, recall_avg[key_name] / num_instances))
 
 
+@utilsConf.marker_decorator(utilsConf.ALL_DONE_FILE)
+def wrapperAll():
+    wrapperLearner()
+    executeTests()
+    # create_experiment(executeTests())
+
 if __name__ == '__main__':
     csv.field_size_limit(sys.maxint)
     utilsConf.configure(sys.argv[1])
@@ -602,7 +608,7 @@ if __name__ == '__main__':
     if utilsConf.copy_from_cache() is not None:
         exit()
     if len(sys.argv) == 2:
-        wrapperLearner()
+        wrapperAll()
         # executeTests()
         # create_experiment(executeTests())
         tested_repo = os.path.join(utilsConf.get_configuration().workingDir, "testedVer", "repo")
@@ -612,8 +618,8 @@ if __name__ == '__main__':
         create_experiment(test_runner)
         utilsConf.export_to_cache()
     elif sys.argv[2] =="learn":
-        wrapperLearner()
+        pass
     elif sys.argv[2]=="experiments":
-        wrapperExperiments()
+        pass
     elif sys.argv[2]=="all_planning":
         Planner.planningExperiments.planning_for_project(sys.argv[1])

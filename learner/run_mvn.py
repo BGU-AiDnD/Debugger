@@ -138,7 +138,7 @@ class TestRunner(object):
 
     def run(self):
         with self.tracer.trace():
-            # self.run_mvn()
+            self.run_mvn()
             pass
         self.observations = self.observe_tests()
 
