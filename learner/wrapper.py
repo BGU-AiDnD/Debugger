@@ -599,8 +599,8 @@ if __name__ == '__main__':
     csv.field_size_limit(sys.maxint)
     utilsConf.configure(sys.argv[1])
     shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
-    # if utilsConf.copy_from_cache() is not None:
-    #     exit()
+    if utilsConf.copy_from_cache() is not None:
+        exit()
     if len(sys.argv) == 2:
         wrapperLearner()
         # executeTests()
