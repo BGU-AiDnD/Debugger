@@ -2,11 +2,12 @@
 # encoding: utf-8
 
 import csv
+import json
 import os
 import shutil
 import subprocess
 import sys
-from random import randint
+import random
 
 import Agent.bugs_testsDBMethods
 # import Agent.experimentsMethods
@@ -24,6 +25,11 @@ import wekaMethods.issuesExtract.python_bugzilla
 import wekaMethods.patchsBuild
 import wekaMethods.wekaAccuracy
 from utilsConf import Mkdirs, version_to_dir_name, mkOneDir, versions_info
+from run_mvn import AmirTracer, TestRunner
+from sfl_diagnoser.Diagnoser.diagnoserUtils import write_planning_file, readPlanningFile
+from sfl_diagnoser.Diagnoser.Diagnosis_Results import Diagnosis_Results
+import Bug
+from collections import OrderedDict
 
 """
 resources :
@@ -300,6 +306,44 @@ def weka_csv_to_readable_csv(weka_csv, prediction_csv):
         writer.writerows(out_lines)
 
 
+def add_to_packages(packages, path, probability, threshold=0.2):
+    if float(probability) < threshold:
+        return
+    d = packages
+    while len(path) != 1:
+        name = path.pop()
+        d.setdefault('_sub_packages', [])
+        package = {'_name': name}
+        d['_sub_packages'].append(package)
+        d = package
+    d.setdefault('_files', {})
+    d['_files'][path[0]] = {'_probability': probability}
+
+
+def calc_all_probabilities(package, reduce_function):
+    if '_probability' not in package:
+        sub_probabilities = [0.0]
+        if '_files' in package:
+            files_probabilities = map(lambda x: package['_files'][x]['_probability'], package['_files'].keys())
+            sub_probabilities.extend(files_probabilities)
+        if '_sub_packages' in package:
+            sub_packages_probabilites = map(lambda x: calc_all_probabilities(x, reduce_function), package['_sub_packages'])
+            sub_probabilities.extend(sub_packages_probabilites)
+        package['_probability'] = reduce_function(sub_probabilities)
+    return package['_probability']
+
+
+def save_json_watchers(precidtion_csv):
+    packges = {'_name': '_root', '_sub_packages': []}
+    lines = []
+    with open(precidtion_csv) as f:
+        lines = list(csv.reader(f))[1:]
+    map(lambda x: add_to_packages(packges, list(reversed(x[0].split(os.path.sep))), float(x[1])), lines)
+    calc_all_probabilities(packges, max)
+    with open(precidtion_csv.replace("csv", "json"), "wb") as f:
+        f.write(json.dumps([packges]))
+
+
 # def Experiments(workingDir,weka,packsPath,utilsPath,randNum):
 #     for buggedType, granularity in itertools.product(["All", "Most"], ["File", "Method"]):
 #         outPath = os.path.join(workingDir, "experiments\\files_{0}{1}".format(buggedType, randNum))
@@ -332,11 +376,14 @@ def download_bugs():
     elif utilsConf.get_configuration().issue_tracker == "github":
         wekaMethods.issuesExtract.github_import.GithubIssues(bugsPath, issue_tracker_url, issue_tracker_product)
 
+
 def create_web_prediction_results():
     for buggedType, granularity in itertools.product(["All", "Most"], ["files", "methods"]):
         weka_csv = os.path.join(utilsConf.get_configuration().weka_path, "{buggedType}_out_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
         prediction_csv = os.path.join(utilsConf.get_configuration().web_prediction_results, "prediction_{buggedType}_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
         weka_csv_to_readable_csv(weka_csv, prediction_csv)
+        save_json_watchers(prediction_csv)
+
 
 @utilsConf.marker_decorator(utilsConf.LEARNER_PHASE_FILE)
 def wrapperLearner():
@@ -360,17 +407,51 @@ def load_prediction_file(prediction_path):
 
 @utilsConf.marker_decorator(utilsConf.EXECUTE_TESTS)
 def executeTests():
-    tested_repo = os.path.join(utilsConf.get_configuration().workingDir, "testedVer", "repo")
     web_prediction_results = utilsConf.get_configuration().web_prediction_results
+    matrix_path = os.path.join(web_prediction_results, "matrix_{0}_{1}.matrix")
+    outcomes_path = os.path.join(web_prediction_results, "outcomes.json")
+    diagnoses_path = os.path.join(web_prediction_results, "diagnosis_{0}_{1}.matrix")
+    diagnoses_json_path = os.path.join(web_prediction_results, "diagnosis_{0}_{1}.json")
+    tested_repo = os.path.join(utilsConf.get_configuration().workingDir, "testedVer", "repo")
+    test_runner = TestRunner(tested_repo, AmirTracer(tested_repo, utilsConf.get_configuration().amir_tracer, utilsConf.get_configuration().DebuggerTests))
+    test_runner.run()
+    tests = test_runner.get_tests()
+    json_observations = map(lambda test: test_runner.observations[test].as_dict(), tests)
+    with open(outcomes_path, "wb") as f:
+        f.write(json.dumps(json_observations))
+    for granularity in utilsConf.get_configuration().prediction_files:
+        for bugged_type in utilsConf.get_configuration().prediction_files[granularity]:
+            components_priors = get_components_probabilities(bugged_type, granularity, test_runner, tests)
+            tests_details = map(
+                lambda test_name: (test_name, list(set(test_runner.tracer.traces[test_name].get_trace(granularity)) & set(components_priors.keys())),
+                                   test_runner.observations[test_name].get_observation()),
+                tests)
+            matrix = matrix_path.format(granularity, bugged_type)
+            write_planning_file(matrix, [], filter(lambda test: len(test[1]) > 0, tests_details),
+                                priors=components_priors)
+            inst = readPlanningFile(matrix)
+            inst.diagnose()
+            named_diagnoses = sorted(inst.get_named_diagnoses(), key=lambda d: d.probability, reverse=True)
+            with open(diagnoses_path.format(granularity, bugged_type), "wb") as diagnosis_file:
+                diagnosis_file.writelines("\n".join(map(lambda d: repr(d), named_diagnoses)))
+            with open(diagnoses_json_path.format(granularity, bugged_type), "wb") as diagnosis_json:
+                diagnosis_json.writelines(json.dumps(map(lambda d: dict([('_name', d[0])] + d[1].as_dict().items()), enumerate(named_diagnoses))))
+    return test_runner
 
-    tracer_path = utilsConf.get_configuration().amir_tracer
-    for x in [tested_repo, weka, tracer_path]:
-        assert os.path.exists(x)
+
+def get_components_probabilities(bugged_type, granularity, test_runner, tests):
     predictions = {}
-    with open(prediction_path) as f:
+    with open(os.path.join(utilsConf.get_configuration().web_prediction_results, utilsConf.get_configuration().prediction_files[granularity][bugged_type])) as f:
         lines = list(csv.reader(f))[1:]
         predictions = dict(
             map(lambda line: (line[0].replace(".java", "").replace(os.path.sep, ".").lower(), line[1]), lines))
+    components_priors = {}
+    for component in set(
+            reduce(list.__add__, map(lambda test_name: test_runner.tracer.traces[test_name].get_trace(granularity), tests), [])):
+        for prediction in predictions:
+            if component in prediction.replace('$', '@'):
+                components_priors[component] = max(float(predictions[prediction]), 0.01)
+    return components_priors
 
 
 def comprasionAll(confFile,globalConfFile):
@@ -441,20 +522,75 @@ def reportProjectData(confFile,globalConfFile):
     report.report(reportCsv,LocalGitPath,lastVer,testsDB)
 
 
-# def wrapperExperiments(confFile):
-#     vers, gitPath, issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir = utilsConf.configure(confFile)
-#     docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath = utilsConf.globalConfig()
-#     vers_dirs = map(version_to_dir_name, vers)
-#     weka=os.path.join(workingDir,"weka")
-#     vers,paths,dates,commits= versions_info(gitPath, vers)
-#     testDb=Agent.bugs_testsDBMethods.basicBuild(workingDir,vers_dirs[-2],dates[-2],dates[-1])
-#     packsPath = os.path.join(workingDir, "packs.txt")
-#     Agent.experimentsMethods.packFileCreate(testDb,1,-1, packsPath)
-#     rnd = str(randint(0,900))
-#     print rnd
-#     Experiments(workingDir, weka,packsPath,utilsPath,rnd)
-#     RealDIagnosis(workingDir, weka)
 
+
+def create_experiment(test_runner, num_instances=50, tests_per_instance=50, bug_passing_probability=0.1):
+    def sample_observation(trace, bugs):
+        return 0 if random.random() < (bug_passing_probability ** len(set(trace) & set(bugs))) else 1
+    matrix_path = os.path.join(utilsConf.get_configuration().experiments, "{BUG_ID}_{GRANULARITY}_{BUGGED_TYPE}.matrix")
+    results_path = os.path.join(utilsConf.get_configuration().experiments, "{GRANULARITY}_{BUGGED_TYPE}")
+    description = 'sample bug id {BUG_ID} with bug_passing_probability = {PROB} with garnularity of {GRANULARITY} and bugged type {BUGGED_TYPE}'
+    bugs = Bug.get_bugs_from_db(os.path.join(utilsConf.get_configuration().db_dir,
+                                             utilsConf.get_configuration().vers_dirs[-2]) + ".db",
+                                utilsConf.get_configuration().dates[-2],
+                                utilsConf.get_configuration().dates[-1])
+    all_files = set(
+            reduce(list.__add__, map(lambda test_name: test_runner.tracer.traces[test_name].get_trace('files'), test_runner.get_tests()), []))
+    packages_tests = {}
+    precision_avg = {}
+    recall_avg = {}
+    for test_name in test_runner.get_tests():
+        spllited = test_name.split('@')[0].split('.')
+        for ind in range(len(spllited)):
+            packages_tests.setdefault('.'.join(spllited[:ind]), set()).add(test_name)
+    i = 0
+    while i < num_instances:
+        bug = random.choice(bugs)
+        bugged_files = set()
+        for component in all_files:
+            for buggy in bug.all_files:
+                if component in buggy:
+                    bugged_files.add(component)
+        tests = reduce(set.__or__, map(lambda x: packages_tests.get('.'.join(x[:random.randint(0, len(x))]), set()), map(lambda file_name: file_name.replace('.java', '').split('.'), bugged_files)), set())
+        if len(tests) < tests_per_instance:
+            continue
+        i += 1
+        relevant_tests = random.sample(tests, tests_per_instance)
+        for granularity in utilsConf.get_configuration().prediction_files:
+            for bugged_type in utilsConf.get_configuration().prediction_files[granularity]:
+                components_priors = get_components_probabilities(bugged_type, granularity, test_runner, relevant_tests)
+                buggy_components = set()
+                for component in set(components_priors.keys()):
+                    for buggy in bug.get_buggy_components(granularity, bugged_type):
+                        if component in buggy:
+                            buggy_components.add(component)
+                if len(buggy_components) == 0:
+                    continue
+                tests_details = []
+                for test_name in relevant_tests:
+                    trace = list(set(test_runner.tracer.traces[test_name].get_trace(granularity)) & set(components_priors.keys()))
+                    tests_details.append((test_name, trace, sample_observation(trace, buggy_components)))
+                matrix = matrix_path.format(BUG_ID=bug.bug_id, GRANULARITY=granularity, BUGGED_TYPE=bugged_type)
+                write_planning_file(matrix, list(buggy_components), filter(lambda test: len(test[1]) > 0, tests_details),
+                                    priors=components_priors, description=description.format(BUG_ID=bug.bug_id, PROB=bug_passing_probability, GRANULARITY=granularity, BUGGED_TYPE=bugged_type))
+                inst = readPlanningFile(matrix)
+                inst.diagnose()
+                res = Diagnosis_Results(inst.diagnoses, inst.initial_tests, inst.error)
+                key_name = "{0}_{1}".format(granularity, bugged_type)
+                precision_avg[key_name] = precision_avg.get(key_name, 0.0) + res.precision
+                recall_avg[key_name] = recall_avg.get(key_name, 0.0) + res.recall
+    for granularity in utilsConf.get_configuration().prediction_files:
+        for bugged_type in utilsConf.get_configuration().prediction_files[granularity]:
+            key_name = "{0}_{1}".format(granularity, bugged_type)
+            with open(results_path.format(GRANULARITY=granularity, BUGGED_TYPE=bugged_type), 'wb') as f:
+                f.write("{0}, {1}".format(precision_avg[key_name] / num_instances, recall_avg[key_name] / num_instances))
+
+
+@utilsConf.marker_decorator(utilsConf.ALL_DONE_FILE)
+def wrapperAll():
+    wrapperLearner()
+    executeTests()
+    # create_experiment(executeTests())
 
 if __name__ == '__main__':
     csv.field_size_limit(sys.maxint)
@@ -463,12 +599,18 @@ if __name__ == '__main__':
     if utilsConf.copy_from_cache() is not None:
         exit()
     if len(sys.argv) == 2:
-        wrapperLearner()
-        executeTests()
-    if sys.argv[2] =="learn":
-        wrapperLearner()
+        wrapperAll()
+        # executeTests()
+        # create_experiment(executeTests())
+        tested_repo = os.path.join(utilsConf.get_configuration().workingDir, "testedVer", "repo")
+        test_runner = TestRunner(tested_repo, AmirTracer(tested_repo, utilsConf.get_configuration().amir_tracer,
+                                                         utilsConf.get_configuration().DebuggerTests))
+        test_runner.run()
+        create_experiment(test_runner)
+        utilsConf.export_to_cache()
+    elif sys.argv[2] =="learn":
+        pass
     elif sys.argv[2]=="experiments":
-        # wrapperExperiments(sys.argv[1])
         pass
     elif sys.argv[2]=="all_planning":
         Planner.planningExperiments.planning_for_project(sys.argv[1])

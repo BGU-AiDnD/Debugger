@@ -11,8 +11,8 @@ import subprocess
 import wekaMethods.wekaAccuracy
 import utilsConf
 
-EXPERIMETS_TABLES = {'File': {'All': ('testsFiles', 'buggedFiles'), 'Most': ('testsFiles', 'buggedFilesMostModified')},
- 'Method': {'All': ('testsMethods', 'buggedMethods'), 'Most': ('testsMethods', 'buggedMethodsMostModified')}}
+EXPERIMETS_TABLES = {'Files': {'All': ('testsFiles', 'buggedFiles'), 'Most': ('testsFiles', 'buggedFilesMostModified')},
+ 'Methods': {'All': ('testsMethods', 'buggedMethods'), 'Most': ('testsMethods', 'buggedMethodsMostModified')}}
 
 
 def optimize(inds_bef, mat, priors):
@@ -897,8 +897,6 @@ def allBuggedFilesDB(dbPath,FileNames,buggedTable):
 
 
 def MultyWekaAndSanity(outPath,dbPath,packsPath,numOfExperiments,numOfBugsARR,timesArr,const,minimalTests,maximalTests,wekaAnsArr,initialsFactor,order,numOfPacks,buggedTestsChooser,initialsChooser,notRand,copybool,copyPath,buggedTable,pureSanity, bugsPacks=[]):
-    #priorsByFiles=priorsFromWeka(dbPath,wekaAns)
-    exp=-1
     conf_file = outPath+"conf.txt"
     exportConf(conf_file,packsPath,numOfExperiments,numOfBugsARR,timesArr,const,minimalTests,maximalTests,initialsFactor,order,numOfPacks,buggedTestsChooser,notRand,initialsChooser,buggedTable,pureSanity)
     exp=-1
@@ -929,45 +927,30 @@ def MultyWekaAndSanity(outPath,dbPath,packsPath,numOfExperiments,numOfBugsARR,ti
             FileNames, allBugged, allFiles, allTests, outcomes, priors, testsChoosedNames = optimizations(FileNamesExp, allBuggedExp,allFilesExp, allTests,outcomes, priorsExp,testsChoosedNamesExp)
             exportBugs_Files(outbugs_Files,allBugged,allFiles,bugsIDS,len(allTests),pack,testsChoosedNames,[],FileNames)
             outBarinel = outPath+"\\barinel\\"+filePre +"uniform_" + str(expIND) + ".csv"
-            outPlanner = outPath+"\\planner\\"+filePre +"uniform_" +  str(expIND) + ".txt"
             priors=[0.1 for p in FileNames]
             exportBarinel(outBarinel,priors,allBugged,allFiles,allTests,outcomes)
             initials=int(initialsFactor*times)
-            exportPlanner(outPlanner,priors,allBugged,allFiles,allTests,outcomes,initials,initialsChooser)
             for wekaAns,name in wekaAnsArr:
                 priorsByFiles=priorsFromWeka(dbPath,wekaAns,FileNames,allFiles)
                 outBarinel = outPath+"\\barinel\\"+filePre +"weka_" +name+  str(expIND) + ".csv"
                 outPlanner = outPath+"\\planner\\"+filePre +"weka_" +name+  str(expIND) + ".txt"
                 exportBarinel(outBarinel,priorsByFiles.values(),allBugged,allFiles,allTests,outcomes)
-                exportPlanner(outPlanner,priorsByFiles.values(),allBugged,allFiles,allTests,outcomes,initials,initialsChooser)
-            pBug = 0.6
-            if(pureSanity):
-                allBugged=allBuggedFilesDB(dbPath,FileNames,buggedTable)
-            for j in range(2+1):  # pValid < pBug
-                pValid = j / 10.0
-                file = filePre +str(pBug) + "_" + str(pValid) + "_" + str(expIND)
-                outBarinel = outPath+"\\barinel\\" + file + ".csv"
-                outPlanner = outPath+"\\planner\\" + file + ".txt"
-                priors=priorsByPbugPvalid(allBugged, allFiles, pBug+0.01, pValid+0.01)
-                exportBarinel(outBarinel,priors,allBugged,allFiles,allTests,outcomes)
-                exportPlanner(outPlanner,priors,allBugged,allFiles,allTests,outcomes,initials,initialsChooser)
     return expIND
+
 
 def MultyWekaAndSanityMethods(outPath,dbPath,packsPath,numOfExperiments,numOfBugsARR,timesArr,const,minimalTests,
                               maximalTests,wekaAnsArr,initialsFactor,order,numOfPacks,buggedTestsChooser,initialsChooser
                               ,notRand,copybool,copyPath,buggedTable,pureSanity, bugsPacks,testTable):
-    #priorsByFiles=priorsFromWeka(dbPath,wekaAns)
-    exp=-1
     conf_file = outPath+"conf.txt"
     exportConf(conf_file,packsPath,numOfExperiments,numOfBugsARR,timesArr,const,minimalTests,maximalTests,initialsFactor,order,numOfPacks,buggedTestsChooser,notRand,initialsChooser,buggedTable,pureSanity,testTable)
     exp=-1
     expIND=-1
     timesMax=max(timesArr)
-    bugs = allPackBugs(dbPath, 20  , packsPath,numOfExperiments,True)
+    bugs = allPackBugs(dbPath, 20, packsPath, numOfExperiments, True)
     if bugsPacks==[]:
         bugsPacks=[choosePackBug(bugs, 20,order,numOfPacks,[]) for x in range(numOfExperiments)]
     print "start Experiment"
-    while exp <numOfExperiments:
+    while exp < numOfExperiments:
         bugsIDS, pack=bugsPacks[exp]
         if(len(bugsIDS)==1): # (-1,)
             break
@@ -989,28 +972,12 @@ def MultyWekaAndSanityMethods(outPath,dbPath,packsPath,numOfExperiments,numOfBug
             FileNames, allBugged, allFiles, allTests, outcomes, priors, testsChoosedNames = optimizations(FileNamesExp, allBuggedExp,allFilesExp, allTests,outcomes, priorsExp,testsChoosedNamesExp)
             exportBugs_Files(outbugs_Files,allBugged,allFiles,bugsIDS,len(allTests),pack,testsChoosedNames,[],FileNames)
             outBarinel = outPath+"\\barinel\\"+filePre +"uniform_" + str(expIND) + ".csv"
-            outPlanner = outPath+"\\planner\\"+filePre +"uniform_" +  str(expIND) + ".txt"
-            priors=[0.1 for p in FileNames]
+            priors=[0.1 for _ in FileNames]
             exportBarinel(outBarinel,priors,allBugged,allFiles,allTests,outcomes)
-            initials=int(initialsFactor*times)
-            exportPlanner(outPlanner,priors,allBugged,allFiles,allTests,outcomes,initials,initialsChooser)
             for wekaAns,name in wekaAnsArr:
                 priorsByFiles=priorsFromWeka(dbPath,wekaAns,FileNames,allFiles)
                 outBarinel = outPath+"\\barinel\\"+filePre +"weka_" +name+  str(expIND) + ".csv"
-                outPlanner = outPath+"\\planner\\"+filePre +"weka_" +name+  str(expIND) + ".txt"
                 exportBarinel(outBarinel,priorsByFiles.values(),allBugged,allFiles,allTests,outcomes)
-                exportPlanner(outPlanner,priorsByFiles.values(),allBugged,allFiles,allTests,outcomes,initials,initialsChooser)
-            pBug = 0.6
-            if(pureSanity):
-                allBugged=allBuggedFilesDB(dbPath,FileNames,buggedTable)
-            for j in range(2+1):  # pValid < pBug
-                pValid = j / 10.0
-                file = filePre +str(pBug) + "_" + str(pValid) + "_" + str(expIND)
-                outBarinel = outPath+"\\barinel\\" + file + ".csv"
-                outPlanner = outPath+"\\planner\\" + file + ".txt"
-                priors=priorsByPbugPvalid(allBugged, allFiles, pBug+0.01, pValid+0.01)
-                exportBarinel(outBarinel,priors,allBugged,allFiles,allTests,outcomes)
-                exportPlanner(outPlanner,priors,allBugged,allFiles,allTests,outcomes,initials,initialsChooser)
     return expIND
 
 def exportConf(conf_file,packsPath,numOfExperiments,numOfBugs,times,const,minimalTests,maximalTests,initials,order,numOfPacks,buggedTestsChooser,notRand,initialsChooser,buggedTable,pureSanity,testTable):
@@ -1067,20 +1034,19 @@ def RunAndResults(buggedTestsChooser, bugsPacks, const, copy, copyPath, outpath,
     numOfExperiments = MultyWekaAndSanityMethods(outpath, dbPath, packsPath, numOfExperiments, numOfBugs, times, const, minimalTests,
                                           maximalTests, wekaAnsArr, initialsFactor, False, numOfPacks, buggedTestsChooser,
                                           initialsChooser, False, copy, copyPath, table, pureSanity, bugsPacks,testTable)
-    weka = True
-    run_commands = ["java", "-jar", "planner150.jar","1", outpath + "\\planner\\", outpath + "\\plannerRecords\\", str(0.7)]
-    proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, shell=True,cwd=outpath)
-    (out, err) = proc.communicate()
+    # run_commands = ["java", "-jar", "planner150.jar","1", outpath + "\\planner\\", outpath + "\\plannerRecords\\", str(0.7)]
+    # proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, shell=True,cwd=outpath)
+    # (out, err) = proc.communicate()
 
     run_commands = ["barinelRun.bat"]
     proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, shell=True,cwd=outpath)
     (out, err) = proc.communicate()
-    types = ["all", "normal", "can't advance"]
-    a = 0
-    for t in types:
-        a = a + 1
-        results.planner_resultsMultyWekaAndSanity(outpath + "\\plannerRes" + t + ".csv", outpath + "\\plannerMEDRes" + t + ".csv", outpath,
-                                                  numOfExperiments, t, weka, times, wekaAnsArr)
+    # types = ["all", "normal", "can't advance"]
+    # a = 0
+    # for t in types:
+    #     a = a + 1
+    #     results.planner_resultsMultyWekaAndSanity(outpath + "\\plannerRes" + t + ".csv", outpath + "\\plannerMEDRes" + t + ".csv", outpath,
+    #                                               numOfExperiments, t, weka, times, wekaAnsArr)
         # results.planner_recordes(outPath+"plannerRes"+t+".csv",outPath+"plannerMEDRes"+t+".csv",outPath+"\\plannerRecords\\",numOfExperiments,t,weka,exps)
     # results.resultsAllBarinel("%s\\barinelOptA.csv" % outPath,"%s\\barinelOptA2.csv" % outPath, "%s\\" % outPath,1,weka,numOfExperiments)
     results.resultsMultyWekaAndSanity("%s\\barinelOptA.csv" % outpath, "%s\\barinelOptA2.csv" % outpath, "%s\\" % outpath, 1,
@@ -1089,48 +1055,42 @@ def RunAndResults(buggedTestsChooser, bugsPacks, const, copy, copyPath, outpath,
 
 def RunExperiments(dbPath, outPath, packsPath, wekaPath, granularity, buggedType, utilsPath):
     print "RunExperiments"
-    numOfExperiments=20
-    numOfPacks=1
-    times=[25,40,70,100,130, 180]
-    times=[10,20,30,40]
-    const=0.05
-    minimalTests=25
-    maximalTests=250
-    buggedTestsChooser=10
-    initialsFactor=0.1
-    initialsChooser=0.5
-    tresh=0.7
-    pureSanity=False
+    numOfExperiments = 20
+    numOfPacks = 1
+    times = [10, 20, 30, 40]
+    const = 0.05
+    minimalTests = 25
+    maximalTests = 250
+    buggedTestsChooser = 10
+    initialsFactor = 0.1
+    initialsChooser = 0.5
+    pureSanity = False
     testTable, bugs_table = EXPERIMETS_TABLES[granularity][buggedType]
     mkdirs(outPath)
-    copySTMS(outPath,utilsPath)
-    bugs = allPackBugs(dbPath, 1  , packsPath,numOfExperiments,True,bugs_table)
-    bugsPacks=[choosePackBug(bugs, 2,False,3,[])for _ in range(numOfExperiments)]
-    wekaAnsArr=[(wekaPath,"randomForest")]#+[(wekaBase+"weka.classifiers.trees.RandomForest_Style2.csv","prev")] #all
+    copySTMS(outPath, utilsPath)
+    bugs = allPackBugs(dbPath, 1, packsPath,numOfExperiments,True,bugs_table)
+    bugsPacks = [choosePackBug(bugs, 2, False, 3, []) for _ in range(numOfExperiments)]
+    wekaAnsArr = [(wekaPath,"randomForest")]
     RunAndResults(buggedTestsChooser, bugsPacks, const, False, "", outPath, dbPath, initialsChooser, initialsFactor,
               maximalTests, minimalTests, [1], numOfExperiments, numOfPacks, packsPath, pureSanity, bugs_table ,
               times,  wekaAnsArr,testTable)
 
 
 @utilsConf.marker_decorator(utilsConf.PACKS_FILE_MARKER)
-def packFileCreate(dbpath, startInd, endInd,outPath):
+def packFileCreate(dbpath, outPath):
     conn = sqlite3.connect(dbpath)
     conn.text_factory = str
     c = conn.cursor()
     lines=set()
-    #wanted_files='select distinct name from haelsTfiles   order by name'
     wanted_files='select distinct fileName from buggedFiles  order by fileName'
     for row in c.execute(wanted_files):
         r=row[0]
         r=r.split("\\")
-        #r=r[startInd:endInd]
         r=r[:-1]
         concat=[]
         for elem in r:
          concat.append(elem)
          lines.add("\\".join(concat))
-        #r=r
-        #lines.add("\\".join(r))
     f=open(outPath,"wb")
     writer=csv.writer(f)
     writer.writerows([[x] for x in list(lines)])
