@@ -9,7 +9,7 @@ import sys
 from random import randint
 
 import Agent.bugs_testsDBMethods
-import Agent.experimentsMethods
+# import Agent.experimentsMethods
 import Planner.Planning_Results
 import itertools
 import report
@@ -25,10 +25,6 @@ import wekaMethods.patchsBuild
 import wekaMethods.wekaAccuracy
 from utilsConf import Mkdirs, version_to_dir_name, mkOneDir, versions_info
 
-try:
-    from SFL_diagnoser.Diagnoser.diagnoserUtils import readPlanningFile, write_planning_file
-except:
-    pass
 """
 resources :
 git
@@ -304,20 +300,13 @@ def weka_csv_to_readable_csv(weka_csv, prediction_csv):
         writer.writerows(out_lines)
 
 
-def Experiments(workingDir,weka,packsPath,utilsPath,randNum):
-    for buggedType, granularity in itertools.product(["All", "Most"], ["File", "Method"]):
-        outPath = os.path.join(workingDir, "experiments\\files_{0}{1}".format(buggedType, randNum))
-        weka_csv = os.path.join(utilsConf.get_configuration().weka_path, "{buggedType}_out_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
-        Agent.experimentsMethods.RunExperiments(os.path.join(workingDir, "testsBugsMethods.db"), outPath, packsPath,
-                                                weka_csv, granularity, buggedType, utilsPath)
+# def Experiments(workingDir,weka,packsPath,utilsPath,randNum):
+#     for buggedType, granularity in itertools.product(["All", "Most"], ["File", "Method"]):
+#         outPath = os.path.join(workingDir, "experiments\\files_{0}{1}".format(buggedType, randNum))
+#         weka_csv = os.path.join(utilsConf.get_configuration().weka_path, "{buggedType}_out_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
+#         Agent.experimentsMethods.RunExperiments(os.path.join(workingDir, "testsBugsMethods.db"), outPath, packsPath,
+#                                                 weka_csv, granularity, buggedType, utilsPath)
 
-def RealDIagnosis(workingDir, weka):
-    testDb = os.path.join(workingDir, "testsBugsMethods.db")
-    for buggedType, granularity in zip(["All", "Most"], ["File", "Method"]):
-        testTable, bugs_table = Agent.experimentsMethods.EXPERIMETS_TABLES[granularity][buggedType]
-        weka_csv = os.path.join(weka, buggedType + "_out_{GRANULARITY}.csv".format(GRANULARITY=granularity))
-        priors = Agent.experimentsMethods.read_weka_csv(weka_csv)
-        # write_planning_file()
 
 @utilsConf.marker_decorator(utilsConf.VERSION_TEST_MARKER)
 def test_version_create():
@@ -452,19 +441,19 @@ def reportProjectData(confFile,globalConfFile):
     report.report(reportCsv,LocalGitPath,lastVer,testsDB)
 
 
-def wrapperExperiments(confFile):
-    vers, gitPath, issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir = utilsConf.configure(confFile)
-    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath = utilsConf.globalConfig()
-    vers_dirs = map(version_to_dir_name, vers)
-    weka=os.path.join(workingDir,"weka")
-    vers,paths,dates,commits= versions_info(gitPath, vers)
-    testDb=Agent.bugs_testsDBMethods.basicBuild(workingDir,vers_dirs[-2],dates[-2],dates[-1])
-    packsPath = os.path.join(workingDir, "packs.txt")
-    Agent.experimentsMethods.packFileCreate(testDb,1,-1, packsPath)
-    rnd = str(randint(0,900))
-    print rnd
-    Experiments(workingDir, weka,packsPath,utilsPath,rnd)
-    RealDIagnosis(workingDir, weka)
+# def wrapperExperiments(confFile):
+#     vers, gitPath, issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir = utilsConf.configure(confFile)
+#     docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath = utilsConf.globalConfig()
+#     vers_dirs = map(version_to_dir_name, vers)
+#     weka=os.path.join(workingDir,"weka")
+#     vers,paths,dates,commits= versions_info(gitPath, vers)
+#     testDb=Agent.bugs_testsDBMethods.basicBuild(workingDir,vers_dirs[-2],dates[-2],dates[-1])
+#     packsPath = os.path.join(workingDir, "packs.txt")
+#     Agent.experimentsMethods.packFileCreate(testDb,1,-1, packsPath)
+#     rnd = str(randint(0,900))
+#     print rnd
+#     Experiments(workingDir, weka,packsPath,utilsPath,rnd)
+#     RealDIagnosis(workingDir, weka)
 
 
 if __name__ == '__main__':
@@ -479,6 +468,7 @@ if __name__ == '__main__':
     if sys.argv[2] =="learn":
         wrapperLearner()
     elif sys.argv[2]=="experiments":
-        wrapperExperiments(sys.argv[1])
+        # wrapperExperiments(sys.argv[1])
+        pass
     elif sys.argv[2]=="all_planning":
         Planner.planningExperiments.planning_for_project(sys.argv[1])
