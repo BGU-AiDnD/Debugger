@@ -29,7 +29,7 @@ from run_mvn import AmirTracer, TestRunner
 from sfl_diagnoser.Diagnoser.diagnoserUtils import write_planning_file, readPlanningFile
 from sfl_diagnoser.Diagnoser.Diagnosis_Results import Diagnosis_Results
 import Bug
-from collections import OrderedDict
+from experiments import ExperimentGenerator
 
 """
 resources :
@@ -412,7 +412,7 @@ def executeTests():
     outcomes_path = os.path.join(web_prediction_results, "outcomes.json")
     diagnoses_path = os.path.join(web_prediction_results, "diagnosis_{0}_{1}.matrix")
     diagnoses_json_path = os.path.join(web_prediction_results, "diagnosis_{0}_{1}.json")
-    tested_repo = os.path.join(utilsConf.get_configuration().workingDir, "testedVer", "repo")
+    tested_repo = utilsConf.to_short_path(os.path.join(utilsConf.get_configuration().workingDir, "testedVer", "repo"))
     test_runner = TestRunner(tested_repo, AmirTracer(tested_repo, utilsConf.get_configuration().amir_tracer, utilsConf.get_configuration().DebuggerTests))
     test_runner.run()
     tests = test_runner.get_tests()
@@ -444,12 +444,12 @@ def get_components_probabilities(bugged_type, granularity, test_runner, tests):
     with open(os.path.join(utilsConf.get_configuration().web_prediction_results, utilsConf.get_configuration().prediction_files[granularity][bugged_type])) as f:
         lines = list(csv.reader(f))[1:]
         predictions = dict(
-            map(lambda line: (line[0].replace(".java", "").replace(os.path.sep, ".").lower(), line[1]), lines))
+            map(lambda line: (line[0].replace(".java", "").replace(os.path.sep, ".").lower().replace('$', '@'), line[1]), lines))
     components_priors = {}
     for component in set(
             reduce(list.__add__, map(lambda test_name: test_runner.tracer.traces[test_name].get_trace(granularity), tests), [])):
         for prediction in predictions:
-            if component in prediction.replace('$', '@'):
+            if prediction.endswith(component):
                 components_priors[component] = max(float(predictions[prediction]), 0.01)
     return components_priors
 
@@ -522,91 +522,37 @@ def reportProjectData(confFile,globalConfFile):
     report.report(reportCsv,LocalGitPath,lastVer,testsDB)
 
 
-
-
-def create_experiment(test_runner, num_instances=50, tests_per_instance=50, bug_passing_probability=0.1):
-    def sample_observation(trace, bugs):
-        return 0 if random.random() < (bug_passing_probability ** len(set(trace) & set(bugs))) else 1
-    matrix_path = os.path.join(utilsConf.get_configuration().experiments, "{BUG_ID}_{GRANULARITY}_{BUGGED_TYPE}.matrix")
+def create_experiment(test_runner, num_instances=50, tests_per_instance=50, bug_passing_probability=0.05):
     results_path = os.path.join(utilsConf.get_configuration().experiments, "{GRANULARITY}_{BUGGED_TYPE}")
-    description = 'sample bug id {BUG_ID} with bug_passing_probability = {PROB} with garnularity of {GRANULARITY} and bugged type {BUGGED_TYPE}'
-    bugs = Bug.get_bugs_from_db(os.path.join(utilsConf.get_configuration().db_dir,
-                                             utilsConf.get_configuration().vers_dirs[-2]) + ".db",
-                                utilsConf.get_configuration().dates[-2],
-                                utilsConf.get_configuration().dates[-1])
-    all_files = set(
-            reduce(list.__add__, map(lambda test_name: test_runner.tracer.traces[test_name].get_trace('files'), test_runner.get_tests()), []))
-    packages_tests = {}
-    precision_avg = {}
-    recall_avg = {}
-    for test_name in test_runner.get_tests():
-        spllited = test_name.split('@')[0].split('.')
-        for ind in range(len(spllited)):
-            packages_tests.setdefault('.'.join(spllited[:ind]), set()).add(test_name)
-    i = 0
-    while i < num_instances:
-        bug = random.choice(bugs)
-        bugged_files = set()
-        for component in all_files:
-            for buggy in bug.all_files:
-                if component in buggy:
-                    bugged_files.add(component)
-        tests = reduce(set.__or__, map(lambda x: packages_tests.get('.'.join(x[:random.randint(0, len(x))]), set()), map(lambda file_name: file_name.replace('.java', '').split('.'), bugged_files)), set())
-        if len(tests) < tests_per_instance:
-            continue
-        i += 1
-        relevant_tests = random.sample(tests, tests_per_instance)
-        for granularity in utilsConf.get_configuration().prediction_files:
-            for bugged_type in utilsConf.get_configuration().prediction_files[granularity]:
-                components_priors = get_components_probabilities(bugged_type, granularity, test_runner, relevant_tests)
-                buggy_components = set()
-                for component in set(components_priors.keys()):
-                    for buggy in bug.get_buggy_components(granularity, bugged_type):
-                        if component in buggy:
-                            buggy_components.add(component)
-                if len(buggy_components) == 0:
-                    continue
-                tests_details = []
-                for test_name in relevant_tests:
-                    trace = list(set(test_runner.tracer.traces[test_name].get_trace(granularity)) & set(components_priors.keys()))
-                    tests_details.append((test_name, trace, sample_observation(trace, buggy_components)))
-                matrix = matrix_path.format(BUG_ID=bug.bug_id, GRANULARITY=granularity, BUGGED_TYPE=bugged_type)
-                write_planning_file(matrix, list(buggy_components), filter(lambda test: len(test[1]) > 0, tests_details),
-                                    priors=components_priors, description=description.format(BUG_ID=bug.bug_id, PROB=bug_passing_probability, GRANULARITY=granularity, BUGGED_TYPE=bugged_type))
-                inst = readPlanningFile(matrix)
-                inst.diagnose()
-                res = Diagnosis_Results(inst.diagnoses, inst.initial_tests, inst.error)
-                key_name = "{0}_{1}".format(granularity, bugged_type)
-                precision_avg[key_name] = precision_avg.get(key_name, 0.0) + res.precision
-                recall_avg[key_name] = recall_avg.get(key_name, 0.0) + res.recall
     for granularity in utilsConf.get_configuration().prediction_files:
         for bugged_type in utilsConf.get_configuration().prediction_files[granularity]:
-            key_name = "{0}_{1}".format(granularity, bugged_type)
+            eg = ExperimentGenerator(test_runner, granularity, bugged_type, num_instances, tests_per_instance, bug_passing_probability)
+            precision, recall = eg.create_instances()
             with open(results_path.format(GRANULARITY=granularity, BUGGED_TYPE=bugged_type), 'wb') as f:
-                f.write("{0}, {1}".format(precision_avg[key_name] / num_instances, recall_avg[key_name] / num_instances))
+                f.write("{0}, {1}".format(precision, recall))
 
 
 @utilsConf.marker_decorator(utilsConf.ALL_DONE_FILE)
 def wrapperAll():
     wrapperLearner()
-    executeTests()
-    # create_experiment(executeTests())
+    create_experiment(executeTests())
 
 if __name__ == '__main__':
     csv.field_size_limit(sys.maxint)
     utilsConf.configure(sys.argv[1])
     shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
-    if utilsConf.copy_from_cache() is not None:
-        exit()
+    # if utilsConf.copy_from_cache() is not None:
+    #     exit()
     if len(sys.argv) == 2:
+        create_web_prediction_results()
         wrapperAll()
         # executeTests()
         # create_experiment(executeTests())
-        tested_repo = os.path.join(utilsConf.get_configuration().workingDir, "testedVer", "repo")
-        test_runner = TestRunner(tested_repo, AmirTracer(tested_repo, utilsConf.get_configuration().amir_tracer,
-                                                         utilsConf.get_configuration().DebuggerTests))
-        test_runner.run()
-        create_experiment(test_runner)
+        # tested_repo = os.path.join(utilsConf.get_configuration().workingDir, "testedVer", "repo")
+        # test_runner = TestRunner(tested_repo, AmirTracer(tested_repo, utilsConf.get_configuration().amir_tracer,
+        #                                                  utilsConf.get_configuration().DebuggerTests))
+        # test_runner.run()
+        # create_experiment(test_runner)
         utilsConf.export_to_cache()
     elif sys.argv[2] =="learn":
         pass
