@@ -2,8 +2,10 @@ __author__ = 'amir'
 
 
 class Diagnosis:
-    def __init__(self):
-        self.diagnosis = []
+    def __init__(self, diagnosis=None):
+        if diagnosis is None:
+            diagnosis = []
+        self.diagnosis = sorted(diagnosis)
         self.probability = 0.0
 
     def clone(self):

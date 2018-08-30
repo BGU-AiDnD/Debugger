@@ -167,6 +167,14 @@ class TestRunner(object):
     def get_tests(self):
         return set(self.tracer.traces.keys()) & set(self.observations.keys())
 
+    def get_packages_tests(self):
+        packages_tests = {}
+        for test_name in self.get_tests():
+            spllited = test_name.split('@')[0].split('.')
+            for ind in range(len(spllited)):
+                packages_tests.setdefault('.'.join(spllited[:ind]), set()).add(test_name)
+        return packages_tests
+
 
 def checkout_commit(commit_to_observe, git_path):
     git_commit_path = os.path.join(OBSERVE_PATH, os.path.basename(git_path), commit_to_observe)

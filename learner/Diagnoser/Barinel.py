@@ -59,10 +59,8 @@ class Barinel:
         #initialize
         self.diagnoses = []
         diags = Staccato.Staccato().run(self.M_matrix, self.e_vector)
-        for  diag in diags:
-            d=Diagnosis.Diagnosis()
-            d.diagnosis=diag
-            self.diagnoses.append(d)
+        for diag in diags:
+            self.diagnoses.append(Diagnosis.Diagnosis(diag))
         #generate probabilities
         self.generate_probs()
 
