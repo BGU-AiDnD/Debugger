@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 install_requires = ['liac-arff', 'python-bugzilla', 'distance', 'GitPython', 'github3.py', 'jira', 'networkx',
-                    'numpy', 'pyswarm', 'requests', 'scipy']
+                    'numpy', 'pyswarm', 'requests', 'scipy', 'junitparser']
 
 setup(
     name='eclipse',
