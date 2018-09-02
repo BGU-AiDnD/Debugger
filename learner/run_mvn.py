@@ -122,7 +122,9 @@ class AmirTracer(Tracer):
         for root, dirs, _ in os.walk(os.path.abspath(os.path.join(self.git_path, "..\.."))):
             traces_files.extend(map(lambda name: glob.glob(os.path.join(root, name, "TRACE_*.txt")), filter(lambda name: name == "DebuggerTests", dirs)))
         for trace_file in reduce(list.__add__, traces_files, []):
-            shutil.copyfile(trace_file, os.path.join(self.copy_traces_to, os.path.basename(trace_file)))
+            dst = os.path.join(self.copy_traces_to, os.path.basename(trace_file))
+            if not os.path.exists(dst):
+                shutil.copyfile(trace_file, dst)
             test_name = trace_file.split('\\Trace_')[1].split('_')[0].lower()
             with open(trace_file) as f:
                 self.traces[test_name] = Trace(test_name, map(lambda line: line.strip().split()[2].strip(), f.readlines()))
