@@ -3,12 +3,22 @@ import utilsConf
 import Bug
 import csv
 import random
+import numbers
 from sfl_diagnoser.Diagnoser.diagnoserUtils import write_planning_file, readPlanningFile
 from sfl_diagnoser.Diagnoser.Diagnosis_Results import Diagnosis_Results
 
 
-class ExperimentInstance(object):
-    pass
+class AvgResults(object):
+    def __init__(self):
+        self.metrics = {}
+        self.count = 0.0
+
+    def update(self, other_results):
+        for key in other_results.metrics:
+            if isinstance(other_results.metrics[key], numbers.Number):
+                self.metrics[key] = ((self.metrics.get(key, 0) * self.count) +
+                                     other_results.metrics[key]) / (self.count + 1)
+        self.count += 1
 
 
 class ExperimentGenerator(object):
@@ -35,9 +45,8 @@ class ExperimentGenerator(object):
         MATRIX_PATH = os.path.join(utilsConf.get_configuration().experiments,
                                    "{ITERATION}_{BUG_ID}_{GRANULARITY}_{BUGGED_TYPE}.matrix")
         DESCRIPTION = 'sample bug id {BUG_ID} with bug_passing_probability = {PROB} with garnularity of {GRANULARITY} and bugged type {BUGGED_TYPE}'
-        precision = 0.0
-        recall = 0.0
         i = 0.0
+        results = AvgResults()
         while i < self.num_instances:
             bug = random.choice(self.bugs)
             buggy_components = set()
@@ -70,12 +79,11 @@ class ExperimentGenerator(object):
             inst = readPlanningFile(matrix)
             inst.diagnose()
             res = Diagnosis_Results(inst.diagnoses, inst.initial_tests, inst.error)
-            precision += res.precision
-            recall += res.recall
+            results.update(res)
             print "created instance num {ITERATION} with bugid {BUG_ID} for granularity {GRANULARITY} and type {BUGGED_TYPE}".\
                 format(ITERATION=i, BUG_ID=bug.bug_id, GRANULARITY=self.granularity, BUGGED_TYPE=self.bugged_type)
             i += 1
-        return precision / i, recall / i
+        return results.metrics
 
     @staticmethod
     def get_components_probabilities(bugged_type, granularity, test_runner, tests):

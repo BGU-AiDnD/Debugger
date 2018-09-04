@@ -527,7 +527,7 @@ def create_experiment(test_runner, num_instances=50, tests_per_instance=50, bug_
     for granularity in utilsConf.get_configuration().prediction_files:
         for bugged_type in utilsConf.get_configuration().prediction_files[granularity]:
             eg = ExperimentGenerator(test_runner, granularity, bugged_type, num_instances, tests_per_instance, bug_passing_probability)
-            precision, recall = eg.create_instances()
+            results = eg.create_instances()
             with open(results_path.format(GRANULARITY=granularity, BUGGED_TYPE=bugged_type), 'wb') as f:
                 f.write("{0}, {1}".format(precision, recall))
 
