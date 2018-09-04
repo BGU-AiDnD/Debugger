@@ -72,6 +72,8 @@ class ExperimentGenerator(object):
             res = Diagnosis_Results(inst.diagnoses, inst.initial_tests, inst.error)
             precision += res.precision
             recall += res.recall
+            print "created instance num {ITERATION} with bugid {BUG_ID} for granularity {GRANULARITY} and type {BUGGED_TYPE}".\
+                format(ITERATION=i, BUG_ID=bug.bug_id, GRANULARITY=self.granularity, BUGGED_TYPE=self.bugged_type)
             i += 1
         return precision / i, recall / i
 
