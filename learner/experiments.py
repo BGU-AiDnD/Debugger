@@ -10,13 +10,15 @@ from sfl_diagnoser.Diagnoser.Diagnosis_Results import Diagnosis_Results
 
 class AvgResults(object):
     def __init__(self):
-        self.metrics = {}
         self.count = 0.0
+        self.results = {'avg': {}}
 
     def update(self, other_results):
+        self.results[self.count] = {}
         for key in other_results.metrics:
             if isinstance(other_results.metrics[key], numbers.Number):
-                self.metrics[key] = ((self.metrics.get(key, 0) * self.count) +
+                self.results[self.count][key] = other_results.metrics[key]
+                self.results['avg'][key] = ((self.results['avg'].get(key, 0) * self.count) +
                                      other_results.metrics[key]) / (self.count + 1)
         self.count += 1
 
@@ -83,7 +85,7 @@ class ExperimentGenerator(object):
             print "created instance num {ITERATION} with bugid {BUG_ID} for granularity {GRANULARITY} and type {BUGGED_TYPE}".\
                 format(ITERATION=i, BUG_ID=bug.bug_id, GRANULARITY=self.granularity, BUGGED_TYPE=self.bugged_type)
             i += 1
-        return results.metrics
+        return results.results
 
     @staticmethod
     def get_components_probabilities(bugged_type, granularity, test_runner, tests):

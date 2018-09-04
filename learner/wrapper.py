@@ -529,7 +529,7 @@ def create_experiment(test_runner, num_instances=50, tests_per_instance=50, bug_
             eg = ExperimentGenerator(test_runner, granularity, bugged_type, num_instances, tests_per_instance, bug_passing_probability)
             results = eg.create_instances()
             with open(results_path.format(GRANULARITY=granularity, BUGGED_TYPE=bugged_type), 'wb') as f:
-                f.write("{0}, {1}".format(precision, recall))
+                f.write(json.dumps(results))
 
 
 @utilsConf.marker_decorator(utilsConf.ALL_DONE_FILE)
