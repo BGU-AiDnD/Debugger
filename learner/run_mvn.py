@@ -115,7 +115,7 @@ class AmirTracer(Tracer):
         paths = [os.path.expandvars(r'%USERPROFILE%\.m2\repository'), self.git_path]
         with open(self.paths_file, 'wb') as paths_file:
             paths_file.write("\n".join(paths))
-        return ' -javaagent:{0}={1} '.format(self.tracer_path, self.paths_file)
+        return ' -Xms8g -Xmx20048m  -javaagent:{0}={1} '.format(self.tracer_path, self.paths_file)
 
     def collect_traces(self):
         traces_files = []
