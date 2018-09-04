@@ -541,18 +541,11 @@ if __name__ == '__main__':
     csv.field_size_limit(sys.maxint)
     utilsConf.configure(sys.argv[1])
     shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
-    # if utilsConf.copy_from_cache() is not None:
-    #     exit()
+    if utilsConf.copy_from_cache() is not None:
+        exit()
     if len(sys.argv) == 2:
         create_web_prediction_results()
         wrapperAll()
-        # executeTests()
-        # create_experiment(executeTests())
-        # tested_repo = os.path.join(utilsConf.get_configuration().workingDir, "testedVer", "repo")
-        # test_runner = TestRunner(tested_repo, AmirTracer(tested_repo, utilsConf.get_configuration().amir_tracer,
-        #                                                  utilsConf.get_configuration().DebuggerTests))
-        # test_runner.run()
-        # create_experiment(test_runner)
         utilsConf.export_to_cache()
     elif sys.argv[2] =="learn":
         pass
