@@ -555,7 +555,7 @@ if __name__ == '__main__':
         # create_experiment(test_runner)
         utilsConf.export_to_cache()
     elif sys.argv[2] =="learn":
-        pass
+        wrapperLearner()
     elif sys.argv[2]=="experiments":
         pass
     elif sys.argv[2]=="all_planning":

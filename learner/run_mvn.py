@@ -4,6 +4,7 @@ from junitparser import JUnitXml, junitparser
 from junitparser.junitparser import Error, Failure
 from subprocess import Popen
 import sys
+import javalang
 import shutil
 import xml.etree.ElementTree
 import tempfile
@@ -63,6 +64,8 @@ class Tracer(object):
     def trace(self):
         yield
 
+class JcovTracer(object):
+    pass
 
 class AmirTracer(Tracer):
     def __init__(self, git_path, tracer_path, copy_traces_to):
