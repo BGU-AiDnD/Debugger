@@ -1,17 +1,10 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
 import csv
 import json
 import os
 import shutil
 import subprocess
 import sys
-import random
 
-import Agent.bugs_testsDBMethods
-# import Agent.experimentsMethods
-import Planner.Planning_Results
 import itertools
 import report
 import utilsConf
@@ -24,11 +17,9 @@ import wekaMethods.issuesExtract.jira_import
 import wekaMethods.issuesExtract.python_bugzilla
 import wekaMethods.patchsBuild
 import wekaMethods.wekaAccuracy
-from utilsConf import Mkdirs, version_to_dir_name, mkOneDir, versions_info
+from utilsConf import Mkdirs, version_to_dir_name, mkOneDir
 from run_mvn import AmirTracer, TestRunner
 from sfl_diagnoser.Diagnoser.diagnoserUtils import write_planning_file, readPlanningFile
-from sfl_diagnoser.Diagnoser.Diagnosis_Results import Diagnosis_Results
-import Bug
 from experiments import ExperimentGenerator
 
 """
@@ -344,14 +335,6 @@ def save_json_watchers(precidtion_csv):
         f.write(json.dumps([packges]))
 
 
-# def Experiments(workingDir,weka,packsPath,utilsPath,randNum):
-#     for buggedType, granularity in itertools.product(["All", "Most"], ["File", "Method"]):
-#         outPath = os.path.join(workingDir, "experiments\\files_{0}{1}".format(buggedType, randNum))
-#         weka_csv = os.path.join(utilsConf.get_configuration().weka_path, "{buggedType}_out_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
-#         Agent.experimentsMethods.RunExperiments(os.path.join(workingDir, "testsBugsMethods.db"), outPath, packsPath,
-#                                                 weka_csv, granularity, buggedType, utilsPath)
-
-
 @utilsConf.marker_decorator(utilsConf.VERSION_TEST_MARKER)
 def test_version_create():
     src = os.path.join(utilsConf.get_configuration().workingDir,"vers", utilsConf.get_configuration().vers_dirs[-2], "repo")
@@ -454,7 +437,7 @@ def get_components_probabilities(bugged_type, granularity, test_runner, tests):
     return components_priors
 
 
-def comprasionAll(confFile,globalConfFile):
+def comprasionAll(confFile):
     vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
     for buggedType in ["All","Most"]:
         Bpath=os.path.join(workingDir,buggedType)
@@ -468,7 +451,7 @@ def comprasionAll(confFile,globalConfFile):
         wekaMethods.ParseWekaOutput.comprasion(os.path.join(methodsPath,"Fam_one\\out"),os.path.join(methodsPath,"Fam_all\\out"), os.path.join(workingDir,buggedType+"_"+"Methods")+".csv",Featuresnames)
 
 
-def comprasionThreeFam(confFile,globalConfFile):
+def comprasionThreeFam(confFile):
     vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
     for buggedType in ["All","Most"]:
         Bpath=os.path.join(workingDir,buggedType)
@@ -486,7 +469,7 @@ def dictToList(dict,lst):
         ans.append(dict[l])
     return ans
 
-def comprasionTypes(confFile,globalConfFile):
+def comprasionTypes(confFile):
     vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
     learnerOutFile=os.path.join(workingDir,"learner.csv")
     wekaD=os.path.join(workingDir,"weka")
@@ -505,11 +488,6 @@ def comprasionTypes(confFile,globalConfFile):
     writer=csv.writer(f)
     writer.writerows(lines)
     f.close()
-
-
-
-    #clean(versPath,LocalGitPath)
-
 
 def reportProjectData(confFile,globalConfFile):
 #java -Xmx2024m  -cp "C:\Program Files\Weka-3-7\weka.jar" weka.core.Instances 13_Appended.arff
@@ -541,10 +519,9 @@ if __name__ == '__main__':
     csv.field_size_limit(sys.maxint)
     utilsConf.configure(sys.argv[1])
     shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
-    # if utilsConf.copy_from_cache() is not None:
-    #     exit()
+    if utilsConf.copy_from_cache() is not None:
+        exit()
     if len(sys.argv) == 2:
-        create_web_prediction_results()
         wrapperAll()
         # executeTests()
         # create_experiment(executeTests())
@@ -556,7 +533,3 @@ if __name__ == '__main__':
         utilsConf.export_to_cache()
     elif sys.argv[2] =="learn":
         wrapperLearner()
-    elif sys.argv[2]=="experiments":
-        pass
-    elif sys.argv[2]=="all_planning":
-        Planner.planningExperiments.planning_for_project(sys.argv[1])
