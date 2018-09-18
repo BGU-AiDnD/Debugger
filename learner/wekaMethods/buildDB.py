@@ -7,6 +7,7 @@ import csv
 import gc
 import git.objects.tree
 import os
+import re
 import datetime
 import checkReport
 import blameParse
@@ -17,6 +18,7 @@ import patchsBuild
 import docXml
 import source_Monitor
 import utilsConf
+from Agent.pathTopack import get_renamed_files_for_commit
 
 
 class Commit(object):
@@ -24,70 +26,17 @@ class Commit(object):
         self._git_commit = git_commit
         self._bug_id = bug_id
         self._commit_id = self._git_commit.hexsha
-        self._files = self._git_commit.stats.files.keys()
+        self._files = get_renamed_files_for_commit(self._git_commit).keys()
 
     def to_list(self):
         return [self._commit_id, str(self._bug_id), ";".join(self._files)]
 
+    @staticmethod
+    def clean_commit_message(commit_message):
+        if "git-svn-id" in commit_message:
+            return commit_message.split("git-svn-id")[0]
+        return commit_message
 
-def get_bug_num_from_comit_text(commit_text, bugsIds):
-    s = commit_text.lower().replace(":", "").replace("#", "").replace("-", " ").replace("_", " ").split()
-    for word in s:
-        if word.isdigit():
-            if word in bugsIds:
-                return word
-    return "0"
-
-def commTable(bugs,commits ,max):
-    commits_items = commits.items()
-    all_commits=[]
-    all_files=[]
-    commitsBugsDict={}
-    i=0
-    j=0
-    k=0
-    for com in commits_items:
-        i=i+1
-        if (i == max):
-            break
-        comm=com[1]
-        commit_id=int("".join(list(comm.hexsha)[:7]),16)
-        commiter_date=  datetime.datetime.fromtimestamp(comm.committed_date).strftime('%Y-%m-%d %H:%M:%S')
-        author_date=  datetime.datetime.fromtimestamp(comm.authored_date).strftime('%Y-%m-%d %H:%M:%S')
-        #x = (comm.committer.name).encode('ascii').decode("ISO-8859-1")
-        name=unicodedata.normalize('NFKD', comm.committer.name).encode('ascii','ignore')
-        committer= str(name)
-        author= str(comm.author.name.encode('ascii','ignore'))
-        parent =0
-        if(comm.parents!=() ):
-            parent =int("".join(list(comm.parents[0].hexsha)[:7]),16)
-        msg =comm.message
-        size=comm.size
-        reach =comm.count()
-        stats =comm.stats
-        tot= stats.total
-        dels=tot["deletions"]
-        lines=tot["lines"]
-        insertions=tot["insertions"]
-        files=tot["files"]
-
-        fields = (commit_id, bugs[j], commiter_date,committer,author_date,author, lines, dels, insertions, files,size,parent,reach,msg ,str(comm.hexsha))
-        commitsBugsDict[str(comm.hexsha)]=(bugs[j],commiter_date,str(comm.hexsha),str(commit_id))
-        all_commits.append(fields)
-        stas= stats.files
-        if(j%1000==0):
-            print "iteration: "+str(j)+ " file: "+str(k)
-        for fileName in stas:
-            tot=stas[fileName]
-            dels=tot["deletions"]
-            lines=tot["lines"]
-            insertions=tot["insertions"]
-            fileTuple = (fileName.replace("/","\\"), commit_id,commiter_date,lines, dels, insertions, bugs[j],str(comm.hexsha))
-            all_files.append(fileTuple)
-            k=k+1
-        j=j+1
-        #conn.commit()
-    return (all_commits,all_files,commitsBugsDict)
 
 def commTablelight(commits):
     all_commits=[]
@@ -102,23 +51,19 @@ def commTablelight(commits):
         name=unicodedata.normalize('NFKD', git_commit.committer.name).encode('ascii','ignore')
         committer= str(name)
         author= str(git_commit.author.name.encode('ascii','ignore'))
-        parent =0
+        parent = 0
         if(git_commit.parents!=() ):
             parent =int("".join(list(git_commit.parents[0].hexsha)[:7]),16)
-        msg =git_commit.message
-        size=git_commit.size
+        msg = git_commit.message
+        size = git_commit.size
         fields = (commit_id, commit._bug_id, commiter_date,committer,author_date,author,size,parent,msg ,str(git_commit.hexsha))
         all_commits.append(fields)
         commitsBugsDict[str(git_commit.hexsha)]=(commit._bug_id,commiter_date,str(git_commit.hexsha),str(commit_id))
     return (all_commits,commitsBugsDict)
 
-def clean_commit_message(commit_message):
-    if "git-svn-id" in commit_message:
-        return commit_message.split("git-svn-id")[0]
-    return commit_message
 
 def commits_and_Bugs(repo, bugsIds):
-    def get_bug_num_from_comit_text(commit_text, bugsIds):
+    def get_bug_num_from_commit_text(commit_text, bugsIds):
         s = commit_text.lower().replace(":", "").replace("#", "").replace("-", " ").replace("_", " ").split()
         for word in s:
             if word.isdigit():
@@ -127,8 +72,8 @@ def commits_and_Bugs(repo, bugsIds):
         return "0"
     commits= []
     for git_commit in repo.iter_commits():
-        commit_text = clean_commit_message(git_commit.message)
-        commits.append(Commit(git_commit, get_bug_num_from_comit_text(commit_text, bugsIds)))
+        commit_text = Commit.clean_commit_message(git_commit.message)
+        commits.append(Commit(git_commit, get_bug_num_from_commit_text(commit_text, bugsIds)))
     return commits
 
 
