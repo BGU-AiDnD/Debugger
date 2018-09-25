@@ -9,6 +9,7 @@ import sys
 import github3
 from datetime import datetime
 import logging
+import detect_renamed_files
 
 LONG_PATH_MAGIC = u"\\\\?\\"
 # markers names:
@@ -105,6 +106,9 @@ def versionsCreate(gitPath, vers, versPath, workingDir):
     proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=to_short_path(workingDir))
     (out, err) = proc.communicate()
 
+def git_file_path_to_java_name(file_path):
+    directories = os.path.splitext(os.path.normpath(file_path))[0].split(os.path.sep)
+    return ".".join(directories[directories.index('java') + 1:])
 
 def configure(confFile):
     full_configure_file, gitPath, issue_tracker, issue_tracker_product, issue_tracker_url, versions, workingDir = read_configuration(confFile)
@@ -133,13 +137,15 @@ def configure(confFile):
     MethodsParsed = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "CheckStyle.txt")
     changeFile = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "Ins_dels.txt")
     debugger_base_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    buggy_repo = git.Repo(gitPath)
+    renamed_mapping = detect_renamed_files.renamed_files_for_repo(buggy_repo)
+    remotes_urls = reduce(list.__add__, map(lambda r: list(r.urls), buggy_repo.remotes))
+    logging.info(
+        'remote git at urls {0} and HEAD is on commit {1}'.format(str(remotes_urls), str(buggy_repo.head.commit)))
+    buggy_repo.close()
     try:
         repo = git.Repo(debugger_base_path)
         logging.info('Debugger HEAD is on commit {0}'.format(str(repo.head.commit)))
-        repo.close()
-        repo = git.Repo(gitPath)
-        remotes_urls = reduce(list.__add__, map(lambda r: list(r.urls), repo.remotes))
-        logging.info('remote git at urls {0} and HEAD is on commit {1}'.format(str(remotes_urls),str(repo.head.commit)))
         repo.close()
     except:
         pass
@@ -154,11 +160,16 @@ def configure(confFile):
                     ("changeFile", changeFile), ("debugger_base_path", debugger_base_path),
                     ("web_prediction_results", web_prediction_results), ("full_configure_file", full_configure_file),
                     ("amir_tracer", amir_tracer), ("configuration_path", configuration_path), ("caching_dir", caching_dir),
-                    ('DebuggerTests', DebuggerTests), ('prediction_files', prediction_files), ('experiments', experiments)]
+                    ('DebuggerTests', DebuggerTests), ('prediction_files', prediction_files), ('experiments', experiments),
+                    ('renamed_mapping', renamed_mapping)]
     map(lambda name_val: setattr(configuration, name_val[0], name_val[1]), names_values)
     Mkdirs(workingDir)
     versionsCreate(gitPath, vers, versPath, workingDir)
     return versions, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir
+
+
+def fix_renamed_file(file_name):
+    return detect_renamed_files.fix_renamed_file(file_name, get_configuration().renamed_files)
 
 
 def read_configuration(confFile):

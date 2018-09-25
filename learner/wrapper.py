@@ -344,14 +344,6 @@ def save_json_watchers(precidtion_csv):
         f.write(json.dumps([packges]))
 
 
-# def Experiments(workingDir,weka,packsPath,utilsPath,randNum):
-#     for buggedType, granularity in itertools.product(["All", "Most"], ["File", "Method"]):
-#         outPath = os.path.join(workingDir, "experiments\\files_{0}{1}".format(buggedType, randNum))
-#         weka_csv = os.path.join(utilsConf.get_configuration().weka_path, "{buggedType}_out_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
-#         Agent.experimentsMethods.RunExperiments(os.path.join(workingDir, "testsBugsMethods.db"), outPath, packsPath,
-#                                                 weka_csv, granularity, buggedType, utilsPath)
-
-
 @utilsConf.marker_decorator(utilsConf.VERSION_TEST_MARKER)
 def test_version_create():
     src = os.path.join(utilsConf.get_configuration().workingDir,"vers", utilsConf.get_configuration().vers_dirs[-2], "repo")
