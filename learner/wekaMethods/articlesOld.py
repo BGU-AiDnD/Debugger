@@ -279,9 +279,9 @@ def Build88(gitPath,haelsPath, dbPath,mccabePath , max):
     conn = sqlite3.connect(dbPath)
     conn.text_factory = str
     c = conn.cursor()
-    c.execute('''CREATE TABLE files (id INT,name text)''')
-    c.execute('''CREATE TABLE haelsTfiles (name text, Operators_count INT, Distinct_operators INT, Operands_count INT, Distinct_operands INT, Program_length INT, Program_vocabulary INT,Volume float, Difficulty INT, Effort float)''')
-    c.execute('''CREATE TABLE Complexyfiles (name text, complex INT)''')
+    c.execute('''CREATE TABLE IF NOT EXISTS files (id INT,name text)''')
+    c.execute('''CREATE TABLE IF NOT EXISTS haelsTfiles (name text, Operators_count INT, Distinct_operators INT, Operands_count INT, Distinct_operands INT, Program_length INT, Program_vocabulary INT,Volume float, Difficulty INT, Effort float)''')
+    c.execute('''CREATE TABLE IF NOT EXISTS Complexyfiles (name text, complex INT)''')
     files=allFiles(gitPath,max)
     # add files to table files
     i=0
@@ -308,9 +308,9 @@ def Build88_GIT(gitPath, dbPath_all,bugsPath, max):
         conn = sqlite3.connect(dbPath)
         conn.text_factory = str
         c = conn.cursor()
-        c.execute('''CREATE TABLE commits (ID INT, bugId INT, commiter_date DateTime , commiter text,author_date DateTime , author text  , lines INT,deletions INT,insertions INT,files INT,size INT, parentID INT,reachable_commits INT, message text )''')
-        c.execute('''CREATE TABLE Commitedfiles (id INT,name text, commitid INT, commiter_date DateTime,lines INT,deletions INT,insertions INT, bugId INT)''')
-        c.execute('''CREATE TABLE bugs (ID INT,Product text,Component text,Assigned_To text,Status text,Resolution text,Reporter text,Last_Modified text ,Version text,Milestone text,Hardware text,OS text,Priority text,Severity text,Summary text,Keywords text,Submit_Date text ,Blocks text,Depends_On text,Duplicate_Of INT,CC text)''')
+        c.execute('''CREATE TABLE IF NOT EXISTS commits (ID INT, bugId INT, commiter_date DateTime , commiter text,author_date DateTime , author text  , lines INT,deletions INT,insertions INT,files INT,size INT, parentID INT,reachable_commits INT, message text )''')
+        c.execute('''CREATE TABLE IF NOT EXISTS Commitedfiles (id INT,name text, commitid INT, commiter_date DateTime,lines INT,deletions INT,insertions INT, bugId INT)''')
+        c.execute('''CREATE TABLE IF NOT EXISTS bugs (ID INT,Product text,Component text,Assigned_To text,Status text,Resolution text,Reporter text,Last_Modified text ,Version text,Milestone text,Hardware text,OS text,Priority text,Severity text,Summary text,Keywords text,Submit_Date text ,Blocks text,Depends_On text,Duplicate_Of INT,CC text)''')
         for com in commits:
             print com
             c.execute("INSERT INTO commits VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)", com)

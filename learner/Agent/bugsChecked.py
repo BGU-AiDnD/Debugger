@@ -12,7 +12,7 @@ dbPath="C:\\GitHub\\agent\\testsBugs.db"
 conn = sqlite3.connect(dbPath)
 conn.text_factory = str
 c = conn.cursor()
-#c.execute("CREATE TABLE buggedFilesChecked (BugId INT, fileName text, fileID INT )")
+#c.execute("CREATE TABLE IF NOT EXISTS buggedFilesChecked (BugId INT, fileName text, fileID INT )")
 for l in lines:
     bugId=l[0]
     files=l[2]

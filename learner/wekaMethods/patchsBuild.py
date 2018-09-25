@@ -213,7 +213,7 @@ def DbAdd(dbPath,allComms):
     conn = sqlite3.connect(dbPath)
     conn.text_factory = str
     c = conn.cursor()
-    c.execute('''CREATE TABLE commitedMethods (commitID INT, methodDir text, fileName text, methodName text, deletions INT , insertions INT , lines INT )''')
+    c.execute('''CREATE TABLE IF NOT EXISTS commitedMethods (commitID INT, methodDir text, fileName text, methodName text, deletions INT , insertions INT , lines INT )''')
     for com in allComms:
         c.execute("INSERT INTO commitedMethods VALUES (?,?,?,?,?,?,?)",com)
     conn.commit()
