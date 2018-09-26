@@ -217,92 +217,99 @@ def insert_values_into_table(connection, table_name, values):
 
 
 def basicBuildOneTimeCommits(dbPath, gitPath, commits, commitedFiles,allMethodsCommits, bugs):
-    conn = sqlite3.connect(dbPath)
-    conn.text_factory = str
-    insert_values_into_table(conn, 'files', list(enumerate(allFiles(gitPath))))
-    insert_values_into_table(conn, 'commits', commits)
-    insert_values_into_table(conn, 'bugs', bugs)
-    insert_values_into_table(conn, 'Commitedfiles', commitedFiles)
-    insert_values_into_table(conn, 'commitedMethods', allMethodsCommits)
-    conn.close()
+    with utilsConf.use_sqllite(dbPath) as conn:
+        c = conn.cursor()
+        createTables(c)
+        insert_values_into_table(conn, 'files', list(enumerate(allFiles(gitPath))))
+        insert_values_into_table(conn, 'commits', commits)
+        insert_values_into_table(conn, 'bugs', bugs)
+        insert_values_into_table(conn, 'Commitedfiles', commitedFiles)
+        insert_values_into_table(conn, 'commitedMethods', allMethodsCommits)
 
 
 def BuildAllOneTimeCommits(git_path, dbPath, JavaDocPath, sourceMonitorFiles, sourceMonitorMethods, checkStyle, checkStyleMethods, blamePath, date, CodeDir):
-    conn = sqlite3.connect(dbPath)
-    conn.text_factory = str
-    c = conn.cursor()
-    createTables(c)
-    insert_values_into_table(conn, "AllMethods", checkReport.analyzeCheckStyle(checkStyleMethods))
-    insert_values_into_table(conn, "haelsTfiles", commentedCodeDetector.buildHael(git_path))
-    insert_values_into_table(conn, "JAVAfiles", source_Monitor.source_files(sourceMonitorFiles))
-    insert_values_into_table(conn, "Sourcemethods", source_Monitor.source_methods(sourceMonitorMethods))
-    # can add all javadoc options
-    classes_data = []
-    methodData = []
-    fieldData = []
-    consData = []
-    for doc in docXml.build(JavaDocPath, pathPackCsv.projectPathPacks(git_path)):
-        for classes, all_methods, all_fields, all_cons in doc:
-            classes_data.append(classes)
-            methodData.extend(all_methods)
-            fieldData.extend(all_fields)
-            consData.extend(all_cons)
-    insert_values_into_table(conn, "classes", classes_data)
-    insert_values_into_table(conn, "methods", methodData)
-    insert_values_into_table(conn, "fields", fieldData)
-    insert_values_into_table(conn, "constructors", consData)
-    insert_values_into_table(conn, "blameExtends", blameParse.blameBuild(blamePath, date))
-    insert_values_into_table(conn, "checkStyleExtends", checkReport.fileRead(checkStyle, False, CodeDir))
-    insert_values_into_table(conn, "JAVAfilesFix", source_Monitor.source_files(sourceMonitorFiles))
-    insert_values_into_table(conn, "SourcemethodsFix", source_Monitor.source_methods(sourceMonitorMethods))
-    conn.close()
+    with utilsConf.use_sqllite(dbPath) as conn:
+        c = conn.cursor()
+        createTables(c)
+        insert_values_into_table(conn, "AllMethods", checkReport.analyzeCheckStyle(checkStyleMethods))
+        insert_values_into_table(conn, "haelsTfiles", commentedCodeDetector.buildHael(git_path))
+        insert_values_into_table(conn, "JAVAfiles", source_Monitor.source_files(sourceMonitorFiles))
+        insert_values_into_table(conn, "Sourcemethods", source_Monitor.source_methods(sourceMonitorMethods))
+        # can add all javadoc options
+        classes_data = []
+        methodData = []
+        fieldData = []
+        consData = []
+        for doc in docXml.build(JavaDocPath, pathPackCsv.projectPathPacks(git_path)):
+            for classes, all_methods, all_fields, all_cons in doc:
+                classes_data.append(classes)
+                methodData.extend(all_methods)
+                fieldData.extend(all_fields)
+                consData.extend(all_cons)
+        insert_values_into_table(conn, "classes", classes_data)
+        insert_values_into_table(conn, "methods", methodData)
+        insert_values_into_table(conn, "fields", fieldData)
+        insert_values_into_table(conn, "constructors", consData)
+        insert_values_into_table(conn, "blameExtends", blameParse.blameBuild(blamePath, date))
+        insert_values_into_table(conn, "checkStyleExtends", checkReport.fileRead(checkStyle, False, CodeDir))
+        insert_values_into_table(conn, "JAVAfilesFix", source_Monitor.source_files(sourceMonitorFiles))
+        insert_values_into_table(conn, "SourcemethodsFix", source_Monitor.source_methods(sourceMonitorMethods))
 
 
 def createIndexes(dbPath):
-    conn = sqlite3.connect(dbPath)
-    conn.text_factory = str
-    c = conn.cursor()
+    with utilsConf.use_sqllite(dbPath) as conn:
+        c = conn.cursor()
 
-    def create_index(index):
-        c.execute(index)
-        conn.commit()
-    create_index('CREATE INDEX IF NOT EXISTS commits_id ON commits (ID)')
-    create_index('CREATE INDEX IF NOT EXISTS commits_commiter_date ON commits (commiter_date)')
-    create_index('CREATE INDEX IF NOT EXISTS bugs_id ON bugs (ID)')
-    create_index('CREATE INDEX IF NOT EXISTS bugsFix_id ON bugsFix (ID)')
-    create_index('CREATE INDEX IF NOT EXISTS commitedFiles_Commitid ON commitedfiles (commitid)')
-    create_index('CREATE INDEX IF NOT EXISTS commitedFiles_commiter_date ON commitedfiles (commiter_date)')
-    create_index('CREATE INDEX IF NOT EXISTS commitedFiles_bugId ON commitedfiles (bugId)')
-    create_index('CREATE INDEX IF NOT EXISTS commitedFiles_Name ON commitedfiles (name)')
-    create_index('CREATE INDEX IF NOT EXISTS JAVAfiles_Name ON JAVAfiles (name)')
-    create_index('CREATE INDEX IF NOT EXISTS Sourcemethods_fileName ON Sourcemethods (File_Name)')
-    create_index('CREATE INDEX IF NOT EXISTS JAVAfilesFix_Name ON JAVAfilesFix (name)')
-    create_index('CREATE INDEX IF NOT EXISTS SourcemethodsFix_fileName ON SourcemethodsFix (File_Name)')
-    create_index('CREATE INDEX IF NOT EXISTS classes_Name ON classes (name)')
-    create_index('CREATE INDEX IF NOT EXISTS constructors_className ON constructors (className)')
-    create_index('CREATE INDEX IF NOT EXISTS methods_className ON methods (className)')
-    create_index('CREATE INDEX IF NOT EXISTS fields_className ON fields (className)')
-    create_index('CREATE INDEX IF NOT EXISTS checkStyle_name ON checkStyle (name)')
-    create_index('CREATE INDEX IF NOT EXISTS checkStyleExtends_name ON checkStyleExtends (name)')
-    create_index('CREATE INDEX IF NOT EXISTS blameExtends_name ON blameExtends (name)')
-    create_index('CREATE INDEX IF NOT EXISTS AllMethods_methodDir ON AllMethods (methodDir)')
-    create_index('CREATE INDEX IF NOT EXISTS commitedMethods_methodDir ON commitedMethods (methodDir)')
-    create_index('CREATE INDEX IF NOT EXISTS commitedMethods_commitID ON commitedMethods (commitID)')
-    create_index('CREATE INDEX IF NOT EXISTS AllMethods_fileName ON AllMethods (fileName)')
-    create_index('CREATE INDEX IF NOT EXISTS commitedMethods_fileName ON commitedMethods (fileName)')
-    create_index('CREATE INDEX IF NOT EXISTS commitedMethods_methodName ON commitedMethods (methodName)')
-    create_index('CREATE INDEX IF NOT EXISTS commitedMethods_bugId ON commitedMethods (bugId)')
-    create_index('CREATE INDEX IF NOT EXISTS commitedMethods_commiter_date ON commitedMethods (commiter_date)')
-    conn.close()
+        def create_index(index):
+            c.execute(index)
+            conn.commit()
+        create_index('CREATE INDEX IF NOT EXISTS commits_id ON commits (ID)')
+        create_index('CREATE INDEX IF NOT EXISTS commits_commiter_date ON commits (commiter_date)')
+        create_index('CREATE INDEX IF NOT EXISTS bugs_id ON bugs (ID)')
+        create_index('CREATE INDEX IF NOT EXISTS bugsFix_id ON bugsFix (ID)')
+        create_index('CREATE INDEX IF NOT EXISTS commitedFiles_Commitid ON commitedfiles (commitid)')
+        create_index('CREATE INDEX IF NOT EXISTS commitedFiles_commiter_date ON commitedfiles (commiter_date)')
+        create_index('CREATE INDEX IF NOT EXISTS commitedFiles_bugId ON commitedfiles (bugId)')
+        create_index('CREATE INDEX IF NOT EXISTS commitedFiles_Name ON commitedfiles (name)')
+        create_index('CREATE INDEX IF NOT EXISTS JAVAfiles_Name ON JAVAfiles (name)')
+        create_index('CREATE INDEX IF NOT EXISTS Sourcemethods_fileName ON Sourcemethods (File_Name)')
+        create_index('CREATE INDEX IF NOT EXISTS JAVAfilesFix_Name ON JAVAfilesFix (name)')
+        create_index('CREATE INDEX IF NOT EXISTS SourcemethodsFix_fileName ON SourcemethodsFix (File_Name)')
+        create_index('CREATE INDEX IF NOT EXISTS classes_Name ON classes (name)')
+        create_index('CREATE INDEX IF NOT EXISTS constructors_className ON constructors (className)')
+        create_index('CREATE INDEX IF NOT EXISTS methods_className ON methods (className)')
+        create_index('CREATE INDEX IF NOT EXISTS fields_className ON fields (className)')
+        create_index('CREATE INDEX IF NOT EXISTS checkStyle_name ON checkStyle (name)')
+        create_index('CREATE INDEX IF NOT EXISTS checkStyleExtends_name ON checkStyleExtends (name)')
+        create_index('CREATE INDEX IF NOT EXISTS blameExtends_name ON blameExtends (name)')
+        create_index('CREATE INDEX IF NOT EXISTS AllMethods_methodDir ON AllMethods (methodDir)')
+        create_index('CREATE INDEX IF NOT EXISTS commitedMethods_methodDir ON commitedMethods (methodDir)')
+        create_index('CREATE INDEX IF NOT EXISTS commitedMethods_commitID ON commitedMethods (commitID)')
+        create_index('CREATE INDEX IF NOT EXISTS AllMethods_fileName ON AllMethods (fileName)')
+        create_index('CREATE INDEX IF NOT EXISTS commitedMethods_fileName ON commitedMethods (fileName)')
+        create_index('CREATE INDEX IF NOT EXISTS commitedMethods_methodName ON commitedMethods (methodName)')
+        create_index('CREATE INDEX IF NOT EXISTS commitedMethods_bugId ON commitedMethods (bugId)')
+        create_index('CREATE INDEX IF NOT EXISTS commitedMethods_commiter_date ON commitedMethods (commiter_date)')
 
 
 def buildBasicAllVers(vers,dates,versPath,CodeDir,dbsPath, bugsPath,MethodsParsed,changeFile):
     gitPath = os.path.join(versPath, vers[-1], CodeDir)
     commits, commitedFiles, allMethodsCommits, bugs, allFilesCommitsPatch = BuildRepo(gitPath, bugsPath, MethodsParsed, changeFile)
-    for ver,date in zip(vers,dates):
+    for ver, date in zip(vers,dates):
         gitPath = os.path.join(versPath, ver, CodeDir)
         dbPath = os.path.join(dbsPath, ver+".db")
         basicBuildOneTimeCommits(dbPath, gitPath, commits, commitedFiles, allMethodsCommits, bugs)
+
+
+@utilsConf.marker_decorator(utilsConf.DB_LABELS_MARKER)
+def build_labels():
+    versPath = utilsConf.get_configuration().versPath
+    db_dir = utilsConf.get_configuration().db_dir
+    vers = utilsConf.get_configuration().vers_dirs
+    dates = utilsConf.get_configuration().dates
+    CodeDir = "repo"
+    buildBasicAllVers(vers, dates, versPath, CodeDir, db_dir, utilsConf.get_configuration().bugsPath,
+                      utilsConf.get_configuration().MethodsParsed, utilsConf.get_configuration().changeFile)
 
 
 @utilsConf.marker_decorator(utilsConf.DB_BUILD_MARKER)
@@ -326,5 +333,4 @@ def buildOneTimeCommits():
                                sourceMonitorFiles, sourceMonitorMethods, checkStyle, checkStyleMethods,
                                blamePath, date, CodeDir)
         createIndexes(dbPath)
-    buildBasicAllVers(vers, dates, versPath, CodeDir, db_dir, utilsConf.get_configuration().bugsPath,
-                      utilsConf.get_configuration().MethodsParsed, utilsConf.get_configuration().changeFile)
+    build_labels()

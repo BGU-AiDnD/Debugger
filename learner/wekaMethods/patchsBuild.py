@@ -1,13 +1,11 @@
 __author__ = 'amir'
 
 
-import sys
 import os
 import glob
 import re
 import subprocess
 import shutil
-import sqlite3
 import utilsConf
 
 # git format-patch --root origin
@@ -60,7 +58,6 @@ def oneFileParser(methods,javaFile,inds,key):
         if methodDir not in methods:
             methods[methodDir]={}
         methods[methodDir][key]=len(list(set(rng) & set(inds)))
-
 
 
 def FileToMethods(beforeFile,AfterFile,deletedInds,addedInds, outPath,commitID):
@@ -199,7 +196,6 @@ def debugPatchs(Path,outFile):
 
 
 def buildPatchs(Path,outDir,changedFile):
-    mkdir(outDir)
     with open(changedFile,"wb") as change:
         for doc in glob.glob(os.path.join(Path,"/*.patch")):
             oneFile(doc, outDir, change)
@@ -208,21 +204,9 @@ def mkdir(d):
     if not os.path.isdir(d):
         os.mkdir(d)
 
-
-def DbAdd(dbPath,allComms):
-    conn = sqlite3.connect(dbPath)
-    conn.text_factory = str
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS commitedMethods (commitID INT, methodDir text, fileName text, methodName text, deletions INT , insertions INT , lines INT )''')
-    for com in allComms:
-        c.execute("INSERT INTO commitedMethods VALUES (?,?,?,?,?,?,?)",com)
-    conn.commit()
-    conn.close()
-
 def RunCheckStyle(workingDir, outPath, checkStyle68, methodNameLines):
     run_commands = ["java" ,"-jar" ,checkStyle68 ,"-c" ,methodNameLines ,"javaFile" ,"-o",outPath,workingDir]
-    proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    (out, err) = proc.communicate()
+    utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).communicate()
 
 def detectFromConf(lines,lineInd):
     deleted = (lines[lineInd])
@@ -316,8 +300,8 @@ def analyzeCheckStyle(checkOut, changeFile):
     return all_methods, filesRows
 
 
-# @utilsConf.marker_decorator(utilsConf.PATCHS_FEATURES_MARKER)
-def do_all():
+@utilsConf.marker_decorator(utilsConf.PATCHS_FEATURES_MARKER)
+def labeling():
     patchD = os.path.join(utilsConf.get_configuration().LocalGitPath, "patch")
     commitsFiles = os.path.join(utilsConf.get_configuration().LocalGitPath, "commitsFiles")
     changedFile = os.path.join(utilsConf.get_configuration().LocalGitPath, "commitsFiles", "Ins_dels.txt")
@@ -327,5 +311,5 @@ def do_all():
     proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().LocalGitPath))
     proc.communicate()
     buildPatchs(patchD, commitsFiles, changedFile)
-    checkOut = os.path.join(commitsFiles, "CheckStyle.txt")
+    checkOut = utilsConf.get_configuration().MethodsParsed
     RunCheckStyle(commitsFiles, checkOut, utilsConf.get_configuration().checkStyle68, utilsConf.get_configuration().methodsNamesXML)

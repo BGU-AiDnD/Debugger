@@ -7,9 +7,11 @@ import subprocess
 import traceback
 import sys
 import github3
+import sqlite3
 from datetime import datetime
 import logging
 import detect_renamed_files
+from contextlib import contextmanager
 
 LONG_PATH_MAGIC = u"\\\\?\\"
 # markers names:
@@ -17,6 +19,7 @@ VERSIONS_MARKER = "versions"
 VERSION_TEST_MARKER = "test_version"
 FEATURES_MARKER = "features"
 DB_BUILD_MARKER = "db"
+DB_LABELS_MARKER = "labels"
 ML_MODELS_MARKER = "ml"
 COMPLEXITY_FEATURES_MARKER = "complexity_features"
 OO_OLD_FEATURES_MARKER = "old_oo_features"
@@ -308,6 +311,13 @@ def post_bug_to_github(etype, value, tb):
     except:
         pass
 
+@contextmanager
+def use_sqllite(db_path):
+    conn = sqlite3.connect(db_path)
+    conn.text_factory = str
+    yield conn
+    conn.commit()
+    conn.close()
 
 def marker_decorator(marker):
     """

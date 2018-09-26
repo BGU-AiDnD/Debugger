@@ -30,6 +30,7 @@ from sfl_diagnoser.Diagnoser.diagnoserUtils import write_planning_file, readPlan
 from sfl_diagnoser.Diagnoser.Diagnosis_Results import Diagnosis_Results
 import Bug
 from experiments import ExperimentGenerator
+from collections import Counter
 
 """
 resources :
@@ -196,7 +197,7 @@ def featuresExtract():
     Extract_complexity_features()
     Extract_OO_features_OLD()
     wekaMethods.commsSpaces.create(utilsConf.get_configuration().vers_dirs, os.path.join(utilsConf.get_configuration().workingDir, "vers"))
-    wekaMethods.patchsBuild.do_all()
+
 
 
 def BuildWekaModel(weka, training, testing, namesCsv, outCsv, name, wekaJar):
@@ -213,31 +214,19 @@ def BuildWekaModel(weka, training, testing, namesCsv, outCsv, name, wekaJar):
     wekaMethods.wekaAccuracy.priorsCreation(namesCsv, wekaCsv, outCsv, "")
 
 
-def BuildMLFiles(outDir, buggedType, component):
-    trainingFile=os.path.join(outDir,buggedType+"_training_"+component+".arff")
-    testingFile=os.path.join(outDir,buggedType+"_testing_"+component+".arff")
-    NamesFile=os.path.join(outDir,buggedType+"_names_"+component+".csv")
-    outCsv=os.path.join(outDir,buggedType+"_out_"+component+".csv")
-    return trainingFile, testingFile, NamesFile, outCsv
-
-
 @utilsConf.marker_decorator(utilsConf.ML_MODELS_MARKER)
 def createBuildMLModels():
+    for granularity in ['File', 'Method']:
+        for buggedType in ["All", "Most"]:
+            continue
+            trainingFile, testingFile, NamesFile, outCsv = wekaMethods.articles.get_features(granularity, buggedType)
+            BuildWekaModel(utilsConf.get_configuration().weka_path, trainingFile, testingFile, NamesFile, outCsv,
+                           "{0}_".format(granularity) + buggedType, utilsConf.get_configuration().wekaJar)
     for buggedType in ["All", "Most"]:
-        Bpath=os.path.join(utilsConf.get_configuration().workingDir, buggedType)
-        mkOneDir(Bpath)
-        FilesPath=os.path.join(Bpath, "Files")
-        methodsPath=os.path.join(Bpath, "Methods")
-        mkOneDir(FilesPath)
-        mkOneDir(methodsPath)
-        trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacks(FilesPath,
-                                                                                                        utilsConf.get_configuration().gitPath, utilsConf.get_configuration().weka_path, utilsConf.get_configuration().vers, utilsConf.get_configuration().vers_dirs, buggedType, utilsConf.get_configuration().db_dir)
-        trainingFile, testingFile, NamesFile, outCsv=BuildMLFiles(utilsConf.to_short_path(utilsConf.get_configuration().weka_path),buggedType,"files")
+        trainingFile, testingFile, NamesFile, outCsv=wekaMethods.articles.articlesAllpacks(buggedType)
         BuildWekaModel(utilsConf.get_configuration().weka_path,trainingFile,testingFile,NamesFile,outCsv,"files_"+buggedType, utilsConf.get_configuration().wekaJar)
         # All_One_create.allFamilies(FilesPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
-        trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacksMethods(methodsPath,
-                                                                                                               utilsConf.get_configuration().gitPath, utilsConf.get_configuration().weka_path, utilsConf.get_configuration().vers, utilsConf.get_configuration().vers_dirs, buggedType, utilsConf.get_configuration().db_dir)
-        trainingFile, testingFile, NamesFile, outCsv=BuildMLFiles(utilsConf.to_short_path(utilsConf.get_configuration().weka_path),buggedType,"methods")
+        trainingFile, testingFile, NamesFile, outCsv=wekaMethods.articles.articlesAllpacksMethods(buggedType)
         BuildWekaModel(utilsConf.get_configuration().weka_path,trainingFile,testingFile,NamesFile,outCsv,"methods_"+buggedType, utilsConf.get_configuration().wekaJar)
         # All_One_create.allFamilies(methodsPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
 
@@ -380,8 +369,20 @@ def create_web_prediction_results():
 @utilsConf.marker_decorator(utilsConf.LEARNER_PHASE_FILE)
 def wrapperLearner():
     download_bugs()
-    test_version_create()
     # NLP.commits.data_to_csv(os.path.join(workingDir, "NLP_data.csv"), gitPath, bugsPath)
+    wekaMethods.patchsBuild.labeling()
+    wekaMethods.buildDB.build_labels()
+    for granularity in ['File', 'Method']:
+        for buggedType in ["All", "Most"]:
+            for i in range(len(utilsConf.get_configuration().vers_dirs)):
+                dbpath = os.path.join(utilsConf.get_configuration().db_dir, str(utilsConf.get_configuration().vers_dirs[i] + ".db"))
+                prev_date, start_date, end_date = utilsConf.get_configuration().dates[i - 1: i + 2]
+                files_hasBug = wekaMethods.articles.get_arff_class(dbpath, start_date, end_date,
+                                                                   wekaMethods.articles.BUG_QUERIES[granularity][buggedType],
+                                                                   wekaMethods.articles.COMPONENTS_QUERIES[granularity])
+                print granularity, buggedType, utilsConf.get_configuration().vers_dirs[i], Counter(files_hasBug.values())
+    exit()
+    test_version_create()
     featuresExtract()
     wekaMethods.buildDB.buildOneTimeCommits()
     createBuildMLModels()
@@ -540,7 +541,7 @@ if __name__ == '__main__':
         wrapperAll()
         utilsConf.export_to_cache()
     elif sys.argv[2] =="learn":
-        pass
+        wrapperLearner()
     elif sys.argv[2]=="experiments":
         pass
     elif sys.argv[2]=="all_planning":
