@@ -31,6 +31,7 @@ BLAME_FEATURES_MARKER = "blame_features"
 TEST_DB_MARKER = "test_db_features"
 PACKS_FILE_MARKER = "packs_file_features"
 LEARNER_PHASE_FILE = "learner_phase_file"
+DISTRIBUTION_FILE = "distribution_file"
 ALL_DONE_FILE = "all_done"
 EXECUTE_TESTS = "test_executed"
 ISSUE_TRACKER_FILE = "issue_tracker_file"
@@ -111,15 +112,21 @@ def versionsCreate(gitPath, vers, versPath, workingDir):
 
 def git_file_path_to_java_name(file_path):
     directories = os.path.splitext(os.path.normpath(file_path))[0].split(os.path.sep)
-    return ".".join(directories[directories.index('java') + 1:])
+    index = 0
+    if 'java' in directories:
+        index = directories.index('java') + 1
+    elif 'src' in directories:
+        index = directories.index('src') + 2
+    return ".".join(directories[index:])
 
 def configure(confFile):
     full_configure_file, gitPath, issue_tracker, issue_tracker_product, issue_tracker_url, versions, workingDir = read_configuration(confFile)
     init_configuration(workingDir, versions)
     configuration = get_configuration()
     db_dir = os.path.join(workingDir, "dbAdd")
+    distribution_report = os.path.join(workingDir, "distribution_report.csv")
     versPath = os.path.join(workingDir, "vers")
-    vers, paths, dates, commits = versions_info(gitPath, versions)
+    vers, paths, dates, commits = versions_info(to_short_path(gitPath), versions)
     docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath = globalConfig()
     current_dir = os.path.dirname(os.path.realpath(__file__))
     utilsPath = os.path.realpath(os.path.join(current_dir, "../utils"))
@@ -137,10 +144,10 @@ def configure(confFile):
     configuration_path = to_short_path(os.path.join(workingDir, "configuration"))
     experiments = to_short_path(os.path.join(workingDir, "experiments"))
     DebuggerTests = to_short_path(os.path.join(workingDir, "DebuggerTests"))
-    MethodsParsed = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "CheckStyle.txt")
-    changeFile = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "Ins_dels.txt")
+    MethodsParsed = os.path.join(os.path.join(workingDir, "commitsFiles"), "CheckStyle.txt")
+    changeFile = os.path.join(os.path.join(workingDir, "commitsFiles"), "Ins_dels.txt")
     debugger_base_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    buggy_repo = git.Repo(gitPath)
+    buggy_repo = git.Repo(to_short_path(gitPath))
     renamed_mapping = detect_renamed_files.renamed_files_for_repo(buggy_repo)
     remotes_urls = reduce(list.__add__, map(lambda r: list(r.urls), buggy_repo.remotes))
     logging.info(
@@ -164,7 +171,7 @@ def configure(confFile):
                     ("web_prediction_results", web_prediction_results), ("full_configure_file", full_configure_file),
                     ("amir_tracer", amir_tracer), ("configuration_path", configuration_path), ("caching_dir", caching_dir),
                     ('DebuggerTests', DebuggerTests), ('prediction_files', prediction_files), ('experiments', experiments),
-                    ('renamed_mapping', renamed_mapping)]
+                    ('renamed_mapping', renamed_mapping), ("distribution_report", distribution_report)]
     map(lambda name_val: setattr(configuration, name_val[0], name_val[1]), names_values)
     Mkdirs(workingDir)
     versionsCreate(gitPath, vers, versPath, workingDir)

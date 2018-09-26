@@ -197,7 +197,7 @@ def debugPatchs(Path,outFile):
 
 def buildPatchs(Path,outDir,changedFile):
     with open(changedFile,"wb") as change:
-        for doc in glob.glob(os.path.join(Path,"/*.patch")):
+        for doc in glob.glob(os.path.join(Path,"*.patch")):
             oneFile(doc, outDir, change)
 
 def mkdir(d):
@@ -302,12 +302,12 @@ def analyzeCheckStyle(checkOut, changeFile):
 
 @utilsConf.marker_decorator(utilsConf.PATCHS_FEATURES_MARKER)
 def labeling():
-    patchD = os.path.join(utilsConf.get_configuration().LocalGitPath, "patch")
-    commitsFiles = os.path.join(utilsConf.get_configuration().LocalGitPath, "commitsFiles")
-    changedFile = os.path.join(utilsConf.get_configuration().LocalGitPath, "commitsFiles", "Ins_dels.txt")
+    patchD = os.path.join(utilsConf.get_configuration().workingDir, "patch")
+    commitsFiles = os.path.join(utilsConf.get_configuration().workingDir, "commitsFiles")
+    changedFile = utilsConf.get_configuration().changeFile
     mkdir(patchD)
     mkdir(commitsFiles)
-    run_commands = "git format-patch --root -o patch --function-context --unified=9000".split()
+    run_commands = "git format-patch --root -o ..\patch --function-context --unified=9000".split()
     proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().LocalGitPath))
     proc.communicate()
     buildPatchs(patchD, commitsFiles, changedFile)

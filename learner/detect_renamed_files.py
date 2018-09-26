@@ -1,6 +1,5 @@
 import re
 import logging
-from utilsConf import git_file_path_to_java_name
 __author__ = 'amir'
 
 def get_renamed_files_for_commit(commit):
@@ -13,6 +12,7 @@ def get_renamed_files_for_commit(commit):
     :param commit: git commit
     :return: mapping of {src : dst}
     """
+    from utilsConf import git_file_path_to_java_name
     new_files = {}
     for file in commit.stats.files.keys():
         if "=>" in file:

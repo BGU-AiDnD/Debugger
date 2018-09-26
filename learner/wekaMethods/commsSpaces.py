@@ -32,8 +32,6 @@ def create(vers, Path):
                 out.writelines(["comments\n", str(comm), "\nspaces\n", str(spaces)])
 
 
-#create(('CDT_8_0_1', 'CDT_8_0_2', 'CDT_8_1_0', 'CDT_8_1_1', 'CDT_8_1_2' ),"C:\\GitHub\\vers\\" )
-
 def read(file):
     if not os.path.isfile(file):
         return [], []
@@ -42,5 +40,3 @@ def read(file):
         comms = eval(lines[1])
         spaces = eval(lines[3])
         return comms,spaces
-
-#print read("C:\GitHub\\vers\CDT_8_0_1\commentsSpaces\CaseBreakQuickFixTest.java.txt")

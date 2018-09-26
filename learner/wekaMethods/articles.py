@@ -35,8 +35,8 @@ BUG_QUERIES = {"Method": {"All": 'select distinct methodDir,"bugged"  from commi
                            "Most": 'select CommitedMethods.methodDir,"bugged"  from CommitedMethods , (select max(lines) as l, bugId from CommitedMethods where methodDir like "%.java%" and commiter_date>="'+str("STARTDATE")+'"  and commiter_date<="'+str("ENDDATE")+'" and bugId<>0 group by bugId) as T where CommitedMethods.lines=T.l and CommitedMethods.bugId=T.bugId group by methodDir'},
                "File": {"All": 'select distinct name,"bugged"  from commitedfiles where bugId<>0  and name like "%.java" and name not like "%test%" and commiter_date>="' + str("STARTDATE")+ '"' + '  and commiter_date<="' + str("ENDDATE")+ '" and not exists (select comments.commitid,comments.name from comments where comments.commitid=Commitedfiles.commitid and comments.name=Commitedfiles.name) ' + ' group by name',
                          "Most": 'select distinct name,"bugged"  from (select Commitedfiles.bugId as bugId,Commitedfiles.name as name  from Commitedfiles , (select max(lines) as l, Commitedfiles.bugId as bugId from Commitedfiles where Commitedfiles.name like "%.java" and name not like "%test%" and commiter_date>="' + str("STARTDATE")+ '"' + '  and commiter_date<="' + str("ENDDATE") +"and not exists (select comments.commitid,comments.name from comments where comments.commitid=Commitedfiles.commitid and comments.name=Commitedfiles.name) " + '" group by bugId) as T where Commitedfiles.lines=T.l and Commitedfiles.bugId=T.bugId) where bugId<>0  group by name'}}
-COMPONENTS_QUERIES = {"Method": 'select distinct methodDir from AllMethods order by methodDir',
-                      "File": 'select distinct name from haelsTfiles  order by name'}
+COMPONENTS_QUERIES = {"Method": 'select distinct methodDir from commitedMethods order by methodDir',
+                      "File": 'select distinct name from commitedFiles  order by name'}
 PACKAGES = {'Method': ["lastProcessMethods","simpleProcessArticlesMethods","simpleProcessAddedMethods","bugsMethods"],
             'File': ["haelstead","g2","g3","methodsArticles","methodsAdded","hirarcy","fieldsArticles","fieldsAdded","constructorsArticles","constructorsAdded","lastProcess","simpleProcessArticles","simpleProcessAdded","bugs","sourceMonitor","checkStyle","blame"]}
 
@@ -162,7 +162,7 @@ def arffCreate(basicPath, objects, names, dates, bugQ, wanted, trainingFile, tes
     attr = objectsAttr(objects)
     while (i+1<len(names)):
         dbpath = os.path.join(basicPath, str(names[i] + ".db"))
-        prev_date, start_date, end_date = dates[i-1: i+2]
+        prev_date, start_date, end_date = dates[i: i + 3]
         tag, allNames = arffCreateForTag(dbpath, prev_date, start_date, end_date, objects, bugQ, wanted)
         data = data + tag
         if i == len(names) - 3:
@@ -401,7 +401,7 @@ def get_features(granularity, buggedType):
     trainingFile, testingFile, NamesFile, outCsv = BuildFiles(utilsConf.get_configuration().weka_path, buggedType, granularity)
     FeaturesClasses, Featuresnames = names_to_classes(granularity, PACKAGES[granularity])
     arffCreate(utilsConf.get_configuration().db_dir, FeaturesClasses, utilsConf.get_configuration().vers_dirs,
-               utilsConf.get_configuration().dates, bugQ, wanted, trainingFile, testingFile, NamesFile)
+               [datetime.datetime(1900, 1, 1, 0, 0).strftime('%Y-%m-%d %H:%M:%S')] + utilsConf.get_configuration().dates, bugQ, wanted, trainingFile, testingFile, NamesFile)
     return trainingFile, testingFile, NamesFile, outCsv
 
 
@@ -411,7 +411,7 @@ def articlesAllpacks(buggedType):
     trainingFile, testingFile, NamesFile, outCsv = BuildFiles(utilsConf.get_configuration().weka_path, buggedType,
                                                               "File")
     FeaturesClasses, Featuresnames = featuresPacksToClasses(PACKAGES['File'])
-    arffCreate(utilsConf.get_configuration().db_dir, FeaturesClasses, utilsConf.get_configuration().vers_dirs, utilsConf.get_configuration().dates, bugQ, wanted, trainingFile, testingFile, NamesFile)
+    arffCreate(utilsConf.get_configuration().db_dir, FeaturesClasses, utilsConf.get_configuration().vers_dirs, [datetime.datetime(1900, 1, 1, 0, 0).strftime('%Y-%m-%d %H:%M:%S')] +utilsConf.get_configuration().dates, bugQ, wanted, trainingFile, testingFile, NamesFile)
     return trainingFile, testingFile, NamesFile, outCsv
 
 def articlesAllpacksMethods(buggedType):
@@ -420,5 +420,5 @@ def articlesAllpacksMethods(buggedType):
     trainingFile, testingFile, NamesFile, outCsv = BuildFiles(utilsConf.get_configuration().weka_path, buggedType,
                                                               "Method")
     FeaturesClasses,Featuresnames=featuresMethodsPacksToClasses(PACKAGES['Method'])
-    arffCreate(utilsConf.get_configuration().db_dir, FeaturesClasses,utilsConf.get_configuration().vers_dirs,utilsConf.get_configuration().dates,bugQ,wanted,trainingFile,testingFile,NamesFile)
+    arffCreate(utilsConf.get_configuration().db_dir, FeaturesClasses,utilsConf.get_configuration().vers_dirs, [datetime.datetime(1900, 1, 1, 0, 0).strftime('%Y-%m-%d %H:%M:%S')] + utilsConf.get_configuration().dates,bugQ,wanted,trainingFile,testingFile,NamesFile)
     return trainingFile, testingFile, NamesFile, outCsv
