@@ -30,6 +30,7 @@ import Bug
 from experiments import ExperimentGenerator
 from collections import Counter
 import wekaMethods.issuesExtract.sourceforge
+import wekaMethods.issuesExtract.google_code
 
 """
 resources :
@@ -307,6 +308,8 @@ def download_bugs():
         wekaMethods.issuesExtract.github_import.GithubIssues(bugsPath, issue_tracker_url, issue_tracker_product)
     elif utilsConf.get_configuration().issue_tracker == "sourceforge":
         wekaMethods.issuesExtract.sourceforge.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
+    elif utilsConf.get_configuration().issue_tracker == "googlecode":
+        wekaMethods.issuesExtract.google_code.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
 
 
 def create_web_prediction_results():
