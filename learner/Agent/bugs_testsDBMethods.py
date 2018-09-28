@@ -40,15 +40,13 @@ def xmlReadTest(doc):
 
 
 def concatenate(tracesPath, outFile):
-    lst= glob.glob(tracesPath+"/*.txt")
-    f=open(outFile,"wb")
-    for fileName in lst:
-        f.write(fileName+"\n")
-        file=open(fileName,"r")
-        for line in file:
-            f.write(line)
-        file.close()
-    f.close()
+    lst = glob.glob(tracesPath+"/*.txt")
+    with open(outFile,"wb") as f:
+        for fileName in lst:
+            f.write(fileName+"\n")
+            with open(fileName,"r") as file:
+                for line in file:
+                    f.write(line)
 
 
 def testsDBConcatinationMany(dbPath, tracesPath, filesDict, packPath):

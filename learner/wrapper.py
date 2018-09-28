@@ -1,17 +1,10 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
 import csv
-import datetime
+import json
 import os
 import shutil
 import subprocess
 import sys
-from random import randint
 
-import Agent.bugs_testsDBMethods
-import Agent.experimentsMethods
-import Planner.Planning_Results
 import itertools
 import report
 import utilsConf
@@ -24,12 +17,11 @@ import wekaMethods.issuesExtract.jira_import
 import wekaMethods.issuesExtract.python_bugzilla
 import wekaMethods.patchsBuild
 import wekaMethods.wekaAccuracy
-from utilsConf import Mkdirs, version_to_dir_name, mkOneDir, versions_info, versionsCreate
+from utilsConf import Mkdirs, version_to_dir_name, mkOneDir
+from run_mvn import AmirTracer, TestRunner
+from sfl_diagnoser.Diagnoser.diagnoserUtils import write_planning_file, readPlanningFile
+from experiments import ExperimentGenerator
 
-try:
-    from SFL_diagnoser.Diagnoser.diagnoserUtils import readPlanningFile, write_planning_file
-except:
-    pass
 """
 resources :
 git
@@ -305,20 +297,43 @@ def weka_csv_to_readable_csv(weka_csv, prediction_csv):
         writer.writerows(out_lines)
 
 
-def Experiments(workingDir,weka,packsPath,utilsPath,randNum):
-    for buggedType, granularity in itertools.product(["All", "Most"], ["File", "Method"]):
-        outPath = os.path.join(workingDir, "experiments\\files_{0}{1}".format(buggedType, randNum))
-        weka_csv = os.path.join(utilsConf.get_configuration().weka_path, "{buggedType}_out_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
-        Agent.experimentsMethods.RunExperiments(os.path.join(workingDir, "testsBugsMethods.db"), outPath, packsPath,
-                                                weka_csv, granularity, buggedType, utilsPath)
+def add_to_packages(packages, path, probability, threshold=0.2):
+    if float(probability) < threshold:
+        return
+    d = packages
+    while len(path) != 1:
+        name = path.pop()
+        d.setdefault('_sub_packages', [])
+        package = {'_name': name}
+        d['_sub_packages'].append(package)
+        d = package
+    d.setdefault('_files', {})
+    d['_files'][path[0]] = {'_probability': probability}
 
-def RealDIagnosis(workingDir, weka):
-    testDb = os.path.join(workingDir, "testsBugsMethods.db")
-    for buggedType, granularity in zip(["All", "Most"], ["File", "Method"]):
-        testTable, bugs_table = Agent.experimentsMethods.EXPERIMETS_TABLES[granularity][buggedType]
-        weka_csv = os.path.join(weka, buggedType + "_out_{GRANULARITY}.csv".format(GRANULARITY=granularity))
-        priors = Agent.experimentsMethods.read_weka_csv(weka_csv)
-        # write_planning_file()
+
+def calc_all_probabilities(package, reduce_function):
+    if '_probability' not in package:
+        sub_probabilities = [0.0]
+        if '_files' in package:
+            files_probabilities = map(lambda x: package['_files'][x]['_probability'], package['_files'].keys())
+            sub_probabilities.extend(files_probabilities)
+        if '_sub_packages' in package:
+            sub_packages_probabilites = map(lambda x: calc_all_probabilities(x, reduce_function), package['_sub_packages'])
+            sub_probabilities.extend(sub_packages_probabilites)
+        package['_probability'] = reduce_function(sub_probabilities)
+    return package['_probability']
+
+
+def save_json_watchers(precidtion_csv):
+    packges = {'_name': '_root', '_sub_packages': []}
+    lines = []
+    with open(precidtion_csv) as f:
+        lines = list(csv.reader(f))[1:]
+    map(lambda x: add_to_packages(packges, list(reversed(x[0].split(os.path.sep))), float(x[1])), lines)
+    calc_all_probabilities(packges, max)
+    with open(precidtion_csv.replace("csv", "json"), "wb") as f:
+        f.write(json.dumps([packges]))
+
 
 @utilsConf.marker_decorator(utilsConf.VERSION_TEST_MARKER)
 def test_version_create():
@@ -344,11 +359,14 @@ def download_bugs():
     elif utilsConf.get_configuration().issue_tracker == "github":
         wekaMethods.issuesExtract.github_import.GithubIssues(bugsPath, issue_tracker_url, issue_tracker_product)
 
+
 def create_web_prediction_results():
     for buggedType, granularity in itertools.product(["All", "Most"], ["files", "methods"]):
         weka_csv = os.path.join(utilsConf.get_configuration().weka_path, "{buggedType}_out_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
         prediction_csv = os.path.join(utilsConf.get_configuration().web_prediction_results, "prediction_{buggedType}_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
         weka_csv_to_readable_csv(weka_csv, prediction_csv)
+        save_json_watchers(prediction_csv)
+
 
 @utilsConf.marker_decorator(utilsConf.LEARNER_PHASE_FILE)
 def wrapperLearner():
@@ -361,7 +379,65 @@ def wrapperLearner():
     create_web_prediction_results()
 
 
-def comprasionAll(confFile,globalConfFile):
+def load_prediction_file(prediction_path):
+    predictions = {}
+    with open(prediction_path) as f:
+        lines = list(csv.reader(f))[1:]
+        predictions = dict(
+            map(lambda line: (line[0].replace(".java", "").replace(os.path.sep, ".").replace("").lower(), line[1]), lines))
+    return predictions
+
+
+@utilsConf.marker_decorator(utilsConf.EXECUTE_TESTS)
+def executeTests():
+    web_prediction_results = utilsConf.get_configuration().web_prediction_results
+    matrix_path = os.path.join(web_prediction_results, "matrix_{0}_{1}.matrix")
+    outcomes_path = os.path.join(web_prediction_results, "outcomes.json")
+    diagnoses_path = os.path.join(web_prediction_results, "diagnosis_{0}_{1}.matrix")
+    diagnoses_json_path = os.path.join(web_prediction_results, "diagnosis_{0}_{1}.json")
+    tested_repo = utilsConf.to_short_path(os.path.join(utilsConf.get_configuration().workingDir, "testedVer", "repo"))
+    test_runner = TestRunner(tested_repo, AmirTracer(tested_repo, utilsConf.get_configuration().amir_tracer, utilsConf.get_configuration().DebuggerTests))
+    test_runner.run()
+    tests = test_runner.get_tests()
+    json_observations = map(lambda test: test_runner.observations[test].as_dict(), tests)
+    with open(outcomes_path, "wb") as f:
+        f.write(json.dumps(json_observations))
+    for granularity in utilsConf.get_configuration().prediction_files:
+        for bugged_type in utilsConf.get_configuration().prediction_files[granularity]:
+            components_priors = get_components_probabilities(bugged_type, granularity, test_runner, tests)
+            tests_details = map(
+                lambda test_name: (test_name, list(set(test_runner.tracer.traces[test_name].get_trace(granularity)) & set(components_priors.keys())),
+                                   test_runner.observations[test_name].get_observation()),
+                tests)
+            matrix = matrix_path.format(granularity, bugged_type)
+            write_planning_file(matrix, [], filter(lambda test: len(test[1]) > 0, tests_details),
+                                priors=components_priors)
+            inst = readPlanningFile(matrix)
+            inst.diagnose()
+            named_diagnoses = sorted(inst.get_named_diagnoses(), key=lambda d: d.probability, reverse=True)
+            with open(diagnoses_path.format(granularity, bugged_type), "wb") as diagnosis_file:
+                diagnosis_file.writelines("\n".join(map(lambda d: repr(d), named_diagnoses)))
+            with open(diagnoses_json_path.format(granularity, bugged_type), "wb") as diagnosis_json:
+                diagnosis_json.writelines(json.dumps(map(lambda d: dict([('_name', d[0])] + d[1].as_dict().items()), enumerate(named_diagnoses))))
+    return test_runner
+
+
+def get_components_probabilities(bugged_type, granularity, test_runner, tests):
+    predictions = {}
+    with open(os.path.join(utilsConf.get_configuration().web_prediction_results, utilsConf.get_configuration().prediction_files[granularity][bugged_type])) as f:
+        lines = list(csv.reader(f))[1:]
+        predictions = dict(
+            map(lambda line: (line[0].replace(".java", "").replace(os.path.sep, ".").lower().replace('$', '@'), line[1]), lines))
+    components_priors = {}
+    for component in set(
+            reduce(list.__add__, map(lambda test_name: test_runner.tracer.traces[test_name].get_trace(granularity), tests), [])):
+        for prediction in predictions:
+            if prediction.endswith(component):
+                components_priors[component] = max(float(predictions[prediction]), 0.01)
+    return components_priors
+
+
+def comprasionAll(confFile):
     vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
     for buggedType in ["All","Most"]:
         Bpath=os.path.join(workingDir,buggedType)
@@ -375,7 +451,7 @@ def comprasionAll(confFile,globalConfFile):
         wekaMethods.ParseWekaOutput.comprasion(os.path.join(methodsPath,"Fam_one\\out"),os.path.join(methodsPath,"Fam_all\\out"), os.path.join(workingDir,buggedType+"_"+"Methods")+".csv",Featuresnames)
 
 
-def comprasionThreeFam(confFile,globalConfFile):
+def comprasionThreeFam(confFile):
     vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
     for buggedType in ["All","Most"]:
         Bpath=os.path.join(workingDir,buggedType)
@@ -393,7 +469,7 @@ def dictToList(dict,lst):
         ans.append(dict[l])
     return ans
 
-def comprasionTypes(confFile,globalConfFile):
+def comprasionTypes(confFile):
     vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
     learnerOutFile=os.path.join(workingDir,"learner.csv")
     wekaD=os.path.join(workingDir,"weka")
@@ -413,11 +489,6 @@ def comprasionTypes(confFile,globalConfFile):
     writer.writerows(lines)
     f.close()
 
-
-
-    #clean(versPath,LocalGitPath)
-
-
 def reportProjectData(confFile,globalConfFile):
 #java -Xmx2024m  -cp "C:\Program Files\Weka-3-7\weka.jar" weka.core.Instances 13_Appended.arff
     vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
@@ -429,27 +500,29 @@ def reportProjectData(confFile,globalConfFile):
     report.report(reportCsv,LocalGitPath,lastVer,testsDB)
 
 
-def wrapperExperiments(confFile):
-    vers, gitPath, issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir = utilsConf.configure(confFile)
-    docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath = utilsConf.globalConfig()
-    vers_dirs = map(version_to_dir_name, vers)
-    weka=os.path.join(workingDir,"weka")
-    vers,paths,dates,commits= versions_info(gitPath, vers)
-    testDb=Agent.bugs_testsDBMethods.basicBuild(workingDir,vers_dirs[-2],dates[-2],dates[-1])
-    packsPath = os.path.join(workingDir, "packs.txt")
-    Agent.experimentsMethods.packFileCreate(testDb,1,-1, packsPath)
-    rnd = str(randint(0,900))
-    print rnd
-    Experiments(workingDir, weka,packsPath,utilsPath,rnd)
-    RealDIagnosis(workingDir, weka)
+def create_experiment(test_runner, num_instances=50, tests_per_instance=50, bug_passing_probability=0.05):
+    results_path = os.path.join(utilsConf.get_configuration().experiments, "{GRANULARITY}_{BUGGED_TYPE}")
+    for granularity in utilsConf.get_configuration().prediction_files:
+        for bugged_type in utilsConf.get_configuration().prediction_files[granularity]:
+            eg = ExperimentGenerator(test_runner, granularity, bugged_type, num_instances, tests_per_instance, bug_passing_probability)
+            results = eg.create_instances()
+            with open(results_path.format(GRANULARITY=granularity, BUGGED_TYPE=bugged_type), 'wb') as f:
+                f.write(json.dumps(results))
 
+
+@utilsConf.marker_decorator(utilsConf.ALL_DONE_FILE)
+def wrapperAll():
+    wrapperLearner()
+    create_experiment(executeTests())
 
 if __name__ == '__main__':
     csv.field_size_limit(sys.maxint)
     utilsConf.configure(sys.argv[1])
-    if sys.argv[2] =="learn":
+    shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
+    if utilsConf.copy_from_cache() is not None:
+        exit()
+    if len(sys.argv) == 2:
+        wrapperAll()
+        utilsConf.export_to_cache()
+    elif sys.argv[2] =="learn":
         wrapperLearner()
-    elif sys.argv[2]=="experiments":
-        wrapperExperiments(sys.argv[1])
-    elif sys.argv[2]=="all_planning":
-        Planner.planningExperiments.planning_for_project(sys.argv[1])

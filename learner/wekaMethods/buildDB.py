@@ -288,7 +288,7 @@ def BuildAllOneTimeCommits(git_path, dbPath, JavaDocPath, sourceMonitorFiles, so
     conn.text_factory = str
     c = conn.cursor()
     createTables(c,add)
-    insert_values_into_table(conn, "AllMethods", checkReport.analyzeCheckStyle(checkStyleMethods, git_path))
+    insert_values_into_table(conn, "AllMethods", checkReport.analyzeCheckStyle(checkStyleMethods))
     if(not add):
         insert_values_into_table(conn, "haelsTfiles", commentedCodeDetector.buildHael(git_path))
         insert_values_into_table(conn, "JAVAfiles", source_Monitor.source_files(sourceMonitorFiles))
