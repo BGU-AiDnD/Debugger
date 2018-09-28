@@ -1,0 +1,166 @@
+{
+  "all_features": [
+    {
+      "tot_changes": "NUMERIC"
+    },
+    {
+      "sum_insert": "NUMERIC"
+    },
+    {
+      "sum_delets": "NUMERIC"
+    },
+    {
+      "count_insert": "NUMERIC"
+    },
+    {
+      "count_delets": "NUMERIC"
+    },
+    {
+      "avg_insert": "NUMERIC"
+    },
+    {
+      "avg_delets": "NUMERIC"
+    },
+    {
+      "avg_insert_nonzero": "NUMERIC"
+    },
+    {
+      "avg_delets_nonzero": "NUMERIC"
+    },
+    {
+      "tot_bugs": "NUMERIC"
+    },
+    {
+      "tot_changes_last": "NUMERIC"
+    },
+    {
+      "sum_insert_last": "NUMERIC"
+    },
+    {
+      "sum_delet_lasts": "NUMERIC"
+    },
+    {
+      "count_insert_last": "NUMERIC"
+    },
+    {
+      "count_delets_last": "NUMERIC"
+    },
+    {
+      "avg_insert_last": "NUMERIC"
+    },
+    {
+      "avg_delets_last": "NUMERIC"
+    },
+    {
+      "avg_insert_nonzero_last": "NUMERIC"
+    },
+    {
+      "avg_delets_nonzero_last": "NUMERIC"
+    },
+    {
+      "tot_bugs_last": "NUMERIC"
+    },
+    {
+      "tot_developers": "NUMERIC"
+    },
+    {
+      "lastVer_tot_developers": "NUMERIC"
+    },
+    {
+      "last_commit": "NUMERIC"
+    },
+    {
+      "last_bug": "NUMERIC"
+    },
+    {
+      "last_bug_binary": "NUMERIC"
+    },
+    {
+      "change_set": "NUMERIC"
+    },
+    {
+      "age": "NUMERIC"
+    },
+    {
+      "age2": "NUMERIC"
+    },
+    {
+      "tot_changes_bugged": "NUMERIC"
+    },
+    {
+      "sum_insert_bugged": "NUMERIC"
+    },
+    {
+      "sum_delet_buggeds": "NUMERIC"
+    },
+    {
+      "count_insert_bugged": "NUMERIC"
+    },
+    {
+      "count_delets_bugged": "NUMERIC"
+    },
+    {
+      "avg_insert_bugged": "NUMERIC"
+    },
+    {
+      "avg_delets_bugged": "NUMERIC"
+    },
+    {
+      "avg_insert_nonzero_bugged": "NUMERIC"
+    },
+    {
+      "avg_delets_nonzero_bugged": "NUMERIC"
+    },
+    {
+      "tot_changes_p3": "NUMERIC"
+    },
+    {
+      "sum_insert_p3": "NUMERIC"
+    },
+    {
+      "sum_delet_p3s": "NUMERIC"
+    },
+    {
+      "count_insert_p3": "NUMERIC"
+    },
+    {
+      "count_delets_p3": "NUMERIC"
+    },
+    {
+      "avg_insert_p3": "NUMERIC"
+    },
+    {
+      "avg_delets_p3": "NUMERIC"
+    },
+    {
+      "avg_insert_nonzero_p3": "NUMERIC"
+    },
+    {
+      "avg_delets_nonzero_p3": "NUMERIC"
+    },
+    {
+      "avg_submit": "NUMERIC"
+    },
+    {
+      "avg_modify": "NUMERIC"
+    },
+    {
+      "distinct_OS": "NUMERIC"
+    },
+    {
+      "distinct_assignedTo": "NUMERIC"
+    },
+    {
+      "distinct_Component": "NUMERIC"
+    },
+    {
+      "avg_commits_files": "NUMERIC"
+    },
+    {
+      "avg_commits_files_bugged": "NUMERIC"
+    },
+    {
+      "avg_commits_files_valid": "NUMERIC"
+    }
+  ]
+}

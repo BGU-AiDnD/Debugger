@@ -1,6 +1,6 @@
 """"""
-from os import path
 import json
+from os import path
 
 import cached_property
 
@@ -12,7 +12,8 @@ class AnalyzeComms:
 
     @cached_property
     def features_object(self):
-        with open(path.abspath("attributes.json"), "r") as features_file:
+        with open(path.abspath(path.join(self.FEATURES_FOLDER, "comments_features.json")),
+                  "r") as features_file:
             return json.load(features_file)
 
     @property
