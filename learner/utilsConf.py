@@ -1,3 +1,5 @@
+import wekaMethods.issuesExtract
+
 __author__ = 'amir'
 import datetime
 import shutil
@@ -103,12 +105,17 @@ def GitRevert(versPath,vers):
         run_cmd(repo_path, ["clean", "-fd", version])
 
 
-def versionsCreate(gitPath, vers, versPath, workingDir):
+def checkout_local_git(gitPath, workingDir):
+    run_commands = ["git", "clone", to_short_path(gitPath), 'repo']
+    proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                           cwd=to_short_path(workingDir))
+    (out, err) = proc.communicate()
+
+
+def versionsCreate(gitPath, vers, versPath):
     CopyDirs(gitPath, versPath, vers)
     GitRevert(versPath, vers)
-    run_commands = ["git", "clone", to_short_path(gitPath), 'repo']
-    proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=to_short_path(workingDir))
-    (out, err) = proc.communicate()
+
 
 def git_file_path_to_java_name(file_path):
     directories = os.path.splitext(os.path.normpath(file_path))[0].split(os.path.sep)
@@ -118,6 +125,24 @@ def git_file_path_to_java_name(file_path):
     elif 'src' in directories:
         index = directories.index('src') + 2
     return ".".join(directories[index:])
+
+
+def download_bugs(bugsPath, issue_tracker_url, issue_tracker_product, issue_tracker):
+    import wekaMethods.issuesExtract.github_import
+    import wekaMethods.issuesExtract.google_code
+    import wekaMethods.issuesExtract.jira_import
+    import wekaMethods.issuesExtract.python_bugzilla
+    import wekaMethods.issuesExtract.sourceforge
+    if issue_tracker == "bugzilla":
+        wekaMethods.issuesExtract.python_bugzilla.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
+    elif issue_tracker == "jira":
+        wekaMethods.issuesExtract.jira_import.jiraIssues(bugsPath, issue_tracker_url, issue_tracker_product)
+    elif issue_tracker == "github":
+        wekaMethods.issuesExtract.github_import.GithubIssues(bugsPath, issue_tracker_url, issue_tracker_product)
+    elif issue_tracker == "sourceforge":
+        wekaMethods.issuesExtract.sourceforge.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
+    elif issue_tracker == "googlecode":
+        wekaMethods.issuesExtract.google_code.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
 
 def configure(confFile):
     full_configure_file, gitPath, issue_tracker, issue_tracker_product, issue_tracker_url, versions, workingDir = read_configuration(confFile)
@@ -135,7 +160,7 @@ def configure(confFile):
     bugsPath = os.path.join(workingDir, "bugs.csv")
     vers_dirs = map(version_to_dir_name, vers)
     vers_paths = map(lambda ver: os.path.join(versPath, ver), vers_dirs)
-    LocalGitPath = os.path.join(workingDir, "repo")
+    LocalGitPath = to_short_path(os.path.join(workingDir, "repo"))
     prediction_files = {'files': {'all': 'prediction_All_files.csv', 'most': 'prediction_Most_files.csv'},
                    'methods': {'all': 'prediction_All_methods.csv', 'most': 'prediction_Most_methods.csv'}}
     mkOneDir(LocalGitPath)
@@ -144,11 +169,11 @@ def configure(confFile):
     configuration_path = to_short_path(os.path.join(workingDir, "configuration"))
     experiments = to_short_path(os.path.join(workingDir, "experiments"))
     DebuggerTests = to_short_path(os.path.join(workingDir, "DebuggerTests"))
-    MethodsParsed = os.path.join(os.path.join(workingDir, "commitsFiles"), "CheckStyle.txt")
-    changeFile = os.path.join(os.path.join(workingDir, "commitsFiles"), "Ins_dels.txt")
+    MethodsParsed = to_short_path(os.path.join(os.path.join(workingDir, "commitsFiles"), "CheckStyle.txt"))
+    changeFile = to_short_path(os.path.join(os.path.join(workingDir, "commitsFiles"), "Ins_dels.txt"))
     debugger_base_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     buggy_repo = git.Repo(to_short_path(gitPath))
-    renamed_mapping = detect_renamed_files.renamed_files_for_repo(buggy_repo)
+    renamed_mapping = {} # detect_renamed_files.renamed_files_for_repo(buggy_repo)
     remotes_urls = reduce(list.__add__, map(lambda r: list(r.urls), buggy_repo.remotes))
     logging.info(
         'remote git at urls {0} and HEAD is on commit {1}'.format(str(remotes_urls), str(buggy_repo.head.commit)))
@@ -171,12 +196,12 @@ def configure(confFile):
                     ("web_prediction_results", web_prediction_results), ("full_configure_file", full_configure_file),
                     ("amir_tracer", amir_tracer), ("configuration_path", configuration_path), ("caching_dir", caching_dir),
                     ('DebuggerTests', DebuggerTests), ('prediction_files', prediction_files), ('experiments', experiments),
-                    ('renamed_mapping', renamed_mapping), ("distribution_report", distribution_report)]
+                    ('renamed_mapping', renamed_mapping), ("distribution_report", distribution_report)] + locals().items()
     map(lambda name_val: setattr(configuration, name_val[0], name_val[1]), names_values)
     Mkdirs(workingDir)
-    versionsCreate(gitPath, vers, versPath, workingDir)
-    return versions, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir
-
+    download_bugs(bugsPath, issue_tracker_url, issue_tracker_product, issue_tracker)
+    checkout_local_git(gitPath,workingDir)
+    # versionsCreate(gitPath, vers, versPath)
 
 def fix_renamed_file(file_name):
     return detect_renamed_files.fix_renamed_file(file_name, get_configuration().renamed_files)
@@ -389,4 +414,3 @@ def export_to_cache():
     mkOneDir(dir_name)
     for folder in DIRS_CACHE:
         copy(os.path.join(get_configuration().workingDir, folder), os.path.join(dir_name, folder))
-

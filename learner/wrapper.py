@@ -2,35 +2,27 @@
 # encoding: utf-8
 
 import csv
+import datetime
+import itertools
 import json
 import os
 import shutil
 import subprocess
 import sys
-import datetime
+from collections import Counter
 from operator import itemgetter
 
-# import Agent.experimentsMethods
-import itertools
 import utilsConf
 import wekaMethods.ParseWekaOutput
 import wekaMethods.articles
 import wekaMethods.buildDB
 import wekaMethods.commsSpaces
-import wekaMethods.issuesExtract.github_import
-import wekaMethods.issuesExtract.jira_import
-import wekaMethods.issuesExtract.python_bugzilla
 import wekaMethods.patchsBuild
 import wekaMethods.wekaAccuracy
-from utilsConf import Mkdirs, version_to_dir_name, mkOneDir, versions_info
+from experiments import ExperimentGenerator
 from run_mvn import AmirTracer, TestRunner
 from sfl_diagnoser.Diagnoser.diagnoserUtils import write_planning_file, readPlanningFile
-from sfl_diagnoser.Diagnoser.Diagnosis_Results import Diagnosis_Results
-import Bug
-from experiments import ExperimentGenerator
-from collections import Counter
-import wekaMethods.issuesExtract.sourceforge
-import wekaMethods.issuesExtract.google_code
+from utilsConf import version_to_dir_name, download_bugs
 
 """
 resources :
@@ -296,22 +288,6 @@ def clean(versPath,LocalGitPath):
     shutil.rmtree(LocalGitPath, ignore_errors=True)
 
 
-def download_bugs():
-    bugsPath = utilsConf.get_configuration().bugsPath
-    issue_tracker_url = utilsConf.get_configuration().issue_tracker_url
-    issue_tracker_product = utilsConf.get_configuration().issue_tracker_product
-    if utilsConf.get_configuration().issue_tracker == "bugzilla":
-        wekaMethods.issuesExtract.python_bugzilla.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
-    elif utilsConf.get_configuration().issue_tracker == "jira":
-        wekaMethods.issuesExtract.jira_import.jiraIssues(bugsPath, issue_tracker_url, issue_tracker_product)
-    elif utilsConf.get_configuration().issue_tracker == "github":
-        wekaMethods.issuesExtract.github_import.GithubIssues(bugsPath, issue_tracker_url, issue_tracker_product)
-    elif utilsConf.get_configuration().issue_tracker == "sourceforge":
-        wekaMethods.issuesExtract.sourceforge.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
-    elif utilsConf.get_configuration().issue_tracker == "googlecode":
-        wekaMethods.issuesExtract.google_code.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
-
-
 def create_web_prediction_results():
     for buggedType, granularity in itertools.product(["All", "Most"], ["files", "methods"]):
         weka_csv = os.path.join(utilsConf.get_configuration().weka_path, "{buggedType}_out_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
@@ -344,7 +320,6 @@ def check_distribution():
 
 @utilsConf.marker_decorator(utilsConf.LEARNER_PHASE_FILE)
 def wrapperLearner():
-    download_bugs()
     # NLP.commits.data_to_csv(os.path.join(workingDir, "NLP_data.csv"), gitPath, bugsPath)
     test_version_create()
     featuresExtract()
