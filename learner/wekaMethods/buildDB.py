@@ -316,6 +316,7 @@ def buildOneTimeCommits():
     vers = utilsConf.get_configuration().vers_dirs
     dates = utilsConf.get_configuration().dates
     CodeDir = "repo"
+    build_labels()
     for version, date in zip(vers, dates):
         gc.collect()
         Path = os.path.join(versPath, version)
@@ -329,4 +330,3 @@ def buildOneTimeCommits():
         BuildAllOneTimeCommits(utilsConf.get_configuration().gitPath, dbPath, JavaDocPath,
                                sourceMonitorFiles, sourceMonitorMethods, checkStyle, checkStyleMethods,
                                blamePath, date, CodeDir)
-    build_labels()
