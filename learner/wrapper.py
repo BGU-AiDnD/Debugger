@@ -308,10 +308,12 @@ def check_distribution():
             for i, version_name in list(enumerate(utilsConf.get_configuration().vers_dirs))[:-1]:
                 dbpath = os.path.join(utilsConf.get_configuration().db_dir, str(utilsConf.get_configuration().vers_dirs[i] + ".db"))
                 prev_date, start_date, end_date = dates[i: i + 3]
+                counts = {'valid': 0, 'bugged': 0}
                 files_hasBug = wekaMethods.articles.get_arff_class(dbpath, start_date, end_date,
                                                                    wekaMethods.articles.BUG_QUERIES[granularity][buggedType],
                                                                    wekaMethods.articles.COMPONENTS_QUERIES[granularity])
-                distribution.append(list(Counter(map(itemgetter(0), files_hasBug.values())).values()))
+                counts.update(Counter(map(itemgetter(0), files_hasBug.values())))
+                distribution.append(list(counts.values()))
             rows.append([granularity, buggedType] + distribution[-1] + reduce(lambda x,y: [x[0] + y[0], x[1] + y[1]], distribution[:-1], [0, 0]))
     with open(utilsConf.get_configuration().distribution_report, "wb") as report:
         writer = csv.writer(report)
