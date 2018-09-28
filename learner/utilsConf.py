@@ -150,6 +150,7 @@ def configure(confFile):
     configuration = get_configuration()
     db_dir = os.path.join(workingDir, "dbAdd")
     distribution_report = os.path.join(workingDir, "distribution_report.csv")
+    distribution_per_version_report = os.path.join(workingDir, "distribution_per_version_report.csv")
     versPath = os.path.join(workingDir, "vers")
     vers, paths, dates, commits = versions_info(to_short_path(gitPath), versions)
     docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath = globalConfig()

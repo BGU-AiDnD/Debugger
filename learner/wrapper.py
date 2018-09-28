@@ -301,7 +301,9 @@ def check_distribution():
     wekaMethods.buildDB.build_labels()
     dates = [datetime.datetime(1900, 1, 1, 0, 0).strftime('%Y-%m-%d %H:%M:%S')] + utilsConf.get_configuration().dates
     headers = ["granularity", "buggedType", "test_set_valid", "test_set_bug", "training_set_valid", "training_set_bug"]
+    headers_per_version = ["granularity", "buggedType", "version_name", "valid", "bug"]
     rows = [headers]
+    rows_per_version = [headers_per_version]
     for granularity in ['File', 'Method']:
         for buggedType in ["All", "Most"]:
             distribution = []
@@ -313,11 +315,16 @@ def check_distribution():
                                                                    wekaMethods.articles.BUG_QUERIES[granularity][buggedType],
                                                                    wekaMethods.articles.COMPONENTS_QUERIES[granularity])
                 counts.update(Counter(map(itemgetter(0), files_hasBug.values())))
-                distribution.append(list(counts.values()))
+                report_values = [counts['valid'], counts['bugged']]
+                rows_per_version.append([granularity, buggedType, version_name] + report_values)
+                distribution.append(report_values)
             rows.append([granularity, buggedType] + distribution[-1] + reduce(lambda x,y: [x[0] + y[0], x[1] + y[1]], distribution[:-1], [0, 0]))
     with open(utilsConf.get_configuration().distribution_report, "wb") as report:
         writer = csv.writer(report)
         writer.writerows(rows)
+    with open(utilsConf.get_configuration().distribution_per_version_report, "wb") as report:
+        writer = csv.writer(report)
+        writer.writerows(rows_per_version)
 
 
 @utilsConf.marker_decorator(utilsConf.LEARNER_PHASE_FILE)
