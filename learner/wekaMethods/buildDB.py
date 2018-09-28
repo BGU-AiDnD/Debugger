@@ -218,10 +218,9 @@ def insert_values_into_table(connection, table_name, values):
     gc.collect()
 
 
-def basicBuildOneTimeCommits(dbPath, gitPath, commits, commitedFiles,allMethodsCommits, bugs):
+def basicBuildOneTimeCommits(dbPath, commits, commitedFiles,allMethodsCommits, bugs):
     with utilsConf.use_sqllite(dbPath) as conn:
         createTables(dbPath)
-        insert_values_into_table(conn, 'files', list(enumerate(allFiles(gitPath))))
         insert_values_into_table(conn, 'commits', commits)
         insert_values_into_table(conn, 'bugs', bugs)
         insert_values_into_table(conn, 'Commitedfiles', commitedFiles)
@@ -235,6 +234,7 @@ def BuildAllOneTimeCommits(git_path, dbPath, JavaDocPath, sourceMonitorFiles, so
         insert_values_into_table(conn, "haelsTfiles", commentedCodeDetector.buildHael(git_path))
         insert_values_into_table(conn, "JAVAfiles", source_Monitor.source_files(sourceMonitorFiles))
         insert_values_into_table(conn, "Sourcemethods", source_Monitor.source_methods(sourceMonitorMethods))
+        insert_values_into_table(conn, 'files', list(enumerate(allFiles(git_path))))
         # can add all javadoc options
         classes_data = []
         methodData = []
@@ -292,23 +292,20 @@ def createIndexes(dbPath):
         create_index('CREATE INDEX IF NOT EXISTS commitedMethods_commiter_date ON commitedMethods (commiter_date)')
 
 
-def buildBasicAllVers(vers,dates,versPath,CodeDir,dbsPath, bugsPath,MethodsParsed,changeFile):
+def buildBasicAllVers(vers, dates, dbsPath, bugsPath, MethodsParsed, changeFile):
     gitPath = utilsConf.get_configuration().LocalGitPath
     commits, commitedFiles, allMethodsCommits, bugs, allFilesCommitsPatch = BuildRepo(gitPath, bugsPath, MethodsParsed, changeFile)
     for ver, date in zip(vers,dates):
-        gitPath = os.path.join(versPath, ver, CodeDir)
         dbPath = os.path.join(dbsPath, ver+".db")
-        basicBuildOneTimeCommits(dbPath, gitPath, commits, commitedFiles, allMethodsCommits, bugs)
+        basicBuildOneTimeCommits(dbPath, commits, commitedFiles, allMethodsCommits, bugs)
 
 
 @utilsConf.marker_decorator(utilsConf.DB_LABELS_MARKER)
 def build_labels():
-    versPath = utilsConf.get_configuration().versPath
     db_dir = utilsConf.get_configuration().db_dir
     vers = utilsConf.get_configuration().vers_dirs
     dates = utilsConf.get_configuration().dates
-    CodeDir = "repo"
-    buildBasicAllVers(vers, dates, utilsConf.to_short_path(versPath), CodeDir, db_dir, utilsConf.get_configuration().bugsPath,
+    buildBasicAllVers(vers, dates, db_dir, utilsConf.get_configuration().bugsPath,
                       utilsConf.get_configuration().MethodsParsed, utilsConf.get_configuration().changeFile)
 
 
