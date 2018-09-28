@@ -6,6 +6,7 @@ import json
 QUERY = r"https://storage.googleapis.com/google-code-archive/v2/code.google.com/{PRODUCT}/issues-page-{PAGE}.json"
 PRIORITIES = {"Priority-Medium": 'P3', "Priority-Low": 'P1', 'Priority-High': 'P5'}
 
+
 def extract_bug_data(bug):
     milestone = ''
     for label in bug['labels']:
@@ -18,7 +19,7 @@ def extract_bug_data(bug):
     return bug['id'], "", bug['labels'][0], "", bug['status'], "", "", \
            "", \
            "", milestone, "", "", priority, \
-           "", bug['summary'], "", ""\
+           "", bug['summary'], "", "" \
         , "", "", "", ""
 
 
@@ -36,8 +37,11 @@ def get_all_bugs(product):
 
 @utilsConf.marker_decorator(utilsConf.ISSUE_TRACKER_FILE)
 def write_bugs_csv(csv_bug_file, url, product):
-    lines=[["id", "product", "component", "assigned_to", "status", "resolution", "reporter", "last_change_time", "version", "target_milestone", "platform", "op_sys", "priority", "severity", "summary", "keywords", "creation_time", "blocks", "depends_on", "Duplicate Of", "cc"]]
+    lines = [
+        ["id", "product", "component", "assigned_to", "status", "resolution", "reporter", "last_change_time", "version",
+         "target_milestone", "platform", "op_sys", "priority", "severity", "summary", "keywords", "creation_time",
+         "blocks", "depends_on", "Duplicate Of", "cc"]]
     lines.extend(get_all_bugs(product))
-    with open(csv_bug_file,"wb") as f:
-        writer=csv.writer(f)
+    with open(csv_bug_file, "wb") as f:
+        writer = csv.writer(f)
         writer.writerows(lines)

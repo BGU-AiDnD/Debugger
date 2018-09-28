@@ -22,7 +22,6 @@ class Bug(object):
         return self.components[granularity][bugged_type]
 
 
-
 @contextmanager
 def use_sql_db(db_path):
     conn = sqlite3.connect(db_path)
@@ -36,8 +35,10 @@ def get_bugs_from_db(db_path, start_date, end_date):
     def get_bug_comps(cursor, query):
         comps = {}
         for bug_id, name in cursor.execute(query.format(START_DATE=start_date, END_DATE=end_date)):
-            comps.setdefault(bug_id, []).append(name.replace(os.path.sep, '.').replace('.java', '').replace('$', '@').lower())
+            comps.setdefault(bug_id, []).append(
+                name.replace(os.path.sep, '.').replace('.java', '').replace('$', '@').lower())
         return comps
+
     bugs = []
     with use_sql_db(db_path) as cursor:
         all_files = get_bug_comps(cursor, ALL_FILES_BUGS_QUERY)
@@ -45,5 +46,6 @@ def get_bugs_from_db(db_path, start_date, end_date):
         all_methods = get_bug_comps(cursor, ALL_METHODS_BUGS_QUERY)
         most_methods = get_bug_comps(cursor, MOST_MODIFIED_METHODS_BUGS_QUERY)
     for bug_id in set(all_files.keys() + most_files.keys() + all_methods.keys() + most_methods.keys()):
-        bugs.append(Bug(bug_id, all_files.get(bug_id, []), most_files.get(bug_id, []), all_methods.get(bug_id, []), most_methods.get(bug_id, [])))
+        bugs.append(Bug(bug_id, all_files.get(bug_id, []), most_files.get(bug_id, []), all_methods.get(bug_id, []),
+                        most_methods.get(bug_id, [])))
     return bugs

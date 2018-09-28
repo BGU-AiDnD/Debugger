@@ -9,6 +9,7 @@ METADATA_DIR = "bugs_files"
 DIAGNOSER_OUTPUT_DIR = "out"
 NAMED_DIAGNOSER_OUTPUT_DIR = "named2"
 
+
 def diagnosis_file_to_named_file(diagnoses_file, named_diagnoses_file, files_ids):
     def line_to_named_line(line):
         probability_index = line.index("P")
@@ -16,7 +17,8 @@ def diagnosis_file_to_named_file(diagnoses_file, named_diagnoses_file, files_ids
 
     with open(diagnoses_file) as diagnoses:
         with open(named_diagnoses_file, "wb") as named:
-            csv.writer(named).writerows(map(line_to_named_line,list(csv.reader(diagnoses))))
+            csv.writer(named).writerows(map(line_to_named_line, list(csv.reader(diagnoses))))
+
 
 def main():
     results_dir = r"C:\Users\User\Dropbox\For ori\ant\files_All867"
@@ -25,14 +27,17 @@ def main():
         with open(experiment_instance) as experiment:
             lines = map(lambda line: line.replace("\n", ""), experiment.readlines())
             used_files = lines[lines.index("FileNames") + 1].split(",")
-        files = dict(map(lambda a : (str(a[0]),a[1].replace("\\","/")), enumerate(used_files)))
+        files = dict(map(lambda a: (str(a[0]), a[1].replace("\\", "/")), enumerate(used_files)))
         diagnoser, id = os.path.basename(experiment_instance).split(".")[0].split("_")
-        diagnoses_file = os.path.join(results_dir, DIAGNOSER_OUTPUT_DIR, "DIFG_check_{0}_uniform_{1}.csv.csv".format(diagnoser, id))
-        named_diagnoses_file = os.path.join(results_dir, NAMED_DIAGNOSER_OUTPUT_DIR, "{0}_uniform_{1}.csv".format(diagnoser, id))
+        diagnoses_file = os.path.join(results_dir, DIAGNOSER_OUTPUT_DIR,
+                                      "DIFG_check_{0}_uniform_{1}.csv.csv".format(diagnoser, id))
+        named_diagnoses_file = os.path.join(results_dir, NAMED_DIAGNOSER_OUTPUT_DIR,
+                                            "{0}_uniform_{1}.csv".format(diagnoser, id))
         try:
             diagnosis_file_to_named_file(diagnoses_file, named_diagnoses_file, files)
         except:
             pass
+
 
 def read_nlp_data(nlp_path):
     with open(nlp_path) as f:
@@ -41,6 +46,7 @@ def read_nlp_data(nlp_path):
         for comp_a, comp_b, similarity in reader:
             similarities.setdefault(min(comp_a, comp_b), {})[max(comp_a, comp_b)] = similarity
         return similarities
+
 
 class Diagnosis(object):
     def __init__(self, diagnosis, probability, bugs):
@@ -62,8 +68,9 @@ class Diagnosis(object):
         fp = len([comp for comp in self.diagnosis if comp not in self.bugs])
         return float(tp), float(fn), float(fp)
 
-    def get_probability(self, alpha = 0.0):
+    def get_probability(self, alpha=0.0):
         return self.probability
+
 
 class NLP_Diagnosis(Diagnosis):
     def __init__(self, diagnosis, probability, bugs, nlp_data):
@@ -77,16 +84,17 @@ class NLP_Diagnosis(Diagnosis):
                 similarity_factor *= self.nlp_data.score(comp_a, comp_b)
         return similarity_factor
 
-    def get_probability(self, alpha = 0.0):
+    def get_probability(self, alpha=0.0):
         return alpha * self.get_diagnosis_similarities() + (1 - alpha) * super(NLP_Diagnosis, self).get_probability()
 
+
 class Diagnosis_Results(object):
-    def __init__(self, diagnosis_file, bugs, nlp_data = None):
+    def __init__(self, diagnosis_file, bugs, nlp_data=None):
         self.diagnoses = []
         self.bugs = bugs
         self.init_diagnoses(bugs, diagnosis_file, nlp_data)
 
-    def init_diagnoses(self, bugs, diagnosis_file, nlp_data = None):
+    def init_diagnoses(self, bugs, diagnosis_file, nlp_data=None):
         with open(diagnosis_file) as f:
             for diagnosis_line in csv.reader(f):
                 probability_index = diagnosis_line.index("P")
@@ -94,13 +102,18 @@ class Diagnosis_Results(object):
                                                 float(diagnosis_line[probability_index + 1]),
                                                 bugs))
 
-    def get_weighted_precision(self, alpha = 0.0):
-        sum_probabilities = 0.0 + reduce(lambda d1,d2: d1 + d2, map(lambda d1: d1.get_probability(alpha), self.diagnoses))
-        return reduce(lambda d1,d2: d1 + d2, map(lambda d1: (d1.get_probability(alpha)/ sum_probabilities) * d1.get_precision(), self.diagnoses))
+    def get_weighted_precision(self, alpha=0.0):
+        sum_probabilities = 0.0 + reduce(lambda d1, d2: d1 + d2,
+                                         map(lambda d1: d1.get_probability(alpha), self.diagnoses))
+        return reduce(lambda d1, d2: d1 + d2,
+                      map(lambda d1: (d1.get_probability(alpha) / sum_probabilities) * d1.get_precision(),
+                          self.diagnoses))
 
-    def get_weighted_recall(self, alpha = 0.0):
-        sum_probabilities = 0.0 + reduce(lambda d1,d2: d1 + d2, map(lambda d1: d1.get_probability(alpha), self.diagnoses))
-        return reduce(lambda d1,d2: d1 + d2, map(lambda d1: (d1.get_probability(alpha)/ sum_probabilities) * d1.get_recall(), self.diagnoses))
+    def get_weighted_recall(self, alpha=0.0):
+        sum_probabilities = 0.0 + reduce(lambda d1, d2: d1 + d2,
+                                         map(lambda d1: d1.get_probability(alpha), self.diagnoses))
+        return reduce(lambda d1, d2: d1 + d2,
+                      map(lambda d1: (d1.get_probability(alpha) / sum_probabilities) * d1.get_recall(), self.diagnoses))
 
 
 class NLP_Diagnosis_Results(Diagnosis_Results):
@@ -109,8 +122,8 @@ class NLP_Diagnosis_Results(Diagnosis_Results):
             for diagnosis_line in csv.reader(f):
                 probability_index = diagnosis_line.index("P")
                 self.diagnoses.append(NLP_Diagnosis(diagnosis_line[:probability_index],
-                                                float(diagnosis_line[probability_index + 1]),
-                                                bugs, nlp_data))
+                                                    float(diagnosis_line[probability_index + 1]),
+                                                    bugs, nlp_data))
 
 
 similarities = read_nlp_data(r"C:\Users\User\Downloads\ANT_cosine_similarity.csv")
@@ -125,18 +138,20 @@ for experiment_instance in glob.glob(os.path.join(results_dir, METADATA_DIR, "*"
         lines = map(lambda line: line.replace("\n", ""), experiment.readlines())
         used_files = lines[lines.index("FileNames") + 1].split(",")
         bugged_ids = lines[lines.index("Bugged") + 1].split(",")
-    files = dict(map(lambda a : (str(a[0]),a[1].replace("\\","/")), enumerate(used_files)))
+    files = dict(map(lambda a: (str(a[0]), a[1].replace("\\", "/")), enumerate(used_files)))
     bugged_files = map(lambda id: files[id], bugged_ids)
     try:
         diagnoser, id = os.path.basename(experiment_instance).split(".")[0].split("_")
-        named_diagnoses_file = os.path.join(results_dir, NAMED_DIAGNOSER_OUTPUT_DIR, "{0}_uniform_{1}.csv".format(diagnoser, id))
+        named_diagnoses_file = os.path.join(results_dir, NAMED_DIAGNOSER_OUTPUT_DIR,
+                                            "{0}_uniform_{1}.csv".format(diagnoser, id))
         results = Diagnosis_Results(named_diagnoses_file, bugged_files)
         nlp_results = NLP_Diagnosis_Results(named_diagnoses_file, bugged_files, model)
         print named_diagnoses_file
-        for alpha in [0, 0.1,0.2, 0.3, 0.4, 0.5, 0.6 , 0.7, 0.8, 0.9, 1]:
+        for alpha in [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]:
             out_lines.append([os.path.basename(named_diagnoses_file), str(alpha),
-                          str(results.get_weighted_precision(alpha)), str(results.get_weighted_recall(alpha))
-            , str(nlp_results.get_weighted_precision(alpha)), str(nlp_results.get_weighted_recall(alpha))])
+                              str(results.get_weighted_precision(alpha)), str(results.get_weighted_recall(alpha))
+                                 , str(nlp_results.get_weighted_precision(alpha)),
+                              str(nlp_results.get_weighted_recall(alpha))])
     except:
         pass
 

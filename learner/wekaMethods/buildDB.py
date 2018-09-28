@@ -1,4 +1,3 @@
-
 __author__ = 'Amir-pc'
 
 import sqlite3
@@ -39,27 +38,29 @@ class Commit(object):
 
 
 def commTablelight(commits):
-    all_commits=[]
-    commitsBugsDict={}
+    all_commits = []
+    commitsBugsDict = {}
     for commit in commits:
         git_commit = commit._git_commit
-        commit_id=int("".join(list(git_commit.hexsha)[:7]),16)
+        commit_id = int("".join(list(git_commit.hexsha)[:7]), 16)
         if not hasattr(git_commit, 'committed_date'):
             continue
-        commiter_date=  datetime.datetime.fromtimestamp(git_commit.committed_date).strftime('%Y-%m-%d %H:%M:%S')
-        author_date=  datetime.datetime.fromtimestamp(git_commit.authored_date).strftime('%Y-%m-%d %H:%M:%S')
-        name=unicodedata.normalize('NFKD', git_commit.committer.name).encode('ascii','ignore')
-        committer= str(name)
-        author= str(git_commit.author.name.encode('ascii','ignore'))
+        commiter_date = datetime.datetime.fromtimestamp(git_commit.committed_date).strftime('%Y-%m-%d %H:%M:%S')
+        author_date = datetime.datetime.fromtimestamp(git_commit.authored_date).strftime('%Y-%m-%d %H:%M:%S')
+        name = unicodedata.normalize('NFKD', git_commit.committer.name).encode('ascii', 'ignore')
+        committer = str(name)
+        author = str(git_commit.author.name.encode('ascii', 'ignore'))
         parent = 0
-        if(git_commit.parents!=() ):
-            parent =int("".join(list(git_commit.parents[0].hexsha)[:7]),16)
+        if (git_commit.parents != ()):
+            parent = int("".join(list(git_commit.parents[0].hexsha)[:7]), 16)
         msg = git_commit.message
         size = git_commit.size
-        fields = (commit_id, commit._bug_id, commiter_date,committer,author_date,author,size,parent,msg ,str(git_commit.hexsha))
+        fields = (commit_id, commit._bug_id, commiter_date, committer, author_date, author, size, parent, msg,
+                  str(git_commit.hexsha))
         all_commits.append(fields)
-        commitsBugsDict[str(git_commit.hexsha)]=(commit._bug_id,commiter_date,str(git_commit.hexsha),str(commit_id))
-    return (all_commits,commitsBugsDict)
+        commitsBugsDict[str(git_commit.hexsha)] = (
+        commit._bug_id, commiter_date, str(git_commit.hexsha), str(commit_id))
+    return (all_commits, commitsBugsDict)
 
 
 def commits_and_Bugs(repo, bugsIds):
@@ -70,7 +71,8 @@ def commits_and_Bugs(repo, bugsIds):
                 if word in bugsIds:
                     return word
         return "0"
-    commits= []
+
+    commits = []
     for git_commit in repo.iter_commits():
         commit_text = Commit.clean_commit_message(git_commit.message)
         commits.append(Commit(git_commit, get_bug_num_from_commit_text(commit_text, bugsIds)))
@@ -86,16 +88,17 @@ def bugsTable(bugs_path):
         if len(date) == len('09/01/09'):
             return datetime.datetime.strptime(date, "%d/%m/%y")
         return datetime.datetime.strptime(date, "%d/%m/%Y %H:%M:%S")
+
     with open(bugs_path, "rb") as BugsFile:
         # creates the reader object
         reader = csv.reader(BugsFile)
-        next(reader, None) # skip header
-        for row in reader:# iterates the rows of the file in orders
+        next(reader, None)  # skip header
+        for row in reader:  # iterates the rows of the file in orders
             r = []
             for x in row:
                 lst = x
-                if len(lst)>0 and lst[0]=="=" :
-                    lst=lst[2:(len(lst)-1)]
+                if len(lst) > 0 and lst[0] == "=":
+                    lst = lst[2:(len(lst) - 1)]
                 r.append(str(lst))
             if len(r) < 16:
                 continue
@@ -107,9 +110,9 @@ def bugsTable(bugs_path):
 
 
 def allFiles(path):
-    acc=[]
-    pathLen = len(path)+1 # one for the \
-    for root, dirs, files in os.walk(path): # Walk directory tree
+    acc = []
+    pathLen = len(path) + 1  # one for the \
+    for root, dirs, files in os.walk(path):  # Walk directory tree
         for f in files:
             path_join = "".join(list(os.path.join(root, f))[pathLen:])
             acc.append(path_join)
@@ -123,42 +126,47 @@ def BuildRepo(gitPath, bugsPath, MethodsParsed, changeFile):
     allCommits, commitsBugsDict = commTablelight(commits_and_Bugs(repo, bugsIds))
     allMethodsCommits = []
     allFilesCommits = []
-    i=0
+    i = 0
     for m in allMethods:
         if not m[0] in commitsBugsDict:
-            i=i+1
-            print "not CommitID method",m[0], i
+            i = i + 1
+            print "not CommitID method", m[0], i
             continue
-        bug,commiterDate,sha,CommitId=commitsBugsDict[m[0]]
-        r=m+[bug,commiterDate,CommitId]
+        bug, commiterDate, sha, CommitId = commitsBugsDict[m[0]]
+        r = m + [bug, commiterDate, CommitId]
         allMethodsCommits.append(r)
-    i=0
+    i = 0
     for m in filesRows:
         if not m[1] in commitsBugsDict:
-            i=i+1
-            print "not CommitID file",m[1], i
+            i = i + 1
+            print "not CommitID file", m[1], i
             continue
-        bug,commiterDate,sha,CommitId=commitsBugsDict[m[1]]
-        r=[0]+m+[bug,commiterDate,CommitId]
+        bug, commiterDate, sha, CommitId = commitsBugsDict[m[1]]
+        r = [0] + m + [bug, commiterDate, CommitId]
         allFilesCommits.append(r)
-    return (allCommits,allFilesCommits,allMethodsCommits,allBugs,allFilesCommits)
+    return (allCommits, allFilesCommits, allMethodsCommits, allBugs, allFilesCommits)
 
 
 def createTables(dbpath):
     with utilsConf.use_sqllite(dbpath) as conn:
         c = conn.cursor()
-        c.execute('''CREATE TABLE IF NOT EXISTS AllMethods (methodDir text, fileName text, methodName text, beginLine INT , endLine INT )''')
-        c.execute('''CREATE TABLE IF NOT EXISTS commitedMethods (commit_sha text , methodDir text, fileName text, methodName text, deletions INT , insertions INT , lines INT, bugId INT, commiter_date DateTime,commitID INT)''')
-        c.execute('''CREATE TABLE IF NOT EXISTS bugsFix (ID INT,Product text,Component text,Assigned_To text,Status text,Resolution text,Reporter text,Last_Modified DateTime ,Version text,Milestone text,Hardware text,OS text,Priority text,Severity text,Summary text,Keywords text,Submit_Date DateTime ,Blocks text,Depends_On text,Duplicate_Of INT,CC text)''')
-        #c.execute('''CREATE TABLE IF NOT EXISTS commits (ID INT, bugId INT, commiter_date DateTime , commiter text,author_date DateTime , author text  , lines INT,deletions INT,insertions INT,files INT,size INT, parentID INT,reachable_commits INT, message text,commit_sha text )''')
-        c.execute('''CREATE TABLE IF NOT EXISTS commits (ID INT, bugId INT, commiter_date DateTime , commiter text,author_date DateTime , author text  , size INT, parentID INT, message text,commit_sha text )''')
-        #c.execute(
-         #   '''CREATE TABLE IF NOT EXISTS Commitedfiles (id INT,name text, commitid INT, commiter_date DateTime,lines INT,deletions INT,insertions INT, bugId INT,commit_sha text)''')
+        c.execute(
+            '''CREATE TABLE IF NOT EXISTS AllMethods (methodDir text, fileName text, methodName text, beginLine INT , endLine INT )''')
+        c.execute(
+            '''CREATE TABLE IF NOT EXISTS commitedMethods (commit_sha text , methodDir text, fileName text, methodName text, deletions INT , insertions INT , lines INT, bugId INT, commiter_date DateTime,commitID INT)''')
+        c.execute(
+            '''CREATE TABLE IF NOT EXISTS bugsFix (ID INT,Product text,Component text,Assigned_To text,Status text,Resolution text,Reporter text,Last_Modified DateTime ,Version text,Milestone text,Hardware text,OS text,Priority text,Severity text,Summary text,Keywords text,Submit_Date DateTime ,Blocks text,Depends_On text,Duplicate_Of INT,CC text)''')
+        # c.execute('''CREATE TABLE IF NOT EXISTS commits (ID INT, bugId INT, commiter_date DateTime , commiter text,author_date DateTime , author text  , lines INT,deletions INT,insertions INT,files INT,size INT, parentID INT,reachable_commits INT, message text,commit_sha text )''')
+        c.execute(
+            '''CREATE TABLE IF NOT EXISTS commits (ID INT, bugId INT, commiter_date DateTime , commiter text,author_date DateTime , author text  , size INT, parentID INT, message text,commit_sha text )''')
+        # c.execute(
+        #   '''CREATE TABLE IF NOT EXISTS Commitedfiles (id INT,name text, commitid INT, commiter_date DateTime,lines INT,deletions INT,insertions INT, bugId INT,commit_sha text)''')
         c.execute(
             '''CREATE TABLE IF NOT EXISTS Commitedfiles (id INT,name text,commit_sha text,lines INT,deletions INT,insertions INT, bugId INT, commiter_date DateTime, commitid INT)''')
         c.execute('''CREATE TABLE IF NOT EXISTS files (id INT,name text)''')
         c.execute('''CREATE TABLE IF NOT EXISTS Complexyfiles (name text, complex INT)''')
-        c.execute('''CREATE TABLE IF NOT EXISTS haelsTfiles (name text, Operators_count INT, Distinct_operators INT, Operands_count INT, Distinct_operands INT, Program_length INT, Program_vocabulary INT,Volume float, Difficulty INT, Effort float)''')
+        c.execute(
+            '''CREATE TABLE IF NOT EXISTS haelsTfiles (name text, Operators_count INT, Distinct_operators INT, Operands_count INT, Distinct_operands INT, Program_length INT, Program_vocabulary INT,Volume float, Difficulty INT, Effort float)''')
         c.execute(
             '''CREATE TABLE IF NOT EXISTS bugs (ID INT,Product text,Component text,Assigned_To text,Status text,Resolution text,Reporter text,Last_Modified DateTime ,Version text,Milestone text,Hardware text,OS text,Priority text,Severity text,Summary text,Keywords text,Submit_Date DateTime ,Blocks text,Depends_On text,Duplicate_Of INT,CC text)''')
         c.execute(
@@ -175,7 +183,7 @@ def createTables(dbpath):
             '''CREATE TABLE IF NOT EXISTS fields (Dirpath text,className text,static text, name text, classPath text, transient text,volatile text,scope text,    final text, type text)''')
         c.execute(
             '''CREATE TABLE IF NOT EXISTS checkStyle (name text,McCabe REAL,fanOut REAL,NPath REAL,FileLen INT, NCSS INT, outer INT, publicMethods INT, totalMethods INT,thorwsSTM INT,Coupling INT,Executables INT, depthFor INT,depthIf INT)''')
-        #c.execute(
+        # c.execute(
         #   '''CREATE TABLE IF NOT EXISTS blame (name text,diff_commits INT,diff_commits_lastver INT,groups INT ,committers INT,avg_date DateTime,median_date DateTime ,max_date DateTime,numBlobs INT, numPatchs INT,numCommits INT )''')
         c.execute('''CREATE TABLE IF NOT EXISTS comments (name text, commitid INT)''')
         c.execute('''CREATE TABLE IF NOT EXISTS blameExtends (name text,diff_commits INT,diff_commits_lastver INT,diff_commitsApproved INT,diff_commits_lastverApproved INT,numBlobs INT, numPatchs INT,numCommits INT,
@@ -190,7 +198,7 @@ def createTables(dbpath):
                     ones_difftimesApproved float, twos_difftimesApproved float,less5_difftimesApproved float,less10_difftimesApproved float,
                     len_committersApproved INT,p01_committersApproved  float,p02_committersApproved  float,p05_committersApproved  float,mx1_committersApproved  float,
                     len_groups INT,mean_groups float,median_groups float,var_groups float,max_groups float,min_groups float,p01_groups  float,p02_groups  float,p05_groups  float,mx1_groups  float,
-                    len_groupsApproved INT,mean_groupsApproved float,median_groupsApproved float,var_groupsApproved float,max_groupsApproved float,min_groupsApproved float,p01_groupsApproved  float,p02_groupsApproved  float,p05_groupsApproved  float,mx1_groupsApproved  float)'''    )
+                    len_groupsApproved INT,mean_groupsApproved float,median_groupsApproved float,var_groupsApproved float,max_groupsApproved float,min_groupsApproved float,p01_groupsApproved  float,p02_groupsApproved  float,p05_groupsApproved  float,mx1_groupsApproved  float)''')
         c.execute(
             '''CREATE TABLE IF NOT EXISTS checkStyleExtends (name text, NCSS INT,FileLen INT,sum_fors REAL,sum_ifs REAL,sum_tries REAL,
                         len_mccab REAL,sum_mccab REAL,mean_mccab REAL,median_mccab REAL,var_mccab REAL,max_mccab REAL,min_mccab REAL, oneElement_mccab text,
@@ -208,17 +216,18 @@ def createTables(dbpath):
             '''CREATE TABLE IF NOT EXISTS SourcemethodsFix (File_Name text, Method text ,Complexity	INT, Statements INT, 	Maximum_Depth	INT, Calls INT)''')
     createIndexes(dbpath)
 
-def insert_values_into_table(connection, table_name, values):
 
+def insert_values_into_table(connection, table_name, values):
     def get_values_str(num):
         return "".join(["(", (",".join(['?'] * num)), ")"])
+
     c = connection.cursor()
     c.executemany("INSERT INTO {0} VALUES {1}".format(table_name, get_values_str(len(values[0]))), values)
     connection.commit()
     gc.collect()
 
 
-def basicBuildOneTimeCommits(dbPath, commits, commitedFiles,allMethodsCommits, bugs):
+def basicBuildOneTimeCommits(dbPath, commits, commitedFiles, allMethodsCommits, bugs):
     with utilsConf.use_sqllite(dbPath) as conn:
         createTables(dbPath)
         insert_values_into_table(conn, 'commits', commits)
@@ -227,7 +236,8 @@ def basicBuildOneTimeCommits(dbPath, commits, commitedFiles,allMethodsCommits, b
         insert_values_into_table(conn, 'commitedMethods', allMethodsCommits)
 
 
-def BuildAllOneTimeCommits(git_path, dbPath, JavaDocPath, sourceMonitorFiles, sourceMonitorMethods, checkStyle, checkStyleMethods, blamePath, date, CodeDir):
+def BuildAllOneTimeCommits(git_path, dbPath, JavaDocPath, sourceMonitorFiles, sourceMonitorMethods, checkStyle,
+                           checkStyleMethods, blamePath, date, CodeDir):
     with utilsConf.use_sqllite(dbPath) as conn:
         createTables(dbPath)
         insert_values_into_table(conn, "AllMethods", checkReport.analyzeCheckStyle(checkStyleMethods))
@@ -263,6 +273,7 @@ def createIndexes(dbPath):
         def create_index(index):
             c.execute(index)
             conn.commit()
+
         create_index('CREATE INDEX IF NOT EXISTS commits_id ON commits (ID)')
         create_index('CREATE INDEX IF NOT EXISTS commits_commiter_date ON commits (commiter_date)')
         create_index('CREATE INDEX IF NOT EXISTS bugs_id ON bugs (ID)')
@@ -294,9 +305,10 @@ def createIndexes(dbPath):
 
 def buildBasicAllVers(vers, dates, dbsPath, bugsPath, MethodsParsed, changeFile):
     gitPath = utilsConf.get_configuration().LocalGitPath
-    commits, commitedFiles, allMethodsCommits, bugs, allFilesCommitsPatch = BuildRepo(gitPath, bugsPath, MethodsParsed, changeFile)
-    for ver, date in zip(vers,dates):
-        dbPath = os.path.join(dbsPath, ver+".db")
+    commits, commitedFiles, allMethodsCommits, bugs, allFilesCommitsPatch = BuildRepo(gitPath, bugsPath, MethodsParsed,
+                                                                                      changeFile)
+    for ver, date in zip(vers, dates):
+        dbPath = os.path.join(dbsPath, ver + ".db")
         basicBuildOneTimeCommits(dbPath, commits, commitedFiles, allMethodsCommits, bugs)
 
 
@@ -322,10 +334,10 @@ def buildOneTimeCommits():
         Path = os.path.join(versPath, version)
         dbPath = os.path.join(db_dir, version + ".db")
         JavaDocPath = os.path.join(Path, "Jdoc2")
-        sourceMonitorFiles = os.path.join(Path, version+".csv")
-        sourceMonitorMethods = os.path.join(Path, version+"_methods.csv")
-        checkStyle = os.path.join(versPath, "checkAll", version+".xml")
-        checkStyleMethods = os.path.join(versPath, "checkAllMethodsData", version+".txt")
+        sourceMonitorFiles = os.path.join(Path, version + ".csv")
+        sourceMonitorMethods = os.path.join(Path, version + "_methods.csv")
+        checkStyle = os.path.join(versPath, "checkAll", version + ".xml")
+        checkStyleMethods = os.path.join(versPath, "checkAllMethodsData", version + ".txt")
         blamePath = os.path.join(Path, "blame")
         BuildAllOneTimeCommits(utilsConf.get_configuration().gitPath, dbPath, JavaDocPath,
                                sourceMonitorFiles, sourceMonitorMethods, checkStyle, checkStyleMethods,

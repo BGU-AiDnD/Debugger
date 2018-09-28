@@ -120,14 +120,16 @@ class AmirTracer(Tracer):
     def collect_traces(self):
         traces_files = []
         for root, dirs, _ in os.walk(os.path.abspath(os.path.join(self.git_path, "..\.."))):
-            traces_files.extend(map(lambda name: glob.glob(os.path.join(root, name, "TRACE_*.txt")), filter(lambda name: name == "DebuggerTests", dirs)))
+            traces_files.extend(map(lambda name: glob.glob(os.path.join(root, name, "TRACE_*.txt")),
+                                    filter(lambda name: name == "DebuggerTests", dirs)))
         for trace_file in reduce(list.__add__, traces_files, []):
             dst = os.path.join(self.copy_traces_to, os.path.basename(trace_file))
             if not os.path.exists(dst):
                 shutil.copyfile(trace_file, dst)
             test_name = trace_file.split('\\Trace_')[1].split('_')[0].lower()
             with open(trace_file) as f:
-                self.traces[test_name] = Trace(test_name, map(lambda line: line.strip().split()[2].strip(), f.readlines()))
+                self.traces[test_name] = Trace(test_name,
+                                               map(lambda line: line.strip().split()[2].strip(), f.readlines()))
 
 
 class TestRunner(object):
@@ -187,24 +189,29 @@ def checkout_commit(commit_to_observe, git_path):
 
 if __name__ == "__main__":
     import csv
+
     assert len(sys.argv) == 5
-    _ , repo, matrix_path, prediction_path, tracer_path = sys.argv
+    _, repo, matrix_path, prediction_path, tracer_path = sys.argv
     for x in [repo, prediction_path, tracer_path]:
         assert os.path.exists(x)
     predictions = {}
     with open(prediction_path) as f:
         lines = list(csv.reader(f))[1:]
-        predictions = dict(map(lambda line: (line[0].replace(".java", "").replace(os.path.sep, ".").lower(), line[1]), lines))
+        predictions = dict(
+            map(lambda line: (line[0].replace(".java", "").replace(os.path.sep, ".").lower(), line[1]), lines))
     tr = TestRunner(repo, AmirTracer(repo, tracer_path))
     tr.run()
     from sfl_diagnoser.Diagnoser.diagnoserUtils import write_planning_file
+
     tests = set(tr.tracer.traces.keys()) & set(tr.observations.keys())
     components_priors = {}
-    for component in set(reduce(list.__add__, map(lambda test_name: tr.tracer.traces[test_name].files_trace(), tests), [])):
+    for component in set(
+            reduce(list.__add__, map(lambda test_name: tr.tracer.traces[test_name].files_trace(), tests), [])):
         for prediction in predictions:
             if component in prediction:
                 components_priors[component] = predictions[prediction]
     components = set(components_priors.keys())
-    tests_details = map(lambda test_name: (test_name, list(set(tr.tracer.traces[test_name].files_trace()) & components), tr.observations[test_name].get_observation()),
+    tests_details = map(lambda test_name: (test_name, list(set(tr.tracer.traces[test_name].files_trace()) & components),
+                                           tr.observations[test_name].get_observation()),
                         tests)
     write_planning_file(matrix_path, [], filter(lambda test: len(test[1]) > 0, tests_details), priors=components_priors)

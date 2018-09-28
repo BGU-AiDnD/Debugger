@@ -1,187 +1,349 @@
 __author__ = 'amir'
 
 from wekaMethods.articles import *
-#from wekaMethods.articles import sqlToAttributes
-best_features=[1,2,4,7,8,10,11,14,15,16,18,19,21,22,24,25,28,42,43,44,46,49,56,60,65,76,79,80,81,83,84,86,87,88,90,91,93,94,95,96,97,98,100,101,102,104,105,107,108,109,111,112,114,115,116,118,119,121,122,123,125,126,128,129,130,132,133,145,146,148,150,151,152,154,155,158,159,160,161,162,163,164,165,166,168,169,171,172,173,175,176,186,187,188,190,191,192,193,194,196,197,199,200,201,202,203,204,206,208,209,217,218,220,223,224,226,230,231,232,234,237,238,240,244,245,247,259,265,266,268,272,273,275,289,290,292,295,296,298,299,302,303,304,306,307,309,310,312,313,316,317,320,330,331,334,337,344,348,353,362,367,368,370,371,374,375,376,378,379,381,382,384,385,388,389,390,391,392,402,403,404,406,407,409,410,412,413,416,417,418,419,420,436,439,440,443,446,447,448,450,451,453,454,456,457,460,461,462,464,474,475,476,478,479,481,482,485,488,489,490,492,506,511,512,514,518,519,520,522,523,525,526,528,532,533,535,546,547,550,553,554,556,560,561,563]
+
+# from wekaMethods.articles import sqlToAttributes
+best_features = [1, 2, 4, 7, 8, 10, 11, 14, 15, 16, 18, 19, 21, 22, 24, 25, 28, 42, 43, 44, 46, 49, 56, 60, 65, 76, 79,
+                 80, 81, 83, 84, 86, 87, 88, 90, 91, 93, 94, 95, 96, 97, 98, 100, 101, 102, 104, 105, 107, 108, 109,
+                 111, 112, 114, 115, 116, 118, 119, 121, 122, 123, 125, 126, 128, 129, 130, 132, 133, 145, 146, 148,
+                 150, 151, 152, 154, 155, 158, 159, 160, 161, 162, 163, 164, 165, 166, 168, 169, 171, 172, 173, 175,
+                 176, 186, 187, 188, 190, 191, 192, 193, 194, 196, 197, 199, 200, 201, 202, 203, 204, 206, 208, 209,
+                 217, 218, 220, 223, 224, 226, 230, 231, 232, 234, 237, 238, 240, 244, 245, 247, 259, 265, 266, 268,
+                 272, 273, 275, 289, 290, 292, 295, 296, 298, 299, 302, 303, 304, 306, 307, 309, 310, 312, 313, 316,
+                 317, 320, 330, 331, 334, 337, 344, 348, 353, 362, 367, 368, 370, 371, 374, 375, 376, 378, 379, 381,
+                 382, 384, 385, 388, 389, 390, 391, 392, 402, 403, 404, 406, 407, 409, 410, 412, 413, 416, 417, 418,
+                 419, 420, 436, 439, 440, 443, 446, 447, 448, 450, 451, 453, 454, 456, 457, 460, 461, 462, 464, 474,
+                 475, 476, 478, 479, 481, 482, 485, 488, 489, 490, 492, 506, 511, 512, 514, 518, 519, 520, 522, 523,
+                 525, 526, 528, 532, 533, 535, 546, 547, 550, 553, 554, 556, 560, 561, 563]
+
+
 class analyzeComms:
     def get_attributes(self):
-        all= [ ("NCSS_Analyze_sum",  "NUMERIC"),("FileLen_Analyze_sum",  "NUMERIC"),("sum_fors_Analyze_sum",  "NUMERIC"),("sum_ifs_Analyze_sum",  "NUMERIC"),
-("sum_tries_Analyze_sum",  "NUMERIC"),("len_mccab_Analyze_sum",  "NUMERIC"),("sum_mccab_Analyze_sum",  "NUMERIC"),("mean_mccab_Analyze_sum",  "NUMERIC"),
-("median_mccab_Analyze_sum",  "NUMERIC"),("var_mccab_Analyze_sum",  "NUMERIC"),("max_mccab_Analyze_sum",  "NUMERIC"),("min_mccab_Analyze_sum",  "NUMERIC"),
-(" len_fanOut_Analyze_sum",  "NUMERIC"),("sum_fanOut_Analyze_sum",  "NUMERIC"),("mean_fanOut_Analyze_sum",  "NUMERIC"),("median_fanOut_Analyze_sum",  "NUMERIC"),
-("var_fanOut_Analyze_sum",  "NUMERIC"),("max_fanOut_Analyze_sum",  "NUMERIC"),("min_fanOut_Analyze_sum",  "NUMERIC"),(" len_NPath_Analyze_sum",  "NUMERIC"),
-("sum_NPath_Analyze_sum",  "NUMERIC"),("mean_NPath_Analyze_sum",  "NUMERIC"),("median_NPath_Analyze_sum",  "NUMERIC"),("var_NPath_Analyze_sum",  "NUMERIC"),
-("max_NPath_Analyze_sum",  "NUMERIC"),("min_NPath_Analyze_sum",  "NUMERIC"),(" len_JavaNCSSmet_Analyze_sum",  "NUMERIC"),("sum_JavaNCSSmet_Analyze_sum",  "NUMERIC"),
-("mean_JavaNCSSmet_Analyze_sum",  "NUMERIC"),("median_JavaNCSSmet_Analyze_sum",  "NUMERIC"),("var_JavaNCSSmet_Analyze_sum",  "NUMERIC"),("max_JavaNCSSmet_Analyze_sum",  "NUMERIC"),
-("min_JavaNCSSmet_Analyze_sum",  "NUMERIC"),(" len_thorwsSTM_Analyze_sum",  "NUMERIC"),("sum_thorwsSTM_Analyze_sum",  "NUMERIC"),("mean_thorwsSTM_Analyze_sum",  "NUMERIC"),
-("median_thorwsSTM_Analyze_sum",  "NUMERIC"),("var_thorwsSTM_Analyze_sum",  "NUMERIC"),("max_thorwsSTM_Analyze_sum",  "NUMERIC"),("min_thorwsSTM_Analyze_sum",  "NUMERIC"),
-(" len_coupl_Analyze_sum",  "NUMERIC"),("sum_coupl_Analyze_sum",  "NUMERIC"),("mean_coupl_Analyze_sum",  "NUMERIC"),("median_coupl_Analyze_sum",  "NUMERIC"),
-("var_coupl_Analyze_sum",  "NUMERIC"),("max_coupl_Analyze_sum",  "NUMERIC"),("min_coupl_Analyze_sum",  "NUMERIC"),(" len_executables_Analyze_sum",  "NUMERIC"),
-("sum_executables_Analyze_sum",  "NUMERIC"),("mean_executables_Analyze_sum",  "NUMERIC"),("median_executables_Analyze_sum",  "NUMERIC"),("var_executables_Analyze_sum",  "NUMERIC"),
-("max_executables_Analyze_sum",  "NUMERIC"),("min_executables_Analyze_sum",  "NUMERIC"),(" len_lens_Analyze_sum",  "NUMERIC"),
-("sum_lens_Analyze_sum",  "NUMERIC"),("mean_lens_Analyze_sum",  "NUMERIC"),("median_lens_Analyze_sum",  "NUMERIC"),("var_lens_Analyze_sum",  "NUMERIC"),
-("max_lens_Analyze_sum",  "NUMERIC"),("min_lens_Analyze_sum",  "NUMERIC"),(" publics_Analyze_sum",  "NUMERIC"),("protecteds_Analyze_sum",  "NUMERIC"),
-("privates_Analyze_sum",  "NUMERIC"),("totals _Analyze_sum",  "NUMERIC"),("len_params_Analyze_sum",  "NUMERIC"),("sum_params_Analyze_sum",  "NUMERIC"),
-("mean_params_Analyze_sum",  "NUMERIC"),("median_params_Analyze_sum",  "NUMERIC"),("var_params_Analyze_sum",  "NUMERIC"),("max_params_Analyze_sum",  "NUMERIC"),
-("min_params_Analyze_sum",  "NUMERIC"),("NCSS_Analyze_avg",  "NUMERIC"),("FileLen_Analyze_avg",  "NUMERIC"),("sum_fors_Analyze_avg",  "NUMERIC"),("sum_ifs_Analyze_avg",  "NUMERIC"),
-("sum_tries_Analyze_avg",  "NUMERIC"),("len_mccab_Analyze_avg",  "NUMERIC"),("sum_mccab_Analyze_avg",  "NUMERIC"),("mean_mccab_Analyze_avg",  "NUMERIC"),
-("median_mccab_Analyze_avg",  "NUMERIC"),("var_mccab_Analyze_avg",  "NUMERIC"),("max_mccab_Analyze_avg",  "NUMERIC"),("min_mccab_Analyze_avg",  "NUMERIC"),
-(" len_fanOut_Analyze_avg",  "NUMERIC"),("sum_fanOut_Analyze_avg",  "NUMERIC"),("mean_fanOut_Analyze_avg",  "NUMERIC"),("median_fanOut_Analyze_avg",  "NUMERIC"),
-("var_fanOut_Analyze_avg",  "NUMERIC"),("max_fanOut_Analyze_avg",  "NUMERIC"),("min_fanOut_Analyze_avg",  "NUMERIC"),(" len_NPath_Analyze_avg",  "NUMERIC"),
-("sum_NPath_Analyze_avg",  "NUMERIC"),("mean_NPath_Analyze_avg",  "NUMERIC"),("median_NPath_Analyze_avg",  "NUMERIC"),("var_NPath_Analyze_avg",  "NUMERIC"),
-("max_NPath_Analyze_avg",  "NUMERIC"),("min_NPath_Analyze_avg",  "NUMERIC"),(" len_JavaNCSSmet_Analyze_avg",  "NUMERIC"),("sum_JavaNCSSmet_Analyze_avg",  "NUMERIC"),
-("mean_JavaNCSSmet_Analyze_avg",  "NUMERIC"),("median_JavaNCSSmet_Analyze_avg",  "NUMERIC"),("var_JavaNCSSmet_Analyze_avg",  "NUMERIC"),("max_JavaNCSSmet_Analyze_avg",  "NUMERIC"),
-("min_JavaNCSSmet_Analyze_avg",  "NUMERIC"),(" len_thorwsSTM_Analyze_avg",  "NUMERIC"),("sum_thorwsSTM_Analyze_avg",  "NUMERIC"),("mean_thorwsSTM_Analyze_avg",  "NUMERIC"),
-("median_thorwsSTM_Analyze_avg",  "NUMERIC"),("var_thorwsSTM_Analyze_avg",  "NUMERIC"),("max_thorwsSTM_Analyze_avg",  "NUMERIC"),("min_thorwsSTM_Analyze_avg",  "NUMERIC"),
-(" len_coupl_Analyze_avg",  "NUMERIC"),("sum_coupl_Analyze_avg",  "NUMERIC"),("mean_coupl_Analyze_avg",  "NUMERIC"),("median_coupl_Analyze_avg",  "NUMERIC"),
-("var_coupl_Analyze_avg",  "NUMERIC"),("max_coupl_Analyze_avg",  "NUMERIC"),("min_coupl_Analyze_avg",  "NUMERIC"),(" len_executables_Analyze_avg",  "NUMERIC"),
-("sum_executables_Analyze_avg",  "NUMERIC"),("mean_executables_Analyze_avg",  "NUMERIC"),("median_executables_Analyze_avg",  "NUMERIC"),("var_executables_Analyze_avg",  "NUMERIC"),
-("max_executables_Analyze_avg",  "NUMERIC"),("min_executables_Analyze_avg",  "NUMERIC"),(" len_lens_Analyze_avg",  "NUMERIC"),
-("sum_lens_Analyze_avg",  "NUMERIC"),("mean_lens_Analyze_avg",  "NUMERIC"),("median_lens_Analyze_avg",  "NUMERIC"),("var_lens_Analyze_avg",  "NUMERIC"),
-("max_lens_Analyze_avg",  "NUMERIC"),("min_lens_Analyze_avg",  "NUMERIC"),(" publics_Analyze_avg",  "NUMERIC"),("protecteds_Analyze_avg",  "NUMERIC"),
-("privates_Analyze_avg",  "NUMERIC"),("totals _Analyze_avg",  "NUMERIC"),("len_params_Analyze_avg",  "NUMERIC"),("sum_params_Analyze_avg",  "NUMERIC"),
-("mean_params_Analyze_avg",  "NUMERIC"),("median_params_Analyze_avg",  "NUMERIC"),("var_params_Analyze_avg",  "NUMERIC"),("max_params_Analyze_avg",  "NUMERIC"),
-("min_params_Analyze_avg",  "NUMERIC"),
-("NCSS_Analyze_countPos",  "NUMERIC"),("FileLen_Analyze_countPos",  "NUMERIC"),("sum_fors_Analyze_countPos",  "NUMERIC"),("sum_ifs_Analyze_countPos",  "NUMERIC"),
-("sum_tries_Analyze_countPos",  "NUMERIC"),("len_mccab_Analyze_countPos",  "NUMERIC"),("sum_mccab_Analyze_countPos",  "NUMERIC"),("mean_mccab_Analyze_countPos",  "NUMERIC"),
-("median_mccab_Analyze_countPos",  "NUMERIC"),("var_mccab_Analyze_countPos",  "NUMERIC"),("max_mccab_Analyze_countPos",  "NUMERIC"),("min_mccab_Analyze_countPos",  "NUMERIC"),
-(" len_fanOut_Analyze_countPos",  "NUMERIC"),("sum_fanOut_Analyze_countPos",  "NUMERIC"),("mean_fanOut_Analyze_countPos",  "NUMERIC"),("median_fanOut_Analyze_countPos",  "NUMERIC"),
-("var_fanOut_Analyze_countPos",  "NUMERIC"),("max_fanOut_Analyze_countPos",  "NUMERIC"),("min_fanOut_Analyze_countPos",  "NUMERIC"),(" len_NPath_Analyze_countPos",  "NUMERIC"),
-("sum_NPath_Analyze_countPos",  "NUMERIC"),("mean_NPath_Analyze_countPos",  "NUMERIC"),("median_NPath_Analyze_countPos",  "NUMERIC"),("var_NPath_Analyze_countPos",  "NUMERIC"),
-("max_NPath_Analyze_countPos",  "NUMERIC"),("min_NPath_Analyze_countPos",  "NUMERIC"),(" len_JavaNCSSmet_Analyze_countPos",  "NUMERIC"),("sum_JavaNCSSmet_Analyze_countPos",  "NUMERIC"),
-("mean_JavaNCSSmet_Analyze_countPos",  "NUMERIC"),("median_JavaNCSSmet_Analyze_countPos",  "NUMERIC"),("var_JavaNCSSmet_Analyze_countPos",  "NUMERIC"),("max_JavaNCSSmet_Analyze_countPos",  "NUMERIC"),
-("min_JavaNCSSmet_Analyze_countPos",  "NUMERIC"),(" len_thorwsSTM_Analyze_countPos",  "NUMERIC"),("sum_thorwsSTM_Analyze_countPos",  "NUMERIC"),("mean_thorwsSTM_Analyze_countPos",  "NUMERIC"),
-("median_thorwsSTM_Analyze_countPos",  "NUMERIC"),("var_thorwsSTM_Analyze_countPos",  "NUMERIC"),("max_thorwsSTM_Analyze_countPos",  "NUMERIC"),("min_thorwsSTM_Analyze_countPos",  "NUMERIC"),
-(" len_coupl_Analyze_countPos",  "NUMERIC"),("sum_coupl_Analyze_countPos",  "NUMERIC"),("mean_coupl_Analyze_countPos",  "NUMERIC"),("median_coupl_Analyze_countPos",  "NUMERIC"),
-("var_coupl_Analyze_countPos",  "NUMERIC"),("max_coupl_Analyze_countPos",  "NUMERIC"),("min_coupl_Analyze_countPos",  "NUMERIC"),(" len_executables_Analyze_countPos",  "NUMERIC"),
-("sum_executables_Analyze_countPos",  "NUMERIC"),("mean_executables_Analyze_countPos",  "NUMERIC"),("median_executables_Analyze_countPos",  "NUMERIC"),("var_executables_Analyze_countPos",  "NUMERIC"),
-("max_executables_Analyze_countPos",  "NUMERIC"),("min_executables_Analyze_countPos",  "NUMERIC"),(" len_lens_Analyze_countPos",  "NUMERIC"),
-("sum_lens_Analyze_countPos",  "NUMERIC"),("mean_lens_Analyze_countPos",  "NUMERIC"),("median_lens_Analyze_countPos",  "NUMERIC"),("var_lens_Analyze_countPos",  "NUMERIC"),
-("max_lens_Analyze_countPos",  "NUMERIC"),("min_lens_Analyze_countPos",  "NUMERIC"),(" publics_Analyze_countPos",  "NUMERIC"),("protecteds_Analyze_countPos",  "NUMERIC"),
-("privates_Analyze_countPos",  "NUMERIC"),("totals _Analyze_countPos",  "NUMERIC"),("len_params_Analyze_countPos",  "NUMERIC"),("sum_params_Analyze_countPos",  "NUMERIC"),
-("mean_params_Analyze_countPos",  "NUMERIC"),("median_params_Analyze_countPos",  "NUMERIC"),("var_params_Analyze_countPos",  "NUMERIC"),("max_params_Analyze_countPos",  "NUMERIC"),
-("min_params_Analyze_countPos",  "NUMERIC"),("NCSS_Analyze_countNeg",  "NUMERIC"),("FileLen_Analyze_countNeg",  "NUMERIC"),("sum_fors_Analyze_countNeg",  "NUMERIC"),("sum_ifs_Analyze_countNeg",  "NUMERIC"),
-("sum_tries_Analyze_countNeg",  "NUMERIC"),("len_mccab_Analyze_countNeg",  "NUMERIC"),("sum_mccab_Analyze_countNeg",  "NUMERIC"),("mean_mccab_Analyze_countNeg",  "NUMERIC"),
-("median_mccab_Analyze_countNeg",  "NUMERIC"),("var_mccab_Analyze_countNeg",  "NUMERIC"),("max_mccab_Analyze_countNeg",  "NUMERIC"),("min_mccab_Analyze_countNeg",  "NUMERIC"),
-(" len_fanOut_Analyze_countNeg",  "NUMERIC"),("sum_fanOut_Analyze_countNeg",  "NUMERIC"),("mean_fanOut_Analyze_countNeg",  "NUMERIC"),("median_fanOut_Analyze_countNeg",  "NUMERIC"),
-("var_fanOut_Analyze_countNeg",  "NUMERIC"),("max_fanOut_Analyze_countNeg",  "NUMERIC"),("min_fanOut_Analyze_countNeg",  "NUMERIC"),(" len_NPath_Analyze_countNeg",  "NUMERIC"),
-("sum_NPath_Analyze_countNeg",  "NUMERIC"),("mean_NPath_Analyze_countNeg",  "NUMERIC"),("median_NPath_Analyze_countNeg",  "NUMERIC"),("var_NPath_Analyze_countNeg",  "NUMERIC"),
-("max_NPath_Analyze_countNeg",  "NUMERIC"),("min_NPath_Analyze_countNeg",  "NUMERIC"),(" len_JavaNCSSmet_Analyze_countNeg",  "NUMERIC"),("sum_JavaNCSSmet_Analyze_countNeg",  "NUMERIC"),
-("mean_JavaNCSSmet_Analyze_countNeg",  "NUMERIC"),("median_JavaNCSSmet_Analyze_countNeg",  "NUMERIC"),("var_JavaNCSSmet_Analyze_countNeg",  "NUMERIC"),("max_JavaNCSSmet_Analyze_countNeg",  "NUMERIC"),
-("min_JavaNCSSmet_Analyze_countNeg",  "NUMERIC"),(" len_thorwsSTM_Analyze_countNeg",  "NUMERIC"),("sum_thorwsSTM_Analyze_countNeg",  "NUMERIC"),("mean_thorwsSTM_Analyze_countNeg",  "NUMERIC"),
-("median_thorwsSTM_Analyze_countNeg",  "NUMERIC"),("var_thorwsSTM_Analyze_countNeg",  "NUMERIC"),("max_thorwsSTM_Analyze_countNeg",  "NUMERIC"),("min_thorwsSTM_Analyze_countNeg",  "NUMERIC"),
-(" len_coupl_Analyze_countNeg",  "NUMERIC"),("sum_coupl_Analyze_countNeg",  "NUMERIC"),("mean_coupl_Analyze_countNeg",  "NUMERIC"),("median_coupl_Analyze_countNeg",  "NUMERIC"),
-("var_coupl_Analyze_countNeg",  "NUMERIC"),("max_coupl_Analyze_countNeg",  "NUMERIC"),("min_coupl_Analyze_countNeg",  "NUMERIC"),(" len_executables_Analyze_countNeg",  "NUMERIC"),
-("sum_executables_Analyze_countNeg",  "NUMERIC"),("mean_executables_Analyze_countNeg",  "NUMERIC"),("median_executables_Analyze_countNeg",  "NUMERIC"),("var_executables_Analyze_countNeg",  "NUMERIC"),
-("max_executables_Analyze_countNeg",  "NUMERIC"),("min_executables_Analyze_countNeg",  "NUMERIC"),(" len_lens_Analyze_countNeg",  "NUMERIC"),
-("sum_lens_Analyze_countNeg",  "NUMERIC"),("mean_lens_Analyze_countNeg",  "NUMERIC"),("median_lens_Analyze_countNeg",  "NUMERIC"),("var_lens_Analyze_countNeg",  "NUMERIC"),
-("max_lens_Analyze_countNeg",  "NUMERIC"),("min_lens_Analyze_countNeg",  "NUMERIC"),(" publics_Analyze_countNeg",  "NUMERIC"),("protecteds_Analyze_countNeg",  "NUMERIC"),
-("privates_Analyze_countNeg",  "NUMERIC"),("totals _Analyze_countNeg",  "NUMERIC"),("len_params_Analyze_countNeg",  "NUMERIC"),("sum_params_Analyze_countNeg",  "NUMERIC"),
-("mean_params_Analyze_countNeg",  "NUMERIC"),("median_params_Analyze_countNeg",  "NUMERIC"),("var_params_Analyze_countNeg",  "NUMERIC"),("max_params_Analyze_countNeg",  "NUMERIC"),
-("min_params_Analyze_countNeg",  "NUMERIC"),("NCSS_Analyze_sumPos",  "NUMERIC"),("FileLen_Analyze_sumPos",  "NUMERIC"),("sum_fors_Analyze_sumPos",  "NUMERIC"),("sum_ifs_Analyze_sumPos",  "NUMERIC"),
-("sum_tries_Analyze_sumPos",  "NUMERIC"),("len_mccab_Analyze_sumPos",  "NUMERIC"),("sum_mccab_Analyze_sumPos",  "NUMERIC"),("mean_mccab_Analyze_sumPos",  "NUMERIC"),
-("median_mccab_Analyze_sumPos",  "NUMERIC"),("var_mccab_Analyze_sumPos",  "NUMERIC"),("max_mccab_Analyze_sumPos",  "NUMERIC"),("min_mccab_Analyze_sumPos",  "NUMERIC"),
-(" len_fanOut_Analyze_sumPos",  "NUMERIC"),("sum_fanOut_Analyze_sumPos",  "NUMERIC"),("mean_fanOut_Analyze_sumPos",  "NUMERIC"),("median_fanOut_Analyze_sumPos",  "NUMERIC"),
-("var_fanOut_Analyze_sumPos",  "NUMERIC"),("max_fanOut_Analyze_sumPos",  "NUMERIC"),("min_fanOut_Analyze_sumPos",  "NUMERIC"),(" len_NPath_Analyze_sumPos",  "NUMERIC"),
-("sum_NPath_Analyze_sumPos",  "NUMERIC"),("mean_NPath_Analyze_sumPos",  "NUMERIC"),("median_NPath_Analyze_sumPos",  "NUMERIC"),("var_NPath_Analyze_sumPos",  "NUMERIC"),
-("max_NPath_Analyze_sumPos",  "NUMERIC"),("min_NPath_Analyze_sumPos",  "NUMERIC"),(" len_JavaNCSSmet_Analyze_sumPos",  "NUMERIC"),("sum_JavaNCSSmet_Analyze_sumPos",  "NUMERIC"),
-("mean_JavaNCSSmet_Analyze_sumPos",  "NUMERIC"),("median_JavaNCSSmet_Analyze_sumPos",  "NUMERIC"),("var_JavaNCSSmet_Analyze_sumPos",  "NUMERIC"),("max_JavaNCSSmet_Analyze_sumPos",  "NUMERIC"),
-("min_JavaNCSSmet_Analyze_sumPos",  "NUMERIC"),(" len_thorwsSTM_Analyze_sumPos",  "NUMERIC"),("sum_thorwsSTM_Analyze_sumPos",  "NUMERIC"),("mean_thorwsSTM_Analyze_sumPos",  "NUMERIC"),
-("median_thorwsSTM_Analyze_sumPos",  "NUMERIC"),("var_thorwsSTM_Analyze_sumPos",  "NUMERIC"),("max_thorwsSTM_Analyze_sumPos",  "NUMERIC"),("min_thorwsSTM_Analyze_sumPos",  "NUMERIC"),
-(" len_coupl_Analyze_sumPos",  "NUMERIC"),("sum_coupl_Analyze_sumPos",  "NUMERIC"),("mean_coupl_Analyze_sumPos",  "NUMERIC"),("median_coupl_Analyze_sumPos",  "NUMERIC"),
-("var_coupl_Analyze_sumPos",  "NUMERIC"),("max_coupl_Analyze_sumPos",  "NUMERIC"),("min_coupl_Analyze_sumPos",  "NUMERIC"),(" len_executables_Analyze_sumPos",  "NUMERIC"),
-("sum_executables_Analyze_sumPos",  "NUMERIC"),("mean_executables_Analyze_sumPos",  "NUMERIC"),("median_executables_Analyze_sumPos",  "NUMERIC"),("var_executables_Analyze_sumPos",  "NUMERIC"),
-("max_executables_Analyze_sumPos",  "NUMERIC"),("min_executables_Analyze_sumPos",  "NUMERIC"),(" len_lens_Analyze_sumPos",  "NUMERIC"),
-("sum_lens_Analyze_sumPos",  "NUMERIC"),("mean_lens_Analyze_sumPos",  "NUMERIC"),("median_lens_Analyze_sumPos",  "NUMERIC"),("var_lens_Analyze_sumPos",  "NUMERIC"),
-("max_lens_Analyze_sumPos",  "NUMERIC"),("min_lens_Analyze_sumPos",  "NUMERIC"),(" publics_Analyze_sumPos",  "NUMERIC"),("protecteds_Analyze_sumPos",  "NUMERIC"),
-("privates_Analyze_sumPos",  "NUMERIC"),("totals _Analyze_sumPos",  "NUMERIC"),("len_params_Analyze_sumPos",  "NUMERIC"),("sum_params_Analyze_sumPos",  "NUMERIC"),
-("mean_params_Analyze_sumPos",  "NUMERIC"),("median_params_Analyze_sumPos",  "NUMERIC"),("var_params_Analyze_sumPos",  "NUMERIC"),("max_params_Analyze_sumPos",  "NUMERIC"),
-("min_params_Analyze_sumPos",  "NUMERIC"),("NCSS_Analyze_sumNeg",  "NUMERIC"),("FileLen_Analyze_sumNeg",  "NUMERIC"),("sum_fors_Analyze_sumNeg",  "NUMERIC"),("sum_ifs_Analyze_sumNeg",  "NUMERIC"),
-("sum_tries_Analyze_sumNeg",  "NUMERIC"),("len_mccab_Analyze_sumNeg",  "NUMERIC"),("sum_mccab_Analyze_sumNeg",  "NUMERIC"),("mean_mccab_Analyze_sumNeg",  "NUMERIC"),
-("median_mccab_Analyze_sumNeg",  "NUMERIC"),("var_mccab_Analyze_sumNeg",  "NUMERIC"),("max_mccab_Analyze_sumNeg",  "NUMERIC"),("min_mccab_Analyze_sumNeg",  "NUMERIC"),
-(" len_fanOut_Analyze_sumNeg",  "NUMERIC"),("sum_fanOut_Analyze_sumNeg",  "NUMERIC"),("mean_fanOut_Analyze_sumNeg",  "NUMERIC"),("median_fanOut_Analyze_sumNeg",  "NUMERIC"),
-("var_fanOut_Analyze_sumNeg",  "NUMERIC"),("max_fanOut_Analyze_sumNeg",  "NUMERIC"),("min_fanOut_Analyze_sumNeg",  "NUMERIC"),(" len_NPath_Analyze_sumNeg",  "NUMERIC"),
-("sum_NPath_Analyze_sumNeg",  "NUMERIC"),("mean_NPath_Analyze_sumNeg",  "NUMERIC"),("median_NPath_Analyze_sumNeg",  "NUMERIC"),("var_NPath_Analyze_sumNeg",  "NUMERIC"),
-("max_NPath_Analyze_sumNeg",  "NUMERIC"),("min_NPath_Analyze_sumNeg",  "NUMERIC"),(" len_JavaNCSSmet_Analyze_sumNeg",  "NUMERIC"),("sum_JavaNCSSmet_Analyze_sumNeg",  "NUMERIC"),
-("mean_JavaNCSSmet_Analyze_sumNeg",  "NUMERIC"),("median_JavaNCSSmet_Analyze_sumNeg",  "NUMERIC"),("var_JavaNCSSmet_Analyze_sumNeg",  "NUMERIC"),("max_JavaNCSSmet_Analyze_sumNeg",  "NUMERIC"),
-("min_JavaNCSSmet_Analyze_sumNeg",  "NUMERIC"),(" len_thorwsSTM_Analyze_sumNeg",  "NUMERIC"),("sum_thorwsSTM_Analyze_sumNeg",  "NUMERIC"),("mean_thorwsSTM_Analyze_sumNeg",  "NUMERIC"),
-("median_thorwsSTM_Analyze_sumNeg",  "NUMERIC"),("var_thorwsSTM_Analyze_sumNeg",  "NUMERIC"),("max_thorwsSTM_Analyze_sumNeg",  "NUMERIC"),("min_thorwsSTM_Analyze_sumNeg",  "NUMERIC"),
-(" len_coupl_Analyze_sumNeg",  "NUMERIC"),("sum_coupl_Analyze_sumNeg",  "NUMERIC"),("mean_coupl_Analyze_sumNeg",  "NUMERIC"),("median_coupl_Analyze_sumNeg",  "NUMERIC"),
-("var_coupl_Analyze_sumNeg",  "NUMERIC"),("max_coupl_Analyze_sumNeg",  "NUMERIC"),("min_coupl_Analyze_sumNeg",  "NUMERIC"),(" len_executables_Analyze_sumNeg",  "NUMERIC"),
-("sum_executables_Analyze_sumNeg",  "NUMERIC"),("mean_executables_Analyze_sumNeg",  "NUMERIC"),("median_executables_Analyze_sumNeg",  "NUMERIC"),("var_executables_Analyze_sumNeg",  "NUMERIC"),
-("max_executables_Analyze_sumNeg",  "NUMERIC"),("min_executables_Analyze_sumNeg",  "NUMERIC"),(" len_lens_Analyze_sumNeg",  "NUMERIC"),
-("sum_lens_Analyze_sumNeg",  "NUMERIC"),("mean_lens_Analyze_sumNeg",  "NUMERIC"),("median_lens_Analyze_sumNeg",  "NUMERIC"),("var_lens_Analyze_sumNeg",  "NUMERIC"),
-("max_lens_Analyze_sumNeg",  "NUMERIC"),("min_lens_Analyze_sumNeg",  "NUMERIC"),(" publics_Analyze_sumNeg",  "NUMERIC"),("protecteds_Analyze_sumNeg",  "NUMERIC"),
-("privates_Analyze_sumNeg",  "NUMERIC"),("totals _Analyze_sumNeg",  "NUMERIC"),("len_params_Analyze_sumNeg",  "NUMERIC"),("sum_params_Analyze_sumNeg",  "NUMERIC"),
-("mean_params_Analyze_sumNeg",  "NUMERIC"),("median_params_Analyze_sumNeg",  "NUMERIC"),("var_params_Analyze_sumNeg",  "NUMERIC"),("max_params_Analyze_sumNeg",  "NUMERIC"),
-("min_params_Analyze_sumNeg",  "NUMERIC"),("NCSS_Analyze_avgPos",  "NUMERIC"),("FileLen_Analyze_avgPos",  "NUMERIC"),("sum_fors_Analyze_avgPos",  "NUMERIC"),("sum_ifs_Analyze_avgPos",  "NUMERIC"),
-("sum_tries_Analyze_avgPos",  "NUMERIC"),("len_mccab_Analyze_avgPos",  "NUMERIC"),("sum_mccab_Analyze_avgPos",  "NUMERIC"),("mean_mccab_Analyze_avgPos",  "NUMERIC"),
-("median_mccab_Analyze_avgPos",  "NUMERIC"),("var_mccab_Analyze_avgPos",  "NUMERIC"),("max_mccab_Analyze_avgPos",  "NUMERIC"),("min_mccab_Analyze_avgPos",  "NUMERIC"),
-(" len_fanOut_Analyze_avgPos",  "NUMERIC"),("sum_fanOut_Analyze_avgPos",  "NUMERIC"),("mean_fanOut_Analyze_avgPos",  "NUMERIC"),("median_fanOut_Analyze_avgPos",  "NUMERIC"),
-("var_fanOut_Analyze_avgPos",  "NUMERIC"),("max_fanOut_Analyze_avgPos",  "NUMERIC"),("min_fanOut_Analyze_avgPos",  "NUMERIC"),(" len_NPath_Analyze_avgPos",  "NUMERIC"),
-("sum_NPath_Analyze_avgPos",  "NUMERIC"),("mean_NPath_Analyze_avgPos",  "NUMERIC"),("median_NPath_Analyze_avgPos",  "NUMERIC"),("var_NPath_Analyze_avgPos",  "NUMERIC"),
-("max_NPath_Analyze_avgPos",  "NUMERIC"),("min_NPath_Analyze_avgPos",  "NUMERIC"),(" len_JavaNCSSmet_Analyze_avgPos",  "NUMERIC"),("sum_JavaNCSSmet_Analyze_avgPos",  "NUMERIC"),
-("mean_JavaNCSSmet_Analyze_avgPos",  "NUMERIC"),("median_JavaNCSSmet_Analyze_avgPos",  "NUMERIC"),("var_JavaNCSSmet_Analyze_avgPos",  "NUMERIC"),("max_JavaNCSSmet_Analyze_avgPos",  "NUMERIC"),
-("min_JavaNCSSmet_Analyze_avgPos",  "NUMERIC"),(" len_thorwsSTM_Analyze_avgPos",  "NUMERIC"),("sum_thorwsSTM_Analyze_avgPos",  "NUMERIC"),("mean_thorwsSTM_Analyze_avgPos",  "NUMERIC"),
-("median_thorwsSTM_Analyze_avgPos",  "NUMERIC"),("var_thorwsSTM_Analyze_avgPos",  "NUMERIC"),("max_thorwsSTM_Analyze_avgPos",  "NUMERIC"),("min_thorwsSTM_Analyze_avgPos",  "NUMERIC"),
-(" len_coupl_Analyze_avgPos",  "NUMERIC"),("sum_coupl_Analyze_avgPos",  "NUMERIC"),("mean_coupl_Analyze_avgPos",  "NUMERIC"),("median_coupl_Analyze_avgPos",  "NUMERIC"),
-("var_coupl_Analyze_avgPos",  "NUMERIC"),("max_coupl_Analyze_avgPos",  "NUMERIC"),("min_coupl_Analyze_avgPos",  "NUMERIC"),(" len_executables_Analyze_avgPos",  "NUMERIC"),
-("sum_executables_Analyze_avgPos",  "NUMERIC"),("mean_executables_Analyze_avgPos",  "NUMERIC"),("median_executables_Analyze_avgPos",  "NUMERIC"),("var_executables_Analyze_avgPos",  "NUMERIC"),
-("max_executables_Analyze_avgPos",  "NUMERIC"),("min_executables_Analyze_avgPos",  "NUMERIC"),(" len_lens_Analyze_avgPos",  "NUMERIC"),
-("sum_lens_Analyze_avgPos",  "NUMERIC"),("mean_lens_Analyze_avgPos",  "NUMERIC"),("median_lens_Analyze_avgPos",  "NUMERIC"),("var_lens_Analyze_avgPos",  "NUMERIC"),
-("max_lens_Analyze_avgPos",  "NUMERIC"),("min_lens_Analyze_avgPos",  "NUMERIC"),(" publics_Analyze_avgPos",  "NUMERIC"),("protecteds_Analyze_avgPos",  "NUMERIC"),
-("privates_Analyze_avgPos",  "NUMERIC"),("totals _Analyze_avgPos",  "NUMERIC"),("len_params_Analyze_avgPos",  "NUMERIC"),("sum_params_Analyze_avgPos",  "NUMERIC"),
-("mean_params_Analyze_avgPos",  "NUMERIC"),("median_params_Analyze_avgPos",  "NUMERIC"),("var_params_Analyze_avgPos",  "NUMERIC"),("max_params_Analyze_avgPos",  "NUMERIC"),
-("min_params_Analyze_avgPos",  "NUMERIC"),("NCSS_Analyze_avgNeg",  "NUMERIC"),("FileLen_Analyze_avgNeg",  "NUMERIC"),("sum_fors_Analyze_avgNeg",  "NUMERIC"),("sum_ifs_Analyze_avgNeg",  "NUMERIC"),
-("sum_tries_Analyze_avgNeg",  "NUMERIC"),("len_mccab_Analyze_avgNeg",  "NUMERIC"),("sum_mccab_Analyze_avgNeg",  "NUMERIC"),("mean_mccab_Analyze_avgNeg",  "NUMERIC"),
-("median_mccab_Analyze_avgNeg",  "NUMERIC"),("var_mccab_Analyze_avgNeg",  "NUMERIC"),("max_mccab_Analyze_avgNeg",  "NUMERIC"),("min_mccab_Analyze_avgNeg",  "NUMERIC"),
-(" len_fanOut_Analyze_avgNeg",  "NUMERIC"),("sum_fanOut_Analyze_avgNeg",  "NUMERIC"),("mean_fanOut_Analyze_avgNeg",  "NUMERIC"),("median_fanOut_Analyze_avgNeg",  "NUMERIC"),
-("var_fanOut_Analyze_avgNeg",  "NUMERIC"),("max_fanOut_Analyze_avgNeg",  "NUMERIC"),("min_fanOut_Analyze_avgNeg",  "NUMERIC"),(" len_NPath_Analyze_avgNeg",  "NUMERIC"),
-("sum_NPath_Analyze_avgNeg",  "NUMERIC"),("mean_NPath_Analyze_avgNeg",  "NUMERIC"),("median_NPath_Analyze_avgNeg",  "NUMERIC"),("var_NPath_Analyze_avgNeg",  "NUMERIC"),
-("max_NPath_Analyze_avgNeg",  "NUMERIC"),("min_NPath_Analyze_avgNeg",  "NUMERIC"),(" len_JavaNCSSmet_Analyze_avgNeg",  "NUMERIC"),("sum_JavaNCSSmet_Analyze_avgNeg",  "NUMERIC"),
-("mean_JavaNCSSmet_Analyze_avgNeg",  "NUMERIC"),("median_JavaNCSSmet_Analyze_avgNeg",  "NUMERIC"),("var_JavaNCSSmet_Analyze_avgNeg",  "NUMERIC"),("max_JavaNCSSmet_Analyze_avgNeg",  "NUMERIC"),
-("min_JavaNCSSmet_Analyze_avgNeg",  "NUMERIC"),(" len_thorwsSTM_Analyze_avgNeg",  "NUMERIC"),("sum_thorwsSTM_Analyze_avgNeg",  "NUMERIC"),("mean_thorwsSTM_Analyze_avgNeg",  "NUMERIC"),
-("median_thorwsSTM_Analyze_avgNeg",  "NUMERIC"),("var_thorwsSTM_Analyze_avgNeg",  "NUMERIC"),("max_thorwsSTM_Analyze_avgNeg",  "NUMERIC"),("min_thorwsSTM_Analyze_avgNeg",  "NUMERIC"),
-(" len_coupl_Analyze_avgNeg",  "NUMERIC"),("sum_coupl_Analyze_avgNeg",  "NUMERIC"),("mean_coupl_Analyze_avgNeg",  "NUMERIC"),("median_coupl_Analyze_avgNeg",  "NUMERIC"),
-("var_coupl_Analyze_avgNeg",  "NUMERIC"),("max_coupl_Analyze_avgNeg",  "NUMERIC"),("min_coupl_Analyze_avgNeg",  "NUMERIC"),(" len_executables_Analyze_avgNeg",  "NUMERIC"),
-("sum_executables_Analyze_avgNeg",  "NUMERIC"),("mean_executables_Analyze_avgNeg",  "NUMERIC"),("median_executables_Analyze_avgNeg",  "NUMERIC"),("var_executables_Analyze_avgNeg",  "NUMERIC"),
-("max_executables_Analyze_avgNeg",  "NUMERIC"),("min_executables_Analyze_avgNeg",  "NUMERIC"),(" len_lens_Analyze_avgNeg",  "NUMERIC"),
-("sum_lens_Analyze_avgNeg",  "NUMERIC"),("mean_lens_Analyze_avgNeg",  "NUMERIC"),("median_lens_Analyze_avgNeg",  "NUMERIC"),("var_lens_Analyze_avgNeg",  "NUMERIC"),
-("max_lens_Analyze_avgNeg",  "NUMERIC"),("min_lens_Analyze_avgNeg",  "NUMERIC"),(" publics_Analyze_avgNeg",  "NUMERIC"),("protecteds_Analyze_avgNeg",  "NUMERIC"),
-("privates_Analyze_avgNeg",  "NUMERIC"),("totals _Analyze_avgNeg",  "NUMERIC"),("len_params_Analyze_avgNeg",  "NUMERIC"),("sum_params_Analyze_avgNeg",  "NUMERIC"),
-("mean_params_Analyze_avgNeg",  "NUMERIC"),("median_params_Analyze_avgNeg",  "NUMERIC"),("var_params_Analyze_avgNeg",  "NUMERIC"),("max_params_Analyze_avgNeg",  "NUMERIC"),
-("min_params_Analyze_avgNeg",  "NUMERIC")
-]
-        ret=[]
+        all = [("NCSS_Analyze_sum", "NUMERIC"), ("FileLen_Analyze_sum", "NUMERIC"), ("sum_fors_Analyze_sum", "NUMERIC"),
+               ("sum_ifs_Analyze_sum", "NUMERIC"),
+               ("sum_tries_Analyze_sum", "NUMERIC"), ("len_mccab_Analyze_sum", "NUMERIC"),
+               ("sum_mccab_Analyze_sum", "NUMERIC"), ("mean_mccab_Analyze_sum", "NUMERIC"),
+               ("median_mccab_Analyze_sum", "NUMERIC"), ("var_mccab_Analyze_sum", "NUMERIC"),
+               ("max_mccab_Analyze_sum", "NUMERIC"), ("min_mccab_Analyze_sum", "NUMERIC"),
+               (" len_fanOut_Analyze_sum", "NUMERIC"), ("sum_fanOut_Analyze_sum", "NUMERIC"),
+               ("mean_fanOut_Analyze_sum", "NUMERIC"), ("median_fanOut_Analyze_sum", "NUMERIC"),
+               ("var_fanOut_Analyze_sum", "NUMERIC"), ("max_fanOut_Analyze_sum", "NUMERIC"),
+               ("min_fanOut_Analyze_sum", "NUMERIC"), (" len_NPath_Analyze_sum", "NUMERIC"),
+               ("sum_NPath_Analyze_sum", "NUMERIC"), ("mean_NPath_Analyze_sum", "NUMERIC"),
+               ("median_NPath_Analyze_sum", "NUMERIC"), ("var_NPath_Analyze_sum", "NUMERIC"),
+               ("max_NPath_Analyze_sum", "NUMERIC"), ("min_NPath_Analyze_sum", "NUMERIC"),
+               (" len_JavaNCSSmet_Analyze_sum", "NUMERIC"), ("sum_JavaNCSSmet_Analyze_sum", "NUMERIC"),
+               ("mean_JavaNCSSmet_Analyze_sum", "NUMERIC"), ("median_JavaNCSSmet_Analyze_sum", "NUMERIC"),
+               ("var_JavaNCSSmet_Analyze_sum", "NUMERIC"), ("max_JavaNCSSmet_Analyze_sum", "NUMERIC"),
+               ("min_JavaNCSSmet_Analyze_sum", "NUMERIC"), (" len_thorwsSTM_Analyze_sum", "NUMERIC"),
+               ("sum_thorwsSTM_Analyze_sum", "NUMERIC"), ("mean_thorwsSTM_Analyze_sum", "NUMERIC"),
+               ("median_thorwsSTM_Analyze_sum", "NUMERIC"), ("var_thorwsSTM_Analyze_sum", "NUMERIC"),
+               ("max_thorwsSTM_Analyze_sum", "NUMERIC"), ("min_thorwsSTM_Analyze_sum", "NUMERIC"),
+               (" len_coupl_Analyze_sum", "NUMERIC"), ("sum_coupl_Analyze_sum", "NUMERIC"),
+               ("mean_coupl_Analyze_sum", "NUMERIC"), ("median_coupl_Analyze_sum", "NUMERIC"),
+               ("var_coupl_Analyze_sum", "NUMERIC"), ("max_coupl_Analyze_sum", "NUMERIC"),
+               ("min_coupl_Analyze_sum", "NUMERIC"), (" len_executables_Analyze_sum", "NUMERIC"),
+               ("sum_executables_Analyze_sum", "NUMERIC"), ("mean_executables_Analyze_sum", "NUMERIC"),
+               ("median_executables_Analyze_sum", "NUMERIC"), ("var_executables_Analyze_sum", "NUMERIC"),
+               ("max_executables_Analyze_sum", "NUMERIC"), ("min_executables_Analyze_sum", "NUMERIC"),
+               (" len_lens_Analyze_sum", "NUMERIC"),
+               ("sum_lens_Analyze_sum", "NUMERIC"), ("mean_lens_Analyze_sum", "NUMERIC"),
+               ("median_lens_Analyze_sum", "NUMERIC"), ("var_lens_Analyze_sum", "NUMERIC"),
+               ("max_lens_Analyze_sum", "NUMERIC"), ("min_lens_Analyze_sum", "NUMERIC"),
+               (" publics_Analyze_sum", "NUMERIC"), ("protecteds_Analyze_sum", "NUMERIC"),
+               ("privates_Analyze_sum", "NUMERIC"), ("totals _Analyze_sum", "NUMERIC"),
+               ("len_params_Analyze_sum", "NUMERIC"), ("sum_params_Analyze_sum", "NUMERIC"),
+               ("mean_params_Analyze_sum", "NUMERIC"), ("median_params_Analyze_sum", "NUMERIC"),
+               ("var_params_Analyze_sum", "NUMERIC"), ("max_params_Analyze_sum", "NUMERIC"),
+               ("min_params_Analyze_sum", "NUMERIC"), ("NCSS_Analyze_avg", "NUMERIC"),
+               ("FileLen_Analyze_avg", "NUMERIC"), ("sum_fors_Analyze_avg", "NUMERIC"),
+               ("sum_ifs_Analyze_avg", "NUMERIC"),
+               ("sum_tries_Analyze_avg", "NUMERIC"), ("len_mccab_Analyze_avg", "NUMERIC"),
+               ("sum_mccab_Analyze_avg", "NUMERIC"), ("mean_mccab_Analyze_avg", "NUMERIC"),
+               ("median_mccab_Analyze_avg", "NUMERIC"), ("var_mccab_Analyze_avg", "NUMERIC"),
+               ("max_mccab_Analyze_avg", "NUMERIC"), ("min_mccab_Analyze_avg", "NUMERIC"),
+               (" len_fanOut_Analyze_avg", "NUMERIC"), ("sum_fanOut_Analyze_avg", "NUMERIC"),
+               ("mean_fanOut_Analyze_avg", "NUMERIC"), ("median_fanOut_Analyze_avg", "NUMERIC"),
+               ("var_fanOut_Analyze_avg", "NUMERIC"), ("max_fanOut_Analyze_avg", "NUMERIC"),
+               ("min_fanOut_Analyze_avg", "NUMERIC"), (" len_NPath_Analyze_avg", "NUMERIC"),
+               ("sum_NPath_Analyze_avg", "NUMERIC"), ("mean_NPath_Analyze_avg", "NUMERIC"),
+               ("median_NPath_Analyze_avg", "NUMERIC"), ("var_NPath_Analyze_avg", "NUMERIC"),
+               ("max_NPath_Analyze_avg", "NUMERIC"), ("min_NPath_Analyze_avg", "NUMERIC"),
+               (" len_JavaNCSSmet_Analyze_avg", "NUMERIC"), ("sum_JavaNCSSmet_Analyze_avg", "NUMERIC"),
+               ("mean_JavaNCSSmet_Analyze_avg", "NUMERIC"), ("median_JavaNCSSmet_Analyze_avg", "NUMERIC"),
+               ("var_JavaNCSSmet_Analyze_avg", "NUMERIC"), ("max_JavaNCSSmet_Analyze_avg", "NUMERIC"),
+               ("min_JavaNCSSmet_Analyze_avg", "NUMERIC"), (" len_thorwsSTM_Analyze_avg", "NUMERIC"),
+               ("sum_thorwsSTM_Analyze_avg", "NUMERIC"), ("mean_thorwsSTM_Analyze_avg", "NUMERIC"),
+               ("median_thorwsSTM_Analyze_avg", "NUMERIC"), ("var_thorwsSTM_Analyze_avg", "NUMERIC"),
+               ("max_thorwsSTM_Analyze_avg", "NUMERIC"), ("min_thorwsSTM_Analyze_avg", "NUMERIC"),
+               (" len_coupl_Analyze_avg", "NUMERIC"), ("sum_coupl_Analyze_avg", "NUMERIC"),
+               ("mean_coupl_Analyze_avg", "NUMERIC"), ("median_coupl_Analyze_avg", "NUMERIC"),
+               ("var_coupl_Analyze_avg", "NUMERIC"), ("max_coupl_Analyze_avg", "NUMERIC"),
+               ("min_coupl_Analyze_avg", "NUMERIC"), (" len_executables_Analyze_avg", "NUMERIC"),
+               ("sum_executables_Analyze_avg", "NUMERIC"), ("mean_executables_Analyze_avg", "NUMERIC"),
+               ("median_executables_Analyze_avg", "NUMERIC"), ("var_executables_Analyze_avg", "NUMERIC"),
+               ("max_executables_Analyze_avg", "NUMERIC"), ("min_executables_Analyze_avg", "NUMERIC"),
+               (" len_lens_Analyze_avg", "NUMERIC"),
+               ("sum_lens_Analyze_avg", "NUMERIC"), ("mean_lens_Analyze_avg", "NUMERIC"),
+               ("median_lens_Analyze_avg", "NUMERIC"), ("var_lens_Analyze_avg", "NUMERIC"),
+               ("max_lens_Analyze_avg", "NUMERIC"), ("min_lens_Analyze_avg", "NUMERIC"),
+               (" publics_Analyze_avg", "NUMERIC"), ("protecteds_Analyze_avg", "NUMERIC"),
+               ("privates_Analyze_avg", "NUMERIC"), ("totals _Analyze_avg", "NUMERIC"),
+               ("len_params_Analyze_avg", "NUMERIC"), ("sum_params_Analyze_avg", "NUMERIC"),
+               ("mean_params_Analyze_avg", "NUMERIC"), ("median_params_Analyze_avg", "NUMERIC"),
+               ("var_params_Analyze_avg", "NUMERIC"), ("max_params_Analyze_avg", "NUMERIC"),
+               ("min_params_Analyze_avg", "NUMERIC"),
+               ("NCSS_Analyze_countPos", "NUMERIC"), ("FileLen_Analyze_countPos", "NUMERIC"),
+               ("sum_fors_Analyze_countPos", "NUMERIC"), ("sum_ifs_Analyze_countPos", "NUMERIC"),
+               ("sum_tries_Analyze_countPos", "NUMERIC"), ("len_mccab_Analyze_countPos", "NUMERIC"),
+               ("sum_mccab_Analyze_countPos", "NUMERIC"), ("mean_mccab_Analyze_countPos", "NUMERIC"),
+               ("median_mccab_Analyze_countPos", "NUMERIC"), ("var_mccab_Analyze_countPos", "NUMERIC"),
+               ("max_mccab_Analyze_countPos", "NUMERIC"), ("min_mccab_Analyze_countPos", "NUMERIC"),
+               (" len_fanOut_Analyze_countPos", "NUMERIC"), ("sum_fanOut_Analyze_countPos", "NUMERIC"),
+               ("mean_fanOut_Analyze_countPos", "NUMERIC"), ("median_fanOut_Analyze_countPos", "NUMERIC"),
+               ("var_fanOut_Analyze_countPos", "NUMERIC"), ("max_fanOut_Analyze_countPos", "NUMERIC"),
+               ("min_fanOut_Analyze_countPos", "NUMERIC"), (" len_NPath_Analyze_countPos", "NUMERIC"),
+               ("sum_NPath_Analyze_countPos", "NUMERIC"), ("mean_NPath_Analyze_countPos", "NUMERIC"),
+               ("median_NPath_Analyze_countPos", "NUMERIC"), ("var_NPath_Analyze_countPos", "NUMERIC"),
+               ("max_NPath_Analyze_countPos", "NUMERIC"), ("min_NPath_Analyze_countPos", "NUMERIC"),
+               (" len_JavaNCSSmet_Analyze_countPos", "NUMERIC"), ("sum_JavaNCSSmet_Analyze_countPos", "NUMERIC"),
+               ("mean_JavaNCSSmet_Analyze_countPos", "NUMERIC"), ("median_JavaNCSSmet_Analyze_countPos", "NUMERIC"),
+               ("var_JavaNCSSmet_Analyze_countPos", "NUMERIC"), ("max_JavaNCSSmet_Analyze_countPos", "NUMERIC"),
+               ("min_JavaNCSSmet_Analyze_countPos", "NUMERIC"), (" len_thorwsSTM_Analyze_countPos", "NUMERIC"),
+               ("sum_thorwsSTM_Analyze_countPos", "NUMERIC"), ("mean_thorwsSTM_Analyze_countPos", "NUMERIC"),
+               ("median_thorwsSTM_Analyze_countPos", "NUMERIC"), ("var_thorwsSTM_Analyze_countPos", "NUMERIC"),
+               ("max_thorwsSTM_Analyze_countPos", "NUMERIC"), ("min_thorwsSTM_Analyze_countPos", "NUMERIC"),
+               (" len_coupl_Analyze_countPos", "NUMERIC"), ("sum_coupl_Analyze_countPos", "NUMERIC"),
+               ("mean_coupl_Analyze_countPos", "NUMERIC"), ("median_coupl_Analyze_countPos", "NUMERIC"),
+               ("var_coupl_Analyze_countPos", "NUMERIC"), ("max_coupl_Analyze_countPos", "NUMERIC"),
+               ("min_coupl_Analyze_countPos", "NUMERIC"), (" len_executables_Analyze_countPos", "NUMERIC"),
+               ("sum_executables_Analyze_countPos", "NUMERIC"), ("mean_executables_Analyze_countPos", "NUMERIC"),
+               ("median_executables_Analyze_countPos", "NUMERIC"), ("var_executables_Analyze_countPos", "NUMERIC"),
+               ("max_executables_Analyze_countPos", "NUMERIC"), ("min_executables_Analyze_countPos", "NUMERIC"),
+               (" len_lens_Analyze_countPos", "NUMERIC"),
+               ("sum_lens_Analyze_countPos", "NUMERIC"), ("mean_lens_Analyze_countPos", "NUMERIC"),
+               ("median_lens_Analyze_countPos", "NUMERIC"), ("var_lens_Analyze_countPos", "NUMERIC"),
+               ("max_lens_Analyze_countPos", "NUMERIC"), ("min_lens_Analyze_countPos", "NUMERIC"),
+               (" publics_Analyze_countPos", "NUMERIC"), ("protecteds_Analyze_countPos", "NUMERIC"),
+               ("privates_Analyze_countPos", "NUMERIC"), ("totals _Analyze_countPos", "NUMERIC"),
+               ("len_params_Analyze_countPos", "NUMERIC"), ("sum_params_Analyze_countPos", "NUMERIC"),
+               ("mean_params_Analyze_countPos", "NUMERIC"), ("median_params_Analyze_countPos", "NUMERIC"),
+               ("var_params_Analyze_countPos", "NUMERIC"), ("max_params_Analyze_countPos", "NUMERIC"),
+               ("min_params_Analyze_countPos", "NUMERIC"), ("NCSS_Analyze_countNeg", "NUMERIC"),
+               ("FileLen_Analyze_countNeg", "NUMERIC"), ("sum_fors_Analyze_countNeg", "NUMERIC"),
+               ("sum_ifs_Analyze_countNeg", "NUMERIC"),
+               ("sum_tries_Analyze_countNeg", "NUMERIC"), ("len_mccab_Analyze_countNeg", "NUMERIC"),
+               ("sum_mccab_Analyze_countNeg", "NUMERIC"), ("mean_mccab_Analyze_countNeg", "NUMERIC"),
+               ("median_mccab_Analyze_countNeg", "NUMERIC"), ("var_mccab_Analyze_countNeg", "NUMERIC"),
+               ("max_mccab_Analyze_countNeg", "NUMERIC"), ("min_mccab_Analyze_countNeg", "NUMERIC"),
+               (" len_fanOut_Analyze_countNeg", "NUMERIC"), ("sum_fanOut_Analyze_countNeg", "NUMERIC"),
+               ("mean_fanOut_Analyze_countNeg", "NUMERIC"), ("median_fanOut_Analyze_countNeg", "NUMERIC"),
+               ("var_fanOut_Analyze_countNeg", "NUMERIC"), ("max_fanOut_Analyze_countNeg", "NUMERIC"),
+               ("min_fanOut_Analyze_countNeg", "NUMERIC"), (" len_NPath_Analyze_countNeg", "NUMERIC"),
+               ("sum_NPath_Analyze_countNeg", "NUMERIC"), ("mean_NPath_Analyze_countNeg", "NUMERIC"),
+               ("median_NPath_Analyze_countNeg", "NUMERIC"), ("var_NPath_Analyze_countNeg", "NUMERIC"),
+               ("max_NPath_Analyze_countNeg", "NUMERIC"), ("min_NPath_Analyze_countNeg", "NUMERIC"),
+               (" len_JavaNCSSmet_Analyze_countNeg", "NUMERIC"), ("sum_JavaNCSSmet_Analyze_countNeg", "NUMERIC"),
+               ("mean_JavaNCSSmet_Analyze_countNeg", "NUMERIC"), ("median_JavaNCSSmet_Analyze_countNeg", "NUMERIC"),
+               ("var_JavaNCSSmet_Analyze_countNeg", "NUMERIC"), ("max_JavaNCSSmet_Analyze_countNeg", "NUMERIC"),
+               ("min_JavaNCSSmet_Analyze_countNeg", "NUMERIC"), (" len_thorwsSTM_Analyze_countNeg", "NUMERIC"),
+               ("sum_thorwsSTM_Analyze_countNeg", "NUMERIC"), ("mean_thorwsSTM_Analyze_countNeg", "NUMERIC"),
+               ("median_thorwsSTM_Analyze_countNeg", "NUMERIC"), ("var_thorwsSTM_Analyze_countNeg", "NUMERIC"),
+               ("max_thorwsSTM_Analyze_countNeg", "NUMERIC"), ("min_thorwsSTM_Analyze_countNeg", "NUMERIC"),
+               (" len_coupl_Analyze_countNeg", "NUMERIC"), ("sum_coupl_Analyze_countNeg", "NUMERIC"),
+               ("mean_coupl_Analyze_countNeg", "NUMERIC"), ("median_coupl_Analyze_countNeg", "NUMERIC"),
+               ("var_coupl_Analyze_countNeg", "NUMERIC"), ("max_coupl_Analyze_countNeg", "NUMERIC"),
+               ("min_coupl_Analyze_countNeg", "NUMERIC"), (" len_executables_Analyze_countNeg", "NUMERIC"),
+               ("sum_executables_Analyze_countNeg", "NUMERIC"), ("mean_executables_Analyze_countNeg", "NUMERIC"),
+               ("median_executables_Analyze_countNeg", "NUMERIC"), ("var_executables_Analyze_countNeg", "NUMERIC"),
+               ("max_executables_Analyze_countNeg", "NUMERIC"), ("min_executables_Analyze_countNeg", "NUMERIC"),
+               (" len_lens_Analyze_countNeg", "NUMERIC"),
+               ("sum_lens_Analyze_countNeg", "NUMERIC"), ("mean_lens_Analyze_countNeg", "NUMERIC"),
+               ("median_lens_Analyze_countNeg", "NUMERIC"), ("var_lens_Analyze_countNeg", "NUMERIC"),
+               ("max_lens_Analyze_countNeg", "NUMERIC"), ("min_lens_Analyze_countNeg", "NUMERIC"),
+               (" publics_Analyze_countNeg", "NUMERIC"), ("protecteds_Analyze_countNeg", "NUMERIC"),
+               ("privates_Analyze_countNeg", "NUMERIC"), ("totals _Analyze_countNeg", "NUMERIC"),
+               ("len_params_Analyze_countNeg", "NUMERIC"), ("sum_params_Analyze_countNeg", "NUMERIC"),
+               ("mean_params_Analyze_countNeg", "NUMERIC"), ("median_params_Analyze_countNeg", "NUMERIC"),
+               ("var_params_Analyze_countNeg", "NUMERIC"), ("max_params_Analyze_countNeg", "NUMERIC"),
+               ("min_params_Analyze_countNeg", "NUMERIC"), ("NCSS_Analyze_sumPos", "NUMERIC"),
+               ("FileLen_Analyze_sumPos", "NUMERIC"), ("sum_fors_Analyze_sumPos", "NUMERIC"),
+               ("sum_ifs_Analyze_sumPos", "NUMERIC"),
+               ("sum_tries_Analyze_sumPos", "NUMERIC"), ("len_mccab_Analyze_sumPos", "NUMERIC"),
+               ("sum_mccab_Analyze_sumPos", "NUMERIC"), ("mean_mccab_Analyze_sumPos", "NUMERIC"),
+               ("median_mccab_Analyze_sumPos", "NUMERIC"), ("var_mccab_Analyze_sumPos", "NUMERIC"),
+               ("max_mccab_Analyze_sumPos", "NUMERIC"), ("min_mccab_Analyze_sumPos", "NUMERIC"),
+               (" len_fanOut_Analyze_sumPos", "NUMERIC"), ("sum_fanOut_Analyze_sumPos", "NUMERIC"),
+               ("mean_fanOut_Analyze_sumPos", "NUMERIC"), ("median_fanOut_Analyze_sumPos", "NUMERIC"),
+               ("var_fanOut_Analyze_sumPos", "NUMERIC"), ("max_fanOut_Analyze_sumPos", "NUMERIC"),
+               ("min_fanOut_Analyze_sumPos", "NUMERIC"), (" len_NPath_Analyze_sumPos", "NUMERIC"),
+               ("sum_NPath_Analyze_sumPos", "NUMERIC"), ("mean_NPath_Analyze_sumPos", "NUMERIC"),
+               ("median_NPath_Analyze_sumPos", "NUMERIC"), ("var_NPath_Analyze_sumPos", "NUMERIC"),
+               ("max_NPath_Analyze_sumPos", "NUMERIC"), ("min_NPath_Analyze_sumPos", "NUMERIC"),
+               (" len_JavaNCSSmet_Analyze_sumPos", "NUMERIC"), ("sum_JavaNCSSmet_Analyze_sumPos", "NUMERIC"),
+               ("mean_JavaNCSSmet_Analyze_sumPos", "NUMERIC"), ("median_JavaNCSSmet_Analyze_sumPos", "NUMERIC"),
+               ("var_JavaNCSSmet_Analyze_sumPos", "NUMERIC"), ("max_JavaNCSSmet_Analyze_sumPos", "NUMERIC"),
+               ("min_JavaNCSSmet_Analyze_sumPos", "NUMERIC"), (" len_thorwsSTM_Analyze_sumPos", "NUMERIC"),
+               ("sum_thorwsSTM_Analyze_sumPos", "NUMERIC"), ("mean_thorwsSTM_Analyze_sumPos", "NUMERIC"),
+               ("median_thorwsSTM_Analyze_sumPos", "NUMERIC"), ("var_thorwsSTM_Analyze_sumPos", "NUMERIC"),
+               ("max_thorwsSTM_Analyze_sumPos", "NUMERIC"), ("min_thorwsSTM_Analyze_sumPos", "NUMERIC"),
+               (" len_coupl_Analyze_sumPos", "NUMERIC"), ("sum_coupl_Analyze_sumPos", "NUMERIC"),
+               ("mean_coupl_Analyze_sumPos", "NUMERIC"), ("median_coupl_Analyze_sumPos", "NUMERIC"),
+               ("var_coupl_Analyze_sumPos", "NUMERIC"), ("max_coupl_Analyze_sumPos", "NUMERIC"),
+               ("min_coupl_Analyze_sumPos", "NUMERIC"), (" len_executables_Analyze_sumPos", "NUMERIC"),
+               ("sum_executables_Analyze_sumPos", "NUMERIC"), ("mean_executables_Analyze_sumPos", "NUMERIC"),
+               ("median_executables_Analyze_sumPos", "NUMERIC"), ("var_executables_Analyze_sumPos", "NUMERIC"),
+               ("max_executables_Analyze_sumPos", "NUMERIC"), ("min_executables_Analyze_sumPos", "NUMERIC"),
+               (" len_lens_Analyze_sumPos", "NUMERIC"),
+               ("sum_lens_Analyze_sumPos", "NUMERIC"), ("mean_lens_Analyze_sumPos", "NUMERIC"),
+               ("median_lens_Analyze_sumPos", "NUMERIC"), ("var_lens_Analyze_sumPos", "NUMERIC"),
+               ("max_lens_Analyze_sumPos", "NUMERIC"), ("min_lens_Analyze_sumPos", "NUMERIC"),
+               (" publics_Analyze_sumPos", "NUMERIC"), ("protecteds_Analyze_sumPos", "NUMERIC"),
+               ("privates_Analyze_sumPos", "NUMERIC"), ("totals _Analyze_sumPos", "NUMERIC"),
+               ("len_params_Analyze_sumPos", "NUMERIC"), ("sum_params_Analyze_sumPos", "NUMERIC"),
+               ("mean_params_Analyze_sumPos", "NUMERIC"), ("median_params_Analyze_sumPos", "NUMERIC"),
+               ("var_params_Analyze_sumPos", "NUMERIC"), ("max_params_Analyze_sumPos", "NUMERIC"),
+               ("min_params_Analyze_sumPos", "NUMERIC"), ("NCSS_Analyze_sumNeg", "NUMERIC"),
+               ("FileLen_Analyze_sumNeg", "NUMERIC"), ("sum_fors_Analyze_sumNeg", "NUMERIC"),
+               ("sum_ifs_Analyze_sumNeg", "NUMERIC"),
+               ("sum_tries_Analyze_sumNeg", "NUMERIC"), ("len_mccab_Analyze_sumNeg", "NUMERIC"),
+               ("sum_mccab_Analyze_sumNeg", "NUMERIC"), ("mean_mccab_Analyze_sumNeg", "NUMERIC"),
+               ("median_mccab_Analyze_sumNeg", "NUMERIC"), ("var_mccab_Analyze_sumNeg", "NUMERIC"),
+               ("max_mccab_Analyze_sumNeg", "NUMERIC"), ("min_mccab_Analyze_sumNeg", "NUMERIC"),
+               (" len_fanOut_Analyze_sumNeg", "NUMERIC"), ("sum_fanOut_Analyze_sumNeg", "NUMERIC"),
+               ("mean_fanOut_Analyze_sumNeg", "NUMERIC"), ("median_fanOut_Analyze_sumNeg", "NUMERIC"),
+               ("var_fanOut_Analyze_sumNeg", "NUMERIC"), ("max_fanOut_Analyze_sumNeg", "NUMERIC"),
+               ("min_fanOut_Analyze_sumNeg", "NUMERIC"), (" len_NPath_Analyze_sumNeg", "NUMERIC"),
+               ("sum_NPath_Analyze_sumNeg", "NUMERIC"), ("mean_NPath_Analyze_sumNeg", "NUMERIC"),
+               ("median_NPath_Analyze_sumNeg", "NUMERIC"), ("var_NPath_Analyze_sumNeg", "NUMERIC"),
+               ("max_NPath_Analyze_sumNeg", "NUMERIC"), ("min_NPath_Analyze_sumNeg", "NUMERIC"),
+               (" len_JavaNCSSmet_Analyze_sumNeg", "NUMERIC"), ("sum_JavaNCSSmet_Analyze_sumNeg", "NUMERIC"),
+               ("mean_JavaNCSSmet_Analyze_sumNeg", "NUMERIC"), ("median_JavaNCSSmet_Analyze_sumNeg", "NUMERIC"),
+               ("var_JavaNCSSmet_Analyze_sumNeg", "NUMERIC"), ("max_JavaNCSSmet_Analyze_sumNeg", "NUMERIC"),
+               ("min_JavaNCSSmet_Analyze_sumNeg", "NUMERIC"), (" len_thorwsSTM_Analyze_sumNeg", "NUMERIC"),
+               ("sum_thorwsSTM_Analyze_sumNeg", "NUMERIC"), ("mean_thorwsSTM_Analyze_sumNeg", "NUMERIC"),
+               ("median_thorwsSTM_Analyze_sumNeg", "NUMERIC"), ("var_thorwsSTM_Analyze_sumNeg", "NUMERIC"),
+               ("max_thorwsSTM_Analyze_sumNeg", "NUMERIC"), ("min_thorwsSTM_Analyze_sumNeg", "NUMERIC"),
+               (" len_coupl_Analyze_sumNeg", "NUMERIC"), ("sum_coupl_Analyze_sumNeg", "NUMERIC"),
+               ("mean_coupl_Analyze_sumNeg", "NUMERIC"), ("median_coupl_Analyze_sumNeg", "NUMERIC"),
+               ("var_coupl_Analyze_sumNeg", "NUMERIC"), ("max_coupl_Analyze_sumNeg", "NUMERIC"),
+               ("min_coupl_Analyze_sumNeg", "NUMERIC"), (" len_executables_Analyze_sumNeg", "NUMERIC"),
+               ("sum_executables_Analyze_sumNeg", "NUMERIC"), ("mean_executables_Analyze_sumNeg", "NUMERIC"),
+               ("median_executables_Analyze_sumNeg", "NUMERIC"), ("var_executables_Analyze_sumNeg", "NUMERIC"),
+               ("max_executables_Analyze_sumNeg", "NUMERIC"), ("min_executables_Analyze_sumNeg", "NUMERIC"),
+               (" len_lens_Analyze_sumNeg", "NUMERIC"),
+               ("sum_lens_Analyze_sumNeg", "NUMERIC"), ("mean_lens_Analyze_sumNeg", "NUMERIC"),
+               ("median_lens_Analyze_sumNeg", "NUMERIC"), ("var_lens_Analyze_sumNeg", "NUMERIC"),
+               ("max_lens_Analyze_sumNeg", "NUMERIC"), ("min_lens_Analyze_sumNeg", "NUMERIC"),
+               (" publics_Analyze_sumNeg", "NUMERIC"), ("protecteds_Analyze_sumNeg", "NUMERIC"),
+               ("privates_Analyze_sumNeg", "NUMERIC"), ("totals _Analyze_sumNeg", "NUMERIC"),
+               ("len_params_Analyze_sumNeg", "NUMERIC"), ("sum_params_Analyze_sumNeg", "NUMERIC"),
+               ("mean_params_Analyze_sumNeg", "NUMERIC"), ("median_params_Analyze_sumNeg", "NUMERIC"),
+               ("var_params_Analyze_sumNeg", "NUMERIC"), ("max_params_Analyze_sumNeg", "NUMERIC"),
+               ("min_params_Analyze_sumNeg", "NUMERIC"), ("NCSS_Analyze_avgPos", "NUMERIC"),
+               ("FileLen_Analyze_avgPos", "NUMERIC"), ("sum_fors_Analyze_avgPos", "NUMERIC"),
+               ("sum_ifs_Analyze_avgPos", "NUMERIC"),
+               ("sum_tries_Analyze_avgPos", "NUMERIC"), ("len_mccab_Analyze_avgPos", "NUMERIC"),
+               ("sum_mccab_Analyze_avgPos", "NUMERIC"), ("mean_mccab_Analyze_avgPos", "NUMERIC"),
+               ("median_mccab_Analyze_avgPos", "NUMERIC"), ("var_mccab_Analyze_avgPos", "NUMERIC"),
+               ("max_mccab_Analyze_avgPos", "NUMERIC"), ("min_mccab_Analyze_avgPos", "NUMERIC"),
+               (" len_fanOut_Analyze_avgPos", "NUMERIC"), ("sum_fanOut_Analyze_avgPos", "NUMERIC"),
+               ("mean_fanOut_Analyze_avgPos", "NUMERIC"), ("median_fanOut_Analyze_avgPos", "NUMERIC"),
+               ("var_fanOut_Analyze_avgPos", "NUMERIC"), ("max_fanOut_Analyze_avgPos", "NUMERIC"),
+               ("min_fanOut_Analyze_avgPos", "NUMERIC"), (" len_NPath_Analyze_avgPos", "NUMERIC"),
+               ("sum_NPath_Analyze_avgPos", "NUMERIC"), ("mean_NPath_Analyze_avgPos", "NUMERIC"),
+               ("median_NPath_Analyze_avgPos", "NUMERIC"), ("var_NPath_Analyze_avgPos", "NUMERIC"),
+               ("max_NPath_Analyze_avgPos", "NUMERIC"), ("min_NPath_Analyze_avgPos", "NUMERIC"),
+               (" len_JavaNCSSmet_Analyze_avgPos", "NUMERIC"), ("sum_JavaNCSSmet_Analyze_avgPos", "NUMERIC"),
+               ("mean_JavaNCSSmet_Analyze_avgPos", "NUMERIC"), ("median_JavaNCSSmet_Analyze_avgPos", "NUMERIC"),
+               ("var_JavaNCSSmet_Analyze_avgPos", "NUMERIC"), ("max_JavaNCSSmet_Analyze_avgPos", "NUMERIC"),
+               ("min_JavaNCSSmet_Analyze_avgPos", "NUMERIC"), (" len_thorwsSTM_Analyze_avgPos", "NUMERIC"),
+               ("sum_thorwsSTM_Analyze_avgPos", "NUMERIC"), ("mean_thorwsSTM_Analyze_avgPos", "NUMERIC"),
+               ("median_thorwsSTM_Analyze_avgPos", "NUMERIC"), ("var_thorwsSTM_Analyze_avgPos", "NUMERIC"),
+               ("max_thorwsSTM_Analyze_avgPos", "NUMERIC"), ("min_thorwsSTM_Analyze_avgPos", "NUMERIC"),
+               (" len_coupl_Analyze_avgPos", "NUMERIC"), ("sum_coupl_Analyze_avgPos", "NUMERIC"),
+               ("mean_coupl_Analyze_avgPos", "NUMERIC"), ("median_coupl_Analyze_avgPos", "NUMERIC"),
+               ("var_coupl_Analyze_avgPos", "NUMERIC"), ("max_coupl_Analyze_avgPos", "NUMERIC"),
+               ("min_coupl_Analyze_avgPos", "NUMERIC"), (" len_executables_Analyze_avgPos", "NUMERIC"),
+               ("sum_executables_Analyze_avgPos", "NUMERIC"), ("mean_executables_Analyze_avgPos", "NUMERIC"),
+               ("median_executables_Analyze_avgPos", "NUMERIC"), ("var_executables_Analyze_avgPos", "NUMERIC"),
+               ("max_executables_Analyze_avgPos", "NUMERIC"), ("min_executables_Analyze_avgPos", "NUMERIC"),
+               (" len_lens_Analyze_avgPos", "NUMERIC"),
+               ("sum_lens_Analyze_avgPos", "NUMERIC"), ("mean_lens_Analyze_avgPos", "NUMERIC"),
+               ("median_lens_Analyze_avgPos", "NUMERIC"), ("var_lens_Analyze_avgPos", "NUMERIC"),
+               ("max_lens_Analyze_avgPos", "NUMERIC"), ("min_lens_Analyze_avgPos", "NUMERIC"),
+               (" publics_Analyze_avgPos", "NUMERIC"), ("protecteds_Analyze_avgPos", "NUMERIC"),
+               ("privates_Analyze_avgPos", "NUMERIC"), ("totals _Analyze_avgPos", "NUMERIC"),
+               ("len_params_Analyze_avgPos", "NUMERIC"), ("sum_params_Analyze_avgPos", "NUMERIC"),
+               ("mean_params_Analyze_avgPos", "NUMERIC"), ("median_params_Analyze_avgPos", "NUMERIC"),
+               ("var_params_Analyze_avgPos", "NUMERIC"), ("max_params_Analyze_avgPos", "NUMERIC"),
+               ("min_params_Analyze_avgPos", "NUMERIC"), ("NCSS_Analyze_avgNeg", "NUMERIC"),
+               ("FileLen_Analyze_avgNeg", "NUMERIC"), ("sum_fors_Analyze_avgNeg", "NUMERIC"),
+               ("sum_ifs_Analyze_avgNeg", "NUMERIC"),
+               ("sum_tries_Analyze_avgNeg", "NUMERIC"), ("len_mccab_Analyze_avgNeg", "NUMERIC"),
+               ("sum_mccab_Analyze_avgNeg", "NUMERIC"), ("mean_mccab_Analyze_avgNeg", "NUMERIC"),
+               ("median_mccab_Analyze_avgNeg", "NUMERIC"), ("var_mccab_Analyze_avgNeg", "NUMERIC"),
+               ("max_mccab_Analyze_avgNeg", "NUMERIC"), ("min_mccab_Analyze_avgNeg", "NUMERIC"),
+               (" len_fanOut_Analyze_avgNeg", "NUMERIC"), ("sum_fanOut_Analyze_avgNeg", "NUMERIC"),
+               ("mean_fanOut_Analyze_avgNeg", "NUMERIC"), ("median_fanOut_Analyze_avgNeg", "NUMERIC"),
+               ("var_fanOut_Analyze_avgNeg", "NUMERIC"), ("max_fanOut_Analyze_avgNeg", "NUMERIC"),
+               ("min_fanOut_Analyze_avgNeg", "NUMERIC"), (" len_NPath_Analyze_avgNeg", "NUMERIC"),
+               ("sum_NPath_Analyze_avgNeg", "NUMERIC"), ("mean_NPath_Analyze_avgNeg", "NUMERIC"),
+               ("median_NPath_Analyze_avgNeg", "NUMERIC"), ("var_NPath_Analyze_avgNeg", "NUMERIC"),
+               ("max_NPath_Analyze_avgNeg", "NUMERIC"), ("min_NPath_Analyze_avgNeg", "NUMERIC"),
+               (" len_JavaNCSSmet_Analyze_avgNeg", "NUMERIC"), ("sum_JavaNCSSmet_Analyze_avgNeg", "NUMERIC"),
+               ("mean_JavaNCSSmet_Analyze_avgNeg", "NUMERIC"), ("median_JavaNCSSmet_Analyze_avgNeg", "NUMERIC"),
+               ("var_JavaNCSSmet_Analyze_avgNeg", "NUMERIC"), ("max_JavaNCSSmet_Analyze_avgNeg", "NUMERIC"),
+               ("min_JavaNCSSmet_Analyze_avgNeg", "NUMERIC"), (" len_thorwsSTM_Analyze_avgNeg", "NUMERIC"),
+               ("sum_thorwsSTM_Analyze_avgNeg", "NUMERIC"), ("mean_thorwsSTM_Analyze_avgNeg", "NUMERIC"),
+               ("median_thorwsSTM_Analyze_avgNeg", "NUMERIC"), ("var_thorwsSTM_Analyze_avgNeg", "NUMERIC"),
+               ("max_thorwsSTM_Analyze_avgNeg", "NUMERIC"), ("min_thorwsSTM_Analyze_avgNeg", "NUMERIC"),
+               (" len_coupl_Analyze_avgNeg", "NUMERIC"), ("sum_coupl_Analyze_avgNeg", "NUMERIC"),
+               ("mean_coupl_Analyze_avgNeg", "NUMERIC"), ("median_coupl_Analyze_avgNeg", "NUMERIC"),
+               ("var_coupl_Analyze_avgNeg", "NUMERIC"), ("max_coupl_Analyze_avgNeg", "NUMERIC"),
+               ("min_coupl_Analyze_avgNeg", "NUMERIC"), (" len_executables_Analyze_avgNeg", "NUMERIC"),
+               ("sum_executables_Analyze_avgNeg", "NUMERIC"), ("mean_executables_Analyze_avgNeg", "NUMERIC"),
+               ("median_executables_Analyze_avgNeg", "NUMERIC"), ("var_executables_Analyze_avgNeg", "NUMERIC"),
+               ("max_executables_Analyze_avgNeg", "NUMERIC"), ("min_executables_Analyze_avgNeg", "NUMERIC"),
+               (" len_lens_Analyze_avgNeg", "NUMERIC"),
+               ("sum_lens_Analyze_avgNeg", "NUMERIC"), ("mean_lens_Analyze_avgNeg", "NUMERIC"),
+               ("median_lens_Analyze_avgNeg", "NUMERIC"), ("var_lens_Analyze_avgNeg", "NUMERIC"),
+               ("max_lens_Analyze_avgNeg", "NUMERIC"), ("min_lens_Analyze_avgNeg", "NUMERIC"),
+               (" publics_Analyze_avgNeg", "NUMERIC"), ("protecteds_Analyze_avgNeg", "NUMERIC"),
+               ("privates_Analyze_avgNeg", "NUMERIC"), ("totals _Analyze_avgNeg", "NUMERIC"),
+               ("len_params_Analyze_avgNeg", "NUMERIC"), ("sum_params_Analyze_avgNeg", "NUMERIC"),
+               ("mean_params_Analyze_avgNeg", "NUMERIC"), ("median_params_Analyze_avgNeg", "NUMERIC"),
+               ("var_params_Analyze_avgNeg", "NUMERIC"), ("max_params_Analyze_avgNeg", "NUMERIC"),
+               ("min_params_Analyze_avgNeg", "NUMERIC")
+               ]
+        ret = []
         for i in range(len(all)):
-            if i+1 in best_features:
+            if i + 1 in best_features:
                 ret.append(all[i])
         return ret
 
-
-    def sqlToAttributesBest(self,basicAtt, c, files_dict, first,best):
+    def sqlToAttributesBest(self, basicAtt, c, files_dict, first, best):
         Att_dict = {}
         for f in files_dict.keys():
             Att_dict[f] = list(basicAtt)
-        if 72==len(best):
-                    print "len ", best
+        if 72 == len(best):
+            print "len ", best
         for row in c.execute(first):
             name = Agent.pathTopack.pathToPack(row[0])
             if (name in Att_dict):
-                ret=[]
-                all=list([ x if x!=None else 0 for x in  row[1:]  ])
+                ret = []
+                all = list([x if x != None else 0 for x in row[1:]])
                 for i in range(len(all)):
-                        if i in best:
-                            ret.append(all[i])
-                if len(ret)!=len(best):
+                    if i in best:
+                        ret.append(all[i])
+                if len(ret) != len(best):
                     print "len ", len(ret)
                 Att_dict[name] = ret
         for f in Att_dict:
             files_dict[f] = files_dict[f] + Att_dict[f]
 
-
-    def get_features(self, c, files_dict,prev_date,start_date,end_date):
-        analyze='''select name , sum( NCSS ), sum(FileLen ), sum(sum_fors ), sum(sum_ifs ), sum(sum_tries ), sum(
+    def get_features(self, c, files_dict, prev_date, start_date, end_date):
+        analyze = '''select name , sum( NCSS ), sum(FileLen ), sum(sum_fors ), sum(sum_ifs ), sum(sum_tries ), sum(
 		len_mccab ), sum(sum_mccab ), sum(mean_mccab ), sum(median_mccab ), sum(var_mccab ), sum(max_mccab ), sum(min_mccab ), sum(
 		len_fanOut ), sum(sum_fanOut ), sum(mean_fanOut ), sum(median_fanOut ), sum(var_fanOut ), sum(max_fanOut ), sum(min_fanOut ), sum(
 		len_NPath ), sum(sum_NPath ), sum(mean_NPath ), sum(median_NPath ), sum(var_NPath ), sum(max_NPath ), sum(min_NPath ), sum(
@@ -192,9 +354,9 @@ class analyzeComms:
 		len_lens ), sum(sum_lens ), sum(mean_lens ), sum(median_lens ), sum(var_lens ), sum(max_lens ), sum(min_lens ), sum(
 		publics ), sum(protecteds ), sum(privates ), sum(totals  ), sum(len_params ), sum(sum_params ), sum(mean_params ), sum(median_params ), sum(var_params ), sum(max_params ), sum(min_params)
 		from checkStyleAnalyzeExtends group by name'''
-        lst=[0,1,3,6,7,9,10,13,14,15,17,18,20,21,23,24,27,41,42,43,45,48,55,59,64]
-        self.sqlToAttributesBest(["0" for x in lst], c, files_dict, analyze,lst)
-        analyze='''select name , avg( NCSS ), avg(FileLen ), avg(sum_fors ), avg(sum_ifs ), avg(sum_tries ), avg(
+        lst = [0, 1, 3, 6, 7, 9, 10, 13, 14, 15, 17, 18, 20, 21, 23, 24, 27, 41, 42, 43, 45, 48, 55, 59, 64]
+        self.sqlToAttributesBest(["0" for x in lst], c, files_dict, analyze, lst)
+        analyze = '''select name , avg( NCSS ), avg(FileLen ), avg(sum_fors ), avg(sum_ifs ), avg(sum_tries ), avg(
 		len_mccab ), avg(sum_mccab ), avg(mean_mccab ), avg(median_mccab ), avg(var_mccab ), avg(max_mccab ), avg(min_mccab ), avg(
 		len_fanOut ), avg(sum_fanOut ), avg(mean_fanOut ), avg(median_fanOut ), avg(var_fanOut ), avg(max_fanOut ), avg(min_fanOut ), avg(
 		len_NPath ), avg(sum_NPath ), avg(mean_NPath ), avg(median_NPath ), avg(var_NPath ), avg(max_NPath ), avg(min_NPath ), avg(
@@ -205,9 +367,10 @@ class analyzeComms:
 		len_lens ), avg(sum_lens ), avg(mean_lens ), avg(median_lens ), avg(var_lens ), avg(max_lens ), avg(min_lens ), avg(
 		publics ), avg(protecteds ), avg(privates ), avg(totals  ), avg(len_params ), avg(sum_params ), avg(mean_params ), avg(median_params ), avg(var_params ), avg(max_params ), avg(min_params)
 		from checkStyleAnalyzeExtends group by name'''
-        lst=[3,6,7,8,10,11,13,14,15,17,18,20,21,22,23,24,25,27,28,29,31,32,34,35,36,38,39,41,42,43,45,46,48,49,50,52,53,55,56,57,59,60]
-        self.sqlToAttributesBest(["0" for x in lst], c, files_dict, analyze,lst)
-        analyze='''select name , Sum(case When	NCSS 	> 0 Then 1 Else 0 End),Sum(case When	FileLen 	> 0 Then 1 Else 0 End),Sum(case When	sum_fors 	> 0 Then 1 Else 0 End),
+        lst = [3, 6, 7, 8, 10, 11, 13, 14, 15, 17, 18, 20, 21, 22, 23, 24, 25, 27, 28, 29, 31, 32, 34, 35, 36, 38, 39,
+               41, 42, 43, 45, 46, 48, 49, 50, 52, 53, 55, 56, 57, 59, 60]
+        self.sqlToAttributesBest(["0" for x in lst], c, files_dict, analyze, lst)
+        analyze = '''select name , Sum(case When	NCSS 	> 0 Then 1 Else 0 End),Sum(case When	FileLen 	> 0 Then 1 Else 0 End),Sum(case When	sum_fors 	> 0 Then 1 Else 0 End),
 Sum(case When	sum_ifs 	> 0 Then 1 Else 0 End),Sum(case When	sum_tries 	> 0 Then 1 Else 0 End),Sum(case When	len_mccab 	> 0 Then 1 Else 0 End),
 Sum(case When	sum_mccab 	> 0 Then 1 Else 0 End),Sum(case When	mean_mccab 	> 0 Then 1 Else 0 End),Sum(case When	median_mccab 	> 0 Then 1 Else 0 End),
 Sum(case When	var_mccab 	> 0 Then 1 Else 0 End),Sum(case When	max_mccab 	> 0 Then 1 Else 0 End),Sum(case When	min_mccab 	> 0 Then 1 Else 0 End),
@@ -232,9 +395,10 @@ Sum(case When	 publics 	> 0 Then 1 Else 0 End),Sum(case When	protecteds 	> 0 The
 Sum(case When	totals  	> 0 Then 1 Else 0 End),Sum(case When	len_params 	> 0 Then 1 Else 0 End),Sum(case When	sum_params 	> 0 Then 1 Else 0 End),
 Sum(case When	mean_params 	> 0 Then 1 Else 0 End),Sum(case When	median_params 	> 0 Then 1 Else 0 End),Sum(case When	var_params 	> 0 Then 1 Else 0 End),
 Sum(case When	max_params 	> 0 Then 1 Else 0 End),Sum(case When	min_params	> 0 Then 1 Else 0 End) from checkStyleAnalyzeExtends group by name'''
-        lst=[0,1,3,5,6,7,9,10,13,14,15,16,17,18,19,20,21,23,24,26,27,28,30,31,41,42,43,45,46,47,48,49,51,52,54,55,56,57,58,59,61,63,64]
-        self.sqlToAttributesBest(["0" for x in lst ], c, files_dict, analyze,lst)
-        analyze='''select name , Sum(case When	NCSS 	< 0 Then 1 Else 0 End),Sum(case When	FileLen 	< 0 Then 1 Else 0 End),Sum(case When	sum_fors 	< 0 Then 1 Else 0 End),
+        lst = [0, 1, 3, 5, 6, 7, 9, 10, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 26, 27, 28, 30, 31, 41, 42, 43, 45,
+               46, 47, 48, 49, 51, 52, 54, 55, 56, 57, 58, 59, 61, 63, 64]
+        self.sqlToAttributesBest(["0" for x in lst], c, files_dict, analyze, lst)
+        analyze = '''select name , Sum(case When	NCSS 	< 0 Then 1 Else 0 End),Sum(case When	FileLen 	< 0 Then 1 Else 0 End),Sum(case When	sum_fors 	< 0 Then 1 Else 0 End),
 Sum(case When	sum_ifs 	< 0 Then 1 Else 0 End),Sum(case When	sum_tries 	< 0 Then 1 Else 0 End),Sum(case When	len_mccab 	< 0 Then 1 Else 0 End),
 Sum(case When	sum_mccab 	< 0 Then 1 Else 0 End),Sum(case When	mean_mccab 	< 0 Then 1 Else 0 End),Sum(case When	median_mccab 	< 0 Then 1 Else 0 End),
 Sum(case When	var_mccab 	< 0 Then 1 Else 0 End),Sum(case When	max_mccab 	< 0 Then 1 Else 0 End),Sum(case When	min_mccab 	< 0 Then 1 Else 0 End),
@@ -259,9 +423,9 @@ Sum(case When	 publics 	< 0 Then 1 Else 0 End),Sum(case When	protecteds 	< 0 The
 Sum(case When	totals  	< 0 Then 1 Else 0 End),Sum(case When	len_params 	< 0 Then 1 Else 0 End),Sum(case When	sum_params 	< 0 Then 1 Else 0 End),
 Sum(case When	mean_params 	< 0 Then 1 Else 0 End),Sum(case When	median_params 	< 0 Then 1 Else 0 End),Sum(case When	var_params 	< 0 Then 1 Else 0 End),
 Sum(case When	max_params 	< 0 Then 1 Else 0 End),Sum(case When	min_params	< 0 Then 1 Else 0 End) from checkStyleAnalyzeExtends group by name'''
-        lst=[0,1,3,6,7,9,13,14,15,17,20,21,23,27,28,30,42,48,49,51,55,56,58]
-        self.sqlToAttributesBest(["0" for x in lst], c, files_dict, analyze,lst)
-        analyze='''select name , Sum(case When	NCSS 	> 0 Then 	NCSS 	Else 0 End),Sum(case When	FileLen 	> 0 Then 	FileLen 	Else 0 End),Sum(case When	sum_fors 	> 0 Then 	sum_fors 	Else 0 End),
+        lst = [0, 1, 3, 6, 7, 9, 13, 14, 15, 17, 20, 21, 23, 27, 28, 30, 42, 48, 49, 51, 55, 56, 58]
+        self.sqlToAttributesBest(["0" for x in lst], c, files_dict, analyze, lst)
+        analyze = '''select name , Sum(case When	NCSS 	> 0 Then 	NCSS 	Else 0 End),Sum(case When	FileLen 	> 0 Then 	FileLen 	Else 0 End),Sum(case When	sum_fors 	> 0 Then 	sum_fors 	Else 0 End),
 Sum(case When	sum_ifs 	> 0 Then 	sum_ifs 	Else 0 End),Sum(case When	sum_tries 	> 0 Then 	sum_tries 	Else 0 End),Sum(case When	len_mccab 	> 0 Then 	len_mccab 	Else 0 End),
 Sum(case When	sum_mccab 	> 0 Then 	sum_mccab 	Else 0 End),Sum(case When	mean_mccab 	> 0 Then 	mean_mccab 	Else 0 End),Sum(case When	median_mccab 	> 0 Then 	median_mccab 	Else 0 End),
 Sum(case When	var_mccab 	> 0 Then 	var_mccab 	Else 0 End),Sum(case When	max_mccab 	> 0 Then 	max_mccab 	Else 0 End),Sum(case When	min_mccab 	> 0 Then 	min_mccab 	Else 0 End),
@@ -286,9 +450,9 @@ Sum(case When	totals  	> 0 Then 	totals  	Else 0 End),Sum(case When	len_params 	
 Sum(case When	mean_params 	> 0 Then 	mean_params 	Else 0 End),Sum(case When	median_params 	> 0 Then 	median_params 	Else 0 End),Sum(case When	var_params 	> 0 Then 	var_params 	Else 0 End),
 Sum(case When	max_params 	> 0 Then 	max_params 	Else 0 End),Sum(case When	min_params	> 0 Then 	min_params	Else 0 End)
 from checkStyleAnalyzeExtends group by name'''
-        lst=[0,1,3,6,7,9,10,13,14,15,17,18,20,21,23,24,27,28,31,41,42,45,48,55,59,64]
-        self.sqlToAttributesBest(["0" for x in lst], c, files_dict, analyze,lst)
-        analyze='''select name , Sum(case When	NCSS 	< 0 Then 	NCSS 	Else 0 End),Sum(case When	FileLen 	< 0 Then 	FileLen 	Else 0 End),Sum(case When	sum_fors 	< 0 Then 	sum_fors 	Else 0 End),
+        lst = [0, 1, 3, 6, 7, 9, 10, 13, 14, 15, 17, 18, 20, 21, 23, 24, 27, 28, 31, 41, 42, 45, 48, 55, 59, 64]
+        self.sqlToAttributesBest(["0" for x in lst], c, files_dict, analyze, lst)
+        analyze = '''select name , Sum(case When	NCSS 	< 0 Then 	NCSS 	Else 0 End),Sum(case When	FileLen 	< 0 Then 	FileLen 	Else 0 End),Sum(case When	sum_fors 	< 0 Then 	sum_fors 	Else 0 End),
 Sum(case When	sum_ifs 	< 0 Then 	sum_ifs 	Else 0 End),Sum(case When	sum_tries 	< 0 Then 	sum_tries 	Else 0 End),Sum(case When	len_mccab 	< 0 Then 	len_mccab 	Else 0 End),
 Sum(case When	sum_mccab 	< 0 Then 	sum_mccab 	Else 0 End),Sum(case When	mean_mccab 	< 0 Then 	mean_mccab 	Else 0 End),Sum(case When	median_mccab 	< 0 Then 	median_mccab 	Else 0 End),
 Sum(case When	var_mccab 	< 0 Then 	var_mccab 	Else 0 End),Sum(case When	max_mccab 	< 0 Then 	max_mccab 	Else 0 End),Sum(case When	min_mccab 	< 0 Then 	min_mccab 	Else 0 End),
@@ -313,9 +477,10 @@ Sum(case When	totals  	< 0 Then 	totals  	Else 0 End),Sum(case When	len_params 	
 Sum(case When	mean_params 	< 0 Then 	mean_params 	Else 0 End),Sum(case When	median_params 	< 0 Then 	median_params 	Else 0 End),Sum(case When	var_params 	< 0 Then 	var_params 	Else 0 End),
 Sum(case When	max_params 	< 0 Then 	max_params 	Else 0 End),Sum(case When	min_params	< 0 Then 	min_params	Else 0 End)
 from checkStyleAnalyzeExtends group by name'''
-        lst=[1,6,7,9,10,13,14,15,17,18,20,21,23,24,27,28,29,30,31,41,42,43,45,46,48,49,51,52,55,56,57,58,59]
-        self.sqlToAttributesBest(["0" for x in lst], c, files_dict, analyze,lst)
-        analyze='''select name , avg(case When	NCSS 	> 0 Then 	NCSS 	Else null End),avg(case When	FileLen 	> 0 Then 	FileLen 	Else null End),avg(case When	sum_fors 	> 0 Then 	sum_fors 	Else null End),
+        lst = [1, 6, 7, 9, 10, 13, 14, 15, 17, 18, 20, 21, 23, 24, 27, 28, 29, 30, 31, 41, 42, 43, 45, 46, 48, 49, 51,
+               52, 55, 56, 57, 58, 59]
+        self.sqlToAttributesBest(["0" for x in lst], c, files_dict, analyze, lst)
+        analyze = '''select name , avg(case When	NCSS 	> 0 Then 	NCSS 	Else null End),avg(case When	FileLen 	> 0 Then 	FileLen 	Else null End),avg(case When	sum_fors 	> 0 Then 	sum_fors 	Else null End),
 avg(case When	sum_ifs 	> 0 Then 	sum_ifs 	Else null End),avg(case When	sum_tries 	> 0 Then 	sum_tries 	Else null End),avg(case When	len_mccab 	> 0 Then 	len_mccab 	Else null End),
 avg(case When	sum_mccab 	> 0 Then 	sum_mccab 	Else null End),avg(case When	mean_mccab 	> 0 Then 	mean_mccab 	Else null End),avg(case When	median_mccab 	> 0 Then 	median_mccab 	Else null End),
 avg(case When	var_mccab 	> 0 Then 	var_mccab 	Else null End),avg(case When	max_mccab 	> 0 Then 	max_mccab 	Else null End),avg(case When	min_mccab 	> 0 Then 	min_mccab 	Else null End),
@@ -340,9 +505,10 @@ avg(case When	privates 	> 0 Then 	privates 	Else null End),avg(case When	totals 
 avg(case When	sum_params 	> 0 Then 	sum_params 	Else null End),avg(case When	mean_params 	> 0 Then 	mean_params 	Else null End),avg(case When	median_params 	> 0 Then 	median_params 	Else null End),
 avg(case When	var_params 	> 0 Then 	var_params 	Else null End),avg(case When	max_params 	> 0 Then 	max_params 	Else null End),avg(case When	min_params	> 0 Then 	min_params	Else null End)
 from checkStyleAnalyzeExtends group by name'''
-        lst=[3,6,7,10,13,14,15,17,18,20,21,23,24,27,28,29,31,41,42,43,45,46,48,49,52,55,56,57,59]
-        self.sqlToAttributesBest(["0" for x in lst], c, files_dict, analyze,lst)
-        analyze='''select name , avg(case When	NCSS 	< 0 Then 	NCSS 	Else null End),avg(case When	FileLen 	< 0 Then 	FileLen 	Else null End),avg(case When	sum_fors 	< 0 Then 	sum_fors 	Else null End),
+        lst = [3, 6, 7, 10, 13, 14, 15, 17, 18, 20, 21, 23, 24, 27, 28, 29, 31, 41, 42, 43, 45, 46, 48, 49, 52, 55, 56,
+               57, 59]
+        self.sqlToAttributesBest(["0" for x in lst], c, files_dict, analyze, lst)
+        analyze = '''select name , avg(case When	NCSS 	< 0 Then 	NCSS 	Else null End),avg(case When	FileLen 	< 0 Then 	FileLen 	Else null End),avg(case When	sum_fors 	< 0 Then 	sum_fors 	Else null End),
 avg(case When	sum_ifs 	< 0 Then 	sum_ifs 	Else null End),avg(case When	sum_tries 	< 0 Then 	sum_tries 	Else null End),avg(case When	len_mccab 	< 0 Then 	len_mccab 	Else null End),
 avg(case When	sum_mccab 	< 0 Then 	sum_mccab 	Else null End),avg(case When	mean_mccab 	< 0 Then 	mean_mccab 	Else null End),avg(case When	median_mccab 	< 0 Then 	median_mccab 	Else null End),
 avg(case When	var_mccab 	< 0 Then 	var_mccab 	Else null End),avg(case When	max_mccab 	< 0 Then 	max_mccab 	Else null End),avg(case When	min_mccab 	< 0 Then 	min_mccab 	Else null End),
@@ -367,5 +533,5 @@ avg(case When	privates 	< 0 Then 	privates 	Else null End),avg(case When	totals 
 avg(case When	sum_params 	< 0 Then 	sum_params 	Else null End),avg(case When	mean_params 	< 0 Then 	mean_params 	Else null End),avg(case When	median_params 	< 0 Then 	median_params 	Else null End),
 avg(case When	var_params 	< 0 Then 	var_params 	Else null End),avg(case When	max_params 	< 0 Then 	max_params 	Else null End),avg(case When	min_params	< 0 Then 	min_params	Else null End)
 from checkStyleAnalyzeExtends group by name'''
-        lst=[1,6,7,9,13,14,15,17,18,20,21,23,27,28,30,41,42,45,48,49,51,55,56,58]
-        self.sqlToAttributesBest(["0" for x in lst], c, files_dict, analyze,lst)
+        lst = [1, 6, 7, 9, 13, 14, 15, 17, 18, 20, 21, 23, 27, 28, 30, 41, 42, 45, 48, 49, 51, 55, 56, 58]
+        self.sqlToAttributesBest(["0" for x in lst], c, files_dict, analyze, lst)

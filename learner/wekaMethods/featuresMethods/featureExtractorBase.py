@@ -1,4 +1,3 @@
-
 class FeatureExtractorBase(object):
     def get_attributes(self):
         """

@@ -1,6 +1,8 @@
 import re
 import logging
+
 __author__ = 'amir'
+
 
 def get_renamed_files_for_commit(commit):
     """
@@ -19,7 +21,8 @@ def get_renamed_files_for_commit(commit):
             if "{" and "}" in file:
                 # file moved
                 src, dst = file.split("{")[1].split("}")[0].split("=>")
-                fix = lambda repl: git_file_path_to_java_name(re.sub(r"{[\.a-zA-Z_/\-0-9]* => [\.a-zA-Z_/\-0-9]*}", repl.strip(), file))
+                fix = lambda repl: git_file_path_to_java_name(
+                    re.sub(r"{[\.a-zA-Z_/\-0-9]* => [\.a-zA-Z_/\-0-9]*}", repl.strip(), file))
                 src, dst = map(fix, [src, dst])
             else:
                 # full path changed

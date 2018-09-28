@@ -1,5 +1,6 @@
 import re
 import logging
+
 __author__ = 'amir'
 
 RENAMED_FILES = None
@@ -63,4 +64,4 @@ def fix_renamed_file(file_name):
 
 
 def pathToPack(path):
-    return fix_renamed_file(path).replace("/","\\")
+    return fix_renamed_file(path).replace("/", "\\")

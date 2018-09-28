@@ -43,6 +43,7 @@ conf = None
 
 USE_LONG_PATHS = True
 
+
 def globalConfig():
     current_dir = os.path.dirname(os.path.realpath(__file__))
     utilsPath = os.path.realpath(os.path.join(current_dir, "../utils"))
@@ -54,7 +55,7 @@ def globalConfig():
     methodsNamesXML = os.path.join(utilsPath, "methodNameLines.xml")
     wekaJar = os.path.join(utilsPath, "weka.jar")
     RemoveBat = os.path.join(utilsPath, "../removeBat.bat")
-    return docletPath,sourceMonitorEXE,checkStyle57,checkStyle68,allchecks,methodsNamesXML,wekaJar,RemoveBat,utilsPath
+    return docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath
 
 
 def to_long_path(path):
@@ -71,9 +72,9 @@ def to_short_path(path):
 
 def versions_info(repoPath, vers):
     r = git.Repo(repoPath)
-    if vers==[]:
+    if vers == []:
         wanted = [x.commit for x in r.tags]
-        vers=r.tags
+        vers = r.tags
     else:
         wanted = [x.commit for x in r.tags if x.name in vers]
     commits = [int("".join(list(x.hexsha)[:7]), 16) for x in wanted]
@@ -84,7 +85,7 @@ def versions_info(repoPath, vers):
 
 def CopyDirs(gitPath, versPath, versions):
     for version in versions:
-        path=os.path.join(versPath, version_to_dir_name(version), "repo")
+        path = os.path.join(versPath, version_to_dir_name(version), "repo")
         if not os.path.exists(path):
             run_commands = ["git", "clone", to_short_path(gitPath), 'repo']
             proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
@@ -92,7 +93,7 @@ def CopyDirs(gitPath, versPath, versions):
             (out, err) = proc.communicate()
 
 
-def GitRevert(versPath,vers):
+def GitRevert(versPath, vers):
     def run_cmd(path, args):
         run_commands = ["git", "-C", path] + args
         proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
@@ -144,8 +145,10 @@ def download_bugs(bugsPath, issue_tracker_url, issue_tracker_product, issue_trac
     elif issue_tracker == "googlecode":
         wekaMethods.issuesExtract.google_code.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
 
+
 def configure(confFile):
-    full_configure_file, gitPath, issue_tracker, issue_tracker_product, issue_tracker_url, versions, workingDir = read_configuration(confFile)
+    full_configure_file, gitPath, issue_tracker, issue_tracker_product, issue_tracker_url, versions, workingDir = read_configuration(
+        confFile)
     init_configuration(workingDir, versions)
     configuration = get_configuration()
     db_dir = os.path.join(workingDir, "dbAdd")
@@ -163,7 +166,7 @@ def configure(confFile):
     vers_paths = map(lambda ver: os.path.join(versPath, ver), vers_dirs)
     LocalGitPath = to_short_path(os.path.join(workingDir, "repo"))
     prediction_files = {'files': {'all': 'prediction_All_files.csv', 'most': 'prediction_Most_files.csv'},
-                   'methods': {'all': 'prediction_All_methods.csv', 'most': 'prediction_Most_methods.csv'}}
+                        'methods': {'all': 'prediction_All_methods.csv', 'most': 'prediction_Most_methods.csv'}}
     mkOneDir(LocalGitPath)
     weka_path = to_short_path(os.path.join(workingDir, "weka"))
     web_prediction_results = to_short_path(os.path.join(workingDir, "web_prediction_results"))
@@ -174,7 +177,7 @@ def configure(confFile):
     changeFile = to_short_path(os.path.join(os.path.join(workingDir, "commitsFiles"), "Ins_dels.txt"))
     debugger_base_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     buggy_repo = git.Repo(to_short_path(gitPath))
-    renamed_mapping = {} # detect_renamed_files.renamed_files_for_repo(buggy_repo)
+    renamed_mapping = {}  # detect_renamed_files.renamed_files_for_repo(buggy_repo)
     remotes_urls = reduce(list.__add__, map(lambda r: list(r.urls), buggy_repo.remotes))
     logging.info(
         'remote git at urls {0} and HEAD is on commit {1}'.format(str(remotes_urls), str(buggy_repo.head.commit)))
@@ -189,20 +192,26 @@ def configure(confFile):
                     ("commits", commits), ("docletPath", docletPath), ("sourceMonitorEXE", sourceMonitorEXE),
                     ("checkStyle57", checkStyle57), ("checkStyle68", checkStyle68), ("allchecks", allchecks),
                     ("methodsNamesXML", methodsNamesXML), ("wekaJar", wekaJar), ("RemoveBat", RemoveBat),
-                    ("utilsPath", utilsPath), ("versions", versions), ("gitPath", gitPath), ("issue_tracker", issue_tracker),
+                    ("utilsPath", utilsPath), ("versions", versions), ("gitPath", gitPath),
+                    ("issue_tracker", issue_tracker),
                     ("issue_tracker_url", issue_tracker_url), ("issue_tracker_product", issue_tracker_product),
-                    ("workingDir", workingDir), ("bugsPath", bugsPath), ("vers_dirs", vers_dirs), ("vers_paths", vers_paths),
+                    ("workingDir", workingDir), ("bugsPath", bugsPath), ("vers_dirs", vers_dirs),
+                    ("vers_paths", vers_paths),
                     ("LocalGitPath", LocalGitPath), ("weka_path", weka_path), ("MethodsParsed", MethodsParsed),
                     ("changeFile", changeFile), ("debugger_base_path", debugger_base_path),
                     ("web_prediction_results", web_prediction_results), ("full_configure_file", full_configure_file),
-                    ("amir_tracer", amir_tracer), ("configuration_path", configuration_path), ("caching_dir", caching_dir),
-                    ('DebuggerTests', DebuggerTests), ('prediction_files', prediction_files), ('experiments', experiments),
-                    ('renamed_mapping', renamed_mapping), ("distribution_report", distribution_report)] + locals().items()
+                    ("amir_tracer", amir_tracer), ("configuration_path", configuration_path),
+                    ("caching_dir", caching_dir),
+                    ('DebuggerTests', DebuggerTests), ('prediction_files', prediction_files),
+                    ('experiments', experiments),
+                    ('renamed_mapping', renamed_mapping),
+                    ("distribution_report", distribution_report)] + locals().items()
     map(lambda name_val: setattr(configuration, name_val[0], name_val[1]), names_values)
     Mkdirs(workingDir)
     download_bugs(bugsPath, issue_tracker_url, issue_tracker_product, issue_tracker)
-    checkout_local_git(gitPath,workingDir)
+    checkout_local_git(gitPath, workingDir)
     # versionsCreate(gitPath, vers, versPath)
+
 
 def fix_renamed_file(file_name):
     return detect_renamed_files.fix_renamed_file(file_name, get_configuration().renamed_files)
@@ -212,7 +221,7 @@ def read_configuration(confFile):
     full_configure_file = ""
     lines = []
     with open(confFile, "r") as conf:
-        lines =[x.split("\n")[0] for x in conf.readlines()]
+        lines = [x.split("\n")[0] for x in conf.readlines()]
         conf.seek(0)
         full_configure_file = conf.read()
     versions, gitPath, issue_tracker_url, issue_tracker_product, workingDir = "", "", "", "", ""
@@ -243,31 +252,34 @@ def version_to_dir_name(version):
 
 def mkOneDir(dir):
     if not os.path.isdir(dir):
-            os.mkdir(dir)
+        os.mkdir(dir)
 
 
 def Mkdirs(workingDir):
     mkOneDir(workingDir)
     map(lambda dir_name: mkOneDir(os.path.join(workingDir, dir_name)), ["", "vers", "experiments", "experiments_known",
-                                                                        "dbAdd", "testedVer", "weka", "web_prediction_results", "markers", "DebuggerTests"])
-    versPath=os.path.join(workingDir,"vers")
+                                                                        "dbAdd", "testedVer", "weka",
+                                                                        "web_prediction_results", "markers",
+                                                                        "DebuggerTests"])
+    versPath = os.path.join(workingDir, "vers")
     mkOneDir(versPath)
-    checkAll=os.path.join(versPath,"checkAll")
+    checkAll = os.path.join(versPath, "checkAll")
     mkOneDir(checkAll)
-    checkAllMethodsData=os.path.join(versPath,"checkAllMethodsData")
+    checkAllMethodsData = os.path.join(versPath, "checkAllMethodsData")
     mkOneDir(checkAllMethodsData)
     for v in get_configuration().vers:
-        version=os.path.join(versPath, version_to_dir_name(v))
+        version = os.path.join(versPath, version_to_dir_name(v))
         mkOneDir(version)
-        blame=os.path.join(version,"blame")
+        blame = os.path.join(version, "blame")
         mkOneDir(blame)
-        Jdoc2=os.path.join(version,"Jdoc2")
+        Jdoc2 = os.path.join(version, "Jdoc2")
         mkOneDir(Jdoc2)
     return versPath
 
+
 class Configuration(object):
     def __init__(self, workingDir, versions):
-        self.markers_dir = os.path.join(workingDir,"markers")
+        self.markers_dir = os.path.join(workingDir, "markers")
         self.versions = versions
         mkOneDir(workingDir)
         log_path = os.path.join(to_short_path(workingDir), "log.log")
@@ -281,6 +293,7 @@ class Configuration(object):
     def get_marker(self, marker):
         return Marker(self.get_marker_path(marker))
 
+
 def open_subprocess(args, bufsize=0, executable=None, stdin=None, stdout=None, stderr=None, preexec_fn=None,
                     close_fds=False, shell=False, cwd=None, env=None, universal_newlines=False,
                     startupinfo=None, creationflags=0):
@@ -288,6 +301,7 @@ def open_subprocess(args, bufsize=0, executable=None, stdin=None, stdout=None, s
     return subprocess.Popen(args, bufsize=bufsize, executable=executable, stdin=stdin, stdout=stdout, stderr=stderr,
                             preexec_fn=preexec_fn, close_fds=close_fds, shell=shell, cwd=cwd, env=env,
                             universal_newlines=universal_newlines, startupinfo=startupinfo, creationflags=creationflags)
+
 
 class Marker(object):
     def __init__(self, path):
@@ -316,12 +330,12 @@ class Marker(object):
         with open(self.marker_path, "ab") as f:
             log_line = "finish time: " + str(datetime.now()) + "\n"
             f.write(log_line)
-            logging.info('writing to %s: %s', self.marker_path ,log_line)
+            logging.info('writing to %s: %s', self.marker_path, log_line)
 
 
 def init_configuration(workingDir, versions):
     global conf
-    assert(conf is None)
+    assert (conf is None)
     conf = Configuration(workingDir, versions)
 
 
@@ -332,17 +346,22 @@ def get_configuration():
 def post_bug_to_github(etype, value, tb):
     # try to post bug to github
     try:
-        gh = github3.login('DebuggerIssuesReport', password='DebuggerIssuesReport1') # DebuggerIssuesReport@mail.com
+        gh = github3.login('DebuggerIssuesReport', password='DebuggerIssuesReport1')  # DebuggerIssuesReport@mail.com
         repo = gh.repository('amir9979', 'Debugger')
-        issue_body = "\n".join(["An Exception occurred while running Debugger:\n", "command line is {0}\n\n".format(" ".join(sys.argv))])\
-                     + "".join(['Traceback (most recent call last):\n'] + traceback.format_tb(tb) + traceback.format_exception_only(etype, value))
-        issue = repo.create_issue(title='An Exception occurred : {0}'.format(value.message), body=issue_body, assignee='amir9979')
+        issue_body = "\n".join(
+            ["An Exception occurred while running Debugger:\n", "command line is {0}\n\n".format(" ".join(sys.argv))]) \
+                     + "".join(
+            ['Traceback (most recent call last):\n'] + traceback.format_tb(tb) + traceback.format_exception_only(etype,
+                                                                                                                 value))
+        issue = repo.create_issue(title='An Exception occurred : {0}'.format(value.message), body=issue_body,
+                                  assignee='amir9979')
         configuration = get_configuration()
         issue.create_comment(body="Configuration is : \n" + "\n".join(map(str, configuration.__dict__.items())))
         with open(logging.root.handlers[0].baseFilename) as logger:
             issue.create_comment(body=logger.read())
     except:
         pass
+
 
 @contextmanager
 def use_sqllite(db_path):
@@ -352,10 +371,12 @@ def use_sqllite(db_path):
     conn.commit()
     conn.close()
 
+
 def marker_decorator(marker):
     """
     run function if marker doesnt exists
     """
+
     def decorator(func):
         def f(*args, **kwargs):
             ans = None
@@ -371,7 +392,9 @@ def marker_decorator(marker):
                     post_bug_to_github(etype, value, tb)
                     raise
             return ans
+
         return f
+
     return decorator
 
 
@@ -384,7 +407,8 @@ def get_from_cache():
     for config in map(lambda d: os.path.join(cache, d, "configuration"), os.listdir(cache)):
         if not os.path.exists(config):
             continue
-        full_configure_file, gitPath, issue_tracker, issue_tracker_product, issue_tracker_url, versions, workingDir = read_configuration(config)
+        full_configure_file, gitPath, issue_tracker, issue_tracker_product, issue_tracker_url, versions, workingDir = read_configuration(
+            config)
         if versions == current_versions:
             return config
     return None

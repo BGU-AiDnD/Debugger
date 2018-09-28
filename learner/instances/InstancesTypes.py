@@ -1,5 +1,5 @@
-
 TYPES = ['class', 'method', 'line']
+
 
 class Instance(object):
     def __init__(self, instance_type, id, commit, bug):

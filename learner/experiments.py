@@ -19,12 +19,13 @@ class AvgResults(object):
             if isinstance(other_results.metrics[key], numbers.Number):
                 self.results[self.count][key] = other_results.metrics[key]
                 self.results['avg'][key] = ((self.results['avg'].get(key, 0) * self.count) +
-                                     other_results.metrics[key]) / (self.count + 1)
+                                            other_results.metrics[key]) / (self.count + 1)
         self.count += 1
 
 
 class ExperimentGenerator(object):
-    def __init__(self, test_runner, granularity, bugged_type, num_instances=50, tests_per_instance=50, bug_passing_probability=0.1):
+    def __init__(self, test_runner, granularity, bugged_type, num_instances=50, tests_per_instance=50,
+                 bug_passing_probability=0.1):
         self.test_runner = test_runner
         self.granularity = granularity
         self.bugged_type = bugged_type
@@ -35,9 +36,9 @@ class ExperimentGenerator(object):
                                                                                   test_runner.get_tests())
         self.bugs = filter(lambda bug: len(bug.get_buggy_components(self.granularity, self.bugged_type)) > 0,
                            Bug.get_bugs_from_db(os.path.join(utilsConf.get_configuration().db_dir,
-                                                 utilsConf.get_configuration().vers_dirs[-2]) + ".db",
-                                    utilsConf.get_configuration().dates[-2],
-                                    utilsConf.get_configuration().dates[-1]))
+                                                             utilsConf.get_configuration().vers_dirs[-2]) + ".db",
+                                                utilsConf.get_configuration().dates[-2],
+                                                utilsConf.get_configuration().dates[-1]))
         assert len(self.bugs) > 0
 
     def sample_observation(self, trace, bugs):
@@ -59,7 +60,8 @@ class ExperimentGenerator(object):
             if len(buggy_components) == 0:
                 continue
             tests = reduce(set.__or__,
-                           map(lambda x: self.test_runner.get_packages_tests().get('.'.join(x[:random.randint(0, len(x))]), set()),
+                           map(lambda x: self.test_runner.get_packages_tests().get(
+                               '.'.join(x[:random.randint(0, len(x))]), set()),
                                map(lambda file_name: file_name.replace('.java', '').split('.'), buggy_components)),
                            set())
             if len(tests) < self.tests_per_instance:
@@ -72,17 +74,19 @@ class ExperimentGenerator(object):
                 tests_details.append((test_name, trace, self.sample_observation(trace, buggy_components)))
             if sum(map(lambda x: x[2], tests_details)) == 0:
                 continue
-            matrix = MATRIX_PATH.format(ITERATION=i, BUG_ID=bug.bug_id, GRANULARITY=self.granularity, BUGGED_TYPE=self.bugged_type)
+            matrix = MATRIX_PATH.format(ITERATION=i, BUG_ID=bug.bug_id, GRANULARITY=self.granularity,
+                                        BUGGED_TYPE=self.bugged_type)
             write_planning_file(matrix, list(buggy_components),
                                 filter(lambda test: len(test[1]) > 0, tests_details),
                                 priors=self.components_priors,
                                 description=DESCRIPTION.format(BUG_ID=bug.bug_id, PROB=self.bug_passing_probability,
-                                                               GRANULARITY=self.granularity, BUGGED_TYPE=self.bugged_type))
+                                                               GRANULARITY=self.granularity,
+                                                               BUGGED_TYPE=self.bugged_type))
             inst = readPlanningFile(matrix)
             inst.diagnose()
             res = Diagnosis_Results(inst.diagnoses, inst.initial_tests, inst.error)
             results.update(res)
-            print "created instance num {ITERATION} with bugid {BUG_ID} for granularity {GRANULARITY} and type {BUGGED_TYPE}".\
+            print "created instance num {ITERATION} with bugid {BUG_ID} for granularity {GRANULARITY} and type {BUGGED_TYPE}". \
                 format(ITERATION=i, BUG_ID=bug.bug_id, GRANULARITY=self.granularity, BUGGED_TYPE=self.bugged_type)
             i += 1
         return results.results
@@ -95,10 +99,11 @@ class ExperimentGenerator(object):
             lines = list(csv.reader(f))[1:]
             predictions = dict(
                 map(lambda line: (
-                line[0].replace(".java", "").replace(os.path.sep, ".").lower().replace('$', '@'), line[1]), lines))
+                    line[0].replace(".java", "").replace(os.path.sep, ".").lower().replace('$', '@'), line[1]), lines))
         components_priors = {}
         components = set(reduce(list.__add__,
-                       map(lambda test_name: test_runner.tracer.traces[test_name].get_trace(granularity), tests), []))
+                                map(lambda test_name: test_runner.tracer.traces[test_name].get_trace(granularity),
+                                    tests), []))
         sorted_list = sorted(map(lambda s: s[::-1], list(components) + predictions.keys()))
         for component in components:
             reversed_component = component[::-1]

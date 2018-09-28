@@ -12,7 +12,6 @@ class Comment:
         self.lastLineNumber = -1
         self.lines = []
 
-
     def addContent(self, appendedContent, lineNumber):
         self.content = " ".join([self.content, appendedContent])
         self.lastLineNumber = lineNumber
@@ -20,34 +19,27 @@ class Comment:
         if self.firstLineNumber == -1:
             self.firstLineNumber = lineNumber
 
-
     def isEmpty(self):
         return self.firstLineNumber == -1
-
 
     def getContent(self):
         return self.content
 
-
     def getFirstLineNumber(self):
         return self.firstLineNumber
-
 
     def getLastLineNumber(self):
         return self.lastLineNumber
 
-
     def getLength(self):
         return self.getLastLineNumber() - self.getFirstLineNumber() + 1
-
 
     def newLine(self):
         self.content += "\n"
 
-
     def __str__(self):
-        return "Comment from lines %d-%d:\n%s" %(self.getFirstLineNumber(),
-            self.getLastLineNumber(), self.getContent())
+        return "Comment from lines %d-%d:\n%s" % (self.getFirstLineNumber(),
+                                                  self.getLastLineNumber(), self.getContent())
 
 
 class CommentFilter:
@@ -78,7 +70,6 @@ class CommentFilter:
 
         return (self.regularLines, self.comments)
 
-
     def reduceLine(self, line):
         notInLine = 999999
         multiLineBeginPosition = notInLine
@@ -95,7 +86,7 @@ class CommentFilter:
             oneLinePosition = line.find(ONELINE_COMMENT_TOKEN)
 
         if (not self.inMultilineComment
-                and oneLinePosition < multiLineBeginPosition and len(line[:oneLinePosition].strip())!=0):
+            and oneLinePosition < multiLineBeginPosition and len(line[:oneLinePosition].strip()) != 0):
             self.currentLine.append(line[:oneLinePosition])
             self.currentComment.addContent(
                 line[oneLinePosition + len(ONELINE_COMMENT_TOKEN):],
@@ -108,12 +99,12 @@ class CommentFilter:
             )
             self.inMultilineComment = False
             return (line[multiLineEndPosition +
-                len(MULTILINE_COMMENT_TOKEN_END):])
+                         len(MULTILINE_COMMENT_TOKEN_END):])
         elif multiLineBeginPosition != notInLine:
             self.currentLine.append(line[:multiLineBeginPosition])
             self.inMultilineComment = True
             return (line[multiLineBeginPosition +
-                len(MULTILINE_COMMENT_TOKEN_BEGIN):])
+                         len(MULTILINE_COMMENT_TOKEN_BEGIN):])
         elif self.inMultilineComment:
             self.currentComment.addContent(line, self.lineNumber)
         else:
@@ -124,12 +115,13 @@ class CommentFilter:
         return ""
 
 
-def commLines(file="C:\GitHub\\try\org.eclipse.cdt\core\org.eclipse.cdt.core.linux\src\org\eclipse\cdt\internal\core\linux\ProcessList.java"):
+def commLines(
+        file="C:\GitHub\\try\org.eclipse.cdt\core\org.eclipse.cdt.core.linux\src\org\eclipse\cdt\internal\core\linux\ProcessList.java"):
     with open(file, 'r') as f:
-            source = f.read().splitlines()
-            (regularLines, comments) = CommentFilter().filterComments(source)
-            commentsLines=[]
-            for c in comments:
-                for x in c.lines:
-                  commentsLines.append(x)
-            return commentsLines
+        source = f.read().splitlines()
+        (regularLines, comments) = CommentFilter().filterComments(source)
+        commentsLines = []
+        for c in comments:
+            for x in c.lines:
+                commentsLines.append(x)
+        return commentsLines

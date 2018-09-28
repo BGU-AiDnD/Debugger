@@ -26,32 +26,45 @@ import featuresMethods.analyzeLastMethods as analyzeLastMethods
 import featuresMethods.processMethodsFamilies as processMethodsFamilies
 import Agent.pathTopack
 
+# for %%l in (1,2,3,4,5,6,7,8,9,10,11,12) do (
+# java -classpath ../weka/weka.jar weka.classifiers.trees.J48  -t TRAINING_%%l.arff -x 10 -d MOEDL_%%l.model
+# java -classpath ../weka/weka.jar weka.classifiers.trees.J48  -l MOEDL_%%l.model -T TEST_WILD%%l.arff -p 0 > WEKA_%%l.txt  )
 
-#for %%l in (1,2,3,4,5,6,7,8,9,10,11,12) do (
-#java -classpath ../weka/weka.jar weka.classifiers.trees.J48  -t TRAINING_%%l.arff -x 10 -d MOEDL_%%l.model
-#java -classpath ../weka/weka.jar weka.classifiers.trees.J48  -l MOEDL_%%l.model -T TEST_WILD%%l.arff -p 0 > WEKA_%%l.txt  )
-
-BUG_QUERIES = {"Method": {"All": 'select distinct methodDir,"bugged"  from commitedMethods where bugId<>0  and methodDir like "%.java%" and methodDir not like "%test%" and commiter_date>="' + str("STARTDATE")+ '"' + '  and commiter_date<="' + str("ENDDATE")+ '" ' + ' group by methodDir',
-                           "Most": 'select CommitedMethods.methodDir,"bugged"  from CommitedMethods , (select max(lines) as l, bugId from CommitedMethods where methodDir like "%.java%" and commiter_date>="'+str("STARTDATE")+'"  and commiter_date<="'+str("ENDDATE")+'" and bugId<>0 group by bugId) as T where CommitedMethods.lines=T.l and CommitedMethods.bugId=T.bugId group by methodDir'},
-               "File": {"All": 'select distinct name,"bugged"  from commitedfiles where bugId<>0  and name like "%.java" and name not like "%test%" and commiter_date>="' + str("STARTDATE")+ '"' + '  and commiter_date<="' + str("ENDDATE")+ '" and not exists (select comments.commitid,comments.name from comments where comments.commitid=Commitedfiles.commitid and comments.name=Commitedfiles.name) ' + ' group by name',
-                         "Most": 'select distinct name,"bugged"  from (select Commitedfiles.bugId as bugId,Commitedfiles.name as name  from Commitedfiles , (select max(lines) as l, Commitedfiles.bugId as bugId from Commitedfiles where Commitedfiles.name like "%.java" and name not like "%test%" and commiter_date>="' + str("STARTDATE")+ '"' + '  and commiter_date<="' + str("ENDDATE") +"and not exists (select comments.commitid,comments.name from comments where comments.commitid=Commitedfiles.commitid and comments.name=Commitedfiles.name) " + '" group by bugId) as T where Commitedfiles.lines=T.l and Commitedfiles.bugId=T.bugId) where bugId<>0  group by name'}}
+BUG_QUERIES = {"Method": {
+    "All": 'select distinct methodDir,"bugged"  from commitedMethods where bugId<>0  and methodDir like "%.java%" and methodDir not like "%test%" and commiter_date>="' + str(
+        "STARTDATE") + '"' + '  and commiter_date<="' + str("ENDDATE") + '" ' + ' group by methodDir',
+    "Most": 'select CommitedMethods.methodDir,"bugged"  from CommitedMethods , (select max(lines) as l, bugId from CommitedMethods where methodDir like "%.java%" and commiter_date>="' + str(
+        "STARTDATE") + '"  and commiter_date<="' + str(
+        "ENDDATE") + '" and bugId<>0 group by bugId) as T where CommitedMethods.lines=T.l and CommitedMethods.bugId=T.bugId group by methodDir'},
+               "File": {
+                   "All": 'select distinct name,"bugged"  from commitedfiles where bugId<>0  and name like "%.java" and name not like "%test%" and commiter_date>="' + str(
+                       "STARTDATE") + '"' + '  and commiter_date<="' + str(
+                       "ENDDATE") + '" and not exists (select comments.commitid,comments.name from comments where comments.commitid=Commitedfiles.commitid and comments.name=Commitedfiles.name) ' + ' group by name',
+                   "Most": 'select distinct name,"bugged"  from (select Commitedfiles.bugId as bugId,Commitedfiles.name as name  from Commitedfiles , (select max(lines) as l, Commitedfiles.bugId as bugId from Commitedfiles where Commitedfiles.name like "%.java" and name not like "%test%" and commiter_date>="' + str(
+                       "STARTDATE") + '"' + '  and commiter_date<="' + str(
+                       "ENDDATE") + "and not exists (select comments.commitid,comments.name from comments where comments.commitid=Commitedfiles.commitid and comments.name=Commitedfiles.name) " + '" group by bugId) as T where Commitedfiles.lines=T.l and Commitedfiles.bugId=T.bugId) where bugId<>0  group by name'}}
 COMPONENTS_QUERIES = {"Method": 'select distinct methodDir from commitedMethods order by methodDir',
                       "File": 'select distinct name from commitedFiles  order by name'}
-PACKAGES = {'Method': ["lastProcessMethods","simpleProcessArticlesMethods","simpleProcessAddedMethods","bugsMethods"],
-            'File': ["haelstead","g2","g3","methodsArticles","methodsAdded","hirarcy","fieldsArticles","fieldsAdded","constructorsArticles","constructorsAdded","lastProcess","simpleProcessArticles","simpleProcessAdded","bugs","sourceMonitor","checkStyle","blame"]}
+PACKAGES = {
+    'Method': ["lastProcessMethods", "simpleProcessArticlesMethods", "simpleProcessAddedMethods", "bugsMethods"],
+    'File': ["haelstead", "g2", "g3", "methodsArticles", "methodsAdded", "hirarcy", "fieldsArticles", "fieldsAdded",
+             "constructorsArticles", "constructorsAdded", "lastProcess", "simpleProcessArticles", "simpleProcessAdded",
+             "bugs", "sourceMonitor", "checkStyle", "blame"]}
 
-def arff_build(attributes, data,desc,relation):
-    dict={}
-    dict['attributes']=attributes
-    dict['data']=data
-    dict['description']=desc
-    dict['relation']=relation
+
+def arff_build(attributes, data, desc, relation):
+    dict = {}
+    dict['attributes'] = attributes
+    dict['data'] = data
+    dict['description'] = desc
+    dict['relation'] = relation
     return dict
 
 
-def write_to_arff(data,filename):
+def write_to_arff(data, filename):
     with open(filename, 'w') as f:
         f.write(arff.dumps(data))
+
 
 def load_arff(filename):
     with open(filename, 'r') as f:
@@ -60,7 +73,7 @@ def load_arff(filename):
 
 def GitVersInfo():
     r = git.Repo(utilsConf.get_configuration().gitPath)
-    wanted=[x.commit for x in r.tags if x.name in utilsConf.get_configuration().vers]
+    wanted = [x.commit for x in r.tags if x.name in utilsConf.get_configuration().vers]
     dates = [datetime.datetime.fromtimestamp(x.committed_date).strftime('%Y-%m-%d %H:%M:%S') for x in wanted]
     return dates
 
@@ -76,21 +89,22 @@ def sqlToAttributes(basicAtt, c, files_dict, first):
     for f in Att_dict:
         files_dict[f] = files_dict[f] + Att_dict[f]
 
-def sqlToAttributesBest(basicAtt, c, files_dict, first,best):
-        Att_dict = {}
-        for f in files_dict.keys():
-            Att_dict[f] = list(basicAtt)
-        for row in c.execute(first):
-            name = Agent.pathTopack.pathToPack(row[0])
-            if (name in Att_dict):
-                ret=[]
-                all=list(row[1:])
-                for i in range(len(all)):
-                    if i+1 in best:
-                        ret.append(all[i])
-                Att_dict[name] = ret
-        for f in Att_dict:
-            files_dict[f] = files_dict[f] + Att_dict[f]
+
+def sqlToAttributesBest(basicAtt, c, files_dict, first, best):
+    Att_dict = {}
+    for f in files_dict.keys():
+        Att_dict[f] = list(basicAtt)
+    for row in c.execute(first):
+        name = Agent.pathTopack.pathToPack(row[0])
+        if (name in Att_dict):
+            ret = []
+            all = list(row[1:])
+            for i in range(len(all)):
+                if i + 1 in best:
+                    ret.append(all[i])
+            Att_dict[name] = ret
+    for f in Att_dict:
+        files_dict[f] = files_dict[f] + Att_dict[f]
 
 
 def get_arff_class(dbpath, start_date, end_date, bug_query, wanted):
@@ -112,7 +126,7 @@ def arffCreateForTag(dbpath, prev_date, start_date, end_date, objects, bugQuery,
     c = conn.cursor()
     files_dict = {}
     for row in c.execute(wanted):
-        name=Agent.pathTopack.pathToPack(row[0])
+        name = Agent.pathTopack.pathToPack(row[0])
         files_dict[name] = []
     conn.close()
     for o in objects:
@@ -128,39 +142,40 @@ def arffCreateForTag(dbpath, prev_date, start_date, end_date, objects, bugQuery,
 
 
 def objectsAttr(objects):
-    attr=[]
+    attr = []
     for o in objects:
         attr.extend(o.get_attributes())
-    attr.append(( "hasBug", ["bugged", "valid"]))
+    attr.append(("hasBug", ["bugged", "valid"]))
     return attr
 
-def writeFile(allNames, arffExtension,namesFile, attr, data, name, outPath):
+
+def writeFile(allNames, arffExtension, namesFile, attr, data, name, outPath):
     arff_data = arff_build(attr, data, str([]), "base")
     path_join = os.path.join(outPath, str(name + arffExtension))
     write_to_arff(arff_data, path_join)
-    if namesFile!="":
+    if namesFile != "":
         path_join = os.path.join(outPath, str(name + namesFile))
-        f=open(path_join,"wb")
-        writer=csv.writer(f)
+        f = open(path_join, "wb")
+        writer = csv.writer(f)
         writer.writerows([[a] for a in allNames])
         f.close()
-    #f.writelines(allNames)
+        # f.writelines(allNames)
 
 
 def writeArff(allNames, arffName, namesFile, attr, data):
     arff_data = arff_build(attr, data, str([]), "base")
     write_to_arff(arff_data, arffName)
-    if namesFile!="":
-        with open(namesFile,"wb") as f:
-            writer=csv.writer(f)
+    if namesFile != "":
+        with open(namesFile, "wb") as f:
+            writer = csv.writer(f)
             writer.writerows([[a] for a in allNames])
 
 
 def arffCreate(basicPath, objects, names, dates, bugQ, wanted, trainingFile, testingFile, NamesFile):
-    data=[]
-    i=0
+    data = []
+    i = 0
     attr = objectsAttr(objects)
-    while (i+1<len(names)):
+    while (i + 1 < len(names)):
         dbpath = os.path.join(basicPath, str(names[i] + ".db"))
         prev_date, start_date, end_date = dates[i: i + 3]
         tag, allNames = arffCreateForTag(dbpath, prev_date, start_date, end_date, objects, bugQ, wanted)
@@ -169,36 +184,36 @@ def arffCreate(basicPath, objects, names, dates, bugQ, wanted, trainingFile, tes
             writeArff([], trainingFile, "", attr, data)
         if i == len(names) - 2:
             writeArff(allNames, testingFile, NamesFile, attr, tag)
-        i=i+1
+        i = i + 1
     return data
 
 
-def attributeSelect(sourceFile, outFile,inds):
-    source=load_arff(sourceFile)
-    attributes=[]
-    ind=0
-    last=len(source['attributes'])-1
+def attributeSelect(sourceFile, outFile, inds):
+    source = load_arff(sourceFile)
+    attributes = []
+    ind = 0
+    last = len(source['attributes']) - 1
     for x in source['attributes']:
-        if ind in inds or ind==last:
+        if ind in inds or ind == last:
             attributes.append(x)
-        ind=ind+1
-    data=[]
+        ind = ind + 1
+    data = []
     for x in source['data']:
-        ind=0
-        d=[]
+        ind = 0
+        d = []
         for y in x:
-            if ind in inds or ind==last:
+            if ind in inds or ind == last:
                 d.append(y)
-            ind=ind+1
-        if(d!=[]):
+            ind = ind + 1
+        if (d != []):
             data.append(d)
-    arff_data=arff_build(attributes, data,str([]),"selected")
+    arff_data = arff_build(attributes, data, str([]), "selected")
     write_to_arff(arff_data, outFile)
 
 
 def featuresMethodsPacksToClasses(packs):
-    l=[]
-    names=[]
+    l = []
+    names = []
     if "bugsMethods" in packs:
         l.append(processMethodsFamilies.processMethodsFamilies("bugsMethods"))
         names.append("bugsMethods")
@@ -274,12 +289,12 @@ def featuresMethodsPacksToClasses(packs):
     if "analyzeLastMethods" in packs:
         l.append(analyzeLastMethods.analyzeLastMethods())
         names.append("analyzeLastMethods")
-    return l,names
+    return l, names
 
 
 def featuresPacksToClasses(packs):
-    l=[]
-    names=[]
+    l = []
+    names = []
     if "process" in packs:
         l.append(process.process())
         names.append("process")
@@ -355,7 +370,7 @@ def featuresPacksToClasses(packs):
     if "analyzeLast" in packs:
         l.append(analyzeLast.analyzeLast())
         names.append("analyzeLast")
-    return l,names
+    return l, names
 
 
 def names_to_classes(granularity, packs):
@@ -365,43 +380,48 @@ def names_to_classes(granularity, packs):
         return featuresMethodsPacksToClasses(packs)
     assert False
 
-def All_one(sourcePathTrain,sourcePathTest,oned,alld,packsInds):
-    red=list(set(reduce(lambda x, y: x+y, packsInds)))
+
+def All_one(sourcePathTrain, sourcePathTest, oned, alld, packsInds):
+    red = list(set(reduce(lambda x, y: x + y, packsInds)))
     if not os.path.isdir(oned):
-            os.mkdir(oned)
+        os.mkdir(oned)
     if not os.path.isdir(alld):
-            os.mkdir(alld)
+        os.mkdir(alld)
     for ind in range(len(packsInds)):
-        p=packsInds[ind]
-        lst=list(red)
+        p = packsInds[ind]
+        lst = list(red)
         for x in p:
             lst.remove(x)
-        reduce1=lst
-        print len(reduce1),len(p),len(reduce1)+len(p)
-        outPathTrain=oned+"\\CDT_8_1_1_AllFiles_"+str(ind)+"_Appended.arff"
-        outPathTest=oned+"\\CDT_8_1_2_AllFiles_"+str(ind)+"_Only.arff"
-        attributeSelect(sourcePathTrain,outPathTrain,p)
-        attributeSelect(sourcePathTest,outPathTest,p)
-        outPathTrain=alld+"\\CDT_8_1_1_AllFiles_"+str(ind)+"_Appended.arff"
-        outPathTest=alld+"\\CDT_8_1_2_AllFiles_"+str(ind)+"_Only.arff"
-        attributeSelect(sourcePathTrain,outPathTrain, reduce1)
-        attributeSelect(sourcePathTest,outPathTest,reduce1)
+        reduce1 = lst
+        print len(reduce1), len(p), len(reduce1) + len(p)
+        outPathTrain = oned + "\\CDT_8_1_1_AllFiles_" + str(ind) + "_Appended.arff"
+        outPathTest = oned + "\\CDT_8_1_2_AllFiles_" + str(ind) + "_Only.arff"
+        attributeSelect(sourcePathTrain, outPathTrain, p)
+        attributeSelect(sourcePathTest, outPathTest, p)
+        outPathTrain = alld + "\\CDT_8_1_1_AllFiles_" + str(ind) + "_Appended.arff"
+        outPathTest = alld + "\\CDT_8_1_2_AllFiles_" + str(ind) + "_Only.arff"
+        attributeSelect(sourcePathTrain, outPathTrain, reduce1)
+        attributeSelect(sourcePathTest, outPathTest, reduce1)
+
 
 def BuildFiles(outDir, buggedType, granularity):
-    trainingFile=os.path.join(outDir, buggedType +"_training_" + granularity + ".arff")
-    testingFile=os.path.join(outDir, buggedType +"_testing_" + granularity + ".arff")
-    NamesFile=os.path.join(outDir, buggedType +"_names_" + granularity + ".csv")
-    outCsv=os.path.join(outDir, buggedType +"_out_" + granularity + ".csv")
+    trainingFile = os.path.join(outDir, buggedType + "_training_" + granularity + ".arff")
+    testingFile = os.path.join(outDir, buggedType + "_testing_" + granularity + ".arff")
+    NamesFile = os.path.join(outDir, buggedType + "_names_" + granularity + ".csv")
+    outCsv = os.path.join(outDir, buggedType + "_out_" + granularity + ".csv")
     return trainingFile, testingFile, NamesFile, outCsv
 
 
 def get_features(granularity, buggedType):
     bugQ = BUG_QUERIES[granularity][buggedType]
     wanted = COMPONENTS_QUERIES[granularity]
-    trainingFile, testingFile, NamesFile, outCsv = BuildFiles(utilsConf.get_configuration().weka_path, buggedType, granularity)
+    trainingFile, testingFile, NamesFile, outCsv = BuildFiles(utilsConf.get_configuration().weka_path, buggedType,
+                                                              granularity)
     FeaturesClasses, Featuresnames = names_to_classes(granularity, PACKAGES[granularity])
     arffCreate(utilsConf.get_configuration().db_dir, FeaturesClasses, utilsConf.get_configuration().vers_dirs,
-               [datetime.datetime(1900, 1, 1, 0, 0).strftime('%Y-%m-%d %H:%M:%S')] + utilsConf.get_configuration().dates, bugQ, wanted, trainingFile, testingFile, NamesFile)
+               [datetime.datetime(1900, 1, 1, 0, 0).strftime(
+                   '%Y-%m-%d %H:%M:%S')] + utilsConf.get_configuration().dates, bugQ, wanted, trainingFile, testingFile,
+               NamesFile)
     return trainingFile, testingFile, NamesFile, outCsv
 
 
@@ -411,14 +431,19 @@ def articlesAllpacks(buggedType):
     trainingFile, testingFile, NamesFile, outCsv = BuildFiles(utilsConf.get_configuration().weka_path, buggedType,
                                                               "File")
     FeaturesClasses, Featuresnames = featuresPacksToClasses(PACKAGES['File'])
-    arffCreate(utilsConf.get_configuration().db_dir, FeaturesClasses, utilsConf.get_configuration().vers_dirs, [datetime.datetime(1900, 1, 1, 0, 0).strftime('%Y-%m-%d %H:%M:%S')] +utilsConf.get_configuration().dates, bugQ, wanted, trainingFile, testingFile, NamesFile)
+    arffCreate(utilsConf.get_configuration().db_dir, FeaturesClasses, utilsConf.get_configuration().vers_dirs, [
+        datetime.datetime(1900, 1, 1, 0, 0).strftime('%Y-%m-%d %H:%M:%S')] + utilsConf.get_configuration().dates, bugQ,
+               wanted, trainingFile, testingFile, NamesFile)
     return trainingFile, testingFile, NamesFile, outCsv
+
 
 def articlesAllpacksMethods(buggedType):
     bugQ = BUG_QUERIES['Method'][buggedType]
     wanted = COMPONENTS_QUERIES['Method']
     trainingFile, testingFile, NamesFile, outCsv = BuildFiles(utilsConf.get_configuration().weka_path, buggedType,
                                                               "Method")
-    FeaturesClasses,Featuresnames=featuresMethodsPacksToClasses(PACKAGES['Method'])
-    arffCreate(utilsConf.get_configuration().db_dir, FeaturesClasses,utilsConf.get_configuration().vers_dirs, [datetime.datetime(1900, 1, 1, 0, 0).strftime('%Y-%m-%d %H:%M:%S')] + utilsConf.get_configuration().dates,bugQ,wanted,trainingFile,testingFile,NamesFile)
+    FeaturesClasses, Featuresnames = featuresMethodsPacksToClasses(PACKAGES['Method'])
+    arffCreate(utilsConf.get_configuration().db_dir, FeaturesClasses, utilsConf.get_configuration().vers_dirs, [
+        datetime.datetime(1900, 1, 1, 0, 0).strftime('%Y-%m-%d %H:%M:%S')] + utilsConf.get_configuration().dates, bugQ,
+               wanted, trainingFile, testingFile, NamesFile)
     return trainingFile, testingFile, NamesFile, outCsv
