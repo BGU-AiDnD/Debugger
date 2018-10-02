@@ -33,9 +33,10 @@ class Commit(object):
 
     @staticmethod
     def clean_commit_message(commit_message):
+        message = commit_message
         if "git-svn-id" in commit_message:
-            return commit_message.split("git-svn-id")[0]
-        return commit_message
+            message = commit_message.split("git-svn-id")[0]
+        return message.lower().replace(":", "").replace("#", "").replace("-", " ").replace("_", " ")
 
 
 def commTablelight(commits):
@@ -63,17 +64,19 @@ def commTablelight(commits):
 
 
 def commits_and_Bugs(repo, bugsIds):
-    def get_bug_num_from_commit_text(commit_text, bugsIds):
-        s = commit_text.lower().replace(":", "").replace("#", "").replace("-", " ").replace("_", " ").split()
-        for word in s:
+    def get_bug_num_from_commit_text(git_commit, bugsIds):
+        if str(git_commit.hexsha) in bugsIds:
+            return str(git_commit.hexsha)
+        commit_text = Commit.clean_commit_message(git_commit.message)
+        text = commit_text.split()
+        for word in text:
             if word.isdigit():
                 if word in bugsIds:
                     return word
         return "0"
     commits= []
     for git_commit in repo.iter_commits():
-        commit_text = Commit.clean_commit_message(git_commit.message)
-        commits.append(Commit(git_commit, get_bug_num_from_commit_text(commit_text, bugsIds)))
+        commits.append(Commit(git_commit, get_bug_num_from_commit_text(git_commit, bugsIds)))
     return commits
 
 
@@ -81,7 +84,6 @@ def bugsTable(bugs_path):
     # Create table
     all_bugs = []
     bugsIds = []
-
     def fix_date(date):
         if len(date) == len('09/01/09'):
             return datetime.datetime.strptime(date, "%d/%m/%y")

@@ -307,8 +307,8 @@ def check_distribution():
     for granularity in ['File', 'Method']:
         for buggedType in ["All", "Most"]:
             distribution = []
+            dbpath = os.path.join(utilsConf.get_configuration().db_dir, str(utilsConf.get_configuration().vers_dirs[-1] + ".db"))
             for i, version_name in list(enumerate(utilsConf.get_configuration().vers_dirs))[:-1]:
-                dbpath = os.path.join(utilsConf.get_configuration().db_dir, str(utilsConf.get_configuration().vers_dirs[i] + ".db"))
                 prev_date, start_date, end_date = dates[i: i + 3]
                 counts = {'valid': 0, 'bugged': 0}
                 files_hasBug = wekaMethods.articles.get_arff_class(dbpath, start_date, end_date,

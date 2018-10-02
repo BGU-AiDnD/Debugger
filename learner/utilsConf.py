@@ -133,6 +133,7 @@ def download_bugs(bugsPath, issue_tracker_url, issue_tracker_product, issue_trac
     import wekaMethods.issuesExtract.jira_import
     import wekaMethods.issuesExtract.python_bugzilla
     import wekaMethods.issuesExtract.sourceforge
+    import wekaMethods.issuesExtract.csv_labels
     if issue_tracker == "bugzilla":
         wekaMethods.issuesExtract.python_bugzilla.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
     elif issue_tracker == "jira":
@@ -143,6 +144,8 @@ def download_bugs(bugsPath, issue_tracker_url, issue_tracker_product, issue_trac
         wekaMethods.issuesExtract.sourceforge.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
     elif issue_tracker == "googlecode":
         wekaMethods.issuesExtract.google_code.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
+    elif issue_tracker == "csv_file":
+        wekaMethods.issuesExtract.csv_labels.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
 
 def configure(confFile):
     full_configure_file, gitPath, issue_tracker, issue_tracker_product, issue_tracker_url, versions, workingDir = read_configuration(confFile)
