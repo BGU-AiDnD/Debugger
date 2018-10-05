@@ -37,8 +37,8 @@ BUG_QUERIES = {"Method": {"All": 'select distinct methodDir,"bugged"  from commi
                          "Most": 'select distinct name,"bugged"  from (select Commitedfiles.bugId as bugId,Commitedfiles.name as name  from Commitedfiles , (select max(lines) as l, Commitedfiles.bugId as bugId from Commitedfiles where Commitedfiles.name like "%.java" and name not like "%test%" and commiter_date>="' + str("STARTDATE")+ '"' + '  and commiter_date<="' + str("ENDDATE") +"and not exists (select comments.commitid,comments.name from comments where comments.commitid=Commitedfiles.commitid and comments.name=Commitedfiles.name) " + '" group by bugId) as T where Commitedfiles.lines=T.l and Commitedfiles.bugId=T.bugId) where bugId<>0  group by name'}}
 COMPONENTS_QUERIES = {"Method": 'select distinct methodDir from commitedMethods order by methodDir',
                       "File": 'select distinct name from commitedFiles  order by name'}
-PACKAGES = {'Method': ["lastProcessMethods","simpleProcessArticlesMethods","simpleProcessAddedMethods","bugsMethods"],
-            'File': ["haelstead","g2","g3","methodsArticles","methodsAdded","hirarcy","fieldsArticles","fieldsAdded","constructorsArticles","constructorsAdded","lastProcess","simpleProcessArticles","simpleProcessAdded","bugs","sourceMonitor","checkStyle","blame"]}
+PACKAGES = {'Method': ["lastProcessMethods","simpleProcessArticlesMethods","simpleProcessAddedMethods"],
+            'File': ["haelstead","g2","g3","methodsArticles","methodsAdded","hirarcy","fieldsArticles","fieldsAdded","constructorsArticles","constructorsAdded","lastProcess","simpleProcessArticles","simpleProcessAdded","sourceMonitor","checkStyle","blame"]}
 
 def arff_build(attributes, data,desc,relation):
     dict={}
@@ -164,6 +164,8 @@ def arffCreate(basicPath, objects, names, dates, bugQ, wanted, trainingFile, tes
         dbpath = os.path.join(basicPath, str(names[i] + ".db"))
         prev_date, start_date, end_date = dates[i: i + 3]
         tag, allNames = arffCreateForTag(dbpath, prev_date, start_date, end_date, objects, bugQ, wanted)
+        names = "_{0}_{1}".format(names[i], names[i+1])
+        writeArff(allNames, testingFile.replace(".arff", names + ".arff"), NamesFile.replace(".csv", names + ".csv"), attr, tag)
         data = data + tag
         if i == len(names) - 3:
             writeArff([], trainingFile, "", attr, data)

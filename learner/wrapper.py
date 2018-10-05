@@ -415,7 +415,7 @@ if __name__ == '__main__':
     utilsConf.configure(sys.argv[1])
     shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
     check_distribution()
-    exit()
+    # exit()
     if utilsConf.copy_from_cache() is not None:
         exit()
     if len(sys.argv) == 2:
