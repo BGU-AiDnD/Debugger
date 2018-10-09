@@ -38,7 +38,7 @@ BUG_QUERIES = {"Method": {"All": 'select distinct methodDir,"bugged"  from commi
 COMPONENTS_QUERIES = {"Method": 'select distinct methodDir from commitedMethods order by methodDir',
                       "File": 'select distinct name from commitedFiles  order by name'}
 PACKAGES = {'Method': ["lastProcessMethods","simpleProcessArticlesMethods","simpleProcessAddedMethods"],
-            'File': ["haelstead","g2","g3","methodsArticles","methodsAdded","hirarcy","fieldsArticles","fieldsAdded","constructorsArticles","constructorsAdded","lastProcess","simpleProcessArticles","simpleProcessAdded","sourceMonitor","checkStyle","blame"]}
+            'File': ["haelstead","methodsArticles","methodsAdded","hirarcy","fieldsArticles","fieldsAdded","constructorsArticles","constructorsAdded","lastProcess","simpleProcessArticles","simpleProcessAdded","sourceMonitor","checkStyle","blame"]}
 
 def arff_build(attributes, data,desc,relation):
     dict={}
