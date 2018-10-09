@@ -206,7 +206,7 @@ def configure(confFile):
     Mkdirs(workingDir)
     download_bugs(bugsPath, issue_tracker_url, issue_tracker_product, issue_tracker)
     checkout_local_git(gitPath,workingDir)
-    # versionsCreate(gitPath, vers, versPath)
+    versionsCreate(gitPath, vers, versPath)
 
 def fix_renamed_file(file_name):
     return detect_renamed_files.fix_renamed_file(file_name, get_configuration().renamed_files)
