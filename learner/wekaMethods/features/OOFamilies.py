@@ -13,6 +13,7 @@ methods_features=[23,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54
 fields_features=[124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152]
 hirarcy_features=[1,2,3,4]
 constructors_features=[95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123]
+
 class OOFamilies:
 
 
@@ -221,6 +222,7 @@ class OOFamilies:
                     sup = nameSuper
                 edges.append((sup, nameClass))
         g = networkx.DiGraph()
+        g.add_node('root')
         g.add_edges_from(edges)
         methods={}
         for x in files_Names:
@@ -252,6 +254,7 @@ class OOFamilies:
 
 
         g2=networkx.DiGraph()
+        g2.add_node('root')
         g2.add_edges_from(sigsEdges)
         counts= Counter(sigsEdges)
         self.addFromDict(files_dict,g2.out_degree(),pathNames)
@@ -350,6 +353,7 @@ class OOFamilies:
                     sup = nameSuper
                 edges.append((sup, nameClass))
         g = networkx.DiGraph()
+        g.add_node('root')
         g.add_edges_from(edges)
         print g.nodes()
         paths = networkx.single_source_dijkstra_path(g, 'root')
@@ -386,6 +390,7 @@ class OOFamilies:
         counts= Counter(sigsEdges)
 
         g3=networkx.DiGraph()
+        g3.add_node('root')
         for e,w in counts.items():
             u,v=e
             g3.add_edge(u,v,weight=w)
@@ -412,6 +417,7 @@ class OOFamilies:
                     sup = nameSuper
                 edges.append((sup, nameClass))
         g = networkx.DiGraph()
+        g.add_node('root')
         g.add_edges_from(edges)
         paths = networkx.single_source_dijkstra_path(g, 'root')
 
@@ -452,6 +458,7 @@ class OOFamilies:
             dictOuts[a]=dictOuts[a]+1
 
         g4=networkx.DiGraph()
+        g4.add_node('root')
         for e,w in counts.items():
             u,v=e
             weigh=w/dictOuts[u]
@@ -480,6 +487,7 @@ class OOFamilies:
                     sup = nameSuper
                 edges.append((sup, nameClass))
         g = networkx.DiGraph()
+        g.add_node('root')
         g.add_edges_from(edges)
         degs = g.out_degree()
         degsIN = g.in_degree()
@@ -910,13 +918,3 @@ class OOFamilies:
 
     def get_attributes(self):
         return self.attributes()
-
-
-elem=( "fields_Count", "NUMERIC")
-l=[]
-l.append(OOFamilies("g2"))
-l.append(OOFamilies("g3"))
-l.append(OOFamilies("methods"))
-l.append(OOFamilies("hirarcy"))
-l.append(OOFamilies("fields"))
-l.append(OOFamilies("constructors"))
