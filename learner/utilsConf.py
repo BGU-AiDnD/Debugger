@@ -184,7 +184,8 @@ def configure(confFile):
     buggy_repo.close()
     try:
         repo = git.Repo(debugger_base_path)
-        logging.info('Debugger HEAD is on commit {0}'.format(str(repo.head.commit)))
+        debugger_commit = str(repo.head.commit)
+        logging.info('Debugger HEAD is on commit {0}'.format(debugger_commit))
         repo.close()
     except:
         pass
