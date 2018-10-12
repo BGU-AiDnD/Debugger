@@ -161,7 +161,7 @@ class ObjectOrientedFeaturesExtractor(FeaturesExtractor):
         """
         return signatures_line[1:-1].split(",")
 
-    def methods_features(self, cursor, files_dict, calling_table, is_simple_method):
+    def methods_features(self, calling_table, is_simple_method):
         """"""
         class_methods_count_query = \
             "select classes.path, count(*) from classes," + calling_table + \
@@ -215,11 +215,11 @@ class ObjectOrientedFeaturesExtractor(FeaturesExtractor):
                     for t in sql_data_types:
                         s = (' or ' + calling_table + '.name like ').join(t)
                         class_methods_count_query = 'select C.path,count(*)/(C.total*1.0) from ' + table + ' as C,' + calling_table + ' where C.name=' + calling_table + '.className and ( ' + calling_table + '.return like ' + s + ') group by C.path'
-                        sqlToAttributes(["0"], cursor, files_dict, class_methods_count_query)
+                        self.convert_sql_queries_to_attributes(["0"], class_methods_count_query)
                     for t in sql_data_types:
                         s = (' or ' + calling_table + '.name like ').join(t)
                         class_methods_count_query = 'select C.path,count(distinct return)/(C.total*1.0) from ' + table + ' as C,' + calling_table + ' where C.name=' + calling_table + '.className and ( ' + calling_table + '.return like ' + s + ' ) group by C.path'
-                        sqlToAttributes(["0"], cursor, files_dict, class_methods_count_query)
+                        self.convert_sql_queries_to_attributes(["0"], class_methods_count_query)
 
         for table in ["(select *,1 as total from classes)",
                       "(select classes.path as path,classes.name as name,count(*) as total from classes," + calling_table + " where classes.name=" + calling_table + ".className group by classes.path)"]:
@@ -227,10 +227,10 @@ class ObjectOrientedFeaturesExtractor(FeaturesExtractor):
             signaturesCheck = {}
             signaturesTotal = {}
             s = 'select C.path,' + calling_table + '.name,signature,(C.total*1.0) from ' + table + ' as C,' + calling_table + ' where C.name=' + calling_table + '.className'
-            for f in files_dict.keys():
+            for f in self.files_map:
                 signaturesCheck[f] = {}
                 signaturesTotal[f] = 0
-            for row in cursor.execute(s):
+            for row in self.cursor_object.execute(s):
                 classname = Agent.pathTopack.pathToPack(row[0])
                 if (classname in signaturesCheck):
                     (signaturesCheck[classname])[row[1]] = self.split_signatures(row[2])
@@ -253,63 +253,61 @@ class ObjectOrientedFeaturesExtractor(FeaturesExtractor):
                 for f in out_t:
                     if out_t[f] == []:
                         out_t[f] = [0, 0, 0, 0, 0, 0]
-                    files_dict[f] = files_dict[f] + list([len(out_t[f])])
+                    self.files_map[f] = self.files_map[f] + list([len(out_t[f])])
                     if out_t_set[f] == []:
                         out_t_set[f] = [0, 0, 0, 0, 0, 0]
-                    files_dict[f] = files_dict[f] + list([len(out_t_set[f])])
+                    self.files_map[f] = self.files_map[f] + list([len(out_t_set[f])])
         params = {}
         parQ = 'select classPath, Num_params  from ' + calling_table + ''
-        for f in files_dict.keys():
+        for f in self.files_map:
             params[f] = [-999]
-        for row in cursor.execute(parQ):
+        for row in self.cursor_object.execute(parQ):
             name = Agent.pathTopack.pathToPack(".".join((row[0].split("."))[:-1]))
             if (name in params):
                 (params[name]).append(int(row[1]))
         for f in params:
             if len(params[f]) > 1:
                 params[f].remove(-999)
-            files_dict[f] = files_dict[f] + list(self.extract_statistical_features(params[f]))
+            self.files_map[f] = self.files_map[f] + list(self.extract_statistical_features(params[f]))
 
-    def fields_features(self, c, files_dict):
-        countMethds = "select classes.path,count(*) from classes,fields where classes.name=fields.className group by classes.path"
-        sqlToAttributes(["0"], c, files_dict, countMethds)
-        primitiveTypes = ["'int'", "'short'", "'long'", "'byte'", "'float'", "'double'", "'char'",
-                          "'boolean'", "'String'"]
-        voidType = ["'void'"]
-        javaLang = ["'java.%'"]
-        typesSql = [primitiveTypes, voidType, javaLang, primitiveTypes + voidType + javaLang]
+    def fields_features(self):
+        countMethds = \
+            "select classes.path,count(*) from classes, fields " \
+            "where classes.name=fields.className group by classes.path"
+        self.convert_sql_queries_to_attributes(["0"], countMethds)
+
+        sql_data_types = [self.PRIMITIVE_TYPES, self.VOID_TYPE, self.JAVA_LANG_ANNOTATION,
+                          self.BASIC_GENERIC_TYPES + self.JAVA_LANG_ANNOTATION]
         callingTable = 'fields'
         for table in ["(select *,1 as total from classes)",
                       "(select classes.path as path,classes.name as name,count(*) as total from classes," + callingTable + " where classes.name=" + callingTable + ".className group by classes.path)"]:
             countMethds = 'select C.path,count(*)/(C.total*1.0) from ' + table + ' as C,' + callingTable + ' where C.name=' + callingTable + '.className and ' + callingTable + '.scope="private" group by C.path'
-            sqlToAttributes(["0"], c, files_dict, countMethds)
+            self.convert_sql_queries_to_attributes(["0"],  countMethds)
             countMethds = 'select C.path,count(*)/(C.total*1.0) from ' + table + ' as C,' + callingTable + ' where C.name=' + callingTable + '.className and ' + callingTable + '.scope="protected" group by C.path'
-            sqlToAttributes(["0"], c, files_dict, countMethds)
+            self.convert_sql_queries_to_attributes(["0"],  countMethds)
             countMethds = 'select C.path,count(*)/(C.total*1.0) from ' + table + ' as C,' + callingTable + ' where C.name=' + callingTable + '.className and ' + callingTable + '.scope="public" group by C.path'
-            sqlToAttributes(["0"], c, files_dict, countMethds)
+            self.convert_sql_queries_to_attributes(["0"],  countMethds)
             countMethds = 'select C.path,count(*)/(C.total*1.0) from ' + table + ' as C,' + callingTable + ' where C.name=' + callingTable + '.className and ' + callingTable + '.scope<>"public" group by C.path'
-            sqlToAttributes(["0"], c, files_dict, countMethds)
+            self.convert_sql_queries_to_attributes(["0"],  countMethds)
             countMethds = 'select C.path,count(*)/(C.total*1.0) from ' + table + ' as C,' + callingTable + ' where C.name=' + callingTable + '.className and ' + callingTable + '.static="true" group by C.path'
-            sqlToAttributes(["0"], c, files_dict, countMethds)
+            self.convert_sql_queries_to_attributes(["0"],  countMethds)
             countMethds = 'select C.path,count(*)/(C.total*1.0) from ' + table + ' as C,' + callingTable + ' where C.name=' + callingTable + '.className and ' + callingTable + '.final="true" group by C.path'
-            sqlToAttributes(["0"], c, files_dict, countMethds)
-            for t in typesSql:
+            self.convert_sql_queries_to_attributes(["0"],  countMethds)
+            for t in sql_data_types:
                 s = (' or ' + callingTable + '.name like ').join(t)
                 countMethds = 'select C.path,count(*)/(C.total*1.0) from ' + table + ' as C,' + callingTable + ' where C.name=' + callingTable + '.className and ( ' + callingTable + '.type like ' + s + ') group by C.path'
-                sqlToAttributes(["0"], c, files_dict, countMethds)
-            for t in typesSql:
+                self.convert_sql_queries_to_attributes(["0"],  countMethds)
+            for t in sql_data_types:
                 s = (' or ' + callingTable + '.name like ').join(t)
                 countMethds = 'select C.path,count(distinct type)/(C.total*1.0) from ' + table + ' as C,' + callingTable + ' where C.name=' + callingTable + '.className and ( ' + callingTable + '.type like ' + s + ' ) group by C.path'
-                sqlToAttributes(["0"], c, files_dict, countMethds)
+                self.convert_sql_queries_to_attributes(["0"],  countMethds)
 
-    def get_featuresBest(self, c, files_dict, prev_date, start_date, end_date):
+    def get_features(self):
         for scope in ['"public"', '"private"',
                       '"public" or scope="protected" or scope="private" or scope=""']:
             self.create_classes_graph(scope)
-        self.methods_features(c, files_dict, 'methods', True)
 
-    def get_features(self, c, files_dict, prev_date, start_date, end_date):
-        self.get_featuresBest(c, files_dict, prev_date, start_date, end_date)
+        self.methods_features('methods', True)
 
     def get_attributes(self):
         best_attributes = [attribute_item for index, attribute_item in
