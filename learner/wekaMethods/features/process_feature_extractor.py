@@ -139,7 +139,7 @@ class ProcessFeaturesExtractor(FeaturesExtractor):
 
         self.convert_sql_queries_to_attributes(["0", "0", "0", "0", "0", "0", "0", "0", "0"], first)
 
-        for p in ['"P3"']:  # TODO: WHATTTTTTTTTTTTTTTTTTTTTTTTTTTTTT???????
+        for bug_priority in ['"P3"']:  # TODO: WHATTTTTTTTTTTTTTTTTTTTTTTTTTTTTT???????
             first = \
                 'select name, count(*), sum(insertions), sum(deletions), ' \
                 'Sum(case When insertions > 0 Then 1 Else 0 End), ' \
@@ -148,9 +148,9 @@ class ProcessFeaturesExtractor(FeaturesExtractor):
                 'avg(case When insertions > 0 Then insertions Else Null End), ' \
                 'avg(case When deletions > 0 Then deletions Else Null End) ' \
                 'from commitedfiles,bugs where commitedfiles.bugId=bugs.id and ' \
-                'name not like "%test%" and bugs.Priority={p} ' \
+                'name not like "%test%" and bugs.Priority={priority} ' \
                 'and commiter_date<="{start_date}"  and commiter_date<="{end_date}" ' \
-                'group by name'.format(start_date=start_date, end_date=end_date)
+                'group by name'.format(start_date=start_date, end_date=end_date, priority=bug_priority)
 
             self.convert_sql_queries_to_attributes(["0", "0", "0", "0", "0", "0", "0", "0", "0"],
                                                    first)
