@@ -4,7 +4,7 @@ import arff
 
 from wekaMethods.buildDB import *
 from wekaMethods.commentedCodeDetector import *
-import features.process as process
+# import features.process as ProcessFeaturesExtractor
 import features.haelstead as haelstead
 import features.OO as OO
 import features.OOFamilies as OOFamilies
@@ -694,9 +694,9 @@ def featuresPacksToClasses(packs):
     l=[]
     names=[]
     if "process" in packs:
-        l.append(process.process())
-        names.append("process")
-        print "process"
+        # l.append(process.process()) # TODO: refactor this
+        # names.append("process")
+        # print "process"
     if "haelstead" in packs:
         l.append(haelstead.haelstead())
         names.append("haelstead")

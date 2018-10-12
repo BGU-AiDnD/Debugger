@@ -4,15 +4,11 @@ from os import path
 import cached_property
 
 from wekaMethods.articles import Agent
+from wekaMethods.features.features_extractor import FeaturesExtractor
 
 
-class ProcessFeaturesExtractor:
+class ProcessFeaturesExtractor(FeaturesExtractor):
     """"""
-
-    def __init__(self, cursor_object, files_map):
-        super(ProcessFeaturesExtractor, self).__init__()
-        self.cursor_object = cursor_object
-        self.files_map = files_map
 
     @cached_property
     def features_object(self):
@@ -24,22 +20,8 @@ class ProcessFeaturesExtractor:
     def all_features(self):
         return self.features_object["all_features"]
 
-    def convert_sql_queries_to_attributes(self, basic_attributes, query):
-        """"""
-        attributes = {}
-        for file_name in self.files_map:
-            attributes[file_name] = list(basic_attributes)
-
-        for result_row in self.cursor_object.execute(query):
-            title = Agent.pathTopack.pathToPack(result_row[0])
-            try:
-                attributes[title] = [column if column is not None else 0 for column in
-                                     result_row[1:]]
-            except:
-                pass  # TODO: LOG this
-
-        for attribute in attributes:
-            self.files_map[attribute] += attributes[attribute]
+    def get_attributes(self):
+        return [(key, self.all_features[key]) for key in self.all_features]
 
     def get_features(self, prev_date, start_date, end_date):
         first = \
@@ -54,7 +36,8 @@ class ProcessFeaturesExtractor:
             'and commiter_date<="{end_date}" ' \
             'group by name'.format(start_date=start_date, end_date=end_date)
 
-        self.sqlToAttributes(["0", "0", "0", "0", "0", "0", "0", "0", "0", "0"], first)
+        self.convert_sql_queries_to_attributes(["0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+                                               first)
 
         first_last_query = \
             'select name, count(*),  sum(insertions),sum(deletions),' \
@@ -68,7 +51,8 @@ class ProcessFeaturesExtractor:
             'and commiter_date<="{start_date}" ' \
             'group by name'.format(prev_date=prev_date, start_date=start_date)
 
-        self.sqlToAttributes(["0", "0", "0", "0", "0", "0", "0", "0", "0", "0"], first_last_query)
+        self.convert_sql_queries_to_attributes(["0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+                                               first_last_query)
 
         distinct_authors_current_commits_query = \
             'select name, count(distinct author) ' \
@@ -78,7 +62,7 @@ class ProcessFeaturesExtractor:
             'and commits.commiter_date<="{end_date}" ' \
             'group by Commitedfiles.name'.format(start_date=start_date, end_date=end_date)
 
-        self.sqlToAttributes(["0"], distinct_authors_current_commits_query)
+        self.convert_sql_queries_to_attributes(["0"], distinct_authors_current_commits_query)
 
         distinct_authors_from_prev_commits_query = \
             'select name, count(distinct author) ' \
@@ -88,7 +72,7 @@ class ProcessFeaturesExtractor:
             'commits.commiter_date<="{start_date}" ' \
             'group by Commitedfiles.name'.format(prev_date=prev_date, start_date=start_date)
 
-        self.sqlToAttributes(["0"], distinct_authors_from_prev_commits_query)
+        self.convert_sql_queries_to_attributes(["0"], distinct_authors_from_prev_commits_query)
 
         last_commit_query = \
             'select name, julianday("{start_date}")-julianday(max(commiter_date)) ' \
@@ -96,7 +80,7 @@ class ProcessFeaturesExtractor:
             'and commitedfiles.commiter_date<="{end_date}" ' \
             'group by Commitedfiles.name'.format(start_date=start_date, end_date=end_date)
 
-        self.sqlToAttributes(["0"], last_commit_query)
+        self.convert_sql_queries_to_attributes(["0"], last_commit_query)
 
         last_bug_query = \
             'select name, julianday("{start_date}")-julianday(max(commiter_date)) ' \
@@ -105,7 +89,7 @@ class ProcessFeaturesExtractor:
             'and commitedfiles.commiter_date<="{end_date}" ' \
             'group by Commitedfiles.name'.format(start_date=start_date, end_date=end_date)
 
-        self.sqlToAttributes(["0"], last_bug_query)
+        self.convert_sql_queries_to_attributes(["0"], last_bug_query)
 
         last_version_bug_query = \
             'select name, julianday("{start_date}")-julianday(max(commiter_date)) ' \
@@ -114,7 +98,7 @@ class ProcessFeaturesExtractor:
             'and commitedfiles.commiter_date<="{start_date}" ' \
             'group by Commitedfiles.name'.format(start_date=start_date, prev_date=prev_date)
 
-        self.sqlToAttributes(["0"], last_version_bug_query)
+        self.convert_sql_queries_to_attributes(["0"], last_version_bug_query)
 
         change_set_query = \
             'select A.name, count(distinct B.name) ' \
@@ -124,7 +108,7 @@ class ProcessFeaturesExtractor:
             'and B.commiter_date<="{end_date}" ' \
             'group by A.name'.format(start_date=start_date, end_date=end_date)
 
-        self.sqlToAttributes(["0"], change_set_query)
+        self.convert_sql_queries_to_attributes(["0"], change_set_query)
 
         commit_age_query = \
             'select name, ' \
@@ -132,7 +116,7 @@ class ProcessFeaturesExtractor:
             'from Commitedfiles  where commiter_date<="{start_date}" ' \
             'and commiter_date<="{end_date}" ' \
             'group by name'.format(start_date=start_date, end_date=end_date)
-        self.sqlToAttributes(["0"], commit_age_query)
+        self.convert_sql_queries_to_attributes(["0"], commit_age_query)
 
         commit_age_query = \
             'select name, julianday("{start_date}")*(sum(insertions)-sum(deletions)) - ' \
@@ -140,7 +124,7 @@ class ProcessFeaturesExtractor:
             'from Commitedfiles  where commiter_date<="{start_date}" and ' \
             'commiter_date<="{end_date}" ' \
             'group by name'.format(start_date=start_date, end_date=end_date)
-        self.sqlToAttributes(["0"], commit_age_query)
+        self.convert_sql_queries_to_attributes(["0"], commit_age_query)
 
         first = \
             'select name, count(*), sum(insertions), sum(deletions),' \
@@ -153,7 +137,7 @@ class ProcessFeaturesExtractor:
             'and commiter_date<="{start_date}"  and commiter_date<="{end_date}" ' \
             'group by name'.format(start_date=start_date, end_date=end_date)
 
-        self.sqlToAttributes(["0", "0", "0", "0", "0", "0", "0", "0", "0"], first)
+        self.convert_sql_queries_to_attributes(["0", "0", "0", "0", "0", "0", "0", "0", "0"], first)
 
         for p in ['"P3"']:  # TODO: WHATTTTTTTTTTTTTTTTTTTTTTTTTTTTTT???????
             first = \
@@ -168,7 +152,8 @@ class ProcessFeaturesExtractor:
                 'and commiter_date<="{start_date}"  and commiter_date<="{end_date}" ' \
                 'group by name'.format(start_date=start_date, end_date=end_date)
 
-            self.sqlToAttributes(["0", "0", "0", "0", "0", "0", "0", "0", "0"], first)
+            self.convert_sql_queries_to_attributes(["0", "0", "0", "0", "0", "0", "0", "0", "0"],
+                                                   first)
 
         # Why are there so many variables named first?!?!
         # Is there no other name that might indicate what the query does????
@@ -179,7 +164,7 @@ class ProcessFeaturesExtractor:
             'from commitedfiles,bugs where commitedfiles.bugId=bugs.id and ' \
             'name not like "%test%" group by name'
 
-        self.sqlToAttributes(["0"], first)
+        self.convert_sql_queries_to_attributes(["0"], first)
 
         first = \
             'select name,' \
@@ -187,41 +172,41 @@ class ProcessFeaturesExtractor:
             'from commitedfiles,bugs where commitedfiles.bugId=bugs.id and ' \
             'name not like "%test%" group by name'
 
-        self.sqlToAttributes(["0"], first)
+        self.convert_sql_queries_to_attributes(["0"], first)
 
         first = \
             'select name, count(distinct OS) from commitedfiles,bugs ' \
             'where commitedfiles.bugId=bugs.id and name not like "%test%" group by name'
 
-        self.sqlToAttributes(["0"], first)
+        self.convert_sql_queries_to_attributes(["0"], first)
 
         first = \
             'select name, count(Distinct Assigned_To) ' \
             'from commitedfiles,bugs ' \
             'where commitedfiles.bugId=bugs.id and name not like "%test%"  group by name'
 
-        self.sqlToAttributes(["0"], first)
+        self.convert_sql_queries_to_attributes(["0"], first)
 
         first = \
             'select name, count(Distinct Component) ' \
             'from commitedfiles,bugs ' \
             'where commitedfiles.bugId=bugs.id and name not like "%test%" group by name'
 
-        self.sqlToAttributes(["0"], first)
+        self.convert_sql_queries_to_attributes(["0"], first)
 
         first = 'select name, avg(files) from commitedfiles,commits ' \
                 'where commitedfiles.commitId=commits.id group by name'
 
-        self.sqlToAttributes(["0"], first)
+        self.convert_sql_queries_to_attributes(["0"], first)
 
         first = 'select name, avg(files) from commitedfiles,commits ' \
                 'where commitedfiles.commitId=commits.id and commitedfiles.bugId<>0 ' \
                 'and name not like "%test%" group by name'
 
-        self.sqlToAttributes(["0"], first)
+        self.convert_sql_queries_to_attributes(["0"], first)
 
         first = 'select name, avg(files) from commitedfiles,commits ' \
                 'where commitedfiles.commitId=commits.id and commitedfiles.bugId=0 ' \
                 'and name not like "%test%" group by name'
 
-        self.sqlToAttributes(["0"], first)
+        self.convert_sql_queries_to_attributes(["0"], first)

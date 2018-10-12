@@ -1,0 +1,545 @@
+{
+  "all_features": [
+    {
+      "degs": "NUMERIC"
+    },
+    {
+      "degsIN": "NUMERIC"
+    },
+    {
+      "succ": "NUMERIC"
+    },
+    {
+      "depth": "NUMERIC"
+    },
+    {
+      "overrideFactor_public": "NUMERIC"
+    },
+    {
+      "inheritenceFactor_public": "NUMERIC"
+    },
+    {
+      "inheritenceFactor_fields_public": "NUMERIC"
+    },
+    {
+      "in_degree_public": "NUMERIC"
+    },
+    {
+      "out_degree_public": "NUMERIC"
+    },
+    {
+      "katz_centrality(g2_public": "NUMERIC"
+    },
+    {
+      "core_number(g2_public": "NUMERIC"
+    },
+    {
+      "closeness_centrality(g2_public": "NUMERIC"
+    },
+    {
+      "betweenness_centrality_source(g2_public": "NUMERIC"
+    },
+    {
+      "eigenvector_centrality_g2_public": "NUMERIC"
+    },
+    {
+      "degree_centrality(g2_public": "NUMERIC"
+    },
+    {
+      "in_degree_centrality(g2_public": "NUMERIC"
+    },
+    {
+      "out_degree_centrality(g2_public": "NUMERIC"
+    },
+    {
+      "in_degreeG3_public": "NUMERIC"
+    },
+    {
+      "out_degreeG3_public": "NUMERIC"
+    },
+    {
+      "core_number(g3_public": "NUMERIC"
+    },
+    {
+      "closeness_centrality(g3_public": "NUMERIC"
+    },
+    {
+      "betweenness_centrality_source(g3_public": "NUMERIC"
+    },
+    {
+      "eigenvector_centrality_g3_public": "NUMERIC"
+    },
+    {
+      "degree_centrality(g3_public": "NUMERIC"
+    },
+    {
+      "in_degree_centrality(g3_public": "NUMERIC"
+    },
+    {
+      "out_degree_centrality(g3_public": "NUMERIC"
+    },
+    {
+      "overrideFactor_protected": "NUMERIC"
+    },
+    {
+      "inheritenceFactor_protected": "NUMERIC"
+    },
+    {
+      "inheritenceFactor_fields_protected": "NUMERIC"
+    },
+    {
+      "in_degree_protected": "NUMERIC"
+    },
+    {
+      "out_degree_protected": "NUMERIC"
+    },
+    {
+      "katz_centrality(g2_protected": "NUMERIC"
+    },
+    {
+      "core_number(g2_protected": "NUMERIC"
+    },
+    {
+      "closeness_centrality(g2_protected": "NUMERIC"
+    },
+    {
+      "betweenness_centrality_source(g2_protected": "NUMERIC"
+    },
+    {
+      "eigenvector_centrality_g2_protected": "NUMERIC"
+    },
+    {
+      "degree_centrality(g2_protected": "NUMERIC"
+    },
+    {
+      "in_degree_centrality(g2_protected": "NUMERIC"
+    },
+    {
+      "out_degree_centrality(g2_protected": "NUMERIC"
+    },
+    {
+      "in_degreeG3_protected": "NUMERIC"
+    },
+    {
+      "out_degreeG3_protected": "NUMERIC"
+    },
+    {
+      "core_number(g3_protected": "NUMERIC"
+    },
+    {
+      "closeness_centrality(g3_protected": "NUMERIC"
+    },
+    {
+      "betweenness_centrality_source(g3_protected": "NUMERIC"
+    },
+    {
+      "eigenvector_centrality_g3_protected": "NUMERIC"
+    },
+    {
+      "degree_centrality(g3_protected": "NUMERIC"
+    },
+    {
+      "in_degree_centrality(g3_protected": "NUMERIC"
+    },
+    {
+      "out_degree_centrality(g3_protected": "NUMERIC"
+    },
+    {
+      "overrideFactor_private": "NUMERIC"
+    },
+    {
+      "inheritenceFactor_private": "NUMERIC"
+    },
+    {
+      "inheritenceFactor_fields_private": "NUMERIC"
+    },
+    {
+      "in_degree_private": "NUMERIC"
+    },
+    {
+      "out_degree_private": "NUMERIC"
+    },
+    {
+      "katz_centrality(g2_private": "NUMERIC"
+    },
+    {
+      "core_number(g2_private": "NUMERIC"
+    },
+    {
+      "closeness_centrality(g2_private": "NUMERIC"
+    },
+    {
+      "betweenness_centrality_source(g2_private": "NUMERIC"
+    },
+    {
+      "eigenvector_centrality_g2_private": "NUMERIC"
+    },
+    {
+      "degree_centrality(g2_private": "NUMERIC"
+    },
+    {
+      "in_degree_centrality(g2_private": "NUMERIC"
+    },
+    {
+      "out_degree_centrality(g2_private": "NUMERIC"
+    },
+    {
+      "in_degreeG3_private": "NUMERIC"
+    },
+    {
+      "out_degreeG3_private": "NUMERIC"
+    },
+    {
+      "core_number(g3_private": "NUMERIC"
+    },
+    {
+      "closeness_centrality(g3_private": "NUMERIC"
+    },
+    {
+      "betweenness_centrality_source(g3_private": "NUMERIC"
+    },
+    {
+      "eigenvector_centrality_g3_private": "NUMERIC"
+    },
+    {
+      "degree_centrality(g3_private": "NUMERIC"
+    },
+    {
+      "in_degree_centrality(g3_private": "NUMERIC"
+    },
+    {
+      "out_degree_centrality(g3_private": "NUMERIC"
+    },
+    {
+      "overrideFactor_all": "NUMERIC"
+    },
+    {
+      "inheritenceFactor_all": "NUMERIC"
+    },
+    {
+      "inheritenceFactor_fields_all": "NUMERIC"
+    },
+    {
+      "in_degree_all": "NUMERIC"
+    },
+    {
+      "out_degree_all": "NUMERIC"
+    },
+    {
+      "katz_centrality(g2_all": "NUMERIC"
+    },
+    {
+      "core_number(g2_all": "NUMERIC"
+    },
+    {
+      "closeness_centrality(g2_all": "NUMERIC"
+    },
+    {
+      "betweenness_centrality_source(g2_all": "NUMERIC"
+    },
+    {
+      "eigenvector_centrality_g2_all": "NUMERIC"
+    },
+    {
+      "degree_centrality(g2_all": "NUMERIC"
+    },
+    {
+      "in_degree_centrality(g2_all": "NUMERIC"
+    },
+    {
+      "out_degree_centrality(g2_all": "NUMERIC"
+    },
+    {
+      "in_degreeG3_all": "NUMERIC"
+    },
+    {
+      "out_degreeG3_all": "NUMERIC"
+    },
+    {
+      "core_number(g3_all": "NUMERIC"
+    },
+    {
+      "closeness_centrality(g3_all": "NUMERIC"
+    },
+    {
+      "betweenness_centrality_source(g3_all": "NUMERIC"
+    },
+    {
+      "eigenvector_centrality_g3_all": "NUMERIC"
+    },
+    {
+      "degree_centrality(g3_all": "NUMERIC"
+    },
+    {
+      "in_degree_centrality(g3_all": "NUMERIC"
+    },
+    {
+      "out_degree_centrality(g3_all": "NUMERIC"
+    },
+    {
+      "methods_Count": "NUMERIC"
+    },
+    {
+      "methods_private_Count": "NUMERIC"
+    },
+    {
+      "methods_protected_Count": "NUMERIC"
+    },
+    {
+      "methods_public_Count": "NUMERIC"
+    },
+    {
+      "methods_not_public_Count": "NUMERIC"
+    },
+    {
+      "methods_static_Count": "NUMERIC"
+    },
+    {
+      "methods_varArgs_Count": "NUMERIC"
+    },
+    {
+      "methods_synchronized_Count": "NUMERIC"
+    },
+    {
+      "methods_final_Count": "NUMERIC"
+    },
+    {
+      "methods_abstract_Count": "NUMERIC"
+    },
+    {
+      "methods_getters_Count": "NUMERIC"
+    },
+    {
+      "methods_setters_Count": "NUMERIC"
+    },
+    {
+      "methods_return_primitive_Count": "NUMERIC"
+    },
+    {
+      "methods_return_void_Count": "NUMERIC"
+    },
+    {
+      "methods_return_java_Count": "NUMERIC"
+    },
+    {
+      "methods_return_all_Count": "NUMERIC"
+    },
+    {
+      "methods_return_distinct_primitive_Count": "NUMERIC"
+    },
+    {
+      "methods_return_distinct_void_Count": "NUMERIC"
+    },
+    {
+      "methods_return_distinct_java_Count": "NUMERIC"
+    },
+    {
+      "methods_return_distinct_all_Count": "NUMERIC"
+    },
+    {
+      "len_primitive": "NUMERIC"
+    },
+    {
+      "len_primitive_set": "NUMERIC"
+    },
+    {
+      "len_void": "NUMERIC"
+    },
+    {
+      "len_void_set": "NUMERIC"
+    },
+    {
+      "len_java": "NUMERIC"
+    },
+    {
+      "len_java_set": "NUMERIC"
+    },
+    {
+      "len_all": "NUMERIC"
+    },
+    {
+      "len_all_set": "NUMERIC"
+    },
+    {
+      "methods_private_Count_percent": "NUMERIC"
+    },
+    {
+      "methods_protected_Count_percent": "NUMERIC"
+    },
+    {
+      "methods_public_Count_percent": "NUMERIC"
+    },
+    {
+      "methods_not_public_Count_percent": "NUMERIC"
+    },
+    {
+      "methods_static_Count_percent": "NUMERIC"
+    },
+    {
+      "methods_varArgs_Count_percent": "NUMERIC"
+    },
+    {
+      "methods_synchronized_Count_percent": "NUMERIC"
+    },
+    {
+      "methods_final_Count_percent": "NUMERIC"
+    },
+    {
+      "methods_abstract_Count_percent": "NUMERIC"
+    },
+    {
+      "methods_getters_Count_percent": "NUMERIC"
+    },
+    {
+      "methods_setters_Count_percent": "NUMERIC"
+    },
+    {
+      "methods_return_primitive_Count_percent": "NUMERIC"
+    },
+    {
+      "methods_return_void_Count_percent": "NUMERIC"
+    },
+    {
+      "methods_return_java_Count_percent": "NUMERIC"
+    },
+    {
+      "methods_return_all_Count_percent": "NUMERIC"
+    },
+    {
+      "methods_return_distinct_primitive_Count_percent": "NUMERIC"
+    },
+    {
+      "methods_return_distinct_void_Count_percent": "NUMERIC"
+    },
+    {
+      "methods_return_distinct_java_Count_percent": "NUMERIC"
+    },
+    {
+      "methods_return_distinct_all_Count_percent": "NUMERIC"
+    },
+    {
+      "len_primitive_percent": "NUMERIC"
+    },
+    {
+      "len_primitive_set_percent": "NUMERIC"
+    },
+    {
+      "len_void_percent": "NUMERIC"
+    },
+    {
+      "len_void_set_percent": "NUMERIC"
+    },
+    {
+      "len_java_percent": "NUMERIC"
+    },
+    {
+      "len_java_set_percent": "NUMERIC"
+    },
+    {
+      "len_all_percent": "NUMERIC"
+    },
+    {
+      "len_all_set_percent": "NUMERIC"
+    },
+    {
+      "len_params": "NUMERIC"
+    },
+    {
+      "sum_params": "NUMERIC"
+    },
+    {
+      "mean_params": "NUMERIC"
+    },
+    {
+      "median_params": "NUMERIC"
+    },
+    {
+      "var_params": "NUMERIC"
+    },
+    {
+      "max_params": "NUMERIC"
+    },
+    {
+      "min_params": "NUMERIC"
+    },
+    {
+      " ONE_elem_params": [
+        "True",
+        "False"
+      ]
+    }
+  ],
+  "best_features": [
+    9,
+    10,
+    11,
+    12,
+    15,
+    17,
+    19,
+    20,
+    21,
+    24,
+    26,
+    53,
+    54,
+    55,
+    56,
+    59,
+    61,
+    63,
+    64,
+    65,
+    68,
+    70,
+    75,
+    76,
+    77,
+    78,
+    81,
+    83,
+    85,
+    86,
+    87,
+    90,
+    92,
+    93,
+    94,
+    96,
+    97,
+    103,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    130,
+    132,
+    133,
+    135,
+    136,
+    137,
+    138,
+    139,
+    140,
+    141,
+    142,
+    143,
+    144,
+    145,
+    146,
+    147,
+    148,
+    149,
+    150,
+    152,
+    153,
+    72,
+    134,
+    151,
+    155
+  ]
+}
