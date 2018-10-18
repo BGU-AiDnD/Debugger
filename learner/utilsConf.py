@@ -76,6 +76,8 @@ def versions_info(repoPath, vers):
         vers=r.tags
     else:
         wanted = [x.commit for x in r.tags if x.name in vers]
+        if not wanted:
+            wanted = filter(lambda c: c.hexsha in vers, r.iter_commits())
     commits = [int("".join(list(x.hexsha)[:7]), 16) for x in wanted]
     dates = [datetime.fromtimestamp(x.committed_date).strftime('%Y-%m-%d %H:%M:%S') for x in wanted]
     paths = [os.path.join(ver, "repo") for ver in vers]
