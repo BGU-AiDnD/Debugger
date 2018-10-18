@@ -164,8 +164,8 @@ def arffCreate(basicPath, objects, names, dates, bugQ, wanted, trainingFile, tes
         dbpath = os.path.join(basicPath, str(names[i] + ".db"))
         prev_date, start_date, end_date = dates[i: i + 3]
         tag, allNames = arffCreateForTag(dbpath, prev_date, start_date, end_date, objects, bugQ, wanted)
-        names = "_{0}_{1}".format(names[i], names[i+1])
-        writeArff(allNames, testingFile.replace(".arff", names + ".arff"), NamesFile.replace(".csv", names + ".csv"), attr, tag)
+        arff_names = "_{0}_{1}".format(names[i], names[i+1])
+        writeArff(allNames, testingFile.replace(".arff", arff_names + ".arff"), NamesFile.replace(".csv", arff_names + ".csv"), attr, tag)
         data = data + tag
         if i == len(names) - 3:
             writeArff([], trainingFile, "", attr, data)

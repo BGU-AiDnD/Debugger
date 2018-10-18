@@ -413,14 +413,15 @@ def wrapperAll():
 if __name__ == '__main__':
     csv.field_size_limit(sys.maxint)
     utilsConf.configure(sys.argv[1])
-    shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
+    if not os.path.exists(utilsConf.get_configuration().configuration_path):
+        shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
     check_distribution()
     # exit()
     if utilsConf.copy_from_cache() is not None:
         exit()
     if len(sys.argv) == 2:
-        create_web_prediction_results()
         wrapperAll()
+        create_web_prediction_results()
         utilsConf.export_to_cache()
     elif sys.argv[2] =="learn":
         wrapperLearner()
