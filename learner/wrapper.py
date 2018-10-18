@@ -207,17 +207,10 @@ def BuildWekaModel(weka, training, testing, namesCsv, outCsv, name, wekaJar):
 def createBuildMLModels():
     for granularity in ['File', 'Method']:
         for buggedType in ["All", "Most"]:
-            continue
             trainingFile, testingFile, NamesFile, outCsv = wekaMethods.articles.get_features(granularity, buggedType)
-            BuildWekaModel(utilsConf.get_configuration().weka_path, trainingFile, testingFile, NamesFile, outCsv,
-                           "{0}_".format(granularity) + buggedType, utilsConf.get_configuration().wekaJar)
-    for buggedType in ["All", "Most"]:
-        trainingFile, testingFile, NamesFile, outCsv=wekaMethods.articles.articlesAllpacks(buggedType)
-        BuildWekaModel(utilsConf.get_configuration().weka_path,trainingFile,testingFile,NamesFile,outCsv,"files_"+buggedType, utilsConf.get_configuration().wekaJar)
-        # All_One_create.allFamilies(FilesPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
-        trainingFile, testingFile, NamesFile, outCsv=wekaMethods.articles.articlesAllpacksMethods(buggedType)
-        BuildWekaModel(utilsConf.get_configuration().weka_path,trainingFile,testingFile,NamesFile,outCsv,"methods_"+buggedType, utilsConf.get_configuration().wekaJar)
-        # All_One_create.allFamilies(methodsPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
+            # BuildWekaModel(utilsConf.get_configuration().weka_path, trainingFile, testingFile, NamesFile, outCsv,
+            #                "{0}_".format(granularity) + buggedType, utilsConf.get_configuration().wekaJar)
+            # All_One_create.allFamilies(FilesPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
 
 
 def weka_csv_to_readable_csv(weka_csv, prediction_csv):
@@ -334,7 +327,7 @@ def wrapperLearner():
     featuresExtract()
     wekaMethods.buildDB.buildOneTimeCommits()
     createBuildMLModels()
-    create_web_prediction_results()
+    # create_web_prediction_results()
 
 
 def load_prediction_file(prediction_path):
@@ -421,7 +414,6 @@ if __name__ == '__main__':
         exit()
     if len(sys.argv) == 2:
         wrapperAll()
-        create_web_prediction_results()
         utilsConf.export_to_cache()
     elif sys.argv[2] =="learn":
         wrapperLearner()
