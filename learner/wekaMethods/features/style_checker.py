@@ -1,69 +1,28 @@
-__author__ = 'amir'
+""""""
+import json
+from os import path
 
-from wekaMethods.articles import *
-import wekaMethods.articles
-
-# from wekaMethods.articles import sqlToAttributes
-best_features = [7, 15, 19, 1, 23, 16, 63, 22, 30, 6, 2, 31, 54, 62, 4, 55, 27, 11, 17, 26, 67, 10,
-                 35, 47, 51, 24, 20, 8, 48, 34, 59, 66, 49, 58, 52, 32]
+from wekaMethods.features.features_extractor import FeaturesExtractor
 
 
-class checkStyle:
-    def get_attributesOLD(self):
-        return [("McCabe", "NUMERIC"),
-                ("fanOut", "NUMERIC"),
-                ("NPath", "NUMERIC"),
-                ("FileLen", "NUMERIC"), ("NCSS", "NUMERIC"), ("outer", "NUMERIC"),
-                ("publicMethods", "NUMERIC"), ("totalMethods", "NUMERIC"), ("thorwsSTM", "NUMERIC")
-                ]
+class StyleChecker(FeaturesExtractor):
+    """"""
 
-    def get_featuresOLD(self, c, files_dict, prev_date, start_date, end_date):
-        style = 'select * from checkStyle group by name'
-        wekaMethods.articles.sqlToAttributes(["0", "0", "0", "0", "0", "0", "0", "0", "0"], c,
-                                             files_dict, style)
+    @cached_property
+    def features_object(self):
+        with open(path.abspath(path.join(self.FEATURES_FOLDER, "style_checker_features.json")),
+                  "r") as features_file:
+            return json.load(features_file)
 
     def get_attributes(self):
-        all = [("NCSS", "NUMERIC"), ("FileLen", "NUMERIC"), ("sum_fors", "NUMERIC"),
-               ("sum_ifs", "NUMERIC"), ("sum_tries", "NUMERIC"),
-               ("len_mccab", "NUMERIC"), ("sum_mccab", "NUMERIC"), ("mean_mccab", "NUMERIC"),
-               ("median_mccab", "NUMERIC"),
-               ("var_mccab", "NUMERIC"), ("max_mccab", "NUMERIC"), ("min_mccab", "NUMERIC"),
-               ("oneElement_mccab", "NUMERIC"),
-               ("len_fanOut", "NUMERIC"), ("sum_fanOut", "NUMERIC"), ("mean_fanOut", "NUMERIC"),
-               ("median_fanOut", "NUMERIC"),
-               ("var_fanOut", "NUMERIC"), ("max_fanOut", "NUMERIC"), ("min_fanOut", "NUMERIC"),
-               ("oneElement_fanOut", "NUMERIC"),
-               ("len_NPath", "NUMERIC"), ("sum_NPath", "NUMERIC"), ("mean_NPath", "NUMERIC"),
-               ("median_NPath", "NUMERIC"),
-               ("var_NPath", "NUMERIC"), ("max_NPath", "NUMERIC"), ("min_NPath", "NUMERIC"),
-               ("oneElement_NPath", "NUMERIC"),
-               ("len_JavaNCSSmet", "NUMERIC"), ("sum_JavaNCSSmet", "NUMERIC"),
-               ("mean_JavaNCSSmet", "NUMERIC"), ("median_JavaNCSSmet", "NUMERIC"),
-               ("var_JavaNCSSmet", "NUMERIC"), ("max_JavaNCSSmet", "NUMERIC"),
-               ("min_JavaNCSSmet", "NUMERIC"), ("oneElement_JavaNCSSmet", "NUMERIC"),
-               ("len_thorwsSTM", "NUMERIC"), ("sum_thorwsSTM", "NUMERIC"),
-               ("mean_thorwsSTM", "NUMERIC"), ("median_thorwsSTM", "NUMERIC"),
-               ("var_thorwsSTM", "NUMERIC"),
-               ("max_thorwsSTM", "NUMERIC"), ("min_thorwsSTM", "NUMERIC"),
-               ("oneElement_thorwsSTM", "NUMERIC"), ("len_coupl", "NUMERIC"),
-               ("sum_coupl", "NUMERIC"),
-               ("mean_coupl", "NUMERIC"), ("median_coupl", "NUMERIC"), ("var_coupl", "NUMERIC"),
-               ("max_coupl", "NUMERIC"), ("min_coupl", "NUMERIC"),
-               ("oneElement_coupl", "NUMERIC"), ("len_executables", "NUMERIC"),
-               ("sum_executables", "NUMERIC"), ("mean_executables", "NUMERIC"),
-               ("median_executables", "NUMERIC"), ("var_executables", "NUMERIC"),
-               ("max_executables", "NUMERIC"), ("min_executables", "NUMERIC"),
-               ("oneElement_executables", "NUMERIC"), ("len_lens", "NUMERIC"),
-               ("sum_lens", "NUMERIC"), ("mean_lens", "NUMERIC"), ("median_lens", "NUMERIC"),
-               ("var_lens", "NUMERIC"), ("max_lens", "NUMERIC"), ("min_lens", "NUMERIC"),
-               ("oneElement_lens", "NUMERIC")]
-        ret = []
-        for i in range(len(all)):
-            if i + 1 in best_features:
-                ret.append(all[i])
-        return ret
+        attributes = []
+        for feature_index, feature_key, feature_type in enumerate(self.all_features.items(), 1):
+            if feature_index in self.best_features_indexes:
+                attributes.append((feature_key, feature_type))
 
-    def get_features(self, c, files_dict, prev_date, start_date, end_date):
-        style = 'select * from checkStyleExtends group by name'
-        wekaMethods.articles.sqlToAttributesBest(["0" for x in best_features], c, files_dict, style,
-                                                 best_features)
+        return attributes
+
+    def get_features(self, prev_date, start_date, end_date):
+        style_query = 'select * from checkStyleExtends group by name'
+        # TODO: WHAT THE HELL "0" FOR X IN BEST_FEATURES???? why???
+        self.convert_sql_queries_to_best_attributes(["0" for x in best_features], style_query)

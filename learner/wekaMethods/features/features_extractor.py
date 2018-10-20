@@ -50,6 +50,26 @@ class FeaturesExtractor(ABC):
         for attribute in attributes:
             self.files_map[attribute] += attributes[attribute]
 
+    def convert_sql_queries_to_best_attributes(self, basic_attributes, query):
+        """"""
+        attributes = {}
+        for file_name in self.files_map:
+            attributes[file_name] = list(basic_attributes)
+
+        for result_row in self.cursor_object.execute(query):
+            file_title = Agent.pathTopack.pathToPack(result_row[0])
+            if file_title in attributes:
+                query_attributes = list(result_row[1:])
+                attribute_items = []
+                for index, query_attribute in enumerate(query_attributes, 1):
+                    if index in self.best_features_indexes:
+                        attribute_items.append(query_attribute)
+
+                attributes[file_title] = attribute_items
+
+        for file_name in attributes:
+            self.files_map[file_name] += attributes[file_name]
+
 
 
 
