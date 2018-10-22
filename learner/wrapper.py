@@ -23,6 +23,7 @@ from experiments import ExperimentGenerator
 from run_mvn import AmirTracer, TestRunner
 from sfl_diagnoser.Diagnoser.diagnoserUtils import write_planning_file, readPlanningFile
 from utilsConf import version_to_dir_name, download_bugs
+import git
 
 """
 resources :
@@ -288,11 +289,15 @@ def create_web_prediction_results():
         weka_csv_to_readable_csv(weka_csv, prediction_csv)
         save_json_watchers(prediction_csv)
 
+
 @utilsConf.marker_decorator(utilsConf.DISTRIBUTION_FILE)
 def check_distribution():
     wekaMethods.patchsBuild.labeling()
     wekaMethods.buildDB.build_labels()
-    dates = [datetime.datetime(1900, 1, 1, 0, 0).strftime('%Y-%m-%d %H:%M:%S')] + utilsConf.get_configuration().dates
+    all_tags = sorted(git.Repo(utilsConf.get_configuration().gitPath).tags, key=lambda tag: tag.commit.committed_date)
+    tags_names = map(lambda tag: tag.name, all_tags)
+    tags_dates = [datetime.datetime(1900, 1, 1, 0, 0).strftime('%Y-%m-%d %H:%M:%S')] + map(
+        lambda tag: tag.commit.committed_date, all_tags)
     headers = ["granularity", "buggedType", "test_set_valid", "test_set_bug", "training_set_valid", "training_set_bug"]
     headers_per_version = ["granularity", "buggedType", "version_name", "valid", "bug"]
     rows = [headers]
@@ -301,8 +306,8 @@ def check_distribution():
         for buggedType in ["All", "Most"]:
             distribution = []
             dbpath = os.path.join(utilsConf.get_configuration().db_dir, str(utilsConf.get_configuration().vers_dirs[-1] + ".db"))
-            for i, version_name in list(enumerate(utilsConf.get_configuration().vers_dirs))[:-1]:
-                prev_date, start_date, end_date = dates[i: i + 3]
+            for i, version_name in list(enumerate(tags_names))[:-1]:
+                prev_date, start_date, end_date = tags_dates[i: i + 3]
                 counts = {'valid': 0, 'bugged': 0}
                 files_hasBug = wekaMethods.articles.get_arff_class(dbpath, start_date, end_date,
                                                                    wekaMethods.articles.BUG_QUERIES[granularity][buggedType],
@@ -409,13 +414,13 @@ if __name__ == '__main__':
     if not os.path.exists(utilsConf.get_configuration().configuration_path):
         shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
     check_distribution()
-    # exit()
+    exit()
     if utilsConf.copy_from_cache() is not None:
         exit()
     if len(sys.argv) == 2:
         wrapperAll()
         utilsConf.export_to_cache()
-    elif sys.argv[2] =="learn":
+    elif sys.argv[2] == "learn":
         wrapperLearner()
-    elif sys.argv[2]=="experiments":
+    elif sys.argv[2] == "experiments":
         pass
