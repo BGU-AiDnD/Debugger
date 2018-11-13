@@ -58,8 +58,10 @@ def OneClass(diff_lines, outPath, commitID, change):
     ADDED = '+++'
     DEV_NULL = '/dev/null'
     diff_files = diff_lines[0].split()
-    if len(diff_files)<3:
+    if len(diff_files) < 3:
         assert False
+    if len(filter(lambda x: x.startswith(REMOVED), diff_lines)) != 1:
+        return
     removed_file_name = filter(lambda x: x.startswith(REMOVED), diff_lines)[0].split()[1]
     added_file_name = filter(lambda x: x.startswith(ADDED), diff_lines)[0].split()[1]
     is_new_file = removed_file_name == DEV_NULL
@@ -232,6 +234,7 @@ def labeling():
 
 if __name__ == "__main__":
     with open(r"C:\Temp\amir.txt", "wb") as change:
-        oneFile(r"C:\Users\eranhe\Fault_Predicition_Defect4J\rss\math_3_amir\commitsFiles\e082e0c48ed611ce3aca949cb47d0e96c35788ef\6145-MATH-1416-Depend-on-Commons-Numbers.patch", r"C:\Temp\79f7a7e", change)
+        for patch in glob.glob(os.path.join(r"C:\Users\eranhe\Fault_Predicition_Defect4J\rss\math_3_amir1\patch","*.patch")):
+            oneFile(patch, r"C:\Temp\79f7a7e", change)
     dict, rows = readChangesFile(r"C:\Temp\amir.txt")
     pass
