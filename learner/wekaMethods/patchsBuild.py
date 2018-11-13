@@ -54,9 +54,17 @@ def fixAssert(l):
 
 
 def OneClass(diff_lines, outPath, commitID, change):
+    REMOVED = '---'
+    ADDED = '+++'
+    DEV_NULL = '/dev/null'
     diff_files = diff_lines[0].split()
     if len(diff_files)<3:
         assert False
+    removed_file_name = filter(lambda x: x.startswith(REMOVED), diff_lines)[0].split()[1]
+    added_file_name = filter(lambda x: x.startswith(ADDED), diff_lines)[0].split()[1]
+    is_new_file = removed_file_name == DEV_NULL
+    is_deleted_file = added_file_name == DEV_NULL
+    is_renamed_file = added_file_name[2:] != removed_file_name[2:]
     fileName = diff_lines[0].split()[3]
     fileName = fileName[2:]
     fileName = os.path.normpath(fileName).replace(os.path.sep,"_")
@@ -104,8 +112,8 @@ def OneClass(diff_lines, outPath, commitID, change):
     with open(os.path.join(outPath, "after", fileName), "wb") as after:
         after.writelines(afterLines)
     with open(os.path.join(outPath, fileName + "_deletsIns.txt"), "wb") as f:
-        f.writelines(["deleted\n", str(deletedInds)+"\n","added\n", str(addedInds)])
-    change.write(fileName + "@" + str(commitID) + "@" + str(deletedInds) + "@" + str(addedInds) + "\n")
+        f.writelines('\n'.join(map(str, ["deleted", deletedInds, "added", addedInds, is_new_file, is_deleted_file, is_renamed_file])))
+    change.write("@".join(map(str, [fileName, commitID, deletedInds, addedInds, is_new_file, is_deleted_file, is_renamed_file])) + "\n")
 
 
 def oneFile(PatchFile, outDir, change):
@@ -113,16 +121,15 @@ def oneFile(PatchFile, outDir, change):
         lines = f.readlines()[:-3]
     if len(lines) == 0:
         return
-    commitSha = lines[0].split()[1] # line 0 word 1
-    commitID = str(commitSha)
+    commitID = str(lines[0].split()[1]) # line 0 word 1
     mkDirs(outDir, commitID)
-    inds=[lines.index(l) for l in lines if "diff --git" in l]+[len(lines)] #lines that start with diff --git
+    diffs = map(lambda x: x[0], filter(lambda x: x[1].startswith("diff --git"), enumerate(lines))) + [len(lines)]
+    diff_lines = map(lambda diff: lines[diff[0]: diff[1]],zip(diffs, diffs[1:]))
     shutil.copyfile(PatchFile, os.path.join(outDir, commitID, os.path.basename(PatchFile)))
-    for i in range(len(inds)-1):
-        diff_lines = lines[inds[i]:inds[i+1]]
-        if len(diff_lines) == 0:
+    for diff in diff_lines:
+        if len(diff) == 0:
             assert False
-        OneClass(diff_lines, os.path.join(outDir, commitID), commitID, change)
+        OneClass(diff, os.path.join(outDir, commitID), commitID, change)
 
 
 def buildPatchs(Path,outDir,changedFile):
@@ -154,7 +161,7 @@ def checkStyleCreateDict(checkOut, changesDict):
             continue
         key = ""
         inds = []
-        deleted, insertions = changesDict[(fileName, commitID)]
+        deleted, insertions, is_new_file, is_deleted_file, is_renamed_file = changesDict[(fileName, commitID)]
         if "before" in file:
             key = "deletions"
             inds = deleted
@@ -171,12 +178,12 @@ def checkStyleCreateDict(checkOut, changesDict):
         if not tup in methods:
             methods[tup] = {}
         methods[tup][key] = keyChange
-        if not "methodName" in methods[tup]:
-            methods[tup]["methodName"] = name
-        if not "fileName" in methods[tup]:
-            methods[tup]["fileName"] = fileName
-        if not "commitID" in methods[tup]:
-            methods[tup]["commitID"] = commitID
+        methods[tup].setdefault("methodName", name)
+        methods[tup].setdefault("fileName", fileName)
+        methods[tup].setdefault("commitID", commitID)
+        methods[tup].setdefault("is_new_file", is_new_file)
+        methods[tup].setdefault("is_deleted_file", is_deleted_file)
+        methods[tup].setdefault("is_renamed_file", is_renamed_file)
     return methods
 
 
@@ -185,10 +192,10 @@ def readChangesFile(change):
     rows = []
     with open(change, "r") as f:
         for line in f:
-            fileName, commitSha, dels, Ins = line.strip().split("@")
+            fileName, commitSha, dels, Ins, is_new_file, is_deleted_file, is_renamed_file = line.strip().split("@")
             fileName = fileName.replace("_", os.path.sep)
-            dict[(fileName, commitSha)] = [eval(dels), eval(Ins)]
-            rows.append(map(str, [fileName,commitSha, len(dels), len(Ins), len(dels)+len(Ins)]))
+            dict[(fileName, commitSha)] = map(eval, [dels, Ins, is_new_file, is_deleted_file, is_renamed_file])
+            rows.append(map(str, [fileName,commitSha, len(dels), len(Ins), len(dels)+len(Ins), is_new_file, is_deleted_file, is_renamed_file]))
     return dict, rows
 
 
@@ -203,7 +210,10 @@ def analyzeCheckStyle(checkOut, changeFile):
         fileName = methods[tup].setdefault("fileName", "")
         methodName = methods[tup].setdefault("methodName", "")
         commitID = methods[tup].setdefault("commitID", "")
-        all_methods.append(map(str, [commitID, methodDir, fileName, methodName, dels, ins, dels+ins]))
+        is_new_file = methods[tup].setdefault("is_new_file", False)
+        is_deleted_file = methods[tup].setdefault("is_deleted_file", False)
+        is_renamed_file = methods[tup].setdefault("is_renamed_file", False)
+        all_methods.append(map(str, [commitID, methodDir, fileName, methodName, dels, ins, dels+ins, is_new_file, is_deleted_file, is_renamed_file]))
     return all_methods, filesRows
 
 
@@ -221,5 +231,7 @@ def labeling():
     RunCheckStyle(commitsFiles, checkOut, utilsConf.get_configuration().checkStyle68, utilsConf.get_configuration().methodsNamesXML)
 
 if __name__ == "__main__":
-    a,b= analyzeCheckStyle(r"C:\Temp\79f7a7ef529ae656a80f7e331f75e79999cef7ea\commitsFiles\CheckStyle.txt", r"C:\Temp\79f7a7ef529ae656a80f7e331f75e79999cef7ea\commitsFiles\Ins_dels.txt")
+    with open(r"C:\Temp\amir.txt", "wb") as change:
+        oneFile(r"C:\Users\eranhe\Fault_Predicition_Defect4J\rss\math_3_amir\commitsFiles\e082e0c48ed611ce3aca949cb47d0e96c35788ef\6145-MATH-1416-Depend-on-Commons-Numbers.patch", r"C:\Temp\79f7a7e", change)
+    dict, rows = readChangesFile(r"C:\Temp\amir.txt")
     pass

@@ -20,6 +20,8 @@ import source_Monitor
 import utilsConf
 from Agent.pathTopack import get_renamed_files_for_commit
 
+class CommitedFile(object):
+    pass
 
 class Commit(object):
     def __init__(self, git_commit, bug_id):
@@ -27,6 +29,8 @@ class Commit(object):
         self._bug_id = bug_id
         self._commit_id = self._git_commit.hexsha
         self._files = get_renamed_files_for_commit(self._git_commit).keys()
+        self.commited_files = map(lambda d: (d.a_path, d.renamed, d.new_file, d.deleted_file),
+                                  self._git_commit.tree.diff(self._git_commit.parents[0].tree))
 
     def to_list(self):
         return [self._commit_id, str(self._bug_id), ";".join(self._files)]
@@ -47,11 +51,11 @@ def commTablelight(commits):
         commit_id=int("".join(list(git_commit.hexsha)[:7]),16)
         if not hasattr(git_commit, 'committed_date'):
             continue
-        commiter_date=  datetime.datetime.fromtimestamp(git_commit.committed_date).strftime('%Y-%m-%d %H:%M:%S')
-        author_date=  datetime.datetime.fromtimestamp(git_commit.authored_date).strftime('%Y-%m-%d %H:%M:%S')
-        name=unicodedata.normalize('NFKD', git_commit.committer.name).encode('ascii','ignore')
-        committer= str(name)
-        author= str(git_commit.author.name.encode('ascii','ignore'))
+        commiter_date = datetime.datetime.fromtimestamp(git_commit.committed_date).strftime('%Y-%m-%d %H:%M:%S')
+        author_date = datetime.datetime.fromtimestamp(git_commit.authored_date).strftime('%Y-%m-%d %H:%M:%S')
+        name = unicodedata.normalize('NFKD', git_commit.committer.name).encode('ascii','ignore')
+        committer = str(name)
+        author = str(git_commit.author.name.encode('ascii','ignore'))
         parent = 0
         if(git_commit.parents!=() ):
             parent =int("".join(list(git_commit.parents[0].hexsha)[:7]),16)
@@ -60,7 +64,7 @@ def commTablelight(commits):
         fields = (commit_id, commit._bug_id, commiter_date,committer,author_date,author,size,parent,msg ,str(git_commit.hexsha))
         all_commits.append(fields)
         commitsBugsDict[str(git_commit.hexsha)]=(commit._bug_id,commiter_date,str(git_commit.hexsha),str(commit_id))
-    return (all_commits,commitsBugsDict)
+    return all_commits, commitsBugsDict
 
 
 def commits_and_Bugs(repo, bugsIds):
@@ -150,14 +154,14 @@ def createTables(dbpath):
     with utilsConf.use_sqllite(dbpath) as conn:
         c = conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS AllMethods (methodDir text, fileName text, methodName text, beginLine INT , endLine INT )''')
-        c.execute('''CREATE TABLE IF NOT EXISTS commitedMethods (commit_sha text , methodDir text, fileName text, methodName text, deletions INT , insertions INT , lines INT, bugId INT, commiter_date DateTime,commitID INT)''')
+        c.execute('''CREATE TABLE IF NOT EXISTS commitedMethods (commit_sha text , methodDir text, fileName text, methodName text, deletions INT , insertions INT , lines INT, is_new_file INT, is_deleted_file INT, is_renamed_file INT, bugId INT, commiter_date DateTime,commitID INT)''')
         c.execute('''CREATE TABLE IF NOT EXISTS bugsFix (ID INT,Product text,Component text,Assigned_To text,Status text,Resolution text,Reporter text,Last_Modified DateTime ,Version text,Milestone text,Hardware text,OS text,Priority text,Severity text,Summary text,Keywords text,Submit_Date DateTime ,Blocks text,Depends_On text,Duplicate_Of INT,CC text)''')
         #c.execute('''CREATE TABLE IF NOT EXISTS commits (ID INT, bugId INT, commiter_date DateTime , commiter text,author_date DateTime , author text  , lines INT,deletions INT,insertions INT,files INT,size INT, parentID INT,reachable_commits INT, message text,commit_sha text )''')
         c.execute('''CREATE TABLE IF NOT EXISTS commits (ID INT, bugId INT, commiter_date DateTime , commiter text,author_date DateTime , author text  , size INT, parentID INT, message text,commit_sha text )''')
         #c.execute(
          #   '''CREATE TABLE IF NOT EXISTS Commitedfiles (id INT,name text, commitid INT, commiter_date DateTime,lines INT,deletions INT,insertions INT, bugId INT,commit_sha text)''')
         c.execute(
-            '''CREATE TABLE IF NOT EXISTS Commitedfiles (id INT,name text,commit_sha text,lines INT,deletions INT,insertions INT, bugId INT, commiter_date DateTime, commitid INT)''')
+            '''CREATE TABLE IF NOT EXISTS Commitedfiles (id INT,name text,commit_sha text,deletions INT,insertions INT, lines INT, is_new_file INT, is_deleted_file INT, is_renamed_file INT, bugId INT, commiter_date DateTime, commitid INT)''')
         c.execute('''CREATE TABLE IF NOT EXISTS files (id INT,name text)''')
         c.execute('''CREATE TABLE IF NOT EXISTS Complexyfiles (name text, complex INT)''')
         c.execute('''CREATE TABLE IF NOT EXISTS haelsTfiles (name text, Operators_count INT, Distinct_operators INT, Operands_count INT, Distinct_operands INT, Program_length INT, Program_vocabulary INT,Volume float, Difficulty INT, Effort float)''')
