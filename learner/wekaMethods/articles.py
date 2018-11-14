@@ -12,8 +12,8 @@ import features.sourceMonitor as sourceMonitor
 import features.checkStyle as checkStyle
 import features.blame as blame
 import features.processFamilies as processFamilies
-import features.analyzeComms as analyzeComms
-import features.analyzeLast as analyzeLast
+from features.analyze_commits import CommitsAnalyzer
+import features.analyze_last_commit as analyzeLast
 import featuresMethods.processMethods as processMethods
 import featuresMethods.haelsteadMethods as haelsteadMethods
 import featuresMethods.OOMethods as OOMethods
@@ -786,11 +786,11 @@ def featuresPacksToClasses(packs):
         names.append("blame")
         print "blame"
     if "analyzeComms" in packs:
-        l.append(analyzeComms.analyzeComms())
+        l.append(CommitsAnalyzer())
         names.append("analyzeComms")
         print "analyzeComms"
     if "analyzeLast" in packs:
-        l.append(analyzeLast.analyzeLast())
+        l.append(analyzeLast.analyze_last_commit())
         names.append("analyzeLast")
         print "analyzeLast"
     return l,names
