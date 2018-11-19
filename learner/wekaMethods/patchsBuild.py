@@ -64,58 +64,59 @@ def OneClass(diff_lines, outPath, commitID, change):
         return
     removed_file_name = filter(lambda x: x.startswith(REMOVED), diff_lines)[0].split()[1]
     added_file_name = filter(lambda x: x.startswith(ADDED), diff_lines)[0].split()[1]
-    is_new_file = removed_file_name == DEV_NULL
-    is_deleted_file = added_file_name == DEV_NULL
-    is_renamed_file = added_file_name[2:] != removed_file_name[2:]
-    fileName = diff_lines[0].split()[3]
-    fileName = fileName[2:]
-    fileName = os.path.normpath(fileName).replace(os.path.sep,"_")
-    if not fileName.endswith('.java'):
-        return
-    start_line = filter(lambda line: line[1].startswith('+++'), enumerate(diff_lines))
-    if len(start_line) != 1:
-        return # no file
-    diff_lines = diff_lines[start_line[0][0] + 1:]
-    befLines=[]
-    afterLines=[]
-    deletedInds=[]
-    addedInds=[]
-    delind=0
-    addind=0
-    for l in diff_lines:
-        if "\ No newline at end of file" in l:
+    is_new_file = 1 if removed_file_name == DEV_NULL else 0
+    is_deleted_file = 1 if added_file_name == DEV_NULL else 0
+    is_renamed_file = 1 if not is_deleted_file and not is_new_file and added_file_name[2:] != removed_file_name[2:] else 0
+    is_removed_file = 1 if is_renamed_file or is_deleted_file else 0
+    file_names = [(added_file_name, 0)] + ([(removed_file_name, 1)] if is_removed_file else [])
+    for name, removed in file_names:
+        fileName = os.path.normpath(name[2:]).replace(os.path.sep, "_")
+        if not fileName.endswith('.java'):
             continue
-        if "1.9.4.msysgit.2" in l:
-            continue
-        if "- \n"== l:
-            continue
-        if "-- \n"== l:
-            continue
-        l=fixEnum(l)
-        l=fixAssert(l)
-        replaced=re.sub('@@(-|\+|,| |[0-9])*@@','',l)
-        if replaced.startswith("*"):
-            replaced="\\"+replaced
-        if replaced.startswith("+"):
-           afterLines.append(replaced[1:])
-           addedInds.append(addind)
-           addind=addind+1
-        elif replaced.startswith("-"):
-           befLines.append(replaced[1:])
-           deletedInds.append(delind)
-           delind=delind+1
-        else:
-            afterLines.append(replaced)
-            befLines.append(replaced)
-            delind=delind+1
-            addind=addind+1
-    with open(os.path.join(outPath, "before", fileName), "wb") as bef:
-        bef.writelines(befLines)
-    with open(os.path.join(outPath, "after", fileName), "wb") as after:
-        after.writelines(afterLines)
-    with open(os.path.join(outPath, fileName + "_deletsIns.txt"), "wb") as f:
-        f.writelines('\n'.join(map(str, ["deleted", deletedInds, "added", addedInds, is_new_file, is_deleted_file, is_renamed_file])))
-    change.write("@".join(map(str, [fileName, commitID, deletedInds, addedInds, is_new_file, is_deleted_file, is_renamed_file])) + "\n")
+        start_line = filter(lambda line: line[1].startswith('+++'), enumerate(diff_lines))
+        if len(start_line) != 1:
+            return # no file
+        diff_lines = diff_lines[start_line[0][0] + 1:]
+        befLines=[]
+        afterLines=[]
+        deletedInds=[]
+        addedInds=[]
+        delind=0
+        addind=0
+        for l in diff_lines:
+            if "\ No newline at end of file" in l:
+                continue
+            if "1.9.4.msysgit.2" in l:
+                continue
+            if "- \n"== l:
+                continue
+            if "-- \n"== l:
+                continue
+            l=fixEnum(l)
+            l=fixAssert(l)
+            replaced=re.sub('@@(-|\+|,| |[0-9])*@@','',l)
+            if replaced.startswith("*"):
+                replaced="\\"+replaced
+            if replaced.startswith("+"):
+               afterLines.append(replaced[1:])
+               addedInds.append(addind)
+               addind=addind+1
+            elif replaced.startswith("-"):
+               befLines.append(replaced[1:])
+               deletedInds.append(delind)
+               delind=delind+1
+            else:
+                afterLines.append(replaced)
+                befLines.append(replaced)
+                delind=delind+1
+                addind=addind+1
+        with open(os.path.join(outPath, "before", fileName), "wb") as bef:
+            bef.writelines(befLines)
+        with open(os.path.join(outPath, "after", fileName), "wb") as after:
+            after.writelines(afterLines)
+        with open(os.path.join(outPath, fileName + "_deletsIns.txt"), "wb") as f:
+            f.writelines('\n'.join(map(str, ["deleted", deletedInds, "added", addedInds, is_new_file, removed, is_renamed_file])))
+        change.write("@".join(map(str, [fileName, commitID, deletedInds, addedInds, is_new_file, removed, is_renamed_file])) + "\n")
 
 
 def oneFile(PatchFile, outDir, change):
@@ -212,9 +213,9 @@ def analyzeCheckStyle(checkOut, changeFile):
         fileName = methods[tup].setdefault("fileName", "")
         methodName = methods[tup].setdefault("methodName", "")
         commitID = methods[tup].setdefault("commitID", "")
-        is_new_file = methods[tup].setdefault("is_new_file", False)
-        is_deleted_file = methods[tup].setdefault("is_deleted_file", False)
-        is_renamed_file = methods[tup].setdefault("is_renamed_file", False)
+        is_new_file = methods[tup].setdefault("is_new_file", 0)
+        is_deleted_file = methods[tup].setdefault("is_deleted_file", 0)
+        is_renamed_file = methods[tup].setdefault("is_renamed_file", 0)
         all_methods.append(map(str, [commitID, methodDir, fileName, methodName, dels, ins, dels+ins, is_new_file, is_deleted_file, is_renamed_file]))
     return all_methods, filesRows
 
@@ -233,8 +234,8 @@ def labeling():
     RunCheckStyle(commitsFiles, checkOut, utilsConf.get_configuration().checkStyle68, utilsConf.get_configuration().methodsNamesXML)
 
 if __name__ == "__main__":
-    with open(r"C:\Temp\amir.txt", "wb") as change:
-        for patch in glob.glob(os.path.join(r"C:\Users\eranhe\Fault_Predicition_Defect4J\rss\math_3_amir1\patch","*.patch")):
-            oneFile(patch, r"C:\Temp\79f7a7e", change)
-    dict, rows = readChangesFile(r"C:\Temp\amir.txt")
+    # with open(r"C:\Temp\amir.txt", "wb") as change:
+    #     for patch in glob.glob(os.path.join(r"C:\Users\eranhe\Fault_Predicition_Defect4J\rss\math_3_amir1\patch","*.patch")):
+    #         oneFile(patch, r"C:\Temp\79f7a7e", change)
+    dict, rows = readChangesFile(r"C:\Users\eranhe\Fault_Predicition_Defect4J\rss\math_3_amir3\commitsFiles\Ins_dels.txt")
     pass

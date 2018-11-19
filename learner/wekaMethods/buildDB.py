@@ -20,17 +20,15 @@ import source_Monitor
 import utilsConf
 from Agent.pathTopack import get_renamed_files_for_commit
 
-class CommitedFile(object):
-    pass
-
 class Commit(object):
     def __init__(self, git_commit, bug_id):
         self._git_commit = git_commit
         self._bug_id = bug_id
         self._commit_id = self._git_commit.hexsha
         self._files = get_renamed_files_for_commit(self._git_commit).keys()
-        self.commited_files = map(lambda d: (d.a_path, d.renamed, d.new_file, d.deleted_file),
-                                  self._git_commit.tree.diff(self._git_commit.parents[0].tree))
+        if self._git_commit.parents:
+            self.commited_files = map(lambda d: (d.a_path, d.renamed, d.new_file, d.deleted_file),
+                                      self._git_commit.tree.diff(self._git_commit.parents[0].tree))
 
     def to_list(self):
         return [self._commit_id, str(self._bug_id), ";".join(self._files)]

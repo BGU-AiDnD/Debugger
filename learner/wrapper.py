@@ -297,7 +297,7 @@ def check_distribution():
     all_tags = sorted(git.Repo(utilsConf.get_configuration().gitPath).tags, key=lambda tag: tag.commit.committed_date)
     tags_names = map(lambda tag: tag.name, all_tags)
     tags_dates = [datetime.datetime(1900, 1, 1, 0, 0).strftime('%Y-%m-%d %H:%M:%S')] + map(
-        lambda tag: tag.commit.committed_date, all_tags)
+        lambda tag: datetime.datetime.fromtimestamp(tag.commit.committed_date).strftime('%Y-%m-%d %H:%M:%S'), all_tags)
     headers = ["granularity", "buggedType", "test_set_valid", "test_set_bug", "training_set_valid", "training_set_bug"]
     headers_per_version = ["granularity", "buggedType", "version_name", "valid", "bug"]
     rows = [headers]
@@ -413,8 +413,8 @@ if __name__ == '__main__':
     utilsConf.configure(sys.argv[1])
     if not os.path.exists(utilsConf.get_configuration().configuration_path):
         shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
-    check_distribution()
-    exit()
+    # check_distribution()
+    # exit()
     if utilsConf.copy_from_cache() is not None:
         exit()
     if len(sys.argv) == 2:
