@@ -62,6 +62,8 @@ def OneClass(diff_lines, outPath, commitID, change):
         assert False
     if len(filter(lambda x: x.startswith(REMOVED), diff_lines)) != 1:
         return
+    if len(filter(lambda x: x.startswith(ADDED), diff_lines)) != 1:
+        return
     removed_file_name = filter(lambda x: x.startswith(REMOVED), diff_lines)[0].split()[1]
     added_file_name = filter(lambda x: x.startswith(ADDED), diff_lines)[0].split()[1]
     is_new_file = 1 if removed_file_name == DEV_NULL else 0
@@ -127,7 +129,7 @@ def oneFile(PatchFile, outDir, change):
     commitID = str(lines[0].split()[1]) # line 0 word 1
     mkDirs(outDir, commitID)
     diffs = map(lambda x: x[0], filter(lambda x: x[1].startswith("diff --git"), enumerate(lines))) + [len(lines)]
-    diff_lines = map(lambda diff: lines[diff[0]: diff[1]],zip(diffs, diffs[1:]))
+    diff_lines = map(lambda diff: lines[diff[0]: diff[1]], zip(diffs, diffs[1:]))
     shutil.copyfile(PatchFile, os.path.join(outDir, commitID, os.path.basename(PatchFile)))
     for diff in diff_lines:
         if len(diff) == 0:
@@ -234,8 +236,8 @@ def labeling():
     RunCheckStyle(commitsFiles, checkOut, utilsConf.get_configuration().checkStyle68, utilsConf.get_configuration().methodsNamesXML)
 
 if __name__ == "__main__":
-    # with open(r"C:\Temp\amir.txt", "wb") as change:
-    #     for patch in glob.glob(os.path.join(r"C:\Users\eranhe\Fault_Predicition_Defect4J\rss\math_3_amir1\patch","*.patch")):
-    #         oneFile(patch, r"C:\Temp\79f7a7e", change)
+    with open(r"C:\Temp\amir.txt", "wb") as change:
+        for patch in glob.glob(os.path.join(r"C:\Users\eranhe\Fault_Predicition_Defect4J\good_model\out\tika_new\patch","*.patch")):
+            oneFile(patch, r"C:\Temp\79f7a7e", change)
     dict, rows = readChangesFile(r"C:\Users\eranhe\Fault_Predicition_Defect4J\rss\math_3_amir3\commitsFiles\Ins_dels.txt")
     pass
