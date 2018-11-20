@@ -340,7 +340,7 @@ def post_bug_to_github(etype, value, tb):
     # try to post bug to github
     try:
         gh = github3.login('DebuggerIssuesReport', password='DebuggerIssuesReport1') # DebuggerIssuesReport@mail.com
-        repo = gh.repository('amir9979', 'Debugger')
+        repo = gh.repository('BGU-AiDnD', 'Debugger')
         issue_body = "\n".join(["An Exception occurred while running Debugger:\n", "command line is {0}\n\n".format(" ".join(sys.argv))])\
                      + "".join(['Traceback (most recent call last):\n'] + traceback.format_tb(tb) + traceback.format_exception_only(etype, value))
         issue = repo.create_issue(title='An Exception occurred : {0}'.format(value.message), body=issue_body, assignee='amir9979')
