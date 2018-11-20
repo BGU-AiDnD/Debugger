@@ -328,6 +328,8 @@ def check_distribution():
 @utilsConf.marker_decorator(utilsConf.LEARNER_PHASE_FILE)
 def wrapperLearner():
     # NLP.commits.data_to_csv(os.path.join(workingDir, "NLP_data.csv"), gitPath, bugsPath)
+    wekaMethods.patchsBuild.labeling()
+    wekaMethods.buildDB.build_labels()
     test_version_create()
     featuresExtract()
     wekaMethods.buildDB.buildOneTimeCommits()
@@ -413,7 +415,7 @@ if __name__ == '__main__':
     utilsConf.configure(sys.argv[1])
     if not os.path.exists(utilsConf.get_configuration().configuration_path):
         shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
-    # check_distribution()
+    check_distribution()
     # exit()
     if utilsConf.copy_from_cache() is not None:
         exit()
