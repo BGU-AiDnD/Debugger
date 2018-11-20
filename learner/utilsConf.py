@@ -1,3 +1,5 @@
+import wekaMethods.issuesExtract
+
 __author__ = 'amir'
 import datetime
 import shutil
@@ -7,8 +9,11 @@ import subprocess
 import traceback
 import sys
 import github3
+import sqlite3
 from datetime import datetime
 import logging
+import detect_renamed_files
+from contextlib import contextmanager
 
 LONG_PATH_MAGIC = u"\\\\?\\"
 # markers names:
@@ -16,6 +21,7 @@ VERSIONS_MARKER = "versions"
 VERSION_TEST_MARKER = "test_version"
 FEATURES_MARKER = "features"
 DB_BUILD_MARKER = "db"
+DB_LABELS_MARKER = "labels"
 ML_MODELS_MARKER = "ml"
 COMPLEXITY_FEATURES_MARKER = "complexity_features"
 OO_OLD_FEATURES_MARKER = "old_oo_features"
@@ -27,6 +33,7 @@ BLAME_FEATURES_MARKER = "blame_features"
 TEST_DB_MARKER = "test_db_features"
 PACKS_FILE_MARKER = "packs_file_features"
 LEARNER_PHASE_FILE = "learner_phase_file"
+DISTRIBUTION_FILE = "distribution_file"
 ALL_DONE_FILE = "all_done"
 EXECUTE_TESTS = "test_executed"
 ISSUE_TRACKER_FILE = "issue_tracker_file"
@@ -69,6 +76,8 @@ def versions_info(repoPath, vers):
         vers=r.tags
     else:
         wanted = [x.commit for x in r.tags if x.name in vers]
+        if not wanted:
+            wanted = filter(lambda c: c.hexsha in vers, r.iter_commits())
     commits = [int("".join(list(x.hexsha)[:7]), 16) for x in wanted]
     dates = [datetime.fromtimestamp(x.committed_date).strftime('%Y-%m-%d %H:%M:%S') for x in wanted]
     paths = [os.path.join(ver, "repo") for ver in vers]
@@ -76,10 +85,11 @@ def versions_info(repoPath, vers):
 
 
 def CopyDirs(gitPath, versPath, versions):
+    remote_url = list(git.Repo(to_short_path(gitPath)).remote().urls)[0]
     for version in versions:
         path=os.path.join(versPath, version_to_dir_name(version), "repo")
         if not os.path.exists(path):
-            run_commands = ["git", "clone", to_short_path(gitPath), 'repo']
+            run_commands = ["git", "clone", remote_url, 'repo']
             proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
                                    cwd=to_short_path(os.path.join(versPath, version_to_dir_name(version))))
             (out, err) = proc.communicate()
@@ -98,21 +108,57 @@ def GitRevert(versPath,vers):
         run_cmd(repo_path, ["clean", "-fd", version])
 
 
-def versionsCreate(gitPath, vers, versPath, workingDir):
-    CopyDirs(gitPath, versPath, vers)
-    GitRevert(versPath, vers)
+def checkout_local_git(gitPath, workingDir):
     run_commands = ["git", "clone", to_short_path(gitPath), 'repo']
-    proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=to_short_path(workingDir))
+    proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                           cwd=to_short_path(workingDir))
     (out, err) = proc.communicate()
 
+
+def versionsCreate(gitPath, vers, versPath):
+    CopyDirs(gitPath, versPath, vers)
+    GitRevert(versPath, vers)
+
+
+def git_file_path_to_java_name(file_path):
+    directories = os.path.splitext(os.path.normpath(file_path))[0].split(os.path.sep)
+    index = 0
+    if 'java' in directories:
+        index = directories.index('java') + 1
+    elif 'src' in directories:
+        index = directories.index('src') + 2
+    return ".".join(directories[index:])
+
+
+def download_bugs(bugsPath, issue_tracker_url, issue_tracker_product, issue_tracker):
+    import wekaMethods.issuesExtract.github_import
+    import wekaMethods.issuesExtract.google_code
+    import wekaMethods.issuesExtract.jira_import
+    import wekaMethods.issuesExtract.python_bugzilla
+    import wekaMethods.issuesExtract.sourceforge
+    import wekaMethods.issuesExtract.csv_labels
+    if issue_tracker == "bugzilla":
+        wekaMethods.issuesExtract.python_bugzilla.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
+    elif issue_tracker == "jira":
+        wekaMethods.issuesExtract.jira_import.jiraIssues(bugsPath, issue_tracker_url, issue_tracker_product)
+    elif issue_tracker == "github":
+        wekaMethods.issuesExtract.github_import.GithubIssues(bugsPath, issue_tracker_url, issue_tracker_product)
+    elif issue_tracker == "sourceforge":
+        wekaMethods.issuesExtract.sourceforge.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
+    elif issue_tracker == "googlecode":
+        wekaMethods.issuesExtract.google_code.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
+    elif issue_tracker == "csv_file":
+        wekaMethods.issuesExtract.csv_labels.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
 
 def configure(confFile):
     full_configure_file, gitPath, issue_tracker, issue_tracker_product, issue_tracker_url, versions, workingDir = read_configuration(confFile)
     init_configuration(workingDir, versions)
     configuration = get_configuration()
     db_dir = os.path.join(workingDir, "dbAdd")
+    distribution_report = os.path.join(workingDir, "distribution_report.csv")
+    distribution_per_version_report = os.path.join(workingDir, "distribution_per_version_report.csv")
     versPath = os.path.join(workingDir, "vers")
-    vers, paths, dates, commits = versions_info(gitPath, versions)
+    vers, paths, dates, commits = versions_info(to_short_path(gitPath), versions)
     docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath = globalConfig()
     current_dir = os.path.dirname(os.path.realpath(__file__))
     utilsPath = os.path.realpath(os.path.join(current_dir, "../utils"))
@@ -121,7 +167,7 @@ def configure(confFile):
     bugsPath = os.path.join(workingDir, "bugs.csv")
     vers_dirs = map(version_to_dir_name, vers)
     vers_paths = map(lambda ver: os.path.join(versPath, ver), vers_dirs)
-    LocalGitPath = os.path.join(workingDir, "repo")
+    LocalGitPath = to_short_path(os.path.join(workingDir, "repo"))
     prediction_files = {'files': {'all': 'prediction_All_files.csv', 'most': 'prediction_Most_files.csv'},
                    'methods': {'all': 'prediction_All_methods.csv', 'most': 'prediction_Most_methods.csv'}}
     mkOneDir(LocalGitPath)
@@ -130,16 +176,19 @@ def configure(confFile):
     configuration_path = to_short_path(os.path.join(workingDir, "configuration"))
     experiments = to_short_path(os.path.join(workingDir, "experiments"))
     DebuggerTests = to_short_path(os.path.join(workingDir, "DebuggerTests"))
-    MethodsParsed = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "CheckStyle.txt")
-    changeFile = os.path.join(os.path.join(LocalGitPath, "commitsFiles"), "Ins_dels.txt")
+    MethodsParsed = to_short_path(os.path.join(os.path.join(workingDir, "commitsFiles"), "CheckStyle.txt"))
+    changeFile = to_short_path(os.path.join(os.path.join(workingDir, "commitsFiles"), "Ins_dels.txt"))
     debugger_base_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    buggy_repo = git.Repo(to_short_path(gitPath))
+    renamed_mapping = {} # detect_renamed_files.renamed_files_for_repo(buggy_repo)
+    remotes_urls = reduce(list.__add__, map(lambda r: list(r.urls), buggy_repo.remotes))
+    logging.info(
+        'remote git at urls {0} and HEAD is on commit {1}'.format(str(remotes_urls), str(buggy_repo.head.commit)))
+    buggy_repo.close()
     try:
         repo = git.Repo(debugger_base_path)
-        logging.info('Debugger HEAD is on commit {0}'.format(str(repo.head.commit)))
-        repo.close()
-        repo = git.Repo(gitPath)
-        remotes_urls = reduce(list.__add__, map(lambda r: list(r.urls), repo.remotes))
-        logging.info('remote git at urls {0} and HEAD is on commit {1}'.format(str(remotes_urls),str(repo.head.commit)))
+        debugger_commit = str(repo.head.commit)
+        logging.info('Debugger HEAD is on commit {0}'.format(debugger_commit))
         repo.close()
     except:
         pass
@@ -154,11 +203,16 @@ def configure(confFile):
                     ("changeFile", changeFile), ("debugger_base_path", debugger_base_path),
                     ("web_prediction_results", web_prediction_results), ("full_configure_file", full_configure_file),
                     ("amir_tracer", amir_tracer), ("configuration_path", configuration_path), ("caching_dir", caching_dir),
-                    ('DebuggerTests', DebuggerTests), ('prediction_files', prediction_files), ('experiments', experiments)]
+                    ('DebuggerTests', DebuggerTests), ('prediction_files', prediction_files), ('experiments', experiments),
+                    ('renamed_mapping', renamed_mapping), ("distribution_report", distribution_report)] + locals().items()
     map(lambda name_val: setattr(configuration, name_val[0], name_val[1]), names_values)
     Mkdirs(workingDir)
-    versionsCreate(gitPath, vers, versPath, workingDir)
-    return versions, gitPath,issue_tracker, issue_tracker_url, issue_tracker_product, workingDir, versPath, db_dir
+    download_bugs(bugsPath, issue_tracker_url, issue_tracker_product, issue_tracker)
+    checkout_local_git(gitPath,workingDir)
+    versionsCreate(gitPath, vers, versPath)
+
+def fix_renamed_file(file_name):
+    return detect_renamed_files.fix_renamed_file(file_name, get_configuration().renamed_files)
 
 
 def read_configuration(confFile):
@@ -286,7 +340,7 @@ def post_bug_to_github(etype, value, tb):
     # try to post bug to github
     try:
         gh = github3.login('DebuggerIssuesReport', password='DebuggerIssuesReport1') # DebuggerIssuesReport@mail.com
-        repo = gh.repository('amir9979', 'Debugger')
+        repo = gh.repository('BGU-AiDnD', 'Debugger')
         issue_body = "\n".join(["An Exception occurred while running Debugger:\n", "command line is {0}\n\n".format(" ".join(sys.argv))])\
                      + "".join(['Traceback (most recent call last):\n'] + traceback.format_tb(tb) + traceback.format_exception_only(etype, value))
         issue = repo.create_issue(title='An Exception occurred : {0}'.format(value.message), body=issue_body, assignee='amir9979')
@@ -297,6 +351,13 @@ def post_bug_to_github(etype, value, tb):
     except:
         pass
 
+@contextmanager
+def use_sqllite(db_path):
+    conn = sqlite3.connect(db_path)
+    conn.text_factory = str
+    yield conn
+    conn.commit()
+    conn.close()
 
 def marker_decorator(marker):
     """
@@ -361,4 +422,3 @@ def export_to_cache():
     mkOneDir(dir_name)
     for folder in DIRS_CACHE:
         copy(os.path.join(get_configuration().workingDir, folder), os.path.join(dir_name, folder))
-

@@ -1,9 +1,13 @@
 import csv
+import datetime
+import itertools
 import json
 import os
 import shutil
 import subprocess
 import sys
+from collections import Counter
+from operator import itemgetter
 
 import itertools
 import report
@@ -12,14 +16,14 @@ import wekaMethods.ParseWekaOutput
 import wekaMethods.articles
 import wekaMethods.buildDB
 import wekaMethods.commsSpaces
-import wekaMethods.issuesExtract.github_import
-import wekaMethods.issuesExtract.jira_import
-import wekaMethods.issuesExtract.python_bugzilla
 import wekaMethods.patchsBuild
 import wekaMethods.wekaAccuracy
+from experiments import ExperimentGenerator
 from utilsConf import Mkdirs, version_to_dir_name, mkOneDir
 from run_mvn import AmirTracer, TestRunner
 from sfl_diagnoser.Diagnoser.diagnoserUtils import write_planning_file, readPlanningFile
+from utilsConf import version_to_dir_name, download_bugs
+import git
 from experiments import ExperimentGenerator
 
 """
@@ -64,11 +68,10 @@ def Extract_OO_features_OLD():
         verPath = os.path.join(utilsConf.get_configuration().versPath, version_to_dir_name(version))
         command = """cd /d  """ + utilsConf.to_short_path(verPath) + " & for /R .\\repo %f in (*.java) do (call javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath "+utilsConf.to_short_path(utilsConf.get_configuration().docletPath)+" -filename %~nxf.xml -private -d .\Jdoc2 %f >NUL 2>NUL)"
         os.system(command)
-# GENERATE Jdoc
 
 
 @utilsConf.marker_decorator(utilsConf.OO_FEATURES_MARKER)
-def Extract_OO_features(versPath,vers,docletPath="..\..\\xml-doclet-1.0.4-jar-with-dependencies.jar"):
+def Extract_OO_features(versPath,vers,docletPath):
     for x in vers:
         verPath=os.path.join(versPath,x)
         outPath=os.path.join(verPath,"Jdoc")
@@ -180,14 +183,12 @@ def Extract_complexity_features():
         if proc.returncode != 0:
             RuntimeWarning('subprocess execution failed. args are {0}. err is {1}'.format(str(run_commands), err))
 
-# blame
-#checkStyle
+
 @utilsConf.marker_decorator(utilsConf.FEATURES_MARKER)
 def featuresExtract():
     Extract_complexity_features()
     Extract_OO_features_OLD()
     wekaMethods.commsSpaces.create(utilsConf.get_configuration().vers_dirs, os.path.join(utilsConf.get_configuration().workingDir, "vers"))
-    wekaMethods.patchsBuild.do_all()
 
 
 def BuildWekaModel(weka, training, testing, namesCsv, outCsv, name, wekaJar):
@@ -204,81 +205,15 @@ def BuildWekaModel(weka, training, testing, namesCsv, outCsv, name, wekaJar):
     wekaMethods.wekaAccuracy.priorsCreation(namesCsv, wekaCsv, outCsv, "")
 
 
-def BuildMLFiles(outDir, buggedType, component):
-    trainingFile=os.path.join(outDir,buggedType+"_training_"+component+".arff")
-    testingFile=os.path.join(outDir,buggedType+"_testing_"+component+".arff")
-    NamesFile=os.path.join(outDir,buggedType+"_names_"+component+".csv")
-    outCsv=os.path.join(outDir,buggedType+"_out_"+component+".csv")
-    return trainingFile, testingFile, NamesFile, outCsv
-
-
 @utilsConf.marker_decorator(utilsConf.ML_MODELS_MARKER)
 def createBuildMLModels():
-    for buggedType in ["All", "Most"]:
-        Bpath=os.path.join(utilsConf.get_configuration().workingDir, buggedType)
-        mkOneDir(Bpath)
-        FilesPath=os.path.join(Bpath, "Files")
-        methodsPath=os.path.join(Bpath, "Methods")
-        mkOneDir(FilesPath)
-        mkOneDir(methodsPath)
-        trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacks(FilesPath,
-                                                                                                        utilsConf.get_configuration().gitPath, utilsConf.get_configuration().weka_path, utilsConf.get_configuration().vers, utilsConf.get_configuration().vers_dirs, buggedType, utilsConf.get_configuration().db_dir)
-        trainingFile, testingFile, NamesFile, outCsv=BuildMLFiles(utilsConf.to_short_path(utilsConf.get_configuration().weka_path),buggedType,"files")
-        BuildWekaModel(utilsConf.get_configuration().weka_path,trainingFile,testingFile,NamesFile,outCsv,"files_"+buggedType, utilsConf.get_configuration().wekaJar)
-        # All_One_create.allFamilies(FilesPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
-        trainingFile,testingFile,NamesFile,Featuresnames,lensAttr=wekaMethods.articles.articlesAllpacksMethods(methodsPath,
-                                                                                                               utilsConf.get_configuration().gitPath, utilsConf.get_configuration().weka_path, utilsConf.get_configuration().vers, utilsConf.get_configuration().vers_dirs, buggedType, utilsConf.get_configuration().db_dir)
-        trainingFile, testingFile, NamesFile, outCsv=BuildMLFiles(utilsConf.to_short_path(utilsConf.get_configuration().weka_path),buggedType,"methods")
-        BuildWekaModel(utilsConf.get_configuration().weka_path,trainingFile,testingFile,NamesFile,outCsv,"methods_"+buggedType, utilsConf.get_configuration().wekaJar)
-        # All_One_create.allFamilies(methodsPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
+    for granularity in ['File', 'Method']:
+        for buggedType in ["All", "Most"]:
+            trainingFile, testingFile, NamesFile, outCsv = wekaMethods.articles.get_features(granularity, buggedType)
+            # BuildWekaModel(utilsConf.get_configuration().weka_path, trainingFile, testingFile, NamesFile, outCsv,
+            #                "{0}_".format(granularity) + buggedType, utilsConf.get_configuration().wekaJar)
+            # All_One_create.allFamilies(FilesPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
 
-
-def mergeArffs(merge,arffFile,tempFile):
-    os.system('java -Xmx2024m  -cp "C:\Program Files\Weka-3-7\weka.jar" weka.filters.unsupervised.attribute.RemoveByName -E hasBug -i '+ merge+' > '+ tempFile)
-    os.system('java -Xmx2024m  -cp "C:\Program Files\Weka-3-7\weka.jar" weka.core.Instances merge '+ tempFile+' '+ arffFile+'  > '+ merge)
-
-
-def indsFamilies(packsInds,Wanted):
-    outpacksInds=[]
-    for p in Wanted:
-        lst = [packsInds[x] for x in p]
-        outpacksInds.append(reduce(lambda x, y: x + y, lst))
-    return outpacksInds
-
-
-def merge_multiple_arff_file(path,outArff,tempFile,indices):
-        shutil.copyfile(os.path.join(path,str(indices[0])),outArff)
-        for ind in indices[1:]:
-            arffFile=os.path.join(path,str(ind))
-            mergeArffs(outArff,arffFile,tempFile)
-
-
-def ArticleFeaturesMostFiles(workingDir,outArffTrain,outArffTest,tempFile,outCsv,wekaJar,indices):
-    weka=os.path.join(workingDir,"weka")
-    Bpath=os.path.join(workingDir,"Most")
-    FilesPath=os.path.join(Bpath,"Files")
-    FilesPath=os.path.join(FilesPath,"Fam_one")
-    for train,name in zip([outArffTrain,outArffTest],["_Appended.arff","_Only.arff"]):
-        shutil.copyfile(os.path.join(FilesPath,str(0)+name),train)
-        for ind in indices[1:]:
-            arffFile=os.path.join(FilesPath,str(ind)+name)
-            mergeArffs(train,arffFile,tempFile)
-    trainingFile,testingFile,NamesFile=BuildMLFiles(weka,"Most","files")
-    BuildWekaModel(weka,outArffTrain,outArffTest,NamesFile,outCsv,"methods_"+"Most",wekaJar)
-
-def append_families_indices(workingDir,wekaJar, fam_one_path, buggedType,component,indices):
-    weka=os.path.join(workingDir,"weka")
-    instance_name = component+"_"+buggedType
-    outArffTrain = os.path.join(weka, instance_name + "_Appended.arff")
-    outArffTest = os.path.join(weka, instance_name + "_Only.arff")
-    tempFile= os.path.join(weka, instance_name + "_TMP.arff")
-    for train,name in zip([outArffTrain,outArffTest],["_Appended.arff","_Only.arff"]):
-        shutil.copyfile(os.path.join(fam_one_path,str(0)+name),train)
-        for ind in indices[1:]:
-            arffFile=os.path.join(fam_one_path,str(ind)+name)
-            mergeArffs(train,arffFile,tempFile)
-    trainingFile,testingFile,NamesFile, outCsv=BuildMLFiles(weka,buggedType,component)
-    BuildWekaModel(weka,outArffTrain,outArffTest,NamesFile,outCsv,instance_name,wekaJar)
 
 def weka_csv_to_readable_csv(weka_csv, prediction_csv):
     out_lines = [["component_name", "fault_probability"]]
@@ -348,18 +283,6 @@ def clean(versPath,LocalGitPath):
     shutil.rmtree(LocalGitPath, ignore_errors=True)
 
 
-def download_bugs():
-    bugsPath = utilsConf.get_configuration().bugsPath
-    issue_tracker_url = utilsConf.get_configuration().issue_tracker_url
-    issue_tracker_product = utilsConf.get_configuration().issue_tracker_product
-    if utilsConf.get_configuration().issue_tracker == "bugzilla":
-        wekaMethods.issuesExtract.python_bugzilla.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
-    elif utilsConf.get_configuration().issue_tracker == "jira":
-        wekaMethods.issuesExtract.jira_import.jiraIssues(bugsPath, issue_tracker_url, issue_tracker_product)
-    elif utilsConf.get_configuration().issue_tracker == "github":
-        wekaMethods.issuesExtract.github_import.GithubIssues(bugsPath, issue_tracker_url, issue_tracker_product)
-
-
 def create_web_prediction_results():
     for buggedType, granularity in itertools.product(["All", "Most"], ["files", "methods"]):
         weka_csv = os.path.join(utilsConf.get_configuration().weka_path, "{buggedType}_out_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
@@ -368,15 +291,49 @@ def create_web_prediction_results():
         save_json_watchers(prediction_csv)
 
 
+@utilsConf.marker_decorator(utilsConf.DISTRIBUTION_FILE)
+def check_distribution():
+    wekaMethods.patchsBuild.labeling()
+    wekaMethods.buildDB.build_labels()
+    all_tags = sorted(git.Repo(utilsConf.get_configuration().gitPath).tags, key=lambda tag: tag.commit.committed_date)
+    tags_names = map(lambda tag: tag.name, all_tags)
+    tags_dates = [datetime.datetime(1900, 1, 1, 0, 0).strftime('%Y-%m-%d %H:%M:%S')] + map(
+        lambda tag: datetime.datetime.fromtimestamp(tag.commit.committed_date).strftime('%Y-%m-%d %H:%M:%S'), all_tags)
+    headers = ["granularity", "buggedType", "test_set_valid", "test_set_bug", "training_set_valid", "training_set_bug"]
+    headers_per_version = ["granularity", "buggedType", "version_name", "valid", "bug"]
+    rows = [headers]
+    rows_per_version = [headers_per_version]
+    for granularity in ['File', 'Method']:
+        for buggedType in ["All", "Most"]:
+            distribution = []
+            dbpath = os.path.join(utilsConf.get_configuration().db_dir, str(utilsConf.get_configuration().vers_dirs[-1] + ".db"))
+            for i, version_name in list(enumerate(tags_names))[:-1]:
+                prev_date, start_date, end_date = tags_dates[i: i + 3]
+                counts = {'valid': 0, 'bugged': 0}
+                files_hasBug = wekaMethods.articles.get_arff_class(dbpath, start_date, end_date,
+                                                                   wekaMethods.articles.BUG_QUERIES[granularity][buggedType],
+                                                                   wekaMethods.articles.COMPONENTS_QUERIES[granularity])
+                counts.update(Counter(map(itemgetter(0), files_hasBug.values())))
+                report_values = [counts['valid'], counts['bugged']]
+                rows_per_version.append([granularity, buggedType, version_name] + report_values)
+                distribution.append(report_values)
+            rows.append([granularity, buggedType] + distribution[-1] + reduce(lambda x,y: [x[0] + y[0], x[1] + y[1]], distribution[:-1], [0, 0]))
+    with open(utilsConf.get_configuration().distribution_report, "wb") as report:
+        writer = csv.writer(report)
+        writer.writerows(rows)
+    with open(utilsConf.get_configuration().distribution_per_version_report, "wb") as report:
+        writer = csv.writer(report)
+        writer.writerows(rows_per_version)
+
+
 @utilsConf.marker_decorator(utilsConf.LEARNER_PHASE_FILE)
 def wrapperLearner():
-    download_bugs()
-    test_version_create()
     # NLP.commits.data_to_csv(os.path.join(workingDir, "NLP_data.csv"), gitPath, bugsPath)
+    test_version_create()
     featuresExtract()
     wekaMethods.buildDB.buildOneTimeCommits()
     createBuildMLModels()
-    create_web_prediction_results()
+    # create_web_prediction_results()
 
 
 def load_prediction_file(prediction_path):
@@ -437,69 +394,6 @@ def get_components_probabilities(bugged_type, granularity, test_runner, tests):
     return components_priors
 
 
-def comprasionAll(confFile):
-    vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
-    for buggedType in ["All","Most"]:
-        Bpath=os.path.join(workingDir,buggedType)
-        FilesPath=os.path.join(Bpath,"Files")
-        methodsPath=os.path.join(Bpath,"Methods")
-        packs=["haelstead","g2","g3","methodsArticles","methodsAdded","hirarcy","fieldsArticles","fieldsAdded","constructorsArticles","constructorsAdded","lastProcess","simpleProcessArticles","simpleProcessAdded","bugs","sourceMonitor","checkStyle","blame"]#,"analyzeComms"]
-        FeaturesClasses,Featuresnames=wekaMethods.articles.featuresPacksToClasses(packs)
-        wekaMethods.ParseWekaOutput.comprasion(os.path.join(FilesPath,"Fam_one\\out"),os.path.join(FilesPath,"Fam_all\\out"), os.path.join(workingDir,buggedType+"_"+"Files")+".csv",Featuresnames)
-        packs=["lastProcessMethods","simpleProcessArticlesMethods","simpleProcessAddedMethods","bugsMethods"]#,"analyzeComms"]
-        FeaturesClasses,Featuresnames=wekaMethods.articles.featuresMethodsPacksToClasses(packs)
-        wekaMethods.ParseWekaOutput.comprasion(os.path.join(methodsPath,"Fam_one\\out"),os.path.join(methodsPath,"Fam_all\\out"), os.path.join(workingDir,buggedType+"_"+"Methods")+".csv",Featuresnames)
-
-
-def comprasionThreeFam(confFile):
-    vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
-    for buggedType in ["All","Most"]:
-        Bpath=os.path.join(workingDir,buggedType)
-        FilesPath=os.path.join(Bpath,"Files")
-        methodsPath=os.path.join(Bpath,"Methods")
-        packs=["Traditional" , "OO", "process" ,"Fault_History"]#,"analyzeComms"]
-        wekaMethods.ParseWekaOutput.comprasion(os.path.join(FilesPath,"ThreeFam_Fam_one\\out"),os.path.join(FilesPath,"ThreeFam_Fam_all\\out"), os.path.join(workingDir,"ThreeFam_"+buggedType+"_"+"Files")+".csv",packs)
-        packs=["Fault_History","process_version1","process_version2"]#,"analyzeComms"]
-        wekaMethods.ParseWekaOutput.comprasion(os.path.join(methodsPath,"ThreeFam_Fam_one\\out"),os.path.join(methodsPath,"ThreeFam_Fam_all\\out"), os.path.join(workingDir,"ThreeFam_"+buggedType+"_"+"Methods")+".csv",packs)
-
-
-def dictToList(dict,lst):
-    ans=[]
-    for l in lst:
-        ans.append(dict[l])
-    return ans
-
-def comprasionTypes(confFile):
-    vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
-    learnerOutFile=os.path.join(workingDir,"learner.csv")
-    wekaD=os.path.join(workingDir,"weka")
-    keys=["TP Rate","FP Rate","Precision","Recall"," F-Measure","MCC","ROC Area","PRC Area"]
-    titles=["type","class","TP Rate","FP Rate","Precision","Recall"," F-Measure","MCC","ROC Area","PRC Area"]
-    classes=['bugged',"valid","both"]
-    filesNames=["testingAll_files.txt", "testingAll_methods.txt", "testingMost_files.txt", "testingMost_methods.txt"]
-    lines=[titles]
-    for f in filesNames:
-        file=os.path.join(wekaD,f)
-        Exptype=f.replace(".txt","").replace(".testing","")
-        parsedDict=wekaMethods.ParseWekaOutput.Parse(file)
-        for d in parsedDict:
-          lines.append([Exptype,d]+list(dictToList(parsedDict[d],keys)))
-    f=open(learnerOutFile,"wb")
-    writer=csv.writer(f)
-    writer.writerows(lines)
-    f.close()
-
-def reportProjectData(confFile,globalConfFile):
-#java -Xmx2024m  -cp "C:\Program Files\Weka-3-7\weka.jar" weka.core.Instances 13_Appended.arff
-    vers, gitPath,bugsPath, workingDir = utilsConf.configure(confFile)
-    versPath, dbadd= Mkdirs(workingDir, vers)
-    LocalGitPath=os.path.join(workingDir,"repo")
-    reportCsv=os.path.join(workingDir,"report.csv")
-    lastVer=os.path.join(dbadd,vers[-1]+".db")
-    testsDB=os.path.join(workingDir,"testsBugsMethods.db")
-    report.report(reportCsv,LocalGitPath,lastVer,testsDB)
-
-
 def create_experiment(test_runner, num_instances=50, tests_per_instance=50, bug_passing_probability=0.05):
     results_path = os.path.join(utilsConf.get_configuration().experiments, "{GRANULARITY}_{BUGGED_TYPE}")
     for granularity in utilsConf.get_configuration().prediction_files:
@@ -518,11 +412,16 @@ def wrapperAll():
 if __name__ == '__main__':
     csv.field_size_limit(sys.maxint)
     utilsConf.configure(sys.argv[1])
-    shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
+    if not os.path.exists(utilsConf.get_configuration().configuration_path):
+        shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
+    # check_distribution()
+    # exit()
     if utilsConf.copy_from_cache() is not None:
         exit()
     if len(sys.argv) == 2:
         wrapperAll()
         utilsConf.export_to_cache()
-    elif sys.argv[2] =="learn":
+    elif sys.argv[2] == "learn":
         wrapperLearner()
+    elif sys.argv[2] == "experiments":
+        pass

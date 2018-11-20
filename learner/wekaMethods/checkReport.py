@@ -373,8 +373,3 @@ def analyzeCheckStyle(checkOut):
         end = methods[methodDir].get('EndLine', 0)
         ans.append([methodDir, fileName, methodName, str(begin), str(end)])
     return ans
-
-
-if __name__ == "__main__":
-    x = analyzeCheckStyle(r"C:\amirelm\projects\MYFACES_6\vers\checkAllMethodsData\myfaces_core_project_2_1_1.txt")
-    pass
