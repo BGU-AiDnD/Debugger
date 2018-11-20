@@ -85,10 +85,11 @@ def versions_info(repoPath, vers):
 
 
 def CopyDirs(gitPath, versPath, versions):
+    remote_url = list(git.Repo(to_short_path(gitPath)).remote().urls)[0]
     for version in versions:
         path=os.path.join(versPath, version_to_dir_name(version), "repo")
         if not os.path.exists(path):
-            run_commands = ["git", "clone", to_short_path(gitPath), 'repo']
+            run_commands = ["git", "clone", remote_url, 'repo']
             proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
                                    cwd=to_short_path(os.path.join(versPath, version_to_dir_name(version))))
             (out, err) = proc.communicate()
