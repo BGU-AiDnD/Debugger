@@ -300,26 +300,26 @@ def get_versions_by_type(tags):
     templates = []
     for base in template_base:
         templates.extend(map(lambda sep: sep.join(base), SEPERATORS))
-    templates.append('([0-9])([0-9])([0-9])$', '([0-9])([0-9])$')
+    templates.extend(['([0-9])([0-9])([0-9])$', '([0-9])([0-9])$'])
     for tag in tags:
-        version = tag.name
-        for triple in templates:
-            values = re.findall(triple, version)
+        for template in templates:
+            values = re.findall(template, tag.name)
             if values:
+                values = values[0]
                 if len(values) == 4:
-                    micros.append(version)
+                    micros.append(tag)
                     major, minor1, minor2, macro = values
                     minor = 10 * minor1 + minor2
                 elif len(values) == 3:
-                    micros.append(version)
+                    micros.append(tag)
                     major, minor, macro = values
                 else:
                     major, minor = values
                     macro = 0
                 if macro == 0:
-                    minors.append(version)
+                    minors.append(tag)
                 if minor == 0:
-                    majors.append(version)
+                    majors.append(tag)
                 break
     return majors, minors, micros
 

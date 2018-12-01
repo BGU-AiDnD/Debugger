@@ -6,6 +6,7 @@ import sys
 
 
 def run_process(cmd_args):
+    print "Running", cmd_args
     proc = Popen(cmd_args)
     proc.communicate()
 

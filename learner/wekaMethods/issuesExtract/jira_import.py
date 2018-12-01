@@ -50,7 +50,7 @@ def issueAnalyze(issue):
     CC=str("")
     return [Id,Product,Component,Assigned_To,Status,Resolution,Reporter,Last_Modified,Version,Milestone,Hardware,OS,Priority,Severity,Summary,Keywords,Submit_Date,Blocks,Depends_On,Duplicate_Of,CC]
 
-# @utilsConf.marker_decorator(utilsConf.ISSUE_TRACKER_FILE)
+@utilsConf.marker_decorator(utilsConf.ISSUE_TRACKER_FILE)
 def jiraIssues(outFile , url, project_name, bunch = 100):
     jiraE = jira.JIRA(url)
     allIssues=[]
