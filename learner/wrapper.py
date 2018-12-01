@@ -296,7 +296,7 @@ def get_versions_by_type(tags):
     minors = []
     micros = []
     SEPERATORS = ['\.', '\-', '\_']
-    template_base = [['([0-9])', '([0-9])([0-9])$'], ['([0-9])', '([0-9])([0-9])', '([0-9])$'], ['([0-9])([0-9])', '([0-9])$'], ['([0-9])', '([0-9])', '([0-9])$'], ['([0-9])', '([0-9])$']]
+    template_base = [['([0-9])', '([0-9])([0-9])$'], ['([0-9])', '([0-9])([0-9])', '([0-9])$'], ['([0-9])', '([0-9])', '([0-9])([0-9])$'], ['([0-9])([0-9])', '([0-9])$'], ['([0-9])', '([0-9])', '([0-9])$'], ['([0-9])', '([0-9])$']]
     templates = []
     for base in template_base:
         templates.extend(map(lambda sep: sep.join(base), SEPERATORS))
@@ -353,7 +353,7 @@ def check_distribution():
     all_tags = sorted(git.Repo(utilsConf.get_configuration().gitPath).tags, key=lambda tag: tag.commit.committed_date)
     majors, minors, micros = get_versions_by_type(all_tags)
     vers_tags = filter(lambda tag: tag.name in utilsConf.get_configuration().vers, all_tags)
-    for tags, out_file in zip([all_tags, majors, minors, micros, vers_tags], [utilsConf.get_configuration().distribution_per_version_report, utilsConf.get_configuration().distribution_per_majors_report, utilsConf.get_configuration().distribution_report]):
+    for tags, out_file in zip([all_tags, majors, minors, micros, vers_tags], [utilsConf.get_configuration().distribution_per_version_report, utilsConf.get_configuration().distribution_per_majors_report, utilsConf.get_configuration().distribution_per_minors_report, utilsConf.get_configuration().distribution_per_micros_report, utilsConf.get_configuration().distribution_report]):
         rows_all_versions = distribution_for_tags(tags)
         with open(out_file, "wb") as report:
             writer = csv.writer(report)
