@@ -35,7 +35,7 @@ def get_all_bugs(url, product):
 
 @utilsConf.marker_decorator(utilsConf.ISSUE_TRACKER_FILE)
 def write_bugs_csv(csv_bug_file, url, product=None):
-    if "xmlrpc" not  in url:
+    if "xmlrpc" not in url:
         url += "/xmlrpc.cgi"
     lines=[["id", "product", "component", "assigned_to", "status", "resolution", "reporter", "last_change_time", "version", "target_milestone", "platform", "op_sys", "priority", "severity", "summary", "keywords", "creation_time", "blocks", "depends_on", "Duplicate Of", "cc"]]
     bugs = get_all_bugs(url, product)

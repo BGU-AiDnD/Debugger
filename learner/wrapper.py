@@ -290,39 +290,74 @@ def create_web_prediction_results():
         save_json_watchers(prediction_csv)
 
 
-@utilsConf.marker_decorator(utilsConf.DISTRIBUTION_FILE)
-def check_distribution():
-    wekaMethods.patchsBuild.labeling()
-    wekaMethods.buildDB.build_labels()
-    all_tags = sorted(git.Repo(utilsConf.get_configuration().gitPath).tags, key=lambda tag: tag.commit.committed_date)
-    tags_names = map(lambda tag: tag.name, all_tags)
+def get_versions_by_type(tags):
+    import re
+    majors = []
+    minors = []
+    micros = []
+    SEPERATORS = ['\.', '\-', '\_']
+    template_base = [['([0-9])', '([0-9])([0-9])$'], ['([0-9])', '([0-9])([0-9])', '([0-9])$'], ['([0-9])([0-9])', '([0-9])$'], ['([0-9])', '([0-9])', '([0-9])$'], ['([0-9])', '([0-9])$']]
+    templates = []
+    for base in template_base:
+        templates.extend(map(lambda sep: sep.join(base), SEPERATORS))
+    templates.append('([0-9])([0-9])([0-9])$', '([0-9])([0-9])$')
+    for tag in tags:
+        version = tag.name
+        for triple in templates:
+            values = re.findall(triple, version)
+            if values:
+                if len(values) == 4:
+                    micros.append(version)
+                    major, minor1, minor2, macro = values
+                    minor = 10 * minor1 + minor2
+                elif len(values) == 3:
+                    micros.append(version)
+                    major, minor, macro = values
+                else:
+                    major, minor = values
+                    macro = 0
+                if macro == 0:
+                    minors.append(version)
+                if minor == 0:
+                    majors.append(version)
+                break
+    return majors, minors, micros
+
+
+def distribution_for_tags(tags):
+    tags_names = map(lambda tag: tag.name, tags)
     tags_dates = [datetime.datetime(1900, 1, 1, 0, 0).strftime('%Y-%m-%d %H:%M:%S')] + map(
-        lambda tag: datetime.datetime.fromtimestamp(tag.commit.committed_date).strftime('%Y-%m-%d %H:%M:%S'), all_tags)
-    headers = ["granularity", "buggedType", "test_set_valid", "test_set_bug", "training_set_valid", "training_set_bug"]
+        lambda tag: datetime.datetime.fromtimestamp(tag.commit.committed_date).strftime('%Y-%m-%d %H:%M:%S'), tags)
     headers_per_version = ["granularity", "buggedType", "version_name", "valid", "bug"]
-    rows = [headers]
     rows_per_version = [headers_per_version]
-    for granularity in ['File', 'Method']:
-        for buggedType in ["All", "Most"]:
-            distribution = []
-            dbpath = os.path.join(utilsConf.get_configuration().db_dir, str(utilsConf.get_configuration().vers_dirs[-1] + ".db"))
+    for granularity in wekaMethods.articles.BUG_QUERIES:
+        for buggedType in wekaMethods.articles.BUG_QUERIES[granularity]:
+            dbpath = os.path.join(utilsConf.get_configuration().db_dir,
+                                  str(utilsConf.get_configuration().vers_dirs[-1] + ".db"))
             for i, version_name in list(enumerate(tags_names))[:-1]:
                 prev_date, start_date, end_date = tags_dates[i: i + 3]
                 counts = {'valid': 0, 'bugged': 0}
                 files_hasBug = wekaMethods.articles.get_arff_class(dbpath, start_date, end_date,
-                                                                   wekaMethods.articles.BUG_QUERIES[granularity][buggedType],
+                                                                   wekaMethods.articles.BUG_QUERIES[granularity][
+                                                                       buggedType],
                                                                    wekaMethods.articles.COMPONENTS_QUERIES[granularity])
                 counts.update(Counter(map(itemgetter(0), files_hasBug.values())))
                 report_values = [counts['valid'], counts['bugged']]
                 rows_per_version.append([granularity, buggedType, version_name] + report_values)
-                distribution.append(report_values)
-            rows.append([granularity, buggedType] + distribution[-1] + reduce(lambda x,y: [x[0] + y[0], x[1] + y[1]], distribution[:-1], [0, 0]))
-    with open(utilsConf.get_configuration().distribution_report, "wb") as report:
-        writer = csv.writer(report)
-        writer.writerows(rows)
-    with open(utilsConf.get_configuration().distribution_per_version_report, "wb") as report:
-        writer = csv.writer(report)
-        writer.writerows(rows_per_version)
+    return rows_per_version
+
+
+def check_distribution():
+    wekaMethods.patchsBuild.labeling()
+    wekaMethods.buildDB.build_labels()
+    all_tags = sorted(git.Repo(utilsConf.get_configuration().gitPath).tags, key=lambda tag: tag.commit.committed_date)
+    majors, minors, micros = get_versions_by_type(all_tags)
+    vers_tags = filter(lambda tag: tag.name in utilsConf.get_configuration().vers, all_tags)
+    for tags, out_file in zip([all_tags, majors, minors, micros, vers_tags], [utilsConf.get_configuration().distribution_per_version_report, utilsConf.get_configuration().distribution_per_majors_report, utilsConf.get_configuration().distribution_report]):
+        rows_all_versions = distribution_for_tags(tags)
+        with open(out_file, "wb") as report:
+            writer = csv.writer(report)
+            writer.writerows(rows_all_versions)
 
 
 @utilsConf.marker_decorator(utilsConf.LEARNER_PHASE_FILE)
@@ -416,7 +451,7 @@ if __name__ == '__main__':
     if not os.path.exists(utilsConf.get_configuration().configuration_path):
         shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
     check_distribution()
-    # exit()
+    exit()
     if utilsConf.copy_from_cache() is not None:
         exit()
     if len(sys.argv) == 2:

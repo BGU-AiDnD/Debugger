@@ -71,9 +71,9 @@ def to_short_path(path):
 
 def versions_info(repoPath, vers):
     r = git.Repo(repoPath)
-    if vers==[]:
+    if vers == []:
         wanted = [x.commit for x in r.tags]
-        vers=r.tags
+        vers = r.tags
     else:
         wanted = [x.commit for x in r.tags if x.name in vers]
         if not wanted:
@@ -157,6 +157,9 @@ def configure(confFile):
     db_dir = os.path.join(workingDir, "dbAdd")
     distribution_report = os.path.join(workingDir, "distribution_report.csv")
     distribution_per_version_report = os.path.join(workingDir, "distribution_per_version_report.csv")
+    distribution_per_majors_report = os.path.join(workingDir, "distribution_per_majors_report.csv")
+    distribution_per_minors_report = os.path.join(workingDir, "distribution_per_minors_report.csv")
+    distribution_per_micros_report = os.path.join(workingDir, "distribution_per_micros_report.csv")
     versPath = os.path.join(workingDir, "vers")
     vers, paths, dates, commits = versions_info(to_short_path(gitPath), versions)
     docletPath, sourceMonitorEXE, checkStyle57, checkStyle68, allchecks, methodsNamesXML, wekaJar, RemoveBat, utilsPath = globalConfig()

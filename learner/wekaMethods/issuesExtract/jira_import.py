@@ -50,7 +50,7 @@ def issueAnalyze(issue):
     CC=str("")
     return [Id,Product,Component,Assigned_To,Status,Resolution,Reporter,Last_Modified,Version,Milestone,Hardware,OS,Priority,Severity,Summary,Keywords,Submit_Date,Blocks,Depends_On,Duplicate_Of,CC]
 
-@utilsConf.marker_decorator(utilsConf.ISSUE_TRACKER_FILE)
+# @utilsConf.marker_decorator(utilsConf.ISSUE_TRACKER_FILE)
 def jiraIssues(outFile , url, project_name, bunch = 100):
     jiraE = jira.JIRA(url)
     allIssues=[]
@@ -62,10 +62,12 @@ def jiraIssues(outFile , url, project_name, bunch = 100):
     while True:
         issues = jiraE.search_issues("project={0}".format(project_name), maxResults=bunch, startAt=extracted_issues)
         allIssues.extend(issues)
-        extracted_issues=extracted_issues+bunch
-        if len(issues) < bunch :
+        extracted_issues = extracted_issues+bunch
+        if len(issues) < bunch:
             break
     for issue in allIssues:
+        if issue.fields.issuetype.name.lower() != 'bug':
+            continue
         analyze = issueAnalyze(issue)
         lines.append(analyze)
     with open(outFile,"wb") as f:
