@@ -296,7 +296,7 @@ def get_versions_by_type(tags):
     minors = []
     micros = []
     SEPERATORS = ['\.', '\-', '\_']
-    template_base = [['([0-9])', '([0-9])([0-9])$'], ['([0-9])', '([0-9])([0-9])', '([0-9])$'], ['([0-9])', '([0-9])', '([0-9])([0-9])$'], ['([0-9])([0-9])', '([0-9])$'], ['([0-9])', '([0-9])', '([0-9])$'], ['([0-9])', '([0-9])$']]
+    template_base = [['([0-9])', '([0-9])([0-9])', '([0-9])$'], ['([0-9])', '([0-9])([0-9])$'], ['([0-9])', '([0-9])', '([0-9])([0-9])$'], ['([0-9])([0-9])', '([0-9])$'], ['([0-9])', '([0-9])', '([0-9])$'], ['([0-9])', '([0-9])$']]
     templates = []
     for base in template_base:
         templates.extend(map(lambda sep: sep.join(base), SEPERATORS))
@@ -305,18 +305,18 @@ def get_versions_by_type(tags):
         for template in templates:
             values = re.findall(template, tag.name)
             if values:
-                values = values[0]
+                values = map(int, values[0])
                 if len(values) == 4:
                     micros.append(tag)
-                    major, minor1, minor2, macro = values
+                    major, minor1, minor2, micro = values
                     minor = 10 * minor1 + minor2
                 elif len(values) == 3:
                     micros.append(tag)
-                    major, minor, macro = values
+                    major, minor, micro = values
                 else:
                     major, minor = values
-                    macro = 0
-                if macro == 0:
+                    micro = 0
+                if micro == 0:
                     minors.append(tag)
                 if minor == 0:
                     majors.append(tag)
