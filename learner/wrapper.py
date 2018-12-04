@@ -10,7 +10,7 @@ import report
 import utilsConf
 import wekaMethods.ParseWekaOutput
 import wekaMethods.articles
-import wekaMethods.buildDB
+import wekaMethods.db_builders.buildDB
 import wekaMethods.commsSpaces
 import wekaMethods.issuesExtract.github_import
 import wekaMethods.issuesExtract.jira_import
@@ -374,7 +374,7 @@ def wrapperLearner():
     test_version_create()
     # NLP.commits.data_to_csv(os.path.join(workingDir, "NLP_data.csv"), gitPath, bugsPath)
     featuresExtract()
-    wekaMethods.buildDB.buildOneTimeCommits()
+    wekaMethods.db_builders.buildDB.buildOneTimeCommits()
     createBuildMLModels()
     create_web_prediction_results()
 

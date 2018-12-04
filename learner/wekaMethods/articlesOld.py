@@ -2,8 +2,8 @@ import datetime
 import os
 import sqlite3
 import git
-from weka.articles import load_arff, arff_build, write_to_arff, getPaths, Build88_GIT
-from weka.buildDB import names_dates
+from wekaMethods.articles import load_arff, arff_build, write_to_arff, getPaths, Build88_GIT
+from wekaMethods.db_builders.buildDB import names_dates
 
 __author__ = 'amir'
 
