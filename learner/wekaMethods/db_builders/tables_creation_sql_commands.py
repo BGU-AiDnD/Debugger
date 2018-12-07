@@ -1,49 +1,22 @@
-CREATE_ALL_METHODS_SQL_TABLE = ("CREATE TABLE AllMethods (methodDir text, fileName text, "
-                                "methodName text, beginLine INT, endLine INT)")
+CREATE_ALL_METHODS_SQL_TABLE = ("CREATE TABLE AllMethods (methodDir text, fileName text, methodName text, beginLine INT , endLine INT )")
 
-CREATE_COMMITTED_METHODS_SQL_TABLE_COMMAND = ("CREATE TABLE commitedMethods ("
-                                              "commit_sha text, methodDir text, fileName text, "
-                                              "methodName text, deletions INT, insertions INT, "
-                                              "lines INT, bugId INT, commiter_date DateTime,"
-                                              "commitID INT)")
+CREATE_COMMITTED_METHODS_SQL_TABLE_COMMAND = ("CREATE TABLE commitedMethods (commit_sha text , methodDir text, fileName text, methodName text, deletions INT , insertions INT , lines INT, bugId INT, commiter_date DateTime,commitID INT)")
 
-CREATE_BUG_FIX_COMMITS_SQL_TABLE_COMMAND = ("CREATE TABLE bugsFix (ID INT,Product text,"
-                                            "Component text, Assigned_To text, Status text, "
-                                            "Resolution text, Reporter text, "
-                                            "Last_Modified DateTime, Version text, Milestone text,"
-                                            "Hardware text, OS text, Priority text, Severity text,"
-                                            "Summary text, Keywords text, Submit_Date DateTime, "
-                                            "Blocks text, Depends_On text,Duplicate_Of INT,"
-                                            "CC text)")
+CREATE_BUG_FIX_COMMITS_SQL_TABLE_COMMAND = ("CREATE TABLE bugsFix (ID INT,Product text,Component text,Assigned_To text,Status text,Resolution text,Reporter text,Last_Modified DateTime ,Version text,Milestone text,Hardware text,OS text,Priority text,Severity text,Summary text,Keywords text,Submit_Date DateTime ,Blocks text,Depends_On text,Duplicate_Of INT,CC text)")
 
-CREATE_COMMITS_SQL_TABLE_COMMAND = ("CREATE TABLE commits (ID INT, bugId INT, "
-                                    "commiter_date DateTime, commiter text, author_date DateTime, "
-                                    "author text, size INT, parentID INT, message text,"
-                                    "commit_sha text )")
+CREATE_COMMITS_SQL_TABLE_COMMAND = ("CREATE TABLE commits (ID INT, bugId INT, commiter_date DateTime , commiter text,author_date DateTime , author text  , size INT, parentID INT, message text,commit_sha text )")
 
-CREATE_COMMITED_FILES_SQL_TABLE_COMMAMD = ("CREATE TABLE Commitedfiles (id INT, name text, "
-                                           "commit_sha text, lines INT, deletions INT, "
-                                           "insertions INT, bugId INT, commiter_date DateTime, "
-                                           "commitid INT)")
+CREATE_COMMITED_FILES_SQL_TABLE_COMMAMD = ("CREATE TABLE Commitedfiles (id INT,name text,commit_sha text,lines INT,deletions INT,insertions INT, bugId INT, commiter_date DateTime, commitid INT)")
 
 CREATE_FILES_SQL_TABLE_COMMAND = "CREATE TABLE files (id INT,name text)"
 
 CREATE_COMPLEX_FILES_SQL_TABLE_COMMAND = "CREATE TABLE Complexyfiles (name text, complex INT)"
 
-CREATE_HALSTEAD_FILES_SQL_TABLE_COMMAND = ("CREATE TABLE haelsTfiles (name text,"
-                                           "Operators_count INT, Distinct_operators INT,"
-                                           "Operands_count INT, Distinct_operands INT,"
-                                           "Program_length INT, Program_vocabulary INT,"
-                                           "Volume float, Difficulty INT, Effort float)")
+CREATE_HALSTEAD_FILES_SQL_TABLE_COMMAND = ("CREATE TABLE haelsTfiles (name text, Operators_count INT, Distinct_operators INT, Operands_count INT, Distinct_operands INT, Program_length INT, Program_vocabulary INT,Volume float, Difficulty INT, Effort float)")
 
-CREATE_BUGS_SQL_TABLE_COMMAND = ("CREATE TABLE bugs (ID INT,Product text, Component text, "
-                                 "Assigned_To text, Status text, Resolution text, Reporter text, "
-                                 "Last_Modified DateTime, Version text, Milestone text, "
-                                 "Hardware text, OS text, Priority text, Severity text, "
-                                 "Summary text, Keywords text, Submit_Date DateTime, Blocks text,"
-                                 "Depends_On text, Duplicate_Of INT,CC text)")
+CREATE_BUGS_SQL_TABLE_COMMAND = ("CREATE TABLE bugs (ID INT,Product text,Component text,Assigned_To text,Status text,Resolution text,Reporter text,Last_Modified DateTime ,Version text,Milestone text,Hardware text,OS text,Priority text,Severity text,Summary text,Keywords text,Submit_Date DateTime ,Blocks text,Depends_On text,Duplicate_Of INT,CC text)")
 
-STATEMENTS_AT_BLOCK_LEVEL_X_COLUMNS = ["Statements_at_block_level_{level} INT,".format(level=level)
+STATEMENTS_AT_BLOCK_LEVEL_X_COLUMNS = ["Statements_at_block_level_{level} INT".format(level=level)
                                        for level in range(10)]
 
 CREATE_JAVA_FILES_SQL_TABLE_COMMAND = ("CREATE TABLE JAVAfiles (name text, Lines INT, "
@@ -55,39 +28,20 @@ CREATE_JAVA_FILES_SQL_TABLE_COMMAND = ("CREATE TABLE JAVAfiles (name text, Lines
                                        "Name_of_Most_Complex_Method text, "
                                        "Maximum_Complexity INT, Line_Number_of_Deepest_Block INT,"
                                        "Maximum_Block_Depth INT, Average_Block_Depth float, "
-                                       "Average_Complexity float, {}".format(" ".join(
-	STATEMENTS_AT_BLOCK_LEVEL_X_COLUMNS)))
+                                       "Average_Complexity float, {}".format(",".join(
+										STATEMENTS_AT_BLOCK_LEVEL_X_COLUMNS)))
 
-CREATE_SOURCE_METHODS_SQL_TABLE_COMMAND = (
-	"CREATE TABLE Sourcemethods (File_Name text, Method text,"
-	"Complexity	INT, Statements INT, Maximum_Depth INT, "
-	"Calls INT)")
+CREATE_SOURCE_METHODS_SQL_TABLE_COMMAND = ("CREATE TABLE JAVAfiles (name text,Lines INT,	Statements INT,	Percent_Branch_Statements INT,Method_Call_Statements INT,Percent_Lines_with_Comments INT,Classes_and_Interfaces INT,Methods_per_Class float,Average_Statements_per_Method float,Line_Number_of_Most_Complex_Method 	INT, Name_of_Most_Complex_Method 	text, Maximum_Complexity INT,Line_Number_of_Deepest_Block INT,Maximum_Block_Depth INT,Average_Block_Depth	float, Average_Complexity	float, Statements_at_block_level_0 INT,Statements_at_block_level_1 INT,Statements_at_block_level_2 INT,Statements_at_block_level_3 INT,Statements_at_block_level_4 INT,Statements_at_block_level_5 INT,Statements_at_block_level_6 INT,Statements_at_block_level_7 INT,Statements_at_block_level_8 INT,Statements_at_block_level_9 INT)")
 
-CREATE_CLASSES_SQL_TABLE_COMMAND = ("CREATE TABLE classes (Dirpath text, superClass text,"
-                                    "exception text, name text, externalizable text, abstract text,"
-                                    "path text, error text, included text, scope text,"
-                                    "serializable text)")
+CREATE_CLASSES_SQL_TABLE_COMMAND = ("CREATE TABLE classes (Dirpath text,superClass text,exception text, name text,externalizable text ,abstract text ,path text ,error text   ,included text ,scope text   ,serializable text)")
 
-CREATE_CONSTRUCTORS_SQL_TABLE_COMMAND = ("CREATE TABLE constructors (Dirpath text, className text,"
-                                         "name text, synchronized text, varArgs text, "
-                                         "classPath text,static text, signature text, "
-                                         "included text, scope text, final text, native text, "
-                                         "Num_params text)")
+CREATE_CONSTRUCTORS_SQL_TABLE_COMMAND = ("CREATE TABLE constructors (Dirpath text ,className text , name text , synchronized text, varArgs text,  classPath text ,static text, signature text, included text, scope text, final text,  native text,  Num_params text)")
 
-CREATE_METHODS_SQL_TABLE_COMMAND = ("CREATE TABLE methods (Dirpath text, className text, name text,"
-                                    "synchronized text, abstract text, varArgs text, "
-                                    "classPath text, static text, signature text, "
-                                    "included text, scope text, final text, native text, "
-                                    "return text, Num_params text)")
+CREATE_METHODS_SQL_TABLE_COMMAND = ("CREATE TABLE methods (Dirpath text,className text, name text , synchronized text, abstract text , varArgs text, classPath text , static text, signature text , included text , scope text  , final text  , native text   ,return text,Num_params text)")
 
-CREATE_FIELDS_SQL_TABLE_COMMAND = ("CREATE TABLE fields (Dirpath text, className text, static text,"
-                                   "name text, classPath text, transient text, volatile text,"
-                                   "scope text, final text, type text)")
+CREATE_FIELDS_SQL_TABLE_COMMAND = ("CREATE TABLE fields (Dirpath text,className text,static text, name text, classPath text, transient text,volatile text,scope text,    final text, type text)")
 
-CREATE_CHECKSTYLE_SQL_TABLE_COMMAND = ("CREATE TABLE checkStyle (name text, McCabe REAL, "
-                                       "fanOut REAL, NPath REAL, FileLen INT, NCSS INT, outer INT,"
-                                       "publicMethods INT, totalMethods INT, thorwsSTM INT,"
-                                       "Coupling INT, Executables INT, depthFor INT, depthIf INT)")
+CREATE_CHECKSTYLE_SQL_TABLE_COMMAND = ("CREATE TABLE checkStyle (name text,McCabe REAL,fanOut REAL,NPath REAL,FileLen INT, NCSS INT, outer INT, publicMethods INT, totalMethods INT,thorwsSTM INT,Coupling INT,Executables INT, depthFor INT,depthIf INT)")
 
 CREATE_COMMENTS_SQL_TABLE_COMMAND = "CREATE TABLE comments (name text, commitid INT)"
 
@@ -126,7 +80,7 @@ CREATE_JAVA_FILE_FIX_SQL_TABLE_COMMAND = \
 	 "Line_Number_of_Most_Complex_Method INT, Name_of_Most_Complex_Method text, "
 	 "Maximum_Complexity INT, Line_Number_of_Deepest_Block INT,"
 	 "Maximum_Block_Depth INT,Average_Block_Depth float, Average_Complexity float,"
-	 " {}".format(" ".join(STATEMENTS_AT_BLOCK_LEVEL_X_COLUMNS)))
+	 " {}".format(",".join(STATEMENTS_AT_BLOCK_LEVEL_X_COLUMNS)))
 
 CREATE_SOURCE_METHODS_FIX_SQL_TABLE_COMMMAD = \
 	("CREATE TABLE SourcemethodsFix (File_Name text, Method text ,Complexity INT, Statements INT, "
