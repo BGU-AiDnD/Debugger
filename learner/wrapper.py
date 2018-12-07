@@ -443,17 +443,20 @@ def create_experiment(test_runner, num_instances=50, tests_per_instance=50, bug_
 @utilsConf.marker_decorator(utilsConf.ALL_DONE_FILE)
 def wrapperAll():
     wrapperLearner()
-    create_experiment(executeTests())
+    # create_experiment(executeTests())
+
 
 if __name__ == '__main__':
     csv.field_size_limit(sys.maxint)
     utilsConf.configure(sys.argv[1])
-    if not os.path.exists(utilsConf.get_configuration().configuration_path):
-        shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
+    repo = git.Repo(utilsConf.get_configuration().LocalGitPath)
+    allBugs, bugsIds = wekaMethods.buildDB.bugsTable(utilsConf.get_configuration().bugsPath)
+    allCommits, commitsBugsDict = wekaMethods.buildDB.commits_and_Bugs(repo, bugsIds)
+    # if not os.path.exists(utilsConf.get_configuration().configuration_path):
+    #     shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
     check_distribution()
-    exit()
-    if utilsConf.copy_from_cache() is not None:
-        exit()
+    # if utilsConf.copy_from_cache() is not None:
+    #     exit()
     if len(sys.argv) == 2:
         wrapperAll()
         utilsConf.export_to_cache()
