@@ -232,11 +232,3 @@ class processMethodsFamilies(featureExtractorBase.FeatureExtractorBase):
             self.last_get_features(c, files_dict,prev_date,start_date,end_date)
         if self.family=="bugsMethods":
             self.bugs_get_features(c, files_dict,prev_date,start_date,end_date)
-
-
-
-
-
-
-
-

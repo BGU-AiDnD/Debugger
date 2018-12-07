@@ -43,10 +43,3 @@ def write_bugs_csv(csv_bug_file, url, product=None):
     with open(csv_bug_file,"wb") as f:
         writer=csv.writer(f)
         writer.writerows(lines)
-
-if __name__ == "__main__":
-    write_bugs_csv("C:\Temp\\AntBugs.csv", "bz.apache.org/bugzilla/xmlrpc.cgi", "Ant")
-    write_bugs_csv("C:\Temp\\POI.csv", "bz.apache.org/bugzilla/xmlrpc.cgi", "POI")
-    write_bugs_csv("C:\Temp\\CDT.csv", "bugs.eclipse.org/bugs/xmlrpc.cgi", "CDT")
-    # write_bugs_csv("C:\Temp\\mozilla.csv", "bugzilla.mozilla.org/xmlrpc.cgi", "Ant")
-    # write_bugs_csv("C:\Temp\\redhat.csv", "bugzilla.redhat.com/xmlrpc.cgi", "Security Response")
