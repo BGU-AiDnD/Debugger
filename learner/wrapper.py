@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
 import csv
 import datetime
 import itertools
@@ -12,6 +9,7 @@ import sys
 from collections import Counter
 from operator import itemgetter
 
+import itertools
 import utilsConf
 import wekaMethods.ParseWekaOutput
 import wekaMethods.articles
@@ -19,9 +17,10 @@ import wekaMethods.buildDB
 import wekaMethods.commsSpaces
 import wekaMethods.patchsBuild
 import wekaMethods.wekaAccuracy
-from experiments import ExperimentGenerator
+from utilsConf import Mkdirs, version_to_dir_name, mkOneDir
 from run_mvn import AmirTracer, TestRunner
 from sfl_diagnoser.Diagnoser.diagnoserUtils import write_planning_file, readPlanningFile
+from experiments import ExperimentGenerator
 from utilsConf import version_to_dir_name, download_bugs
 import git
 
