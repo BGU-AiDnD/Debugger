@@ -189,6 +189,8 @@ def checkout_commit(commit_to_observe, git_path):
 
 
 if __name__ == "__main__":
+    tr = TestRunner(r"C:\t\a\MavenProj", AmirTracer(r"C:\t\a\MavenProj", r"C:\temp\uber-tracer-1.0.1-SNAPSHOT.jar", r"c:\temp\temp"))
+    tr.run()
     import csv
     assert len(sys.argv) == 5
     _ , repo, matrix_path, prediction_path, tracer_path = sys.argv
