@@ -227,7 +227,7 @@ def labeling():
     mkdir(patchD)
     mkdir(commitsFiles)
     run_commands = "git format-patch --root -o ..\patch --function-context --unified=900000".split()
-    proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().LocalGitPath))
+    proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=convert_to_long_path(utilsConf.get_configuration().LocalGitPath))
     proc.communicate()
     buildPatchs(patchD, commitsFiles, utilsConf.get_configuration().changeFile)
     checkOut = utilsConf.get_configuration().MethodsParsed
