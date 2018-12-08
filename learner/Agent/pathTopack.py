@@ -1,5 +1,3 @@
-import re
-import logging
 __author__ = 'amir'
 
 RENAMED_FILES = None
