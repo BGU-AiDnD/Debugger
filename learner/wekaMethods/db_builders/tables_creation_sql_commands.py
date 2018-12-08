@@ -28,7 +28,7 @@ CREATE_JAVA_FILES_SQL_TABLE_COMMAND = ("CREATE TABLE JAVAfiles (name text, Lines
                                        "Name_of_Most_Complex_Method text, "
                                        "Maximum_Complexity INT, Line_Number_of_Deepest_Block INT,"
                                        "Maximum_Block_Depth INT, Average_Block_Depth float, "
-                                       "Average_Complexity float, {}".format(",".join(
+                                       "Average_Complexity float, {})".format(",".join(
 										STATEMENTS_AT_BLOCK_LEVEL_X_COLUMNS)))
 
 CREATE_SOURCE_METHODS_SQL_TABLE_COMMAND = ("CREATE TABLE JAVAfiles (name text,Lines INT,	Statements INT,	Percent_Branch_Statements INT,Method_Call_Statements INT,Percent_Lines_with_Comments INT,Classes_and_Interfaces INT,Methods_per_Class float,Average_Statements_per_Method float,Line_Number_of_Most_Complex_Method 	INT, Name_of_Most_Complex_Method 	text, Maximum_Complexity INT,Line_Number_of_Deepest_Block INT,Maximum_Block_Depth INT,Average_Block_Depth	float, Average_Complexity	float, Statements_at_block_level_0 INT,Statements_at_block_level_1 INT,Statements_at_block_level_2 INT,Statements_at_block_level_3 INT,Statements_at_block_level_4 INT,Statements_at_block_level_5 INT,Statements_at_block_level_6 INT,Statements_at_block_level_7 INT,Statements_at_block_level_8 INT,Statements_at_block_level_9 INT)")
@@ -80,7 +80,7 @@ CREATE_JAVA_FILE_FIX_SQL_TABLE_COMMAND = \
 	 "Line_Number_of_Most_Complex_Method INT, Name_of_Most_Complex_Method text, "
 	 "Maximum_Complexity INT, Line_Number_of_Deepest_Block INT,"
 	 "Maximum_Block_Depth INT,Average_Block_Depth float, Average_Complexity float,"
-	 " {}".format(",".join(STATEMENTS_AT_BLOCK_LEVEL_X_COLUMNS)))
+	 " {})".format(",".join(STATEMENTS_AT_BLOCK_LEVEL_X_COLUMNS)))
 
 CREATE_SOURCE_METHODS_FIX_SQL_TABLE_COMMMAD = \
 	("CREATE TABLE SourcemethodsFix (File_Name text, Method text ,Complexity INT, Statements INT, "
