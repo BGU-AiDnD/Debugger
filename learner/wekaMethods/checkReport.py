@@ -1,5 +1,7 @@
 from numpy.lib.function_base import average
 
+from filesystem_utils import convert_to_long_path
+
 __author__ = 'Amir-pc'
 
 from xml.dom import minidom
@@ -348,7 +350,7 @@ def checkStyleCreateDict(lines):
         file, data = o.split(" ")
         data=data.split("\n")[0]
         file = file.split(".java")[0]+".java"
-        splitted = utilsConf.to_short_path(file).split(os.path.sep)
+        splitted = convert_to_long_path(file).split(os.path.sep)
         fileName = os.path.sep.join(splitted[splitted.index('repo') + 1:])
         name, begin, end = data.split("@")
         methodDir = fileName + "@" + name

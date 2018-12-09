@@ -69,6 +69,7 @@ def create_tables(cursor, do_add=False, is_java=True):
 		return
 
 	for sql_command in JAVA_TABLES_CREATION_COMMANDS:
+		# print "Running the command: {}".format(sql_command)
 		cursor.execute(sql_command)
 
 
@@ -100,8 +101,7 @@ def get_relative_files_paths(path):
 	return relative_paths
 
 
-def basic_build_one_time_commits(db_path, git_path, commits, committed_files,
-                                 all_methods_commits, bugs):
+def insert_single_commit_data(db_path, git_path, commits, committed_files, all_methods_commits, bugs):
 	""""""
 	conn = sqlite3.connect(db_path)
 	conn.text_factory = str
@@ -227,8 +227,8 @@ def buildBasicAllVers(vers, dates, versPath, CodeDir, dbsPath, bugsPath, Methods
 	for ver, date in zip(vers, dates):
 		gitPath = os.path.join(versPath, ver, CodeDir)
 		dbPath = os.path.join(dbsPath, ver + ".db")
-		basic_build_one_time_commits(dbPath, gitPath, commits, commitedFiles, allMethodsCommits,
-		                             bugs)
+		insert_single_commit_data(dbPath, gitPath, commits, commitedFiles, allMethodsCommits,
+		                          bugs)
 
 
 @utilsConf.marker_decorator(utilsConf.DB_BUILD_MARKER)

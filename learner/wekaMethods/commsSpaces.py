@@ -1,3 +1,5 @@
+from filesystem_utils import convert_to_long_path
+
 __author__ = 'amir'
 
 import diffAnalyze.comments
@@ -24,7 +26,7 @@ def create(vers, Path):
         commsPath = os.path.join(vPath, "commentsSpaces")
         if not os.path.isdir(commsPath):
             os.mkdir(commsPath)
-        files = [utilsConf.to_long_path(x.split("\n")[0]) for x in open(os.path.join(vPath, "javaFiles.txt"), "r").readlines()]
+        files = [convert_to_long_path(x.split("\n")[0]) for x in open(os.path.join(vPath, "javaFiles.txt"), "r").readlines()]
         for f in files:
             outPath = os.path.join(commsPath, os.path.basename(f) + ".txt")
             comm, spaces = commentsSpacesLines(f)
