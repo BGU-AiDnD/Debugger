@@ -4,7 +4,7 @@ from os import path
 
 from wekaMethods.articles import *
 
-class FeatureAnalyzer(object):
+class FeatureGenerator(object):
 	"""This is the base class that contains the common
 	functionality of the analyzers.
 	"""

@@ -1,6 +1,4 @@
-from numpy.lib.function_base import average
-
-from filesystem_utils import convert_to_long_path
+from utils.filesystem import convert_to_long_path
 
 __author__ = 'Amir-pc'
 
@@ -8,7 +6,6 @@ from xml.dom import minidom
 import docXml
 import os
 import numpy
-import utilsConf
 from collections import Counter
 
 # for %%f in (CDT_8_0_1,CDT_8_0_2,CDT_8_0_3,CDT_8_1_0,CDT_8_1_1,CDT_8_1_2 ) do  java -jar checkstyle-5.7-all.jar -c cycl.xml -r ../%%f/org.eclipse.cdt/ -f xml -o ../mccabe/%%f.xml

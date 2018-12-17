@@ -1,13 +1,13 @@
 """This module analyzes the commits the users uploaded."""
 from wekaMethods.articles import *
-from wekaMethods.features.features_analyzer import FeatureAnalyzer
+from wekaMethods.features.features_generator import FeatureGenerator
 
 
-class CommitsAnalyzer(FeatureAnalyzer):
+class CommitsGenerator(FeatureGenerator):
 	"""Class to analyze the commits posted to the work-flow tool."""
 
 	def __init__(self):
-		super(CommitsAnalyzer, self).__init__("commits_static_data.json")
+		super(CommitsGenerator, self).__init__("commits_static_data.json")
 
 	def get_attributes(self):
 		return self.get_best_attributes()

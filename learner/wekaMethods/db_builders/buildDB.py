@@ -4,16 +4,10 @@ import sqlite3
 from functools import partial
 
 import git
-import git.objects.tree
 
 import utilsConf
 import wekaMethods.blameParse
-import wekaMethods.checkReport
-import wekaMethods.commentedCodeDetector
-import wekaMethods.docXml
-import wekaMethods.patchsBuild
-import wekaMethods.pathPackCsv
-import wekaMethods.source_Monitor
+from utils.monitors_manager import monitor, DB_BUILD_MARKER, DB_LABELS_MARKER
 from wekaMethods import (patchsBuild,
                          source_Monitor,
                          commentedCodeDetector,
@@ -31,6 +25,9 @@ from wekaMethods.db_builders.tables_names import (FIELDS_TABLE_NAME,
                                                   COMMITTED_METHODS_TABLE_NAME,
                                                   ALL_METHOD_TABLE_NAME, HALSTEAD_TABLE_NAME,
                                                   JAVA_FILES_TABLE_NAME, SOURCE_METHODS_TABLE_NAME)
+
+
+# import git.objects.tree
 
 
 def collect_repository_data(git_path, bugs_path, parsed_methods, change_files):
@@ -101,7 +98,8 @@ def get_relative_files_paths(path):
 	return relative_paths
 
 
-def insert_single_commit_data(db_path, git_path, commits, committed_files, all_methods_commits, bugs):
+def insert_single_commit_data(db_path, git_path, commits, committed_files, all_methods_commits,
+                              bugs):
 	""""""
 	conn = sqlite3.connect(db_path)
 	conn.text_factory = str
@@ -116,7 +114,7 @@ def insert_single_commit_data(db_path, git_path, commits, committed_files, all_m
 
 def BuildAllOneTimeCommits(git_path, db_path, javadoc_path, source_monitor_files,
                            source_monitor_methods, checkstyle, checkstyle_methods, blame_path, date,
-                           do_add, max, code_dir):
+                           do_add, code_dir):
 	conn = sqlite3.connect(db_path)
 	conn.text_factory = str
 	cursor = conn.cursor()
@@ -217,29 +215,39 @@ def createIndexes(dbPath):
 	conn.close()
 
 
-def buildBasicAllVers(vers, dates, versPath, CodeDir, dbsPath, bugsPath, MethodsParsed, changeFile):
-	gitPath = os.path.join(versPath, vers[-1], CodeDir)
-	commits, commitedFiles, allMethodsCommits, bugs, allFilesCommitsPatch = collect_repository_data(
-		gitPath,
-		bugsPath,
-		MethodsParsed,
-		changeFile)
+def basicBuildOneTimeCommits(dbPath, commits, commitedFiles, allMethodsCommits, bugs):
+	with utilsConf.use_sqllite(dbPath) as conn:
+		createTables(dbPath)
+		insert_values_into_table(conn, 'commits', commits)
+		insert_values_into_table(conn, 'bugs', bugs)
+		insert_values_into_table(conn, 'Commitedfiles', commitedFiles)
+		insert_values_into_table(conn, 'commitedMethods', allMethodsCommits)
+
+
+def buildBasicAllVers(vers, dates, dbsPath, bugsPath, MethodsParsed, changeFile, configuration):
+	gitPath = configuration.LocalGitPath
+	commits, commitedFiles, allMethodsCommits, bugs, allFilesCommitsPatch = \
+		collect_repository_data(gitPath, bugsPath, MethodsParsed, changeFile)
 	for ver, date in zip(vers, dates):
-		gitPath = os.path.join(versPath, ver, CodeDir)
 		dbPath = os.path.join(dbsPath, ver + ".db")
-		insert_single_commit_data(dbPath, gitPath, commits, commitedFiles, allMethodsCommits,
-		                          bugs)
+		basicBuildOneTimeCommits(dbPath, commits, commitedFiles, allMethodsCommits, bugs)
 
 
-@utilsConf.marker_decorator(utilsConf.DB_BUILD_MARKER)
-def buildOneTimeCommits():
-	versPath = utilsConf.get_configuration().versPath
-	db_dir = utilsConf.get_configuration().db_dir
-	vers = utilsConf.get_configuration().vers_dirs
-	dates = utilsConf.get_configuration().dates
-	add = False
-	max = -1
+@monitor(DB_LABELS_MARKER)
+def build_labels(configuration):
+	buildBasicAllVers(configuration.vers_dirs, configuration.dates,
+	                  configuration.db_dir, configuration.bugsPath,
+	                  configuration.MethodsParsed, configuration.changeFile, configuration)
+
+
+@monitor(DB_BUILD_MARKER)
+def buildOneTimeCommits(configuration):
+	versPath = configuration.versPath
+	db_dir = configuration.db_dir
+	vers = configuration.vers_dirs
+	dates = configuration.dates
 	CodeDir = "repo"
+	build_labels()
 	for version, date in zip(vers, dates):
 		gc.collect()
 		Path = os.path.join(versPath, version)
@@ -250,12 +258,7 @@ def buildOneTimeCommits():
 		checkStyle = os.path.join(versPath, "checkAll", version + ".xml")
 		checkStyleMethods = os.path.join(versPath, "checkAllMethodsData", version + ".txt")
 		blamePath = os.path.join(Path, "blame")
-		BuildAllOneTimeCommits(utilsConf.get_configuration().gitPath, dbPath, JavaDocPath,
+		BuildAllOneTimeCommits(configuration.gitPath, dbPath, JavaDocPath,
 		                       sourceMonitorFiles, sourceMonitorMethods, checkStyle,
 		                       checkStyleMethods,
-		                       blamePath, date, add, max, CodeDir)
-		createIndexes(dbPath)
-	buildBasicAllVers(vers, dates, versPath, CodeDir, db_dir,
-	                  utilsConf.get_configuration().bugsPath,
-	                  utilsConf.get_configuration().MethodsParsed,
-	                  utilsConf.get_configuration().changeFile)
+		                       blamePath, date, CodeDir)

@@ -7,6 +7,7 @@ LONG_PATH_MAGIC = u"\\\\?\\"
 
 
 def create_directory_if_not_exists(dir):
+
 	if not os.path.isdir(dir):
 		os.mkdir(dir)
 
@@ -32,4 +33,5 @@ def copy(src, dst):
 	else:   # src is a directory
 		if os.path.exists(dst):
 			shutil.rmtree(dst)
+
 		shutil.copytree(src, dst)

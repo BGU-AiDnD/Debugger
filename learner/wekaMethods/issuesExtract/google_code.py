@@ -1,7 +1,8 @@
-import utilsConf
 import csv
 import urllib2
 import json
+
+from utils.monitors_manager import monitor, ISSUE_TRACKER_FILE
 
 QUERY = r"https://storage.googleapis.com/google-code-archive/v2/code.google.com/{PRODUCT}/issues-page-{PAGE}.json"
 PRIORITIES = {"Priority-Medium": 'P3', "Priority-Low": 'P1', 'Priority-High': 'P5'}
@@ -34,7 +35,7 @@ def get_all_bugs(product):
     return bugs
 
 
-@utilsConf.marker_decorator(utilsConf.ISSUE_TRACKER_FILE)
+@monitor(ISSUE_TRACKER_FILE)
 def write_bugs_csv(csv_bug_file, url, product):
     lines=[["id", "product", "component", "assigned_to", "status", "resolution", "reporter", "last_change_time", "version", "target_milestone", "platform", "op_sys", "priority", "severity", "summary", "keywords", "creation_time", "blocks", "depends_on", "Duplicate Of", "cc"]]
     lines.extend(get_all_bugs(product))

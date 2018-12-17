@@ -1,11 +1,11 @@
-from wekaMethods.features.features_analyzer import FeatureAnalyzer
+from wekaMethods.features.features_generator import FeatureGenerator
 
 
-class LastCommitAnalyzer(FeatureAnalyzer):
+class LastCommitGenerator(FeatureGenerator):
 	""""""
 
 	def __init__(self):
-		super(LastCommitAnalyzer, self).__init__("last_commit_static_data.json")
+		super(LastCommitGenerator, self).__init__("last_commit_static_data.json")
 
 	def get_attributes(self):
 		return self.get_best_attributes()

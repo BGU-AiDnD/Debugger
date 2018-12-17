@@ -1,3 +1,6 @@
+import csv
+import datetime
+
 __author__ = 'Amir-pc'
 
 import arff
@@ -5,7 +8,7 @@ import arff
 import Agent.pathTopack
 import features.OO as OO
 import features.OOFamilies as OOFamilies
-import features.analyze_last_commit as analyzeLast
+import features.generate_last_commit_features as analyzeLast
 import features.blame as blame
 import features.checkStyle as checkStyle
 import features.haelstead as haelstead
@@ -22,14 +25,34 @@ import featuresMethods.haelsteadMethods as haelsteadMethods
 import featuresMethods.processMethods as processMethods
 import featuresMethods.processMethodsFamilies as processMethodsFamilies
 import featuresMethods.sourceMonitorMethods as sourceMonitorMethods
-from features.analyze_commits import CommitsAnalyzer
+from features.generate_commit_features import CommitsGenerator
 from wekaMethods.db_builders.buildDB import *
 from wekaMethods.commentedCodeDetector import *
 
-
-# for %%l in (1,2,3,4,5,6,7,8,9,10,11,12) do (
-# java -classpath ../weka/weka.jar weka.classifiers.trees.J48  -t TRAINING_%%l.arff -x 10 -d MOEDL_%%l.model
-# java -classpath ../weka/weka.jar weka.classifiers.trees.J48  -l MOEDL_%%l.model -T TEST_WILD%%l.arff -p 0 > WEKA_%%l.txt  )
+BUG_QUERIES = {"Method": {
+	"All": 'select distinct methodDir,"bugged"  from commitedMethods where bugId<>0  and methodDir like "%.java%" and methodDir not like "%test%" and commiter_date>="' + str(
+		"STARTDATE") + '"' + '  and commiter_date<="' + str(
+		"ENDDATE") + '" ' + ' group by methodDir',
+	"Most": 'select CommitedMethods.methodDir,"bugged"  from CommitedMethods , (select max(lines) as l, bugId from CommitedMethods where methodDir like "%.java%" and commiter_date>="' + str(
+		"STARTDATE") + '"  and commiter_date<="' + str(
+		"ENDDATE") + '" and bugId<>0 group by bugId) as T where CommitedMethods.lines=T.l and CommitedMethods.bugId=T.bugId group by methodDir'},
+               "File": {
+	               "All": 'select distinct name,"bugged"  from commitedfiles where bugId<>0  and name like "%.java" and name not like "%test%" and commiter_date>="' + str(
+		               "STARTDATE") + '"' + '  and commiter_date<="' + str(
+		               "ENDDATE") + '" and not exists (select comments.commitid,comments.name from comments where comments.commitid=Commitedfiles.commitid and comments.name=Commitedfiles.name) ' + ' group by name',
+	               "Most": 'select distinct name,"bugged"  from (select Commitedfiles.bugId as bugId,Commitedfiles.name as name  from Commitedfiles , (select max(lines) as l, Commitedfiles.bugId as bugId from Commitedfiles where Commitedfiles.name like "%.java" and name not like "%test%" and commiter_date>="' + str(
+		               "STARTDATE") + '"' + '  and commiter_date<="' + str(
+		               "ENDDATE") + "and not exists (select comments.commitid,comments.name from comments where comments.commitid=Commitedfiles.commitid and comments.name=Commitedfiles.name) " + '" group by bugId) as T where Commitedfiles.lines=T.l and Commitedfiles.bugId=T.bugId) where bugId<>0  group by name'}}
+COMPONENTS_QUERIES = {
+	"Method": 'select methodDir from (select distinct methodDir, sum(is_deleted_file) as deleted from commitedMethods where commitedMethods.commiter_date  <="' + str(
+		"ENDDATE") + '" ' + ' group by methodDir) where deleted=0',
+	"File": 'select name from (select distinct name, sum(is_deleted_file) as deleted from commitedFiles where Commitedfiles.commiter_date <="' + str(
+		"ENDDATE") + '" ' + 'group by name) where deleted=0'}
+PACKAGES = {
+	'Method': ["lastProcessMethods", "simpleProcessArticlesMethods", "simpleProcessAddedMethods"],
+	'File': ["haelstead", "methodsArticles", "methodsAdded", "hirarcy", "fieldsArticles",
+	         "fieldsAdded", "constructorsArticles", "constructorsAdded", "lastProcess",
+	         "simpleProcessArticles", "simpleProcessAdded", "sourceMonitor", "checkStyle", "blame"]}
 
 
 def arff_build(attributes, data, desc, relation):
@@ -53,15 +76,15 @@ def load_arff(filename):
 
 def names_commits():
 	return [('CDT_1_2_1_M1', '196802131'), ('CDT_2_0', '93917497'), ('CDT_3_0', '175441672'),
-			('CDT_4_0_0', '149351409'), ('CDT_5_0_0', '17941490'), ('CDT_6_0_0', '82248927'),
-			('CDT_7_0_0', '175959399'), ('CDT_8_0_0', '89147757'), ('CDT_8_0_1', '142873029'),
-			('CDT_8_0_2', '221902410'), ('CDT_8_1_0', '84025691'), ('CDT_8_1_1', '61881040'),
-			('CDT_8_1_2', '107737174'), ('CDT_8_2_0', '138165869')]
+	        ('CDT_4_0_0', '149351409'), ('CDT_5_0_0', '17941490'), ('CDT_6_0_0', '82248927'),
+	        ('CDT_7_0_0', '175959399'), ('CDT_8_0_0', '89147757'), ('CDT_8_0_1', '142873029'),
+	        ('CDT_8_0_2', '221902410'), ('CDT_8_1_0', '84025691'), ('CDT_8_1_1', '61881040'),
+	        ('CDT_8_1_2', '107737174'), ('CDT_8_2_0', '138165869')]
 
 
 def names_dates():
 	return [('CDT_8_0_1', '2011-09-15'), ('CDT_8_0_2', '2012-02-11'), ('CDT_8_1_0', '2012-06-10'),
-			('CDT_8_1_1', '2012-09-17'), ('CDT_8_1_2', '2013-02-14'), ('CDT_8_2_0', '2013-06-12')]
+	        ('CDT_8_1_1', '2012-09-17'), ('CDT_8_1_2', '2013-02-14'), ('CDT_8_2_0', '2013-06-12')]
 
 
 def getPaths(basicPath):
@@ -75,13 +98,39 @@ def EclipseInfo(basicPath):
 	commits = [i1[1] for i1 in names_commits()]
 	return names, paths, dates, commits
 
+def names_to_classes(granularity, packs):
+    if granularity == 'File':
+        return featuresPacksToClasses(packs)
+    elif granularity == 'Method':
+        return featuresMethodsPacksToClasses(packs)
+    assert False
+
+def BuildFiles(outDir, buggedType, granularity):
+    trainingFile=os.path.join(outDir, buggedType +"_training_" + granularity + ".arff")
+    testingFile=os.path.join(outDir, buggedType +"_testing_" + granularity + ".arff")
+    NamesFile=os.path.join(outDir, buggedType +"_names_" + granularity + ".csv")
+    outCsv=os.path.join(outDir, buggedType +"_out_" + granularity + ".csv")
+    return trainingFile, testingFile, NamesFile, outCsv
+
+def get_features(granularity, buggedType, configuration):
+	bug_query = BUG_QUERIES[granularity][buggedType]
+	component_query = COMPONENTS_QUERIES[granularity]
+	trainingFile, testingFile, NamesFile, outCsv = BuildFiles(
+		configuration.weka_path, buggedType, granularity)
+	FeaturesClasses, Featuresnames = names_to_classes(granularity, PACKAGES[granularity])
+	arffCreate(configuration.db_dir, FeaturesClasses, configuration.vers_dirs,
+	           [datetime.datetime(1900, 1, 1, 0, 0).strftime(
+		           '%Y-%m-%d %H:%M:%S')] + configuration.dates, bug_query,
+	           component_query, trainingFile, testingFile, NamesFile)
+	return trainingFile, testingFile, NamesFile, outCsv
+
 
 def GitVersInfo(basicPath, repoPath, vers):
 	r = git.Repo(repoPath)
 	wanted = [x.commit for x in r.tags if x.name in vers]
 	commits = [int("".join(list(x.hexsha)[:7]), 16) for x in wanted]
 	dates = [datetime.datetime.fromtimestamp(x.committed_date).strftime('%Y-%m-%d %H:%M:%S') for x
-			 in wanted]
+	         in wanted]
 	paths = [os.path.join(basicPath, os.path.join(n, "repo")) for n in vers]
 	return vers, paths, dates, commits
 
@@ -260,13 +309,13 @@ def arff88_ByTag_Past(dbpath, dates, commits, i, isTest, max, buggedType):
 		start_date) + '"' + '  and commits.commiter_date<="' + str(
 		end_date) + '" group by checkStyleAnalyze.name'
 	sqlToAttributes(["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"], c,
-					files_dict, styleAnalyze)
+	                files_dict, styleAnalyze)
 
 	styleAnalyzeLast = 'select name ,sum(McCabe) ,sum(fanOut) ,sum(NPath) ,sum(FileLen) , sum(NCSS) , sum(outer) , sum(publicMethods) , sum(totalMethods) ,sum(thorwsSTM) ,sum(Coupling) ,sum(Executables) , sum(depthFor) ,sum(depthIf) from checkStyleAnalyze,commits where  checkStyleAnalyze.commitid=commits.ID and commits.commiter_date>="' + str(
 		prev_date) + '"' + '  and commits.commiter_date<="' + str(
 		start_date) + '" group by checkStyleAnalyze.name'
 	sqlToAttributes(["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"], c,
-					files_dict, styleAnalyzeLast)
+	                files_dict, styleAnalyzeLast)
 
 	bugQ = ""
 	if (buggedType == "All"):
@@ -312,7 +361,7 @@ def arff88_ByTag_Objects(dbpath, dates, commits, i, isTest, max, buggedType, obj
 	# exit()
 	for o in objects:
 		o.get_features(c, files_dict, prev_date, start_date, end_date)
-		# a=0
+	# a=0
 
 	bugQ = ""
 	if (buggedType == "All"):
@@ -359,7 +408,7 @@ def arff88_ByTag_ObjectsMethods(dbpath, dates, commits, i, isTest, max, buggedTy
 	# exit()
 	for o in objects:
 		o.get_features(c, files_dict, prev_date, start_date, end_date)
-		# a=0
+	# a=0
 	bugQ = ""
 	if (buggedType == "Most"):
 		bugQ = 'select CommitedMethods.methodDir,"bugged"  from CommitedMethods , (select max(lines) as l, bugId from CommitedMethods where methodDir like "%.java%" and commiter_date>="' + str(
@@ -513,7 +562,9 @@ def writeFile(allNames, arffExtension, namesFile, attr, data, name, outPath):
 		writer = csv.writer(f)
 		writer.writerows([[a] for a in allNames])
 		f.close()
-	# f.writelines(allNames)
+
+
+# f.writelines(allNames)
 
 
 def writeArff(allNames, arffName, namesFile, attr, data):
@@ -571,7 +622,7 @@ def arff88Packs(basicPath, i, max, outPath, name, buggedType, packs, names, path
 		os_path_join = os.path.join(basicPath, str(names[i] + ".db"))
 		print(os_path_join)
 		tag, nam = arff88_ByTag_Objects(os_path_join, dates, commits, i, False, max, buggedType,
-										objects)
+		                                objects)
 		data = data + tag
 		if (i == len(names) - 2):
 			arffExtension = name + "_Only.arff"
@@ -587,7 +638,7 @@ def arff88Packs(basicPath, i, max, outPath, name, buggedType, packs, names, path
 
 
 def arff88PacksMethods(basicPath, i, max, outPath, name, buggedType, packs, names, paths, dates,
-					   commits):
+                       commits):
 	print packs
 	objects = featuresMethodsPacksToClasses(packs)
 	data = []
@@ -601,7 +652,7 @@ def arff88PacksMethods(basicPath, i, max, outPath, name, buggedType, packs, name
 		print(os_path_join)
 		# tag,nam = arff88_ByTag_Objects(os_path_join, dates,commits, i, False,max,buggedType,objects)
 		tag, nam = arff88_ByTag_ObjectsMethods(os_path_join, dates, commits, i, False, max,
-											   buggedType, objects)
+		                                       buggedType, objects)
 		data = data + tag
 		if (i == len(names) - 2):
 			arffExtension = name + "_OnlyMethods.arff"
@@ -617,7 +668,7 @@ def arff88PacksMethods(basicPath, i, max, outPath, name, buggedType, packs, name
 
 
 def arffCreate(basicPath, objects, names, dates, bugQ, wanted, trainingFile, testingFile,
-			   NamesFile):
+               NamesFile):
 	data = []
 	i = 0
 	attr, lens = objectsAttr(objects)
@@ -864,35 +915,14 @@ def featuresPacksToClasses(packs):
 		names.append("blame")
 		print "blame"
 	if "analyzeComms" in packs:
-		l.append(CommitsAnalyzer())
+		l.append(CommitsGenerator())
 		names.append("analyzeComms")
 		print "analyzeComms"
 	if "analyzeLast" in packs:
-		l.append(analyzeLast.analyze_last_commit())
+		l.append(analyzeLast.LastCommitGenerator())
 		names.append("analyzeLast")
 		print "analyzeLast"
 	return l, names
-
-
-# print(createAllArffs("C:\Users\Amir-pc\Documents\GitHub\\vers"))
-
-
-# print names_dates_GIT()
-# arff88_alone("C:\Users\Amir-pc\Documents\GitHub\\vers",12)
-# testFromFile("C:\Users\Amir-pc\Documents\GitHub\\vers",os.path.join(os.path.join("C:\Users\Amir-pc\Documents\GitHub\\vers","ML"), str("CDT_8_0_0ML_NEW_alone.arff")))
-# p=[]
-# names,paths=getPaths("C:\Users\Amir-pc\Documents\GitHub\\vers")
-# for i in names:
-#	path_join = os.path.join(os.path.join("C:\Users\Amir-pc\Documents\GitHub\\vers","ML"), str(str(i)+"ML_sec_alone.arff"))
-#	p=p+[path_join]
-
-# print(p[12])
-# path_join = os.path.join(os.path.join("C:\Users\Amir-pc\Documents\GitHub\\vers","ML"), str(names[12]+"_WILD_12.arff"))
-# testFromFile(p[12],path_join)
-# appendFiles(p[:12],path_join = os.path.join(os.path.join("C:\Users\Amir-pc\Documents\GitHub\\vers","ML"), str("Append_To_11.arff")))
-# appendFiles("C:\Users\Amir-pc\Documents\GitHub\\vers", p)
-# arff88("C:\GitHub\\vers",0,-1,"C:\GitHub\\weka","All")
-# print names_commits_GIT()
 
 
 def All_one(sourcePathTrain, sourcePathTest, oned, alld, packsInds):
@@ -920,9 +950,9 @@ def All_one(sourcePathTrain, sourcePathTest, oned, alld, packsInds):
 
 def articlesAllpacks(basicPath, repoPath, outDir, vers, vers_dirs, buggedType, dbPath):
 	packs = ["haelstead", "g2", "g3", "methodsArticles", "methodsAdded", "hirarcy",
-			 "fieldsArticles", "fieldsAdded", "constructorsArticles", "constructorsAdded",
-			 "lastProcess", "simpleProcessArticles", "simpleProcessAdded", "bugs", "sourceMonitor",
-			 "checkStyle", "blame"]  # ,"analyzeComms"]
+	         "fieldsArticles", "fieldsAdded", "constructorsArticles", "constructorsAdded",
+	         "lastProcess", "simpleProcessArticles", "simpleProcessAdded", "bugs", "sourceMonitor",
+	         "checkStyle", "blame"]  # ,"analyzeComms"]
 	# packs=["bugsMethods"]
 	bugQ = ""
 	wanted = 'select distinct name from haelsTfiles   order by name'
@@ -942,13 +972,13 @@ def articlesAllpacks(basicPath, repoPath, outDir, vers, vers_dirs, buggedType, d
 	FeaturesClasses, Featuresnames = featuresPacksToClasses(packs)
 	attr, lensAttr = objectsAttr(FeaturesClasses)
 	arffCreate(dbPath, FeaturesClasses, vers_dirs, dates, bugQ, wanted, trainingFile, testingFile,
-			   NamesFile)
+	           NamesFile)
 	return trainingFile, testingFile, NamesFile, Featuresnames, lensAttr
 
 
 def articlesAllpacksMethods(basicPath, repoPath, outDir, vers, vers_dirs, buggedType, dbPath):
 	packs = ["lastProcessMethods", "simpleProcessArticlesMethods", "simpleProcessAddedMethods",
-			 "bugsMethods"]  # ,"analyzeComms"]
+	         "bugsMethods"]  # ,"analyzeComms"]
 	bugQ = ""
 	wanted = 'select distinct methodDir from AllMethods order by methodDir'
 	if (buggedType == "Most"):
@@ -966,7 +996,7 @@ def articlesAllpacksMethods(basicPath, repoPath, outDir, vers, vers_dirs, bugged
 	FeaturesClasses, Featuresnames = featuresMethodsPacksToClasses(packs)
 	attr, lensAttr = objectsAttr(FeaturesClasses)
 	arffCreate(dbPath, FeaturesClasses, vers_dirs, dates, bugQ, wanted, trainingFile, testingFile,
-			   NamesFile)
+	           NamesFile)
 	return trainingFile, testingFile, NamesFile, Featuresnames, lensAttr
 
 
@@ -980,13 +1010,13 @@ if __name__ == "__main__":
 	# arff88Packs("C:\GitHub\\vers\dbAdd\done2",0,100,d,"_"+b+"_bugsMore",b,["bugs"])
 	# exit()
 	packs = ["haelstead", "g2", "g3", "methodsArticles", "methodsAdded", "hirarcy",
-			 "fieldsArticles", "fieldsAdded", "constructorsArticles", "constructorsAdded",
-			 "lastProcess", "simpleProcessArticles", "simpleProcessAdded", "bugs", "sourceMonitor",
-			 "checkStyle", "blame", "analyzeComms"]
+	         "fieldsArticles", "fieldsAdded", "constructorsArticles", "constructorsAdded",
+	         "lastProcess", "simpleProcessArticles", "simpleProcessAdded", "bugs", "sourceMonitor",
+	         "checkStyle", "blame", "analyzeComms"]
 	packs = ["haelstead", "g2", "g3", "methodsArticles", "methodsAdded", "hirarcy",
-			 "fieldsArticles", "fieldsAdded", "constructorsArticles", "constructorsAdded",
-			 "lastProcess", "simpleProcessArticles", "simpleProcessAdded", "bugs", "sourceMonitor",
-			 "checkStyle", "blame"]  # ,"analyzeComms"]
+	         "fieldsArticles", "fieldsAdded", "constructorsArticles", "constructorsAdded",
+	         "lastProcess", "simpleProcessArticles", "simpleProcessAdded", "bugs", "sourceMonitor",
+	         "checkStyle", "blame"]  # ,"analyzeComms"]
 	for b in buggedTypes:
 		basicPath = "C:\GitHub\\vers\dbAdd\done2"
 		names, paths, dates, commits = EclipseInfo(basicPath)
@@ -995,10 +1025,10 @@ if __name__ == "__main__":
 		repoPath = "C:\projs\poi"
 		Agent.pathTopack.project = "poi"
 		vers = ["REL_3_0", "REL_3_2_FINAL", "REL_3_6", "REL_3_7", "REL_3_8_FINAL", "REL_3_9",
-				"REL_3_10_1"]
+		        "REL_3_10_1"]
 		names, paths, dates, commits = GitVersInfo(basicPath, repoPath, vers)
 		arff88Packs(basicPath + "\dbAdd", 0, 100, d, "_" + b + "_bugsPOI", b, packs, names, paths,
-					dates, commits)
+		            dates, commits)
 
 	exit()
 
@@ -1011,15 +1041,15 @@ if __name__ == "__main__":
 		print len(att)
 	# exit()
 	packsSizes = [0, 10, 34, 54, 68, 92, 104, 111, 133, 138, 162, 176, 190, 199, 280, 333, 369, 405,
-				  650]
+	              650]
 	packsInds = []
 	for i in range(len(packsSizes) - 1):
 		packsInds.append([x + packsSizes[i] for x in range(packsSizes[i + 1] - packsSizes[i])])
 	print packsInds
 	Ronipack = ["OC", "OC_OOO", "OC_OOO_OP", "OC_OOO_DFA", "OC_OOO_IBW", "OC_OOO_IBW_PWCOO"]
 	Roni = [[10, 11, 8], [10, 11, 6, 7, 5, 8, 9], [10, 11, 6, 7, 5, 8, 9, 0, 1],
-			[10, 11, 6, 7, 5, 8, 9, 0, 1, 3, 4], [10, 11, 6, 7, 5, 8, 9, 0, 1, 3, 4, 2],
-			[10, 11, 6, 7, 5, 8, 9, 0, 1, 3, 4, 2, 12, 13]]
+	        [10, 11, 6, 7, 5, 8, 9, 0, 1, 3, 4], [10, 11, 6, 7, 5, 8, 9, 0, 1, 3, 4, 2],
+	        [10, 11, 6, 7, 5, 8, 9, 0, 1, 3, 4, 2, 12, 13]]
 	RonipacksInds = []
 	for p in Roni:
 		lst = [packsInds[x] for x in p]
@@ -1060,6 +1090,6 @@ if __name__ == "__main__":
 			l = [i for i in all if i == 104 or (i >= x and i < y)]
 			attributeSelect(sourcePathTrain, outPathTrain, l)
 			attributeSelect(sourcePathTest, outPathTest, l)
-			# testAns("C:\Users\Amir-pc\Documents\GitHub\\vers")
+		# testAns("C:\Users\Amir-pc\Documents\GitHub\\vers")
 
-			# print( names_dates_GIT())
+		# print( names_dates_GIT())

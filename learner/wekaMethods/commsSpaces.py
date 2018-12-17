@@ -1,10 +1,11 @@
-from filesystem_utils import convert_to_long_path
+from utils.monitors_manager import monitor, COMMENTS_SPACES_MARKER
+from utils.filesystem import convert_to_long_path
 
 __author__ = 'amir'
 
 import diffAnalyze.comments
 import os
-import utilsConf
+
 
 def commentsSpacesLines(doc):
         comm=diffAnalyze.comments.commLines(doc)
@@ -19,7 +20,7 @@ def commentsSpacesLines(doc):
         return comm,spaces
 
 
-@utilsConf.marker_decorator(utilsConf.COMMENTS_SPACES_MARKER)
+@monitor(COMMENTS_SPACES_MARKER)
 def create(vers, Path):
     for ver in vers:
         vPath = os.path.join(Path, ver)

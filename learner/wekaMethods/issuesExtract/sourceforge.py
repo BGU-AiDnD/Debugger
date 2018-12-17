@@ -1,8 +1,9 @@
-import utilsConf
 import csv
 import urllib2
 import json
 import datetime
+
+from utils.monitors_manager import monitor, ISSUE_TRACKER_FILE
 
 QUERY = r"https://sourceforge.net/rest/p/{PRODUCT}/bugs/search/?q=status%3Aclosed-invalid+or+status%3Aclosed-later+or+status%3Aclosed-accepted+or+status%3Aclosed-duplicate+or+status%3Aclosed-out-of-date+or+status%3Aclosed-rejected+or+status%3Aclosed-works-for-me+or+status%3Aclosed+or+status%3Aclosed-wont-fix+or+status%3Aclosed-fixed&page={PAGE}"
 
@@ -26,7 +27,7 @@ def get_all_bugs(product):
     return bugs
 
 
-@utilsConf.marker_decorator(utilsConf.ISSUE_TRACKER_FILE)
+@monitor(ISSUE_TRACKER_FILE)
 def write_bugs_csv(csv_bug_file, url, product):
     lines=[["id", "product", "component", "assigned_to", "status", "resolution", "reporter", "last_change_time", "version", "target_milestone", "platform", "op_sys", "priority", "severity", "summary", "keywords", "creation_time", "blocks", "depends_on", "Duplicate Of", "cc"]]
     lines.extend(get_all_bugs(product))
