@@ -38,7 +38,7 @@ BUG_QUERIES = {"Method": {"All": 'select distinct methodDir,"bugged"  from commi
 COMPONENTS_QUERIES = {"Method": 'select methodDir from (select distinct methodDir, sum(is_deleted_file) as deleted from commitedMethods where commitedMethods.commiter_date  <="' + str("ENDDATE") + '" ' + ' group by methodDir) where deleted=0',
                       "File": 'select name from (select distinct name, sum(is_deleted_file) as deleted from commitedFiles where Commitedfiles.commiter_date <="' + str("ENDDATE") + '" ' + 'group by name) where deleted=0'}
 PACKAGES = {'Method': ["lastProcessMethods","simpleProcessArticlesMethods","simpleProcessAddedMethods"],
-            'File': ["haelstead","g2","g3","methodsArticles","methodsAdded","hirarcy","fieldsArticles","fieldsAdded","constructorsArticles","constructorsAdded","lastProcess","simpleProcessArticles","simpleProcessAdded","bugs","sourceMonitor","checkStyle","blame"]}
+            'File': ["haelstead","methodsArticles","methodsAdded","hirarcy","fieldsArticles","fieldsAdded","constructorsArticles","constructorsAdded","lastProcess","simpleProcessArticles","simpleProcessAdded","bugs","sourceMonitor","checkStyle","blame"]}
 
 
 def arff_build(attributes, data,desc,relation):
