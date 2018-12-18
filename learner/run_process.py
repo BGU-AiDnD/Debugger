@@ -16,6 +16,7 @@ def main(num_processes, cmd_lines_path):
     with open(cmd_lines_path) as f:
         p.map(run_process, csv.reader(f))
 
+
 if __name__ == '__main__':
     main(*sys.argv[1:])
 
