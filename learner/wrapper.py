@@ -317,7 +317,7 @@ def get_versions_by_type(tags):
                     micro = 0
                 if micro == 0:
                     minors.append(tag)
-                if minor == 0:
+                if minor == 0 and micro == 0:
                     majors.append(tag)
                 break
     return majors, minors, micros
@@ -368,7 +368,7 @@ def wrapperLearner():
     featuresExtract()
     wekaMethods.buildDB.buildOneTimeCommits()
     createBuildMLModels()
-    # create_web_prediction_results()
+    create_web_prediction_results()
 
 
 def load_prediction_file(prediction_path):
@@ -448,9 +448,6 @@ def wrapperAll():
 if __name__ == '__main__':
     csv.field_size_limit(sys.maxint)
     utilsConf.configure(sys.argv[1])
-    repo = git.Repo(utilsConf.get_configuration().LocalGitPath)
-    allBugs, bugsIds = wekaMethods.buildDB.bugsTable(utilsConf.get_configuration().bugsPath)
-    allCommits, commitsBugsDict = wekaMethods.buildDB.commits_and_Bugs(repo, bugsIds)
     # if not os.path.exists(utilsConf.get_configuration().configuration_path):
     #     shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
     check_distribution()
