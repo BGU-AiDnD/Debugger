@@ -205,8 +205,8 @@ def BuildWekaModel(weka, training, testing, namesCsv, outCsv, name, wekaJar):
 
 @utilsConf.marker_decorator(utilsConf.ML_MODELS_MARKER)
 def createBuildMLModels():
-    for granularity in ['File', 'Method']:
-        for buggedType in ["All", "Most"]:
+    for granularity in wekaMethods.articles.BUG_QUERIES:
+        for buggedType in wekaMethods.articles.BUG_QUERIES[granularity]:
             trainingFile, testingFile, NamesFile, outCsv = wekaMethods.articles.get_features(granularity, buggedType)
             # BuildWekaModel(utilsConf.get_configuration().weka_path, trainingFile, testingFile, NamesFile, outCsv,
             #                "{0}_".format(granularity) + buggedType, utilsConf.get_configuration().wekaJar)
