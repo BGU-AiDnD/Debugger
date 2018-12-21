@@ -363,34 +363,50 @@ def featuresPacksToClasses(packs):
     return l,names
 
 
-def names_to_classes(granularity, packs):
-    if granularity == 'File':
-        return featuresPacksToClasses(packs)
-    elif granularity == 'Method':
-        return featuresMethodsPacksToClasses(packs)
-    assert False
+class featuresToArff(object):
+    def __init__(self, buggedType, granularity, outDir, packages):
+        self.buggedType = buggedType
+        self.granularity = granularity
+        self.bug_query = BUG_QUERIES[granularity][buggedType]
+        self.component_query = COMPONENTS_QUERIES[granularity]
+        self.outDir = outDir
+        self.packages = packages
+        self.trainingFile = os.path.join(self.outDir, self.buggedType + "_training_" + self.granularity + ".arff")
+        self.testingFile = os.path.join(self.outDir, self.buggedType + "_testing_" + self.granularity + ".arff")
+        self.NamesFile = os.path.join(self.outDir, self.buggedType + "_names_" + self.granularity + ".csv")
+        self.outCsv = os.path.join(self.outDir, self.buggedType + "_out_" + self.granularity + ".csv")
 
-def All_one(sourcePathTrain,sourcePathTest,oned,alld,packsInds):
-    red=list(set(reduce(lambda x, y: x+y, packsInds)))
-    if not os.path.isdir(oned):
-            os.mkdir(oned)
-    if not os.path.isdir(alld):
-            os.mkdir(alld)
-    for ind in range(len(packsInds)):
-        p=packsInds[ind]
-        lst=list(red)
-        for x in p:
-            lst.remove(x)
-        reduce1=lst
-        print len(reduce1),len(p),len(reduce1)+len(p)
-        outPathTrain=oned+"\\CDT_8_1_1_AllFiles_"+str(ind)+"_Appended.arff"
-        outPathTest=oned+"\\CDT_8_1_2_AllFiles_"+str(ind)+"_Only.arff"
-        attributeSelect(sourcePathTrain,outPathTrain,p)
-        attributeSelect(sourcePathTest,outPathTest,p)
-        outPathTrain=alld+"\\CDT_8_1_1_AllFiles_"+str(ind)+"_Appended.arff"
-        outPathTest=alld+"\\CDT_8_1_2_AllFiles_"+str(ind)+"_Only.arff"
-        attributeSelect(sourcePathTrain,outPathTrain, reduce1)
-        attributeSelect(sourcePathTest,outPathTest,reduce1)
+    def generate_features(self):
+        FeaturesClasses, Featuresnames = self.names_to_classes()
+        arffCreate(utilsConf.get_configuration().db_dir, FeaturesClasses, utilsConf.get_configuration().vers_dirs,
+                   [datetime.datetime(1900, 1, 1, 0, 0).strftime(
+                       '%Y-%m-%d %H:%M:%S')] + utilsConf.get_configuration().dates, self.bug_query, self.component_query,
+                   self.trainingFile, self.testingFile, self.NamesFile)
+        return self.trainingFile, self.testingFile, self.NamesFile, self.outCsv
+
+    def names_to_classes(self):
+        if self.granularity == 'File':
+            return featuresPacksToClasses(self.packages)
+        elif self.granularity == 'Method':
+            return featuresMethodsPacksToClasses(self.packages)
+        assert False
+
+    def BuildWekaModel(self, weka, training, testing, namesCsv, outCsv, name, wekaJar):
+        algorithm = "weka.classifiers.trees.RandomForest -I 1000 -K 0 -S 1 -num-slots 1 "
+        # os.system("cd /d  "+weka +" & java -Xmx2024m  -cp \"C:\\Program Files\\Weka-3-7\\weka.jar\" weka.Run " +algorithm+ " -x 10 -d .\\model.model -t "+training+" > training"+name+".txt")
+        os.system("cd /d  " + utilsConf.to_short_path(utilsConf.get_configuration().weka_path) + " & java -Xmx2024m  -cp " + utilsConf.to_short_path(
+            wekaJar) + " weka.Run " + algorithm + " -x 10 -d .\\model.model -t " + training + " > training" + name + ".txt")
+        # run_commands = ['java', '-Xmx2024m',  '-cp', wekaJar, 'weka.Run', algorithm, '-x', '10', '-d', '.\\model.model', 't']
+        # proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(weka))
+        # proc.communicate()
+        algorithm = "weka.classifiers.trees.RandomForest "
+        os.system("cd /d  " + utilsConf.to_short_path(utilsConf.get_configuration().weka_path) + " & java -Xmx2024m  -cp " + utilsConf.to_short_path(
+            wekaJar) + " weka.Run " + algorithm + " -l .\\model.model -T " + testing + " -classifications \"weka.classifiers.evaluation.output.prediction.CSV -file testing" + name + ".csv\" ")
+        os.system("cd /d  " + utilsConf.to_short_path(utilsConf.get_configuration().weka_path) + " & java -Xmx2024m  -cp " + utilsConf.to_short_path(
+            wekaJar) + " weka.Run " + algorithm + " -l .\\model.model -T " + testing + " > testing" + name + ".txt ")
+        wekaCsv = os.path.join(utilsConf.to_short_path(utilsConf.get_configuration().weka_path), "testing" + name + ".csv")
+        wekaMethods.wekaAccuracy.priorsCreation(namesCsv, wekaCsv, outCsv, "")
+
 
 def BuildFiles(outDir, buggedType, granularity):
     trainingFile=os.path.join(outDir, buggedType +"_training_" + granularity + ".arff")
@@ -407,23 +423,4 @@ def get_features(granularity, buggedType):
     FeaturesClasses, Featuresnames = names_to_classes(granularity, PACKAGES[granularity])
     arffCreate(utilsConf.get_configuration().db_dir, FeaturesClasses, utilsConf.get_configuration().vers_dirs,
                [datetime.datetime(1900, 1, 1, 0, 0).strftime('%Y-%m-%d %H:%M:%S')] + utilsConf.get_configuration().dates, bug_query, component_query, trainingFile, testingFile, NamesFile)
-    return trainingFile, testingFile, NamesFile, outCsv
-
-
-def articlesAllpacks(buggedType):
-    bug_query = BUG_QUERIES['File'][buggedType]
-    component_query = COMPONENTS_QUERIES['File']
-    trainingFile, testingFile, NamesFile, outCsv = BuildFiles(utilsConf.get_configuration().weka_path, buggedType,
-                                                              "File")
-    FeaturesClasses, Featuresnames = featuresPacksToClasses(PACKAGES['File'])
-    arffCreate(utilsConf.get_configuration().db_dir, FeaturesClasses, utilsConf.get_configuration().vers_dirs, [datetime.datetime(1900, 1, 1, 0, 0).strftime('%Y-%m-%d %H:%M:%S')] +utilsConf.get_configuration().dates, bug_query, component_query, trainingFile, testingFile, NamesFile)
-    return trainingFile, testingFile, NamesFile, outCsv
-
-def articlesAllpacksMethods(buggedType):
-    bug_query = BUG_QUERIES['Method'][buggedType]
-    component_query = COMPONENTS_QUERIES['Method']
-    trainingFile, testingFile, NamesFile, outCsv = BuildFiles(utilsConf.get_configuration().weka_path, buggedType,
-                                                              "Method")
-    FeaturesClasses,Featuresnames=featuresMethodsPacksToClasses(PACKAGES['Method'])
-    arffCreate(utilsConf.get_configuration().db_dir, FeaturesClasses,utilsConf.get_configuration().vers_dirs, [datetime.datetime(1900, 1, 1, 0, 0).strftime('%Y-%m-%d %H:%M:%S')] + utilsConf.get_configuration().dates,bug_query,component_query,trainingFile,testingFile,NamesFile)
     return trainingFile, testingFile, NamesFile, outCsv
