@@ -282,11 +282,14 @@ def clean(versPath,LocalGitPath):
 
 
 def create_web_prediction_results():
-    for buggedType, granularity in itertools.product(["All", "Most"], ["files", "methods"]):
-        weka_csv = os.path.join(utilsConf.get_configuration().weka_path, "{buggedType}_out_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
-        prediction_csv = os.path.join(utilsConf.get_configuration().web_prediction_results, "prediction_{buggedType}_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
-        weka_csv_to_readable_csv(weka_csv, prediction_csv)
-        save_json_watchers(prediction_csv)
+    for granularity in wekaMethods.articles.BUG_QUERIES:
+        for buggedType in wekaMethods.articles.BUG_QUERIES[granularity]:
+            weka_csv = os.path.join(utilsConf.get_configuration().weka_path, "{buggedType}_out_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
+            if not os.path.exists(weka_csv):
+                continue
+            prediction_csv = os.path.join(utilsConf.get_configuration().web_prediction_results, "prediction_{buggedType}_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
+            weka_csv_to_readable_csv(weka_csv, prediction_csv)
+            save_json_watchers(prediction_csv)
 
 
 def get_versions_by_type(tags):
