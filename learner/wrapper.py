@@ -151,7 +151,7 @@ def blameExecute(path, pathRepo, version):
                 raise RuntimeError('blame subprocess failed. args: {0}. err is {1}'.format(str(blame_commands), err))
             with open(blame_file_path, "w") as f:
                 f.writelines(out)
-    run_commands = ["dir", "/b", "/s", "*.java"]
+    run_commands = ["dir", "/b", "/s", "/A:-D", "*.java"]
     proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(pathRepo))
     (out, err) = proc.communicate()
     with open(os.path.join(path, "javaFiles.txt"), "wb") as f:

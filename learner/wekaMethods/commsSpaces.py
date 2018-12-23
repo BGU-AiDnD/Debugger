@@ -26,6 +26,8 @@ def create(vers, Path):
             os.mkdir(commsPath)
         files = [utilsConf.to_long_path(x.split("\n")[0]) for x in open(os.path.join(vPath, "javaFiles.txt"), "r").readlines()]
         for f in files:
+            if not os.path.isfile(f):
+                continue
             outPath = os.path.join(commsPath, os.path.basename(f) + ".txt")
             comm, spaces = commentsSpacesLines(f)
             with open(outPath, "w") as out:

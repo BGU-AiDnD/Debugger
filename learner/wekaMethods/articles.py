@@ -367,7 +367,7 @@ def featuresPacksToClasses(packs):
 
 
 class arffGenerator(object):
-    def __init__(self, buggedType, granularity, outDir, packages):
+    def __init__(self, buggedType, granularity):
         self.buggedType = buggedType
         self.granularity = granularity
         self.bug_query = BUG_QUERIES[granularity][buggedType]
