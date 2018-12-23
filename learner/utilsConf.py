@@ -181,6 +181,9 @@ def configure(confFile):
     DebuggerTests = to_short_path(os.path.join(workingDir, "DebuggerTests"))
     MethodsParsed = to_short_path(os.path.join(os.path.join(workingDir, "commitsFiles"), "CheckStyle.txt"))
     changeFile = to_short_path(os.path.join(os.path.join(workingDir, "commitsFiles"), "Ins_dels.txt"))
+    learning_dir = os.path.join(workingDir, "learning")
+    all_but_one_dir = os.path.join(learning_dir, "AllbutOne")
+    one_dir = os.path.join(learning_dir, "One")
     debugger_base_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     buggy_repo = git.Repo(to_short_path(gitPath))
     renamed_mapping = {} # detect_renamed_files.renamed_files_for_repo(buggy_repo)
@@ -259,8 +262,11 @@ def mkOneDir(dir):
 def Mkdirs(workingDir):
     mkOneDir(workingDir)
     map(lambda dir_name: mkOneDir(os.path.join(workingDir, dir_name)), ["", "vers", "experiments", "experiments_known",
-                                                                        "dbAdd", "testedVer", "weka", "web_prediction_results", "markers", "DebuggerTests"])
+                                                                        "dbAdd", "testedVer", "weka", "web_prediction_results", "markers", "DebuggerTests", "learning"])
     versPath=os.path.join(workingDir,"vers")
+    learning = os.path.join(workingDir,"learning")
+    mkOneDir(os.path.join(learning, "AllbutOne"))
+    mkOneDir(os.path.join(learning, "One"))
     mkOneDir(versPath)
     checkAll=os.path.join(versPath,"checkAll")
     mkOneDir(checkAll)

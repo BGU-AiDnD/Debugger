@@ -206,11 +206,18 @@ def BuildWekaModel(weka, training, testing, namesCsv, outCsv, name, wekaJar):
 @utilsConf.marker_decorator(utilsConf.ML_MODELS_MARKER)
 def createBuildMLModels():
     for granularity in wekaMethods.articles.BUG_QUERIES:
+        packages = wekaMethods.articles.PACKAGES[granularity]
         for buggedType in wekaMethods.articles.BUG_QUERIES[granularity]:
-            trainingFile, testingFile, NamesFile, outCsv = wekaMethods.articles.get_features(granularity, buggedType)
-            # BuildWekaModel(utilsConf.get_configuration().weka_path, trainingFile, testingFile, NamesFile, outCsv,
-            #                "{0}_".format(granularity) + buggedType, utilsConf.get_configuration().wekaJar)
-            # All_One_create.allFamilies(FilesPath,Featuresnames,lensAttr,trainingFile, testingFile,RemoveBat)
+            generator = wekaMethods.articles.arffGenerator(buggedType, granularity)
+            generator.generate_features(utilsConf.get_configuration().weka_path, packages)
+            # generate all but one files
+            for ind in range(len(packages)):
+                one_feature_dir = os.path.join(utilsConf.get_configuration().one_dir, packages[ind])
+                mkOneDir(one_feature_dir)
+                all_feature_dir = os.path.join(utilsConf.get_configuration().all_but_one_dir, packages[ind])
+                mkOneDir(all_feature_dir)
+                generator.generate_features(one_feature_dir, [packages[ind]])
+                generator.generate_features(all_feature_dir, packages[:ind] + packages[ind+1:])
 
 
 def weka_csv_to_readable_csv(weka_csv, prediction_csv):

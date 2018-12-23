@@ -1,3 +1,6 @@
+from sympy.functions.elementary.trigonometric import sec
+from wekaMethods import wekaAccuracy
+
 __author__ = 'Amir-pc'
 
 import arff
@@ -363,32 +366,34 @@ def featuresPacksToClasses(packs):
     return l,names
 
 
-class featuresToArff(object):
+class arffGenerator(object):
     def __init__(self, buggedType, granularity, outDir, packages):
         self.buggedType = buggedType
         self.granularity = granularity
         self.bug_query = BUG_QUERIES[granularity][buggedType]
         self.component_query = COMPONENTS_QUERIES[granularity]
-        self.outDir = outDir
-        self.packages = packages
-        self.trainingFile = os.path.join(self.outDir, self.buggedType + "_training_" + self.granularity + ".arff")
-        self.testingFile = os.path.join(self.outDir, self.buggedType + "_testing_" + self.granularity + ".arff")
-        self.NamesFile = os.path.join(self.outDir, self.buggedType + "_names_" + self.granularity + ".csv")
-        self.outCsv = os.path.join(self.outDir, self.buggedType + "_out_" + self.granularity + ".csv")
 
-    def generate_features(self):
-        FeaturesClasses, Featuresnames = self.names_to_classes()
+    def get_files(self, out_dir):
+        trainingFile = os.path.join(out_dir, self.buggedType + "_training_" + self.granularity + ".arff")
+        testingFile = os.path.join(out_dir, self.buggedType + "_testing_" + self.granularity + ".arff")
+        NamesFile = os.path.join(out_dir, self.buggedType + "_names_" + self.granularity + ".csv")
+        outCsv = os.path.join(out_dir, self.buggedType + "_out_" + self.granularity + ".csv")
+        return trainingFile, testingFile, NamesFile, outCsv
+
+    def generate_features(self, out_dir, packages):
+        trainingFile, testingFile, NamesFile, outCsv = self.get_files(out_dir)
+        FeaturesClasses, Featuresnames = self.names_to_classes(packages)
         arffCreate(utilsConf.get_configuration().db_dir, FeaturesClasses, utilsConf.get_configuration().vers_dirs,
                    [datetime.datetime(1900, 1, 1, 0, 0).strftime(
                        '%Y-%m-%d %H:%M:%S')] + utilsConf.get_configuration().dates, self.bug_query, self.component_query,
-                   self.trainingFile, self.testingFile, self.NamesFile)
-        return self.trainingFile, self.testingFile, self.NamesFile, self.outCsv
+                   trainingFile, testingFile, NamesFile)
+        return trainingFile, testingFile, NamesFile, outCsv
 
-    def names_to_classes(self):
+    def names_to_classes(self, packages):
         if self.granularity == 'File':
-            return featuresPacksToClasses(self.packages)
+            return featuresPacksToClasses(packages)
         elif self.granularity == 'Method':
-            return featuresMethodsPacksToClasses(self.packages)
+            return featuresMethodsPacksToClasses(packages)
         assert False
 
     def BuildWekaModel(self, weka, training, testing, namesCsv, outCsv, name, wekaJar):
@@ -405,22 +410,4 @@ class featuresToArff(object):
         os.system("cd /d  " + utilsConf.to_short_path(utilsConf.get_configuration().weka_path) + " & java -Xmx2024m  -cp " + utilsConf.to_short_path(
             wekaJar) + " weka.Run " + algorithm + " -l .\\model.model -T " + testing + " > testing" + name + ".txt ")
         wekaCsv = os.path.join(utilsConf.to_short_path(utilsConf.get_configuration().weka_path), "testing" + name + ".csv")
-        wekaMethods.wekaAccuracy.priorsCreation(namesCsv, wekaCsv, outCsv, "")
-
-
-def BuildFiles(outDir, buggedType, granularity):
-    trainingFile=os.path.join(outDir, buggedType +"_training_" + granularity + ".arff")
-    testingFile=os.path.join(outDir, buggedType +"_testing_" + granularity + ".arff")
-    NamesFile=os.path.join(outDir, buggedType +"_names_" + granularity + ".csv")
-    outCsv=os.path.join(outDir, buggedType +"_out_" + granularity + ".csv")
-    return trainingFile, testingFile, NamesFile, outCsv
-
-
-def get_features(granularity, buggedType):
-    bug_query = BUG_QUERIES[granularity][buggedType]
-    component_query = COMPONENTS_QUERIES[granularity]
-    trainingFile, testingFile, NamesFile, outCsv = BuildFiles(utilsConf.get_configuration().weka_path, buggedType, granularity)
-    FeaturesClasses, Featuresnames = names_to_classes(granularity, PACKAGES[granularity])
-    arffCreate(utilsConf.get_configuration().db_dir, FeaturesClasses, utilsConf.get_configuration().vers_dirs,
-               [datetime.datetime(1900, 1, 1, 0, 0).strftime('%Y-%m-%d %H:%M:%S')] + utilsConf.get_configuration().dates, bug_query, component_query, trainingFile, testingFile, NamesFile)
-    return trainingFile, testingFile, NamesFile, outCsv
+        wekaAccuracy.priorsCreation(namesCsv, wekaCsv, outCsv, "")
