@@ -208,9 +208,15 @@ def createBuildMLModels():
     for granularity in wekaMethods.articles.BUG_QUERIES:
         packages = wekaMethods.articles.PACKAGES[granularity]
         for buggedType in wekaMethods.articles.BUG_QUERIES[granularity]:
+            print buggedType, granularity
             generator = wekaMethods.articles.arffGenerator(buggedType, granularity)
             generator.generate_features(utilsConf.get_configuration().weka_path, packages)
-            # generate all but one files
+    # generate all but one files
+    for granularity in wekaMethods.articles.BUG_QUERIES:
+        packages = wekaMethods.articles.PACKAGES[granularity]
+        for buggedType in wekaMethods.articles.BUG_QUERIES[granularity]:
+            generator = wekaMethods.articles.arffGenerator(buggedType, granularity)
+            generator.generate_features(utilsConf.get_configuration().weka_path, packages)
             for ind in range(len(packages)):
                 one_feature_dir = os.path.join(utilsConf.get_configuration().one_dir, packages[ind])
                 mkOneDir(one_feature_dir)
@@ -460,7 +466,7 @@ if __name__ == '__main__':
     utilsConf.configure(sys.argv[1])
     # if not os.path.exists(utilsConf.get_configuration().configuration_path):
     #     shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
-    check_distribution()
+    # check_distribution()
     # if utilsConf.copy_from_cache() is not None:
     #     exit()
     if len(sys.argv) == 2:

@@ -4,7 +4,6 @@ from junitparser import JUnitXml, junitparser
 from junitparser.junitparser import Error, Failure
 from subprocess import Popen
 import sys
-import javalang
 import shutil
 import xml.etree.ElementTree
 import tempfile

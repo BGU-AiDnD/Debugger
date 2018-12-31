@@ -125,6 +125,8 @@ def stat(lst):
 
 
 def fileRead(file_path, isAnalyze, CodeDir):
+    import gc
+    gc.collect()
     with open(file_path) as doc:
         lines=[]
         ans=[]
