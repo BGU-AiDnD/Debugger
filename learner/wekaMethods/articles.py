@@ -34,23 +34,57 @@ import Agent.pathTopack
 # java -classpath ../weka/weka.jar weka.classifiers.trees.J48  -l MOEDL_%%l.model -T TEST_WILD%%l.arff -p 0 > WEKA_%%l.txt  )
 
 BUG_QUERIES = {"Method": {
-    "All": 'select distinct methodDir,"bugged"  from commitedMethods where bugId<>0  and methodDir like "%.java%" and methodDir not like "%test%" and commiter_date>="' + str(
-        "STARTDATE") + '"' + '  and commiter_date<="' + str("ENDDATE") + '" ' + ' group by methodDir',
-    "Most": 'select CommitedMethods.methodDir,"bugged"  from CommitedMethods , (select max(lines) as l, bugId from CommitedMethods where methodDir like "%.java%" and commiter_date>="' + str(
-        "STARTDATE") + '"  and commiter_date<="' + str(
-        "ENDDATE") + '" and bugId<>0 group by bugId) as T where CommitedMethods.lines=T.l and CommitedMethods.bugId=T.bugId group by methodDir'},
-               "File": {
-                   "All": 'select distinct name,"bugged"  from commitedfiles where bugId<>0  and name like "%.java" and name not like "%test%" and commiter_date>="' + str(
-                       "STARTDATE") + '"' + '  and commiter_date<="' + str(
-                       "ENDDATE") + '" and not exists (select comments.commitid,comments.name from comments where comments.commitid=Commitedfiles.commitid and comments.name=Commitedfiles.name) ' + ' group by name',
-                   "Most": 'select distinct name,"bugged"  from (select Commitedfiles.bugId as bugId,Commitedfiles.name as name  from Commitedfiles , (select max(lines) as l, Commitedfiles.bugId as bugId from Commitedfiles where Commitedfiles.name like "%.java" and name not like "%test%" and commiter_date>="' + str(
-                       "STARTDATE") + '"' + '  and commiter_date<="' + str(
-                       "ENDDATE") + "and not exists (select comments.commitid,comments.name from comments where comments.commitid=Commitedfiles.commitid and comments.name=Commitedfiles.name) " + '" group by bugId) as T where Commitedfiles.lines=T.l and Commitedfiles.bugId=T.bugId) where bugId<>0  group by name'}}
+    "All": 'select distinct methodDir,"bugged"  from commitedMethods '
+           'where bugId<>0 and '
+           'methodDir like "%.java%" and '
+           'methodDir not like "%test%" and '
+           'commiter_date>="STARTDATE" and '
+           'commiter_date<="ENDDATE" '
+           'group by methodDir',
+    "Most": 'select CommitedMethods.methodDir,"bugged"  from CommitedMethods , '
+            '(select max(lines) as l, bugId from CommitedMethods '
+            'where methodDir like "%.java%" and '
+            'methodDir not like "%test%" and '
+            'commiter_date>="STARTDATE"  and '
+            'commiter_date<="ENDDATE" and '
+            'bugId<>0 '
+            'group by bugId) as T '
+            'where CommitedMethods.lines=T.l and '
+            'CommitedMethods.bugId=T.bugId group by methodDir '
+},
+    "File": {
+        "All": 'select distinct name,"bugged"  from commitedfiles '
+               'where bugId<>0 and '
+               'name like "%.java" and '
+               'name not like "%test%" and '
+               'commiter_date>="STARTDATE" and '
+               'commiter_date<="ENDDATE" and '
+               'not exists (select comments.commitid,comments.name from comments where comments.commitid=Commitedfiles.commitid and comments.name=Commitedfiles.name) '
+               'group by name',
+        "Most": 'select distinct name,"bugged" from '
+                '(select Commitedfiles.bugId as bugId,Commitedfiles.name as name  from Commitedfiles , '
+                '(select max(lines) as l, Commitedfiles.bugId as bugId from Commitedfiles '
+                'where Commitedfiles.name like "%.java" and '
+                'name not like "%test%" and '
+                'commiter_date>="STARTDATE" and '
+                'commiter_date<="ENDDATE" and '
+                'not exists (select comments.commitid,comments.name from comments where comments.commitid=Commitedfiles.commitid and comments.name=Commitedfiles.name) '
+                'group by bugId) as T '
+                'where Commitedfiles.lines=T.l and '
+                'Commitedfiles.bugId=T.bugId) '
+                'where bugId<>0 '
+                'group by name'}}
 COMPONENTS_QUERIES = {
-    "Method": 'select methodDir from (select distinct methodDir, sum(is_deleted_file) as deleted from commitedMethods where commitedMethods.commiter_date  <="' + str(
-        "ENDDATE") + '" ' + ' group by methodDir) where deleted=0',
-    "File": 'select name from (select distinct name, sum(is_deleted_file) as deleted from commitedFiles where Commitedfiles.commiter_date <="' + str(
-        "ENDDATE") + '" ' + 'group by name) where deleted=0'}
+    "Method": 'select methodDir from '
+              '(select distinct methodDir, sum(is_deleted_file) as deleted from commitedMethods '
+              'where commitedMethods.commiter_date<="ENDDATE" '
+              'group by methodDir) where deleted=0',
+    "File": 'select name from '
+            '(select distinct name, sum(is_deleted_file) as deleted from '
+            'commitedFiles '
+            'where Commitedfiles.commiter_date <="ENDDATE" '
+            'group by name) '
+            'where deleted=0'}
 PACKAGES = {'Method': ["lastProcessMethods", "simpleProcessArticlesMethods", "simpleProcessAddedMethods"],
             'File': ["haelstead", "methodsArticles", "methodsAdded", "hirarcy", "fieldsArticles", "fieldsAdded",
                      "constructorsArticles", "constructorsAdded", "lastProcess", "simpleProcessArticles",
