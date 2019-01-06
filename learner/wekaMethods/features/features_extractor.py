@@ -32,7 +32,7 @@ def object_orient_features_error_analyze(err):
 @monitor(OO_OLD_FEATURES_MARKER)
 def extract_object_oriented_features_old(configuration):
 	for version in configuration.vers:
-		verPath = os.path.join(configuration.versPath, utilsConf.version_to_dir_name(version))
+		verPath = os.path.join(configuration.versions_dir_path, utilsConf.version_to_dir_name(version))
 		command = """cd /d  """ + convert_to_long_path(
 			verPath) + " & for /R .\\repo %f in (*.java) do (call javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath " + convert_to_long_path(
 			configuration.docletPath) + " -filename %~nxf.xml -private -d .\Jdoc2 %f >NUL 2>NUL)"
@@ -40,9 +40,9 @@ def extract_object_oriented_features_old(configuration):
 
 
 @monitor(OO_FEATURES_MARKER)
-def extract_object_oriented_features(versPath, vers, docletPath):
+def extract_object_oriented_features(versions_dir_path, vers, docletPath):
 	for x in vers:
-		verPath = os.path.join(versPath, x)
+		verPath = os.path.join(versions_dir_path, x)
 		outPath = os.path.join(verPath, "Jdoc")
 		outPath = os.path.join(outPath, "javadoc.xml")
 		err = ""

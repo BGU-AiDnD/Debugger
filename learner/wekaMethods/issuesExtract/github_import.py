@@ -57,27 +57,3 @@ def GithubIssues(outFile, owner, repo):
 if __name__ == "__main__":
     # GithubIssues(r"C:\temp\orientBugs.csv", "orientechnologies", "orientdb")
     GithubIssues(r"C:\temp\JodaOrg2.csv", "JodaOrg", "joda-time")
-
-"""
-
-gh=github3.GitHub()
-issues= gh.iter_repo_issues("PyGithub","PyGithub",state="all")
-iss= [x for x in issues]
-print len(iss)
-isu=iss[6]
-print isu.state
-print isu.labels
-print isu.body
-print isu.repository
-print isu.user
-print [str(x.labels) for x in issues]
-print isu.title
-print isu.state
-exit()
-gh = login(user, pw)
-issue = gh.issue(user, repo, num)
-if issue.is_closed():
-    issue.reopen()
-
-issue.edit('New issue title', issue.body + '\n------\n**Update:** Text to append')
-"""

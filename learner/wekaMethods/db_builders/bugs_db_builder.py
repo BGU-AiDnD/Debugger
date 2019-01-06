@@ -1,4 +1,29 @@
-"""Module to handle the the relevant actions related to the creation of the BUGS table."""
+"""Module to handle the the relevant actions related to the creation of the BUGS table.
+
+The bugs CSV file has the following columns:
+	ID
+	Product
+	Component
+	Assigned To
+	Status
+	Resolution
+	Reporter
+	Last Modified
+	Version
+	Milestone
+	Hardware
+	OS
+	Priority
+	Severity
+	Summary
+	Keywords
+	Submit
+	Date
+	Blocks
+	Depends On
+	Duplicate Of
+	CC
+"""
 import csv
 from datetime import datetime
 
@@ -20,7 +45,7 @@ def parse_bug_date(date):
 	try:
 		return datetime.strptime(date, "%d/%m/%y")
 	except ValueError:
-		return datetime.datetime.strptime(date, "%d/%m/%Y %H:%M:%S")
+		return datetime.strptime(date, "%d/%m/%Y %H:%M:%S")
 
 
 def parse_bugs_data(bugs_file_path):

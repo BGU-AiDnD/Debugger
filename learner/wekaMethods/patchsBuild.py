@@ -107,17 +107,18 @@ class PatchesBuilder(object):
 		self.patches_dir_path = None
 
 	def _create_patches_work_tree(self):
-		patches_dir_path = os.path.join(self.configuration.workingDir, "patch")
-		commits_files_dir_path = os.path.join(self.configuration.workingDir,
+		self.logger.info("Creating the patches directory tree")
+		self.patches_dir_path = os.path.join(self.configuration.workingDir, "patch")
+		self.commits_files_dir_path = os.path.join(self.configuration.workingDir,
 		                                      "commitsFiles")
-		create_directory_if_not_exists(patches_dir_path)
-		create_directory_if_not_exists(commits_files_dir_path)
+		create_directory_if_not_exists(self.patches_dir_path)
+		create_directory_if_not_exists(self.commits_files_dir_path)
 
 	def run_checkstyle(self):
 		"""Runs the checkstyle tool to check for warnings in the java code. """
 		self.logger.info("Running the checkstyle algorithm on the repositories")
 		run_commands = ["java", "-jar", self.configuration.checkStyle68, "-c",
-		                self.configuration.methodsNamesXML, "javaFile", "-o",
+		                self.configuration.methods_names_xml_path, "javaFile", "-o",
 		                self.configuration.MethodsParsed,
 		                self.commits_files_dir_path]
 		utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -161,7 +162,7 @@ class PatchesBuilder(object):
 			return
 
 		removed_file_name = removed_data_lines[0].split()[1]
-		added_file_name = added_data_lines.split()[1]
+		added_file_name = added_data_lines[0].split()[1]
 		added_file_name_source_path = added_file_name[2:]
 		deleted_file_name_source_path = removed_file_name[2:]
 
@@ -255,6 +256,7 @@ class PatchesBuilder(object):
 
 	def parse_patch_file(self, patch_file, change_file):
 		"""Parse the patch file and outputs the diffs between the versions."""
+		self.logger.info("Parsing the patch file - %s", patch_file)
 		with open(patch_file, 'r') as f:
 			lines = f.readlines()[:-3]
 
@@ -281,6 +283,7 @@ class PatchesBuilder(object):
 	def build_patches(self):
 		""""""
 		# Opens the files that contains the insertions and deletions from the original file
+		self.logger.info("Building the patches to run CheckStyle on them.")
 		with open(self.configuration.changeFile, "wb") as change_file:
 			for patch_path in glob.iglob(os.path.join(self.patches_dir_path, "*.patch")):
 				self.parse_patch_file(patch_path, change_file)
@@ -296,5 +299,4 @@ class PatchesBuilder(object):
 		                                 cwd=convert_to_short_path(self.configuration.LocalGitPath))
 		proc.communicate()
 		self.build_patches()
-		# if check_java_code:
 		self.run_checkstyle()

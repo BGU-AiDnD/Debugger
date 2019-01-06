@@ -1,0 +1,1559 @@
+{
+  "total": 261,
+  "p": 1,
+  "ps": 100,
+  "rules": [
+    {
+      "key": "csharpsquid:S1698",
+      "name": "\"==\" should not be used when \"Equals\" is overridden",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "cwe",
+        "suspicious"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3451",
+      "name": "\"[DefaultValue]\" should not be used when \"[DefaultParameterValue]\" is meant",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "suspicious"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3431",
+      "name": "\"[ExpectedException]\" should not be used",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "tests"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3447",
+      "name": "\"[Optional]\" should not be used on \"ref\" or \"out\" parameters",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3442",
+      "name": "\"abstract\" classes should not have \"public\" constructors",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "confusing"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1155",
+      "name": "\"Any()\" should be used to test for emptiness",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "clumsy"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3902",
+      "name": "\"Assembly.GetExecutingAssembly\" should not be called",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "performance"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3885",
+      "name": "\"Assembly.Load\" should be used",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "unpredictable"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S2306",
+      "name": "\"async\" and \"await\" should not be used as identifiers",
+      "severity": "BLOCKER",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S2737",
+      "name": "\"catch\" clauses should do more than rethrow",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "clumsy",
+        "finding",
+        "unused"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3216",
+      "name": "\"ConfigureAwait(false)\" should be used",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "multi-threading",
+        "suspicious"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S4524",
+      "name": "\"default\" clauses should be first or last",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "misra"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1210",
+      "name": "\"Equals\" and the comparison operators should be overridden when implementing \"IComparable\"",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S2221",
+      "name": "\"Exception\" should not be caught when not required by called methods",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cwe",
+        "error-handling"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3217",
+      "name": "\"Explicit\" conversions of \"foreach\" loops should not be used",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "suspicious"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1994",
+      "name": "\"for\" loop increment clauses should modify the loops' counters",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "confusing"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S127",
+      "name": "\"for\" loop stop conditions should be invariant",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "misra",
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1215",
+      "name": "\"GC.Collect\" should not be called",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "bad-practice",
+        "performance",
+        "unpredictable"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3971",
+      "name": "\"GC.SuppressFinalize\" should not be called",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3234",
+      "name": "\"GC.SuppressFinalize\" should not be invoked for types without destructors",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "confusing",
+        "unused"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3956",
+      "name": "\"Generic.List\" instances should not be part of public APIs",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "api-design"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S907",
+      "name": "\"goto\" statement should not be used",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "brain-overload",
+        "misra"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3881",
+      "name": "\"IDisposable\" should be implemented correctly",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S2971",
+      "name": "\"IEnumerable\" LINQs should be simplified",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "clumsy"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S126",
+      "name": "\"if ... else if\" constructs should end with \"else\" clauses",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "misra"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S2692",
+      "name": "\"IndexOf\" checks should not be for positive numbers",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "suspicious"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3215",
+      "name": "\"interface\" instances should not be cast to concrete types",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "design"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3060",
+      "name": "\"is\" should not be used with \"this\"",
+      "severity": "BLOCKER",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "api-design",
+        "bad-practice"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3925",
+      "name": "\"ISerializable\" should be implemented correctly",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S2302",
+      "name": "\"nameof\" should be used",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "c#6"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S4581",
+      "name": "\"new Guid()\" should not be used",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1123",
+      "name": "\"Obsolete\" attributes should include explanations",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "bad-practice",
+        "obsolete"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3875",
+      "name": "\"operator==\" should not be overloaded on reference types",
+      "severity": "BLOCKER",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3874",
+      "name": "\"out\" and \"ref\" parameters should not be used",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "suspicious"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S4214",
+      "name": "\"P/Invoke\" methods should not be visible",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "pinvoke"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S4061",
+      "name": "\"params\" should be used instead of \"varargs\"",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3262",
+      "name": "\"params\" should be used on overrides",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "confusing"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3600",
+      "name": "\"params\" should not be introduced on overrides",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "confusing"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S2156",
+      "name": "\"sealed\" classes should not have \"protected\" members",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "confusing"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3597",
+      "name": "\"ServiceContract\" and \"OperationContract\" attributes should be used together",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "api-design"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3962",
+      "name": "\"static readonly\" constants should be \"const\" instead",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "performance"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3963",
+      "name": "\"static\" fields should be initialized inline",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3256",
+      "name": "\"string.IsNullOrEmpty\" should be used",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "clumsy"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1151",
+      "name": "\"switch case\" clauses should not have too many lines of code",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "brain-overload"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1301",
+      "name": "\"switch\" statements should have at least 3 \"case\" clauses",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "bad-practice",
+        "misra"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1821",
+      "name": "\"switch\" statements should not be nested",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1479",
+      "name": "\"switch\" statements should not have too many \"case\" clauses",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "brain-overload"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S131",
+      "name": "\"switch/Select\" statements should contain a \"default/Case Else\" clauses",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "cwe",
+        "misra"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S4005",
+      "name": "\"System.Uri\" arguments should be used instead of strings",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3366",
+      "name": "\"this\" should not be exposed from constructors",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "multi-threading",
+        "suspicious"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1858",
+      "name": "\"ToString()\" calls should not be redundant",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "clumsy",
+        "finding"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S2327",
+      "name": "\"try\" statements with identical \"catch\" and/or \"finally\" blocks should be merged",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "clumsy"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3237",
+      "name": "\"value\" parameters should be used",
+      "severity": "BLOCKER",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1264",
+      "name": "A \"while\" loop should be used instead of a \"for\" loop",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "clumsy"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1109",
+      "name": "A close curly brace should be located at the beginning of a line",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "convention"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3973",
+      "name": "A conditionally executed single line should be denoted by indentation",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "confusing",
+        "suspicious"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1694",
+      "name": "An abstract class should have both abstract and concrete methods",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "convention"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3900",
+      "name": "Arguments of public methods should be validated against null",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "convention"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S2330",
+      "name": "Array covariance should not be used",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3990",
+      "name": "Assemblies should be marked as CLS compliant",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "api-design"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S4026",
+      "name": "Assemblies should be marked with \"NeutralResourcesLanguageAttribute\"",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "performance"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3992",
+      "name": "Assemblies should explicitly specify COM visibility",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "api-design"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3904",
+      "name": "Assemblies should have version information",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3415",
+      "name": "Assertion arguments should be passed in the correct order",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "suspicious",
+        "tests"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1121",
+      "name": "Assignments should not be made from within sub-expressions",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "cwe",
+        "misra",
+        "suspicious"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3376",
+      "name": "Attribute, EventArgs, and Exception type names should end with the type being extended",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "convention"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S4019",
+      "name": "Base class methods should not be hidden",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1940",
+      "name": "Boolean checks should not be inverted",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S2589",
+      "name": "Boolean expressions should not be gratuitous",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "cwe",
+        "misra",
+        "redundant"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1125",
+      "name": "Boolean literals should not be redundant",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "clumsy"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "common-cs:InsufficientBranchCoverage",
+      "name": "Branches should have sufficient coverage by tests",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "bad-practice"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1227",
+      "name": "break statements should not be used except for switch cases",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3236",
+      "name": "Caller information arguments should not be provided explicitly",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "suspicious"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S4462",
+      "name": "Calls to \"async\" methods should not be blocking",
+      "severity": "BLOCKER",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "async-await",
+        "deadlock"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S4025",
+      "name": "Child class fields should not differ from parent class fields only by capitalization",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S2387",
+      "name": "Child class fields should not shadow parent class fields",
+      "severity": "BLOCKER",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "confusing"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S2436",
+      "name": "Classes and methods should not have too many generic parameters",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "brain-overload"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S4035",
+      "name": "Classes implementing \"IEquatable<T>\" should be sealed",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1200",
+      "name": "Classes should not be coupled to too many other classes (Single Responsibility Principle)",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "brain-overload"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3897",
+      "name": "Classes that provide \"Equals(<T>)\" should implement \"IEquatable<T>\"",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "api-design"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3776",
+      "name": "Cognitive Complexity of methods should not be too high",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "brain-overload"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1066",
+      "name": "Collapsible \"if\" statements should be merged",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "clumsy"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S4004",
+      "name": "Collection properties should be readonly",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3909",
+      "name": "Collections should implement the generic interface",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3457",
+      "name": "Composite format strings should be used correctly",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "confusing"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3972",
+      "name": "Conditionals should start on new lines",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "suspicious"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3253",
+      "name": "Constructor and destructor declarations should not be redundant",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "clumsy",
+        "finding"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1699",
+      "name": "Constructors should only call non-overridable methods",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S134",
+      "name": "Control flow statements \"if\", \"switch\", \"for\", \"foreach\", \"while\", \"do\"  and \"try\" should not be nested too deeply",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "brain-overload"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S121",
+      "name": "Control structures should use curly braces",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "misra",
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1449",
+      "name": "Culture should be specified for \"string\" operations",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "unpredictable"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3993",
+      "name": "Custom attributes should be marked with \"System.AttributeUsageAttribute\"",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "api-design"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S1854",
+      "name": "Dead stores should be removed",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "cwe",
+        "unused"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3257",
+      "name": "Declarations and initializations should be as concise as possible",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "clumsy",
+        "finding"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3254",
+      "name": "Default parameter values should not be passed as arguments",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "clumsy",
+        "finding"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S4002",
+      "name": "Disposable types should declare finalizers",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3247",
+      "name": "Duplicate casts should not be made",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "performance"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S4142",
+      "name": "Duplicate values should not be passed as arguments",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3458",
+      "name": "Empty \"case\" clauses that fall through to the \"default\" should be omitted",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "clumsy",
+        "finding"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    },
+    {
+      "key": "csharpsquid:S3532",
+      "name": "Empty \"default\" clauses should be removed",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "clumsy",
+        "finding",
+        "unused"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "CODE_SMELL"
+    }
+  ],
+  "facets": [
+    {
+      "property": "languages",
+      "values": [
+        {
+          "val": "cs",
+          "count": 261
+        },
+        {
+          "val": "py",
+          "count": 370
+        },
+        {
+          "val": "java",
+          "count": 338
+        },
+        {
+          "val": "cpp",
+          "count": 259
+        },
+        {
+          "val": "objc",
+          "count": 184
+        },
+        {
+          "val": "c",
+          "count": 176
+        },
+        {
+          "val": "cobol",
+          "count": 149
+        },
+        {
+          "val": "js",
+          "count": 134
+        },
+        {
+          "val": "plsql",
+          "count": 130
+        },
+        {
+          "val": "php",
+          "count": 114
+        },
+        {
+          "val": "swift",
+          "count": 103
+        },
+        {
+          "val": "ts",
+          "count": 90
+        },
+        {
+          "val": "vbnet",
+          "count": 77
+        },
+        {
+          "val": "abap",
+          "count": 72
+        },
+        {
+          "val": "flex",
+          "count": 64
+        },
+        {
+          "val": "tsql",
+          "count": 64
+        },
+        {
+          "val": "rpg",
+          "count": 54
+        },
+        {
+          "val": "web",
+          "count": 41
+        },
+        {
+          "val": "apex",
+          "count": 40
+        },
+        {
+          "val": "kotlin",
+          "count": 39
+        },
+        {
+          "val": "ruby",
+          "count": 38
+        },
+        {
+          "val": "scala",
+          "count": 38
+        },
+        {
+          "val": "go",
+          "count": 33
+        },
+        {
+          "val": "pli",
+          "count": 26
+        },
+        {
+          "val": "css",
+          "count": 14
+        },
+        {
+          "val": "xml",
+          "count": 10
+        }
+      ]
+    },
+    {
+      "property": "types",
+      "values": [
+        {
+          "val": "CODE_SMELL",
+          "count": 261
+        },
+        {
+          "val": "BUG",
+          "count": 75
+        },
+        {
+          "val": "SECURITY_HOTSPOT",
+          "count": 22
+        },
+        {
+          "val": "VULNERABILITY",
+          "count": 21
+        }
+      ]
+    }
+  ]
+}

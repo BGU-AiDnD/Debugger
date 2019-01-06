@@ -11,17 +11,16 @@ import git
 from attrdict import AttrDict
 
 from utils.consts import GLOBAL_CONFIGURATION_FILE_PATH
-from utils.filesystem import convert_to_long_path, create_directory_if_not_exists, \
-	convert_to_short_path
+from utils.filesystem import convert_to_long_path, create_directory_if_not_exists
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
 utilsPath = os.path.realpath(os.path.join(current_dir, "../utils"))
 docletPath = os.path.join(utilsPath, "xml-doclet-1.0.4-jar-with-dependencies.jar")
-sourceMonitorEXE = os.path.join(utilsPath, "SourceMonitor.exe")
+source_monitor_exe_path = os.path.join(utilsPath, "SourceMonitor.exe")
 checkStyle57 = os.path.join(utilsPath, "checkstyle-5.7-all.jar")
 checkStyle68 = os.path.join(utilsPath, "checkstyle-6.8-SNAPSHOT-all.jar")
-allchecks = os.path.join(utilsPath, "allChecks.xml")
-methodsNamesXML = os.path.join(utilsPath, "methodNameLines.xml")
+all_checks_xml_path = os.path.join(utilsPath, "allChecks.xml")
+methods_names_xml_path = os.path.join(utilsPath, "methodNameLines.xml")
 wekaJar = os.path.join(utilsPath, "weka.jar")
 RemoveBat = os.path.join(utilsPath, "../removeBat.bat")
 caching_dir = os.path.realpath(os.path.join(current_dir, "../Debugger_cache"))
@@ -74,23 +73,23 @@ def create_global_configuration(configuration, prediction_files):
 	versions_directory_path = os.path.join(workdir, "vers")
 
 	return AttrDict({
-		"versPath": versions_directory_path,
-		"db_dir": os.path.join(workdir, "dbAdd"),
+		"versions_dir_path": versions_directory_path,
+		"db_dir": os.path.join(workdir, "db_address"),
 		"vers": version_info.versions,
 		"paths": version_info.paths,
 		"dates": version_info.dates,
 		"commits": version_info.commits,
 		"docletPath": docletPath,
-		"sourceMonitorEXE": sourceMonitorEXE,
+		"source_monitor_exe_path": source_monitor_exe_path,
 		"checkStyle57": checkStyle57,
 		"checkStyle68": checkStyle68,
-		"allchecks": allchecks,
-		"methodsNamesXML": methodsNamesXML,
+		"all_checks_xml_path": all_checks_xml_path,
+		"methods_names_xml_path": methods_names_xml_path,
 		"wekaJar": wekaJar,
 		"RemoveBat": RemoveBat,
 		"utilsPath": utilsPath,
 		"versions": configuration.versions,
-		"gitPath": configuration.git_repo_path,
+		"git_repo_path": configuration.git_repo_path,
 		"issue_tracker": configuration.issue_tracker_name,
 		"issue_tracker_url": configuration.issue_tracker_url,
 		"issue_tracker_product": configuration.product_being_tracked,
@@ -153,7 +152,7 @@ def create_working_directory_tree(configuration):
 	create_directory_if_not_exists(work_dir)
 	map(lambda dir_name: create_directory_if_not_exists(os.path.join(work_dir, dir_name)),
 	    ["", "vers", "experiments", "experiments_known",
-	     "dbAdd", "testedVer", "weka", "web_prediction_results", "markers", "DebuggerTests"])
+	     "db_address", "testedVer", "weka", "web_prediction_results", "markers", "DebuggerTests"])
 	vers_path = os.path.join(work_dir, "vers")
 	create_directory_if_not_exists(vers_path)
 

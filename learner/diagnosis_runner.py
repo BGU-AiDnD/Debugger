@@ -4,10 +4,10 @@ import os
 
 import wekaMethods.wekaAccuracy
 from experiments import ExperimentGenerator
-from utils.monitors_manager import monitor, EXECUTE_TESTS
 from run_mvn import TestRunner, AmirTracer
 from sfl_diagnoser.Diagnoser.diagnoserUtils import write_planning_file, readPlanningFile
 from utils.filesystem import convert_to_long_path
+from utils.monitors_manager import monitor, EXECUTE_TESTS
 
 
 class DiagnosisRunner(object):
@@ -137,7 +137,7 @@ class DiagnosisRunner(object):
 		                            "{GRANULARITY}_{BUGGED_TYPE}")
 		for granularity in self.configuration.prediction_files:
 			for bugged_type in self.configuration.prediction_files[granularity]:
-				eg = ExperimentGenerator(test_runner, granularity, bugged_type, num_instances,
+				eg = ExperimentGenerator(self.configuration, test_runner, granularity, bugged_type, num_instances,
 				                         tests_per_instance, bug_passing_probability)
 				results = eg.create_instances()
 				with open(results_path.format(GRANULARITY=granularity, BUGGED_TYPE=bugged_type),

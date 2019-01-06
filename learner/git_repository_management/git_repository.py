@@ -14,9 +14,9 @@ class GitCloningManager(object):
 
 	def checkout_local_git(self):
 		"""Clone the git path to a local repository."""
-		run_commands = ["git", "clone", convert_to_long_path(self.configuration.gitPath), 'repo']
+		run_commands = ["git", "clone", convert_to_short_path(self.configuration.git_repo_path), 'repo']
 		proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-		                       shell=True, cwd=convert_to_long_path(self.configuration.workingDir))
+		                       shell=True, cwd=convert_to_short_path(self.configuration.workingDir))
 		proc.communicate()
 
 	@staticmethod
@@ -26,16 +26,16 @@ class GitCloningManager(object):
 	def copy_directories(self):
 		"""Copy the repositories directory trees to the disk for a faster access."""
 		for version in self.configuration.vers:
-			path = os.path.join(self.configuration.versPath,
+			path = os.path.join(self.configuration.versions_dir_path,
 			                    self.version_to_dir_name(version), "repo")
 
 			if not os.path.exists(path):
-				run_commands = ["git", "clone", convert_to_short_path(self.configuration.gitPath),
+				run_commands = ["git", "clone", convert_to_short_path(self.configuration.git_repo_path),
 				                'repo']
 
 				proc = open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
 				                       shell=True, cwd=convert_to_short_path(
-					                       os.path.join(self.configuration.versPath,
+					                       os.path.join(self.configuration.versions_dir_path,
 					                                    self.version_to_dir_name(version))))
 				proc.communicate()
 
@@ -49,7 +49,7 @@ class GitCloningManager(object):
 
 	def run_git_revert(self):
 		for version in self.configuration.vers:
-			repo_path = os.path.join(self.configuration.versPath,
+			repo_path = os.path.join(self.configuration.versions_dir_path,
 			                         self.version_to_dir_name(version), "repo")
 			self.run_cmd(repo_path, ["clean", "-fd", version])
 			self.run_cmd(repo_path, ["checkout", '-f', version])

@@ -1,0 +1,1146 @@
+{
+  "total": 75,
+  "p": 1,
+  "ps": 100,
+  "rules": [
+    {
+      "key": "csharpsquid:S2757",
+      "name": "\"=+\" should not be used instead of \"+=\"",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3168",
+      "name": "\"async\" methods should not return \"void\"",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "async-await",
+        "multi-threading"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3397",
+      "name": "\"base.Equals\" should not be used to check for reference equality in \"Equals\" if \"base\" is not \"object\"",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S4260",
+      "name": "\"ConstructorArgument\" parameters should exist in constructors",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "wpf",
+        "xaml"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S1206",
+      "name": "\"Equals(Object)\" and \"GetHashCode()\" should be overridden in pairs",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "cwe"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2328",
+      "name": "\"GetHashCode\" should not reference mutable fields",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2997",
+      "name": "\"IDisposables\" created in a \"using\" statement should not be returned",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2930",
+      "name": "\"IDisposables\" should be disposed",
+      "severity": "BLOCKER",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cwe",
+        "denial-of-service"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2688",
+      "name": "\"NaN\" should not be used in comparisons",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2995",
+      "name": "\"Object.ReferenceEquals\" should not be used for value types",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S4428",
+      "name": "\"PartCreationPolicyAttribute\" should be used with \"ExportAttribute\"",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "mef",
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3869",
+      "name": "\"SafeHandle.DangerousGetHandle\" should not be called",
+      "severity": "BLOCKER",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "leak",
+        "unpredictable"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S4277",
+      "name": "\"Shared\" parts should not be created with \"new\"",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "mef",
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3456",
+      "name": "\"string.ToCharArray()\" should not be called redundantly",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "clumsy"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2996",
+      "name": "\"ThreadStatic\" fields should not be initialized",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "multi-threading"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3005",
+      "name": "\"ThreadStatic\" should not be used on non-static fields",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "unused"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2225",
+      "name": "\"ToString()\" method should not return null",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "cwe"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3923",
+      "name": "All branches in a conditional structure should not have exactly the same implementation",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3244",
+      "name": "Anonymous delegates should not be used to unsubscribe from Events",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3343",
+      "name": "Caller information parameters should come at the end of the parameter list",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "api-design"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3249",
+      "name": "Classes directly extending \"object\" should not call \"base\" in \"GetHashCode\" or \"Equals\"",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2952",
+      "name": "Classes should \"Dispose\" of members from the classes' own \"Dispose\" methods",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cwe",
+        "denial-of-service"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S4159",
+      "name": "Classes should implement their \"ExportAttribute\" interfaces",
+      "severity": "BLOCKER",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "mef",
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3453",
+      "name": "Classes should not have only \"private\" constructors",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "design"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2931",
+      "name": "Classes with \"IDisposable\" members should implement \"IDisposable\"",
+      "severity": "BLOCKER",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cwe",
+        "denial-of-service"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S4143",
+      "name": "Collection elements should not be replaced unconditionally",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "suspicious"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3981",
+      "name": "Collection sizes and array length comparisons should make sense",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2114",
+      "name": "Collections should not be passed as arguments to their own methods",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2275",
+      "name": "Composite format strings should not lead to unexpected behavior at runtime",
+      "severity": "BLOCKER",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2583",
+      "name": "Conditionally executed blocks should be reachable",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "cwe",
+        "misra",
+        "pitfall",
+        "unused"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3172",
+      "name": "Delegates should not be subtracted",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3926",
+      "name": "Deserialization methods should be provided for \"OptionalField\" members",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "serialization"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S1048",
+      "name": "Destructors should not throw exceptions",
+      "severity": "BLOCKER",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "misra"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2761",
+      "name": "Doubled prefix operators \"!!\" and \"~~\" should not be used",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S4158",
+      "name": "Empty collections should not be accessed or iterated",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3655",
+      "name": "Empty nullable value should not be accessed",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cwe"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3693",
+      "name": "Exception constructors should not throw exceptions",
+      "severity": "BLOCKER",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3984",
+      "name": "Exception should not be created without being thrown",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3346",
+      "name": "Expressions used in \"Debug.Assert\" should not produce side effects",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "common-cs:FailedUnitTests",
+      "name": "Failed unit tests should be fixed",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2345",
+      "name": "Flags enumerations should explicitly initialize all their members",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S1244",
+      "name": "Floating point numbers should not be tested for equality",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "misra"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2955",
+      "name": "Generic parameters not constrained to reference types should not be compared to \"null\"",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S4275",
+      "name": "Getters and setters should access the expected fields",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "pitfall"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S1764",
+      "name": "Identical expressions should not be used on both sides of a binary operator",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2183",
+      "name": "Ints and longs should not be shifted by zero or more than their number of bits-1",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S1751",
+      "name": "Loops with at most one iteration should be refactored",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S1226",
+      "name": "Method parameters, caught exceptions and foreach variables' initial values should not be ignored",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "misra"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3603",
+      "name": "Methods with \"Pure\" attribute should return a value",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3887",
+      "name": "Mutable, non-private fields should not be \"readonly\"",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3889",
+      "name": "Neither \"Thread.Resume\" nor \"Thread.Suspend\" should be used",
+      "severity": "BLOCKER",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "multi-threading",
+        "unpredictable"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S4586",
+      "name": "Non-async \"Task/Task<T>\" methods should not return null",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2259",
+      "name": "Null pointers should not be dereferenced",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "cwe"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3610",
+      "name": "Nullable type comparison should not be redundant",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "redundant"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S1848",
+      "name": "Objects should not be created to be dropped immediately without being used",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3598",
+      "name": "One-way \"OperationContract\" methods should have \"void\" return type",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3466",
+      "name": "Optional parameters should be passed to \"base\" calls",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2934",
+      "name": "Property assignments should not be made for \"readonly\" fields not constrained to reference types",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2190",
+      "name": "Recursion should not be infinite",
+      "severity": "BLOCKER",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S1862",
+      "name": "Related \"if/else if\" statements should not have the same condition",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "pitfall",
+        "unused"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2184",
+      "name": "Results of integer division should not be assigned to floating point variables",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "cwe",
+        "misra",
+        "overflow",
+        "sans-top25-risky"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2201",
+      "name": "Return values from functions without side effects should not be ignored",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert",
+        "misra"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3449",
+      "name": "Right operands of shift operators should be integers",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3927",
+      "name": "Serialization event handlers should be implemented correctly",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S1697",
+      "name": "Short-circuit logic should be used to prevent null pointer dereferences in conditionals",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3263",
+      "name": "Static fields should appear in the order they must be initialized",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2674",
+      "name": "The length returned from a stream read should be checked",
+      "severity": "MINOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2758",
+      "name": "The ternary operator should not return the same value regardless of the condition",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3464",
+      "name": "Type inheritance should not be recursive",
+      "severity": "BLOCKER",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2551",
+      "name": "Types and \"this\" should not be used for locking",
+      "severity": "CRITICAL",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "multi-threading"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S3903",
+      "name": "Types should be defined in named namespaces",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S1145",
+      "name": "Useless \"if(true) {...}\" and \"if(false){...}\" blocks should be removed",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cwe",
+        "misra"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S2123",
+      "name": "Values should not be uselessly incremented",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "unused"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S1656",
+      "name": "Variables should not be self-assigned",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "cert"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    },
+    {
+      "key": "csharpsquid:S4210",
+      "name": "Windows Forms entry points should be marked with STAThread",
+      "severity": "MAJOR",
+      "status": "READY",
+      "isTemplate": false,
+      "tags": [],
+      "sysTags": [
+        "pitfall",
+        "winforms"
+      ],
+      "lang": "cs",
+      "langName": "C#",
+      "type": "BUG"
+    }
+  ],
+  "facets": [
+    {
+      "property": "languages",
+      "values": [
+        {
+          "val": "cs",
+          "count": 75
+        },
+        {
+          "val": "java",
+          "count": 119
+        },
+        {
+          "val": "cpp",
+          "count": 82
+        },
+        {
+          "val": "js",
+          "count": 61
+        },
+        {
+          "val": "c",
+          "count": 60
+        },
+        {
+          "val": "objc",
+          "count": 50
+        },
+        {
+          "val": "plsql",
+          "count": 42
+        },
+        {
+          "val": "cobol",
+          "count": 33
+        },
+        {
+          "val": "vbnet",
+          "count": 33
+        },
+        {
+          "val": "php",
+          "count": 28
+        },
+        {
+          "val": "ts",
+          "count": 26
+        },
+        {
+          "val": "web",
+          "count": 20
+        },
+        {
+          "val": "tsql",
+          "count": 17
+        },
+        {
+          "val": "css",
+          "count": 16
+        },
+        {
+          "val": "abap",
+          "count": 15
+        },
+        {
+          "val": "py",
+          "count": 14
+        },
+        {
+          "val": "swift",
+          "count": 14
+        },
+        {
+          "val": "go",
+          "count": 11
+        },
+        {
+          "val": "flex",
+          "count": 9
+        },
+        {
+          "val": "apex",
+          "count": 8
+        },
+        {
+          "val": "kotlin",
+          "count": 8
+        },
+        {
+          "val": "rpg",
+          "count": 8
+        },
+        {
+          "val": "ruby",
+          "count": 8
+        },
+        {
+          "val": "scala",
+          "count": 7
+        },
+        {
+          "val": "xml",
+          "count": 3
+        },
+        {
+          "val": "pli",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "property": "types",
+      "values": [
+        {
+          "val": "CODE_SMELL",
+          "count": 261
+        },
+        {
+          "val": "BUG",
+          "count": 75
+        },
+        {
+          "val": "SECURITY_HOTSPOT",
+          "count": 22
+        },
+        {
+          "val": "VULNERABILITY",
+          "count": 21
+        }
+      ]
+    }
+  ]
+}

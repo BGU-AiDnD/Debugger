@@ -6,12 +6,13 @@ import wekaMethods.commsSpaces
 from utils.monitors_manager import monitor, LEARNER_PHASE_FILE, VERSION_TEST_MARKER, FEATURES_MARKER, \
 	ML_MODELS_MARKER
 from wekaMethods import patchsBuild
-from wekaMethods.db_builders import buildDB
+from wekaMethods.csharp.sonarqube import SonarQube
+from wekaMethods.db_builders import java_db_builder
 from wekaMethods.features import complexity_features
 from wekaMethods.features.features_extractor import extract_object_oriented_features_old
 
 
-class FaultPredictorLearner(object):
+class Learner(object):
 	"""Handle all the Fault prediction related actions."""
 
 	def __init__(self, logger, programming_language, configuration):
@@ -38,6 +39,7 @@ class FaultPredictorLearner(object):
 	@monitor(VERSION_TEST_MARKER)
 	def create_test_versions_tree(self):
 		"""Creating the tested versions workdir directory tree"""
+		self.logger.info("Creating the versions local workdir directory tree.")
 		src = os.path.join(self.configuration.workingDir, "vers",
 		                   self.configuration.vers_dirs[-2], "repo")
 		dst = os.path.join(self.configuration.workingDir, "testedVer", "repo")
@@ -47,9 +49,13 @@ class FaultPredictorLearner(object):
 	@monitor(LEARNER_PHASE_FILE)
 	def run_learner_algorithm(self):
 		"""Run the fault prediction learning algorithm."""
-		patchsBuild.PatchesBuilder(self.configuration, self.logger).labeling()
-		buildDB.build_labels(self.configuration)
-		self.create_test_versions_tree()
-		self.extract_features()
-		buildDB.buildOneTimeCommits(self.configuration)
-		self.create_build_machine_learning_model()
+		if self.programming_language == "java":
+			patchsBuild.PatchesBuilder(self.configuration, self.logger).labeling()
+			java_db_builder.build_labels(self.configuration)
+			self.create_test_versions_tree()
+			self.extract_features()
+			java_db_builder.buildOneTimeCommits(self.configuration)
+			self.create_build_machine_learning_model()
+		elif self.programming_language == "csharp":
+			sonar_inspector = SonarQube(self.configuration, self.logger)
+			sonar_inspector.inspect_versions()

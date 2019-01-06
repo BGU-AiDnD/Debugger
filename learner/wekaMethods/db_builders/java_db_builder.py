@@ -14,17 +14,18 @@ from wekaMethods import (patchsBuild,
                          checkReport,
                          docXml,
                          pathPackCsv)
+from wekaMethods.db_builder import DBBuilder
 from wekaMethods.db_builders.bugs_db_builder import parse_bugs_data
 from wekaMethods.db_builders.commits_db_builder import CommitTable
 from wekaMethods.db_builders.tables_creation_sql_commands import (JAVA_TABLES_CREATION_COMMANDS,
                                                                   CREATE_ALL_METHODS_SQL_TABLE)
-from wekaMethods.db_builders.tables_names import (FIELDS_TABLE_NAME,
-                                                  COMMITS_TABLE_NAME,
-                                                  BUGS_TABLE_NAME,
-                                                  COMMITTED_FILES_TABLE_NAME,
-                                                  COMMITTED_METHODS_TABLE_NAME,
-                                                  ALL_METHOD_TABLE_NAME, HALSTEAD_TABLE_NAME,
-                                                  JAVA_FILES_TABLE_NAME, SOURCE_METHODS_TABLE_NAME)
+from wekaMethods.db_builders.consts.tables_names import (FIELDS_TABLE_NAME,
+                                                         COMMITS_TABLE_NAME,
+                                                         BUGS_TABLE_NAME,
+                                                         COMMITTED_FILES_TABLE_NAME,
+                                                         COMMITTED_METHODS_TABLE_NAME,
+                                                         ALL_METHOD_TABLE_NAME, HALSTEAD_TABLE_NAME,
+                                                         JAVA_FILES_TABLE_NAME, SOURCE_METHODS_TABLE_NAME)
 
 
 # import git.objects.tree
@@ -225,9 +226,9 @@ def basicBuildOneTimeCommits(dbPath, commits, commitedFiles, allMethodsCommits, 
 
 
 def buildBasicAllVers(vers, dates, dbsPath, bugsPath, MethodsParsed, changeFile, configuration):
-	gitPath = configuration.LocalGitPath
+	git_repo_path = configuration.LocalGitPath
 	commits, commitedFiles, allMethodsCommits, bugs, allFilesCommitsPatch = \
-		collect_repository_data(gitPath, bugsPath, MethodsParsed, changeFile)
+		collect_repository_data(git_repo_path, bugsPath, MethodsParsed, changeFile)
 	for ver, date in zip(vers, dates):
 		dbPath = os.path.join(dbsPath, ver + ".db")
 		basicBuildOneTimeCommits(dbPath, commits, commitedFiles, allMethodsCommits, bugs)
@@ -242,7 +243,7 @@ def build_labels(configuration):
 
 @monitor(DB_BUILD_MARKER)
 def buildOneTimeCommits(configuration):
-	versPath = configuration.versPath
+	versions_dir_path = configuration.versions_dir_path
 	db_dir = configuration.db_dir
 	vers = configuration.vers_dirs
 	dates = configuration.dates
@@ -250,15 +251,41 @@ def buildOneTimeCommits(configuration):
 	build_labels()
 	for version, date in zip(vers, dates):
 		gc.collect()
-		Path = os.path.join(versPath, version)
+		Path = os.path.join(versions_dir_path, version)
 		dbPath = os.path.join(db_dir, version + ".db")
 		JavaDocPath = os.path.join(Path, "Jdoc2")
 		sourceMonitorFiles = os.path.join(Path, version + ".csv")
 		sourceMonitorMethods = os.path.join(Path, version + "_methods.csv")
-		checkStyle = os.path.join(versPath, "checkAll", version + ".xml")
-		checkStyleMethods = os.path.join(versPath, "checkAllMethodsData", version + ".txt")
+		checkStyle = os.path.join(versions_dir_path, "checkAll", version + ".xml")
+		checkStyleMethods = os.path.join(versions_dir_path, "checkAllMethodsData", version + ".txt")
 		blamePath = os.path.join(Path, "blame")
-		BuildAllOneTimeCommits(configuration.gitPath, dbPath, JavaDocPath,
+		BuildAllOneTimeCommits(configuration.git_repo_path, dbPath, JavaDocPath,
 		                       sourceMonitorFiles, sourceMonitorMethods, checkStyle,
 		                       checkStyleMethods,
 		                       blamePath, date, CodeDir)
+
+
+class JavaDBBuilder(DBBuilder):
+
+	def collect_repository_data(self):
+		""""""
+		repo = git.Repo(self.configuration.LocalGitPath)
+		all_bugs, bugs_ids = parse_bugs_data(self.configuration.bugsPath)
+		all_methods, files_rows = patchsBuild.analyzeCheckStyle(
+			self.configuration.MethodsParsed, self.configuration.changeFile)
+		all_commits, commits_bugs_dict = CommitTable(repository=repo, bug_ids=bugs_ids) \
+			.collect_light_commit_table_data()
+
+		all_methods_commits = extract_committed_id_method_data(all_methods, commits_bugs_dict, 0)
+		all_files_commits = extract_committed_id_method_data(all_methods, commits_bugs_dict, 1)
+
+		return all_commits, all_files_commits, all_methods_commits, all_bugs, all_files_commits
+
+	def build_all_versions_db(self):
+		""""""
+		local_git_repo_path = self.configuration.LocalGitPath
+		commits, commitedFiles, allMethodsCommits, bugs, allFilesCommitsPatch = \
+			collect_repository_data(local_git_repo_path, bugsPath, MethodsParsed, changeFile)
+		for ver, date in zip(vers, dates):
+			dbPath = os.path.join(dbsPath, ver + ".db")
+			basicBuildOneTimeCommits(dbPath, commits, commitedFiles, allMethodsCommits, bugs)

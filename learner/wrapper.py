@@ -25,12 +25,13 @@ import shutil
 import sys
 
 import coloredlogs
+import git
 from attrdict import AttrDict
 from docopt import docopt
 
 import utilsConf
 from diagnosis_runner import DiagnosisRunner
-from fault_prediction import FaultPredictorLearner
+from fault_prediction import Learner
 from git_repository_management.bugs import BugManager
 from git_repository_management.git_repository import GitCloningManager
 from utils.monitors_manager import monitor, ALL_DONE_FILE, MonitorsManager
@@ -54,11 +55,12 @@ class LearnerDiagnoserRunner(object):
 		""""""
 		self.learner.run_learner_algorithm()
 		self.diagnosis_runner.create_experiment(self.diagnosis_runner.execute_tests())
+		self.cache.export_to_cache()
 
 	def clean(self):
 		"""Cleans the working directory once the run finishes"""
 		self.logger.info("Cleaning the created paths to clean your computer")
-		shutil.rmtree(self.configuration.versPath, ignore_errors=True)
+		shutil.rmtree(self.configuration.versions_dir_path, ignore_errors=True)
 		shutil.rmtree(self.configuration.LocalGitPath, ignore_errors=True)
 
 	@staticmethod
@@ -89,6 +91,13 @@ class LearnerDiagnoserRunner(object):
 
 	def start_nlp_run(self, is_learning, is_experimenting):
 		"""Parse the user's input and runs the appropriate algorithm."""
+		try:
+			self.cache.copy_cache_directory_data()
+
+		except ValueError:
+			self.logger.error("Cache is not empty. Exiting.")
+			exit()
+
 		if not is_experimenting and not is_learning:
 			self.logger.info("Running both learning & experimenting")
 			self.run_all()
@@ -109,8 +118,9 @@ class LearnerDiagnoserRunner(object):
 			configurations_json = json.load(configuration_file)
 
 		self.configuration = AttrDict(configurations_json)
-		self.learner = FaultPredictorLearner(self.logger, self.programing_language,
-		                                     self.configuration)
+
+		self.learner = Learner(self.logger, self.programing_language,
+		                       self.configuration)
 		self.diagnosis_runner = DiagnosisRunner(self.logger, self.configuration)
 		BugManager(self.logger, self.configuration).download_bugs()
 

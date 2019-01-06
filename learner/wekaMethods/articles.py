@@ -26,7 +26,7 @@ import featuresMethods.processMethods as processMethods
 import featuresMethods.processMethodsFamilies as processMethodsFamilies
 import featuresMethods.sourceMonitorMethods as sourceMonitorMethods
 from features.generate_commit_features import CommitsGenerator
-from wekaMethods.db_builders.buildDB import *
+from wekaMethods.db_builders.java_db_builder import *
 from wekaMethods.commentedCodeDetector import *
 
 BUG_QUERIES = {"Method": {
@@ -1007,7 +1007,7 @@ if __name__ == "__main__":
 	if not os.path.isdir(d):
 		os.mkdir(d)
 	# for b in buggedTypes:
-	# arff88Packs("C:\GitHub\\vers\dbAdd\done2",0,100,d,"_"+b+"_bugsMore",b,["bugs"])
+	# arff88Packs("C:\GitHub\\vers\db_address\done2",0,100,d,"_"+b+"_bugsMore",b,["bugs"])
 	# exit()
 	packs = ["haelstead", "g2", "g3", "methodsArticles", "methodsAdded", "hirarcy",
 	         "fieldsArticles", "fieldsAdded", "constructorsArticles", "constructorsAdded",
@@ -1018,7 +1018,7 @@ if __name__ == "__main__":
 	         "lastProcess", "simpleProcessArticles", "simpleProcessAdded", "bugs", "sourceMonitor",
 	         "checkStyle", "blame"]  # ,"analyzeComms"]
 	for b in buggedTypes:
-		basicPath = "C:\GitHub\\vers\dbAdd\done2"
+		basicPath = "C:\GitHub\\vers\db_address\done2"
 		names, paths, dates, commits = EclipseInfo(basicPath)
 		# arff88Packs(basicPath,0,100,d,"_"+b+"_bugs",b,packs,names,paths,dates,commits)
 		basicPath = "C:\projs\poiWorking"
@@ -1027,7 +1027,7 @@ if __name__ == "__main__":
 		vers = ["REL_3_0", "REL_3_2_FINAL", "REL_3_6", "REL_3_7", "REL_3_8_FINAL", "REL_3_9",
 		        "REL_3_10_1"]
 		names, paths, dates, commits = GitVersInfo(basicPath, repoPath, vers)
-		arff88Packs(basicPath + "\dbAdd", 0, 100, d, "_" + b + "_bugsPOI", b, packs, names, paths,
+		arff88Packs(basicPath + "\db_address", 0, 100, d, "_" + b + "_bugsPOI", b, packs, names, paths,
 		            dates, commits)
 
 	exit()
@@ -1065,7 +1065,7 @@ if __name__ == "__main__":
 	# All_one(sourcePathTrain,sourcePathTest,d+"\\one",d+"\\all",packsInds)
 	# exit()
 	for b in buggedTypes:
-		arff88Packs("C:\GitHub\\vers\dbAdd\done2", 0, 100, d, "_" + b + "_bugs", b, packs)
+		arff88Packs("C:\GitHub\\vers\db_address\done2", 0, 100, d, "_" + b + "_bugs", b, packs)
 
 	if 1 == 0:
 		buggedTypes = []
@@ -1075,7 +1075,7 @@ if __name__ == "__main__":
 		if not os.path.isdir(d):
 			os.mkdir(d)
 		for b in buggedTypes:
-			arff88("C:\GitHub\\vers\dbAdd\done2", 0, 100, d, "_" + b + "_blameP", b)
+			arff88("C:\GitHub\\vers\db_address\done2", 0, 100, d, "_" + b + "_blameP", b)
 	if 0 == 2:
 		sourcePathTrain = "C:\GitHub\\weka\\m4\\CDT_8_1_1_AllFiles_blameP_Appended.arff"
 		sourcePathTest = "C:\GitHub\\weka\\m4\\CDT_8_1_2_AllFiles_blameP_Only.arff"
