@@ -4,7 +4,7 @@ import subprocess
 import utilsConf
 from utils.monitors_manager import monitor, COMPLEXITY_FEATURES_MARKER
 from utils.filesystem import convert_to_short_path, convert_to_long_path
-from wekaMethods.features.features_static_data.source_monitor_xml_command import \
+from feature_engineering.features.features_static_data.source_monitor_xml_command import \
 	SOURCE_MONITOR_XML_COMMAND
 
 

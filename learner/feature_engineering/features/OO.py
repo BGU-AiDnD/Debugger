@@ -1,6 +1,6 @@
 __author__ = 'amir'
 
-from wekaMethods.articles import *
+from feature_engineering.articles import *
 import networkx
 #from wekaMethods.articles import sqlToAttributes
 from collections import Counter

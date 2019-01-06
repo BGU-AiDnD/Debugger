@@ -26,8 +26,8 @@ import featuresMethods.processMethods as processMethods
 import featuresMethods.processMethodsFamilies as processMethodsFamilies
 import featuresMethods.sourceMonitorMethods as sourceMonitorMethods
 from features.generate_commit_features import CommitsGenerator
-from wekaMethods.db_builders.java_db_builder import *
-from wekaMethods.commentedCodeDetector import *
+from feature_engineering.db_builders.java_db_builder import *
+from feature_engineering.commentedCodeDetector import *
 
 BUG_QUERIES = {"Method": {
 	"All": 'select distinct methodDir,"bugged"  from commitedMethods where bugId<>0  and methodDir like "%.java%" and methodDir not like "%test%" and commiter_date>="' + str(

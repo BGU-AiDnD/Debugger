@@ -2,7 +2,7 @@
 import json
 from os import path
 
-from wekaMethods.articles import *
+from feature_engineering.articles import *
 
 class FeatureGenerator(object):
 	"""This is the base class that contains the common

@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-from utils.filesystem import convert_to_long_path, convert_to_short_path
+from utils.filesystem import convert_to_short_path
 from utilsConf import open_subprocess
 
 

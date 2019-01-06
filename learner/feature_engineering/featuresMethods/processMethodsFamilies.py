@@ -1,7 +1,7 @@
 __author__ = 'amir'
 
-from wekaMethods.articles import *
-import wekaMethods.articles
+from feature_engineering.articles import *
+import feature_engineering.articles
 import featureExtractorBase
 
 simple_features=[1,2,3,4,5,6,7,8,9,10,21,26,27,28,29,30,31,32,33,34,35,36,37]

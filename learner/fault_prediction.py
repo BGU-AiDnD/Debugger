@@ -1,15 +1,15 @@
 import os
 import shutil
 
-import wekaMethods.articles
-import wekaMethods.commsSpaces
+import feature_engineering.articles
+import feature_engineering.commsSpaces
 from utils.monitors_manager import monitor, LEARNER_PHASE_FILE, VERSION_TEST_MARKER, FEATURES_MARKER, \
 	ML_MODELS_MARKER
-from wekaMethods import patchsBuild
-from wekaMethods.csharp.sonarqube import SonarQube
-from wekaMethods.db_builders import java_db_builder
-from wekaMethods.features import complexity_features
-from wekaMethods.features.features_extractor import extract_object_oriented_features_old
+from feature_engineering import patchsBuild
+from feature_engineering.csharp.sonarqube import SonarQube
+from feature_engineering.db_builders import java_db_builder
+from feature_engineering.features import complexity_features
+from feature_engineering.features.features_extractor import extract_object_oriented_features_old
 
 
 class Learner(object):
@@ -24,7 +24,7 @@ class Learner(object):
 	def create_build_machine_learning_model(self):
 		for granularity in ['File', 'Method']:
 			for buggedType in ["All", "Most"]:
-				wekaMethods.articles.get_features(granularity, buggedType, self.configuration)
+				feature_engineering.articles.get_features(granularity, buggedType, self.configuration)
 
 	@monitor(FEATURES_MARKER)
 	def extract_features(self):
@@ -33,8 +33,8 @@ class Learner(object):
 		complexity_features.extract_complexity_features(self.configuration)
 		self.logger.info("extracting object oriented features")
 		extract_object_oriented_features_old(self.configuration)
-		wekaMethods.commsSpaces.create(self.configuration.vers_dirs,
-		                               os.path.join(self.configuration.workingDir, "vers"))
+		feature_engineering.commsSpaces.create(self.configuration.vers_dirs,
+		                                       os.path.join(self.configuration.workingDir, "vers"))
 
 	@monitor(VERSION_TEST_MARKER)
 	def create_test_versions_tree(self):

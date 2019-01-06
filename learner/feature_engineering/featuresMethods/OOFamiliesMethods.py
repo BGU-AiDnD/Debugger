@@ -1,10 +1,11 @@
 __author__ = 'amir'
 
-from wekaMethods.articles import *
+from feature_engineering.articles import *
 import networkx
-import wekaMethods.articles
+import feature_engineering.articles
 from collections import Counter
 import numpy
+import featureExtractorBase
 
 best_features=[9,10,11,12,15,17,19,20,21,24,26,53,54,55,56,59,61,63,64,65,68,70,75,76,77,78,81,83,85,86,87,90,92,93,94,96,97,103,113,114,115,116,117,118,119,120,130,132,133,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,152,153,72,134,151,155]
 g2_features=[1,2,3,4,5,6,12,13,14,15,16,17,24,25,26,27,28,29]
@@ -13,40 +14,39 @@ methods_features=[23,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54
 fields_features=[124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152]
 hirarcy_features=[1,2,3,4]
 constructors_features=[95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123]
-
-class OOFamilies:
+class OOFamiliesMethods(featureExtractorBase.FeatureExtractorBase):
 
 
     def __init__(self,fam):
         self.family=fam
-        if self.family=="g2":
+        if self.family=="g2Methods":
             self.best=g2_features
             self.attributes=self.g2_attributes
-        if self.family=="g3":
+        if self.family=="g3Methods":
             self.best=g3_features
             self.attributes=self.g3_attributes
-        if self.family=="g4":
+        if self.family=="g4Methods":
             self.best=g3_features
             self.attributes=self.g4_attributes
-        if self.family=="methodsArticles":
+        if self.family=="methodsArticlesMethods":
             self.best=methods_features
             self.attributes=self.methodsArticles_attributes
-        if self.family=="methodsAdded":
+        if self.family=="methodsAddedMethods":
             self.best=methods_features
             self.attributes=self.methodsAdded_attributes
-        if self.family=="hirarcy":
+        if self.family=="hirarcyMethods":
             self.best=hirarcy_features
             self.attributes=self.hirarcy_attributes
-        if self.family=="fieldsArticles":
+        if self.family=="fieldsArticlesMethods":
             self.best=fields_features
             self.attributes=self.fieldsArticles_attributes
-        if self.family=="fieldsAdded":
+        if self.family=="fieldsAddedMethods":
             self.best=fields_features
             self.attributes=self.fieldsAdded_attributes
-        if self.family=="constructorsArticles":
+        if self.family=="constructorsArticlesMethods":
             self.best=constructors_features
             self.attributes=self.constructorsArticles_attributes
-        if self.family=="constructorsAdded":
+        if self.family=="constructorsAddedMethods":
             self.best=constructors_features
             self.attributes=self.constructorsAdded_attributes
 
@@ -238,6 +238,7 @@ class OOFamilies:
             if row[2] in files_Names:
                 retAdd=[(nameClass,row[2])]
             sigsEdges.extend([ (nameClass,x) for x in  self.signatureTolst(row[1]) if x in files_Names]+retAdd)
+
         fields='select Dirpath, name ,type from fields where scope='+scope
         fields_d={}
         for x in files_Names:
@@ -258,8 +259,7 @@ class OOFamilies:
         g2.add_edges_from(sigsEdges)
         counts= Counter(sigsEdges)
         self.addFromDict(files_dict,g2.out_degree(),pathNames)
-        self.addFromDict(files_dict,g2.out_degree(),pathNames)
-        #self.addFromDict(files_dict,networkx.katz_centrality(g2),pathNames)
+        self.addFromDict(files_dict,networkx.katz_centrality(g2),pathNames)
         self.addFromDict(files_dict,networkx.core_number(g2),pathNames)
         self.addFromDict(files_dict,networkx.closeness_centrality(g2),pathNames)
         self.addFromDict(files_dict,networkx.degree_centrality(g2),pathNames)
@@ -267,7 +267,7 @@ class OOFamilies:
 
     def fields_features(self,c,files_dict):
         countMethds="select classes.Dirpath,count(*) from classes,fields where classes.name=fields.className group by classes.Dirpath"
-        wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+        feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
         primitiveTypes=["'int'","'short'","'long'","'byte'","'float'","'double'", "'char'","'boolean'","'String'"]
         voidType=["'void'"]
         javaLang=["'java.%'"]
@@ -275,21 +275,21 @@ class OOFamilies:
         callingTable='fields'
         for table in ["(select *,1 as total from classes)","(select classes.Dirpath as Dirpath,classes.name as name,count(*) as total from classes,"+callingTable+" where classes.name="+callingTable+".className group by classes.Dirpath)" ]:
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope="private" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope="protected" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope="public" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope<>"public" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.static="true" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.final="true" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
 
     def fieldsArticles_features(self,c,files_dict):
         countMethds="select classes.Dirpath,count(*) from classes,fields where classes.name=fields.className group by classes.Dirpath"
-        wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+        feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
         primitiveTypes=["'int'","'short'","'long'","'byte'","'float'","'double'", "'char'","'boolean'","'String'"]
         voidType=["'void'"]
         javaLang=["'java.%'"]
@@ -297,17 +297,17 @@ class OOFamilies:
         callingTable='fields'
         for table in ["(select *,1 as total from classes)" ]:
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope="private" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope="protected" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope="public" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope<>"public" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.static="true" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.final="true" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
 
     def fieldsAdded_features(self,c,files_dict):
         primitiveTypes=["'int'","'short'","'long'","'byte'","'float'","'double'", "'char'","'boolean'","'String'"]
@@ -318,25 +318,25 @@ class OOFamilies:
         for table in ["(select *,1 as total from classes)","(select classes.Dirpath as Dirpath,classes.name as name,count(*) as total from classes,"+callingTable+" where classes.name="+callingTable+".className group by classes.Dirpath)" ]:
             if table!="(select *,1 as total from classes)":
                 countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope="private" group by C.Dirpath'
-                wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+                feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
                 countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope="protected" group by C.Dirpath'
-                wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+                feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
                 countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope="public" group by C.Dirpath'
-                wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+                feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
                 countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope<>"public" group by C.Dirpath'
-                wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+                feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
                 countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.static="true" group by C.Dirpath'
-                wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+                feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
                 countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.final="true" group by C.Dirpath'
-                wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+                feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             for t in typesSql:
                     s=(' or '+callingTable+'.name like ').join(t)
                     countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and ( '+callingTable+'.type like '+s+') group by C.Dirpath'
-                    wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+                    feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             for t in typesSql:
                     s=(' or '+callingTable+'.name like ').join(t)
                     countMethds='select C.Dirpath,count(distinct type)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and ( '+callingTable+'.type like '+s+' ) group by C.Dirpath'
-                    wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+                    feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
 
     def graphG3(self,c,files_dict,scope):
         edges = []
@@ -355,7 +355,6 @@ class OOFamilies:
         g = networkx.DiGraph()
         g.add_node('root')
         g.add_edges_from(edges)
-        print g.nodes()
         paths = networkx.single_source_dijkstra_path(g, 'root')
 
         methods={}
@@ -515,7 +514,7 @@ class OOFamilies:
 
     def methods_features(self,c,files_dict,callingTable,isSimpleMethod):
         countMethds="select classes.Dirpath,count(*) from classes,"+callingTable+" where classes.name="+callingTable+".className group by classes.Dirpath"
-        wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+        feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
         primitiveTypes=["'int'","'short'","'long'","'byte'","'float'","'double'", "'char'","'boolean'","'String'"]
         voidType=["'void'"]
         javaLang=["'java.%'"]
@@ -524,26 +523,26 @@ class OOFamilies:
         typesPy=[primitiveTypes,voidType,javaLang,primitiveTypes+voidType+javaLangPy]
         for table in ["(select *,1 as total from classes)"]:
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope="private" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope="protected" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope="public" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope<>"public" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             if isSimpleMethod:
                 countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.name like "get%" group by C.Dirpath'
-                wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+                feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
                 for table in ["(select classes.Dirpath as Dirpath,classes.name as name,count(*) as total from classes,"+callingTable+" where classes.name="+callingTable+".className group by classes.Dirpath)" ]:
 
                         for t in typesSql:
                             s=(' or '+callingTable+'.name like ').join(t)
                             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and ( '+callingTable+'.return like '+s+') group by C.Dirpath'
-                            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+                            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
                         for t in typesSql:
                             s=(' or '+callingTable+'.name like ').join(t)
                             countMethds='select C.Dirpath,count(distinct return)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and ( '+callingTable+'.return like '+s+' ) group by C.Dirpath'
-                            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+                            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
         for table in ["(select *,1 as total from classes)","(select classes.Dirpath as Dirpath,classes.name as name,count(*) as total from classes,"+callingTable+" where classes.name="+callingTable+".className group by classes.Dirpath)" ]:
 
             signaturesCheck={}
@@ -592,7 +591,7 @@ class OOFamilies:
 
     def methodsArticles_features(self,c,files_dict,callingTable,isSimpleMethod):
         countMethds="select classes.Dirpath,count(*) from classes,"+callingTable+" where classes.name="+callingTable+".className group by classes.Dirpath"
-        wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+        feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
         primitiveTypes=["'int'","'short'","'long'","'byte'","'float'","'double'", "'char'","'boolean'","'String'"]
         voidType=["'void'"]
         javaLang=["'java.%'"]
@@ -601,26 +600,26 @@ class OOFamilies:
         typesPy=[primitiveTypes,voidType,javaLang,primitiveTypes+voidType+javaLangPy]
         for table in ["(select *,1 as total from classes)"]:
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope="private" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope="protected" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope="public" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.scope<>"public" group by C.Dirpath'
-            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
             if isSimpleMethod:
                 countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and '+callingTable+'.name like "get%" group by C.Dirpath'
-                wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+                feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
                 for table in ["(select classes.Dirpath as Dirpath,classes.name as name,count(*) as total from classes,"+callingTable+" where classes.name="+callingTable+".className group by classes.Dirpath)" ]:
 
                         for t in typesSql:
                             s=(' or '+callingTable+'.name like ').join(t)
                             countMethds='select C.Dirpath,count(*)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and ( '+callingTable+'.return like '+s+') group by C.Dirpath'
-                            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+                            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
                         for t in typesSql:
                             s=(' or '+callingTable+'.name like ').join(t)
                             countMethds='select C.Dirpath,count(distinct return)/(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className and ( '+callingTable+'.return like '+s+' ) group by C.Dirpath'
-                            wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
+                            feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, countMethds)
 
 
     def methodsAdded_features(self,c,files_dict,callingTable,isSimpleMethod):
@@ -631,6 +630,7 @@ class OOFamilies:
         javaLangPy=["java"]
         typesPy=[primitiveTypes,voidType,javaLang,primitiveTypes+voidType+javaLangPy]
         for table in ["(select *,1 as total from classes)","(select classes.Dirpath as Dirpath,classes.name as name,count(*) as total from classes,"+callingTable+" where classes.name="+callingTable+".className group by classes.Dirpath)" ]:
+
             signaturesCheck={}
             signaturesTotal={}
             s='select C.Dirpath,'+callingTable+'.name,signature,(C.total*1.0) from ' +table+' as C,'+callingTable+' where C.name='+callingTable+'.className'
@@ -865,44 +865,44 @@ class OOFamilies:
 
     def classes_features(self,c,files_dict):
         interfaces='select Dirpath, superClass from classes where superClass="Interface"'
-        wekaMethods.articles.sqlToAttributes(["class"], c, files_dict, interfaces)
+        feature_engineering.articles.sqlToAttributes(["class"], c, files_dict, interfaces)
         interfaces='select Dirpath, "No parent" from classes where superClass="java.lang.Object"'
-        wekaMethods.articles.sqlToAttributes(["Has parent"], c, files_dict, interfaces)
+        feature_engineering.articles.sqlToAttributes(["Has parent"], c, files_dict, interfaces)
         interfaces='select Dirpath ,exception  ,externalizable  ,abstract   ,error  ,case when scope="" then "default" else scope end as b ,serializable from classes'
-        wekaMethods.articles.sqlToAttributes(["false","false","false","false","public","false"], c, files_dict, interfaces)
+        feature_engineering.articles.sqlToAttributes(["false", "false", "false", "false", "public", "false"], c, files_dict, interfaces)
 
 
     def get_featuresBest(self, c, files_dict,prev_date,start_date,end_date):
         #self.hirarcy(c,files_dict)
-        if self.family=="g2":
+        if self.family=="g2Methods":
             for scope in ['"public"','"protected"','"private"','"public" or scope="protected" or scope="private" or scope=""']:
                 self.graphG2(c,files_dict,scope)
-        if self.family=="g3":
+        if self.family=="g3Methods":
             for scope in ['"public"','"protected"','"private"','"public" or scope="protected" or scope="private" or scope=""']:
                 self.graphG3(c,files_dict,scope)
-        if self.family=="g4":
+        if self.family=="g4Methods":
             for scope in ['"public"','"protected"','"private"','"public" or scope="protected" or scope="private" or scope=""']:
                 self.graphG4(c,files_dict,scope)
-        if self.family=="methods":
+        if self.family=="methodsMethods":
             self.methods_features(c,files_dict,'methods',True)
-        if self.family=="methodsAdded":
+        if self.family=="methodsAddedMethods":
             self.methodsAdded_features(c,files_dict,'methods',True)
-        if self.family=="methodsArticles":
+        if self.family=="methodsArticlesMethods":
             self.methodsArticles_features(c,files_dict,'methods',True)
-        if self.family=="hirarcy":
+        if self.family=="hirarcyMethods":
             self.hirarcy(c,files_dict)
             self.classes_features(c,files_dict)
-        if self.family=="fields":
+        if self.family=="fieldsMethods":
             self.fields_features(c,files_dict)
-        if self.family=="constructors":
+        if self.family=="constructorsMethods":
             self.methods_features(c,files_dict,'constructors',False)
-        if self.family=="fieldsArticles":
+        if self.family=="fieldsArticlesMethods":
             self.fieldsArticles_features(c,files_dict)
-        if self.family=="fieldsAdded":
+        if self.family=="fieldsAddedMethods":
             self.fieldsAdded_features(c,files_dict)
-        if self.family=="constructorsArticles":
+        if self.family=="constructorsArticlesMethods":
             self.methodsArticles_features(c,files_dict,'constructors',False)
-        if self.family=="constructorsAdded":
+        if self.family=="constructorsAddedMethods":
             self.methodsAdded_features(c,files_dict,'constructors',False)
 
 
@@ -918,3 +918,5 @@ class OOFamilies:
 
     def get_attributes(self):
         return self.attributes()
+
+

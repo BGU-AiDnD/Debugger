@@ -1,11 +1,12 @@
 __author__ = 'amir'
 
-from wekaMethods.articles import *
-import wekaMethods.articles
-#from wekaMethods.articles import sqlToAttributes
+from feature_engineering.articles import *
+import feature_engineering.articles
 import numpy
 from collections import Counter
-class sourceMonitor:
+import featureExtractorBase
+
+class sourceMonitorMethods(featureExtractorBase.FeatureExtractorBase):
     def get_attributes(self):
         return [("Lines" ,"NUMERIC"),("Statements" ,"NUMERIC"),
     ("Percent_Branch_Statements" ,"NUMERIC"),
@@ -57,41 +58,48 @@ class sourceMonitor:
         for f in Att_dict:
             files_dict[f] = files_dict[f] + Att_dict[f]
 
-    def get_features(self, c, files_dict, prev_date, start_date, end_date):
+    def get_features(self, c, files_dict,prev_date,start_date,end_date):
         sourceMethodsFiles='''select  name ,Lines ,	Statements ,	Percent_Branch_Statements ,Method_Call_Statements ,Percent_Lines_with_Comments
  ,Classes_and_interfaces ,Methods_per_Class ,
  Maximum_Complexity
    ,Average_Block_Depth	, Average_Complexity	,
  Statements_at_block_level_0 ,Statements_at_block_level_1 ,Statements_at_block_level_2 ,Statements_at_block_level_3 ,Statements_at_block_level_4 ,
  Statements_at_block_level_5 ,Statements_at_block_level_6 ,Statements_at_block_level_7   from JAVAfilesFix'''
-        wekaMethods.articles.sqlToAttributes(["0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"], c, files_dict, sourceMethodsFiles)
-        sourceMethodsFiles='''
-select  name  ,
- Statements_at_block_level_3 /(1.0*(case When Statements= 0 Then 1 Else Statements End)),Statements_at_block_level_4/(1.0*(case When Statements= 0 Then 1 Else Statements End)) ,
- Statements_at_block_level_5 /(1.0*(case When Statements= 0 Then 1 Else Statements End)),Statements_at_block_level_6 /(1.0*(case When Statements= 0 Then 1 Else Statements End)),Statements_at_block_level_7/(1.0*(case When Statements= 0 Then 1 Else Statements End))  from JAVAfilesFix'''
-        wekaMethods.articles.sqlToAttributes(["0","0","0","0","0",], c, files_dict, sourceMethodsFiles)
+        feature_engineering.articles.sqlToAttributes(["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"], c, files_dict, sourceMethodsFiles)
+        sourceMethodsFiles='''select  name  ,
+ Statements_at_block_level_3 /(1.0*Statements),Statements_at_block_level_4/(1.0*Statements) ,
+ Statements_at_block_level_5 /(1.0*Statements),Statements_at_block_level_6 /(1.0*Statements),Statements_at_block_level_7/(1.0*Statements)  from JAVAfilesFix'''
+        feature_engineering.articles.sqlToAttributes(["0", "0", "0", "0", "0", ], c, files_dict, sourceMethodsFiles)
         sourceMethodsFiles='''select  name ,
  max(Statements_at_block_level_0 ,Statements_at_block_level_1 ,Statements_at_block_level_2 ,Statements_at_block_level_3 ,Statements_at_block_level_4 ,
  Statements_at_block_level_5 ,Statements_at_block_level_6 ,Statements_at_block_level_7 ,Statements_at_block_level_8 ,Statements_at_block_level_9)  from JAVAfilesFix'''
-        wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, sourceMethodsFiles)
+        feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, sourceMethodsFiles)
         sourceMethodsFiles='''select  name  ,
- max(Statements_at_block_level_0/(1.0*(case When Statements= 0 Then 1 Else Statements End)) ,Statements_at_block_level_1/(1.0*(case When Statements= 0 Then 1 Else Statements End)) ,Statements_at_block_level_2/(1.0*(case When Statements= 0 Then 1 Else Statements End)) ,Statements_at_block_level_3 /(1.0*(case When Statements= 0 Then 1 Else Statements End)),Statements_at_block_level_4/(1.0*(case When Statements= 0 Then 1 Else Statements End)) ,
- Statements_at_block_level_5 /(1.0*(case When Statements= 0 Then 1 Else Statements End)),Statements_at_block_level_6 /(1.0*(case When Statements= 0 Then 1 Else Statements End)),Statements_at_block_level_7/(1.0*(case When Statements= 0 Then 1 Else Statements End)) ,Statements_at_block_level_8/(1.0*(case When Statements= 0 Then 1 Else Statements End)) ,Statements_at_block_level_9/(1.0*(case When Statements= 0 Then 1 Else Statements End)) )  from JAVAfilesFix'''
-        wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, sourceMethodsFiles)
-        complexity_d = dict(map(lambda f: (f, list()), files_dict.keys()))
-        statements_d = dict(map(lambda f: (f, list()), files_dict.keys()))
-        depth_d = dict(map(lambda f: (f, list()), files_dict.keys()))
-        calls_d = dict(map(lambda f: (f, list()), files_dict.keys()))
-        for row in c.execute('select File_Name, Complexity, Statements, Maximum_Depth, Calls from SourcemethodsFix'):
+ max(Statements_at_block_level_0/(1.0*Statements) ,Statements_at_block_level_1/(1.0*Statements) ,Statements_at_block_level_2/(1.0*Statements) ,Statements_at_block_level_3 /(1.0*Statements),Statements_at_block_level_4/(1.0*Statements) ,
+ Statements_at_block_level_5 /(1.0*Statements),Statements_at_block_level_6 /(1.0*Statements),Statements_at_block_level_7/(1.0*Statements) ,Statements_at_block_level_8/(1.0*Statements) ,Statements_at_block_level_9/(1.0*Statements) )  from JAVAfilesFix'''
+        feature_engineering.articles.sqlToAttributes(["0"], c, files_dict, sourceMethodsFiles)
+        complexity_d={}
+        statements_d={}
+        depth_d={}
+        calls_d={}
+        for f in files_dict:
+            complexity_d[f]=[]
+            statements_d[f]=[]
+            depth_d[f]=[]
+            calls_d[f]=[]
+        se='select File_Name  ,Complexity	, Statements , 	Maximum_Depth	, Calls from SourcemethodsFix'
+        for row in c.execute(se):
             name = row[0]
-            if name in files_dict:
-                complexity_d[name].append(int(row[1]))
-                statements_d[name].append(int(row[2]))
+            if (name in files_dict):
+                if str(row[1]).isdigit():
+                    complexity_d[name].append(int(row[1]))
+                if str(row[2]).isdigit():
+                    statements_d[name].append(int(row[2]))
                 depth_d[name].append(int(row[3]))
                 calls_d[name].append(int(row[4]))
-        self.addFromDict(files_dict, complexity_d)
-        self.addFromDict(files_dict, statements_d)
-        self.addFromDict(files_dict, depth_d)
-        self.addFromDict(files_dict, calls_d)
+        self.addFromDict(files_dict,complexity_d)
+        self.addFromDict(files_dict,statements_d)
+        self.addFromDict(files_dict,depth_d)
+        self.addFromDict(files_dict,calls_d)
 
 

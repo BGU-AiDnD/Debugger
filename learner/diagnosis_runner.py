@@ -2,7 +2,7 @@ import csv
 import json
 import os
 
-import wekaMethods.wekaAccuracy
+import feature_engineering.wekaAccuracy
 from experiments import ExperimentGenerator
 from run_mvn import TestRunner, AmirTracer
 from sfl_diagnoser.Diagnoser.diagnoserUtils import write_planning_file, readPlanningFile
@@ -31,7 +31,7 @@ class DiagnosisRunner(object):
 			weka) + " & java -Xmx2024m  -cp " + convert_to_long_path(
 			wekaJar) + " weka.Run " + algorithm + " -l .\\model.model -T " + testing + " > testing" + name + ".txt ")
 		wekaCsv = os.path.join(convert_to_long_path(weka), "testing" + name + ".csv")
-		wekaMethods.wekaAccuracy.priorsCreation(namesCsv, wekaCsv, outCsv, "")
+		feature_engineering.wekaAccuracy.priorsCreation(namesCsv, wekaCsv, outCsv, "")
 
 	@staticmethod
 	def weka_csv_to_readable_csv(weka_csv, prediction_csv):

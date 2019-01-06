@@ -6,26 +6,26 @@ from functools import partial
 import git
 
 import utilsConf
-import wekaMethods.blameParse
+import feature_engineering.blameParse
 from utils.monitors_manager import monitor, DB_BUILD_MARKER, DB_LABELS_MARKER
-from wekaMethods import (patchsBuild,
-                         source_Monitor,
-                         commentedCodeDetector,
-                         checkReport,
-                         docXml,
-                         pathPackCsv)
-from wekaMethods.db_builder import DBBuilder
-from wekaMethods.db_builders.bugs_db_builder import parse_bugs_data
-from wekaMethods.db_builders.commits_db_builder import CommitTable
-from wekaMethods.db_builders.tables_creation_sql_commands import (JAVA_TABLES_CREATION_COMMANDS,
-                                                                  CREATE_ALL_METHODS_SQL_TABLE)
-from wekaMethods.db_builders.consts.tables_names import (FIELDS_TABLE_NAME,
-                                                         COMMITS_TABLE_NAME,
-                                                         BUGS_TABLE_NAME,
-                                                         COMMITTED_FILES_TABLE_NAME,
-                                                         COMMITTED_METHODS_TABLE_NAME,
-                                                         ALL_METHOD_TABLE_NAME, HALSTEAD_TABLE_NAME,
-                                                         JAVA_FILES_TABLE_NAME, SOURCE_METHODS_TABLE_NAME)
+from feature_engineering import (patchsBuild,
+                                 source_Monitor,
+                                 commentedCodeDetector,
+                                 checkReport,
+                                 docXml,
+                                 pathPackCsv)
+from feature_engineering.db_builder import DBBuilder
+from feature_engineering.db_builders.bugs_db_builder import parse_bugs_data
+from feature_engineering.db_builders.commits_db_builder import CommitTable
+from feature_engineering.db_builders.tables_creation_sql_commands import (JAVA_TABLES_CREATION_COMMANDS,
+                                                                          CREATE_ALL_METHODS_SQL_TABLE)
+from feature_engineering.db_builders.consts.tables_names import (FIELDS_TABLE_NAME,
+                                                                 COMMITS_TABLE_NAME,
+                                                                 BUGS_TABLE_NAME,
+                                                                 COMMITTED_FILES_TABLE_NAME,
+                                                                 COMMITTED_METHODS_TABLE_NAME,
+                                                                 ALL_METHOD_TABLE_NAME, HALSTEAD_TABLE_NAME,
+                                                                 JAVA_FILES_TABLE_NAME, SOURCE_METHODS_TABLE_NAME)
 
 
 # import git.objects.tree
@@ -148,13 +148,13 @@ def BuildAllOneTimeCommits(git_path, db_path, javadoc_path, source_monitor_files
 		insert_values_into_table(conn, "fields", fieldData)
 		insert_values_into_table(conn, "constructors", consData)
 		insert_values_into_table(conn, "blameExtends",
-		                         wekaMethods.blameParse.blameBuild(blame_path, date))
+		                         feature_engineering.blameParse.blameBuild(blame_path, date))
 		insert_values_into_table(conn, "checkStyleExtends",
-		                         wekaMethods.checkReport.fileRead(checkstyle, False, code_dir))
+		                         feature_engineering.checkReport.fileRead(checkstyle, False, code_dir))
 		insert_values_into_table(conn, "JAVAfilesFix",
-		                         wekaMethods.source_Monitor.source_files(source_monitor_files))
+		                         feature_engineering.source_Monitor.source_files(source_monitor_files))
 		insert_values_into_table(conn, "SourcemethodsFix",
-		                         wekaMethods.source_Monitor.source_methods(source_monitor_methods))
+		                         feature_engineering.source_Monitor.source_methods(source_monitor_methods))
 	conn.close()
 
 

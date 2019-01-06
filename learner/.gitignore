@@ -142,3 +142,4 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 /.idea/inspectionProfiles/profiles_settings.xml
+/.idea/modules.xml

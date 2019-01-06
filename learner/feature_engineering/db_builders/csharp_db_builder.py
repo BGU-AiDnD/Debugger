@@ -1,7 +1,7 @@
 import git
 
-from wekaMethods.db_builder import DBBuilder
-from wekaMethods.db_builders.bugs_db_builder import parse_bugs_data
+from feature_engineering.db_builder import DBBuilder
+from feature_engineering.db_builders.bugs_db_builder import parse_bugs_data
 
 
 class CSharpDBBuilder(DBBuilder):

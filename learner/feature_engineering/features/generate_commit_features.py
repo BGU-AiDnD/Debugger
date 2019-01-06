@@ -1,11 +1,13 @@
-from wekaMethods.features.features_generator import FeatureGenerator
+"""This module analyzes the commits the users uploaded."""
+from feature_engineering.articles import *
+from feature_engineering.features.features_generator import FeatureGenerator
 
 
-class LastCommitGenerator(FeatureGenerator):
-	""""""
+class CommitsGenerator(FeatureGenerator):
+	"""Class to analyze the commits posted to the work-flow tool."""
 
 	def __init__(self):
-		super(LastCommitGenerator, self).__init__("last_commit_static_data.json")
+		super(CommitsGenerator, self).__init__("commits_static_data.json")
 
 	def get_attributes(self):
 		return self.get_best_attributes()
@@ -21,12 +23,9 @@ class LastCommitGenerator(FeatureGenerator):
 		len_executables ), sum(sum_executables ), sum(mean_executables ), sum(median_executables ), sum(var_executables ), sum(max_executables ), sum(min_executables ), sum(
 		len_lens ), sum(sum_lens ), sum(mean_lens ), sum(median_lens ), sum(var_lens ), sum(max_lens ), sum(min_lens ), sum(
 		publics ), sum(protecteds ), sum(privates ), sum(totals  ), sum(len_params ), sum(sum_params ), sum(mean_params ), sum(median_params ), sum(var_params ), sum(max_params ), sum(min_params)
-		from checkStyleAnalyzeExtends,commits where  checkStyleAnalyzeExtends.commitid=commits.ID and commits.commiter_date>="''' + str(
-			prev_date) + '''"''' + '''  and commits.commiter_date<="''' + str(
-			start_date) + '''" group by checkStyleAnalyzeExtends.name'''
+		from checkStyleAnalyzeExtends group by name'''
 		lst = [0, 1, 3, 6, 7, 9, 10, 13, 14, 15, 17, 18, 20, 21, 23, 24, 27, 41, 42, 43, 45, 48, 55,
 			   59, 64]
-		lst = range(72)
 		self.convert_sql_query_to_attributes(["0" for x in lst], c, files_dict, analyze, lst)
 		analyze = '''select name , avg( NCSS ), avg(FileLen ), avg(sum_fors ), avg(sum_ifs ), avg(sum_tries ), avg(
 		len_mccab ), avg(sum_mccab ), avg(mean_mccab ), avg(median_mccab ), avg(var_mccab ), avg(max_mccab ), avg(min_mccab ), avg(
@@ -38,12 +37,10 @@ class LastCommitGenerator(FeatureGenerator):
 		len_executables ), avg(sum_executables ), avg(mean_executables ), avg(median_executables ), avg(var_executables ), avg(max_executables ), avg(min_executables ), avg(
 		len_lens ), avg(sum_lens ), avg(mean_lens ), avg(median_lens ), avg(var_lens ), avg(max_lens ), avg(min_lens ), avg(
 		publics ), avg(protecteds ), avg(privates ), avg(totals  ), avg(len_params ), avg(sum_params ), avg(mean_params ), avg(median_params ), avg(var_params ), avg(max_params ), avg(min_params)
-		from checkStyleAnalyzeExtends,commits where  checkStyleAnalyzeExtends.commitid=commits.ID and commits.commiter_date>="''' + str(
-			prev_date) + '''"''' + '''  and commits.commiter_date<="''' + str(
-			start_date) + '''" group by checkStyleAnalyzeExtends.name'''
+		from checkStyleAnalyzeExtends group by name'''
 		lst = [3, 6, 7, 8, 10, 11, 13, 14, 15, 17, 18, 20, 21, 22, 23, 24, 25, 27, 28, 29, 31, 32,
-			   34, 35, 36, 38, 39, 41, 42, 43, 45, 46, 48, 49, 50, 52, 53, 55, 56, 57, 59, 60]
-		lst = range(72)
+			   34, 35, 36, 38, 39,
+			   41, 42, 43, 45, 46, 48, 49, 50, 52, 53, 55, 56, 57, 59, 60]
 		self.convert_sql_query_to_attributes(["0" for x in lst], c, files_dict, analyze, lst)
 		analyze = '''select name , Sum(case When	NCSS 	> 0 Then 1 Else 0 End),Sum(case When	FileLen 	> 0 Then 1 Else 0 End),Sum(case When	sum_fors 	> 0 Then 1 Else 0 End),
 Sum(case When	sum_ifs 	> 0 Then 1 Else 0 End),Sum(case When	sum_tries 	> 0 Then 1 Else 0 End),Sum(case When	len_mccab 	> 0 Then 1 Else 0 End),
@@ -69,12 +66,10 @@ Sum(case When	var_lens 	> 0 Then 1 Else 0 End),Sum(case When	max_lens 	> 0 Then 
 Sum(case When	 publics 	> 0 Then 1 Else 0 End),Sum(case When	protecteds 	> 0 Then 1 Else 0 End),Sum(case When	privates 	> 0 Then 1 Else 0 End),
 Sum(case When	totals  	> 0 Then 1 Else 0 End),Sum(case When	len_params 	> 0 Then 1 Else 0 End),Sum(case When	sum_params 	> 0 Then 1 Else 0 End),
 Sum(case When	mean_params 	> 0 Then 1 Else 0 End),Sum(case When	median_params 	> 0 Then 1 Else 0 End),Sum(case When	var_params 	> 0 Then 1 Else 0 End),
-Sum(case When	max_params 	> 0 Then 1 Else 0 End),Sum(case When	min_params	> 0 Then 1 Else 0 End) from checkStyleAnalyzeExtends,commits where  checkStyleAnalyzeExtends.commitid=commits.ID and commits.commiter_date>="''' + str(
-			prev_date) + '''"''' + '''  and commits.commiter_date<="''' + str(
-			start_date) + '''" group by checkStyleAnalyzeExtends.name'''
+Sum(case When	max_params 	> 0 Then 1 Else 0 End),Sum(case When	min_params	> 0 Then 1 Else 0 End) from checkStyleAnalyzeExtends group by name'''
 		lst = [0, 1, 3, 5, 6, 7, 9, 10, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 26, 27, 28, 30,
-			   31, 41, 42, 43, 45, 46, 47, 48, 49, 51, 52, 54, 55, 56, 57, 58, 59, 61, 63, 64]
-		lst = range(72)
+			   31, 41, 42, 43, 45,
+			   46, 47, 48, 49, 51, 52, 54, 55, 56, 57, 58, 59, 61, 63, 64]
 		self.convert_sql_query_to_attributes(["0" for x in lst], c, files_dict, analyze, lst)
 		analyze = '''select name , Sum(case When	NCSS 	< 0 Then 1 Else 0 End),Sum(case When	FileLen 	< 0 Then 1 Else 0 End),Sum(case When	sum_fors 	< 0 Then 1 Else 0 End),
 Sum(case When	sum_ifs 	< 0 Then 1 Else 0 End),Sum(case When	sum_tries 	< 0 Then 1 Else 0 End),Sum(case When	len_mccab 	< 0 Then 1 Else 0 End),
@@ -100,11 +95,8 @@ Sum(case When	var_lens 	< 0 Then 1 Else 0 End),Sum(case When	max_lens 	< 0 Then 
 Sum(case When	 publics 	< 0 Then 1 Else 0 End),Sum(case When	protecteds 	< 0 Then 1 Else 0 End),Sum(case When	privates 	< 0 Then 1 Else 0 End),
 Sum(case When	totals  	< 0 Then 1 Else 0 End),Sum(case When	len_params 	< 0 Then 1 Else 0 End),Sum(case When	sum_params 	< 0 Then 1 Else 0 End),
 Sum(case When	mean_params 	< 0 Then 1 Else 0 End),Sum(case When	median_params 	< 0 Then 1 Else 0 End),Sum(case When	var_params 	< 0 Then 1 Else 0 End),
-Sum(case When	max_params 	< 0 Then 1 Else 0 End),Sum(case When	min_params	< 0 Then 1 Else 0 End) from checkStyleAnalyzeExtends,commits where  checkStyleAnalyzeExtends.commitid=commits.ID and commits.commiter_date>="''' + str(
-			prev_date) + '''"''' + '''  and commits.commiter_date<="''' + str(
-			start_date) + '''" group by checkStyleAnalyzeExtends.name'''
+Sum(case When	max_params 	< 0 Then 1 Else 0 End),Sum(case When	min_params	< 0 Then 1 Else 0 End) from checkStyleAnalyzeExtends group by name'''
 		lst = [0, 1, 3, 6, 7, 9, 13, 14, 15, 17, 20, 21, 23, 27, 28, 30, 42, 48, 49, 51, 55, 56, 58]
-		lst = range(72)
 		self.convert_sql_query_to_attributes(["0" for x in lst], c, files_dict, analyze, lst)
 		analyze = '''select name , Sum(case When	NCSS 	> 0 Then 	NCSS 	Else 0 End),Sum(case When	FileLen 	> 0 Then 	FileLen 	Else 0 End),Sum(case When	sum_fors 	> 0 Then 	sum_fors 	Else 0 End),
 Sum(case When	sum_ifs 	> 0 Then 	sum_ifs 	Else 0 End),Sum(case When	sum_tries 	> 0 Then 	sum_tries 	Else 0 End),Sum(case When	len_mccab 	> 0 Then 	len_mccab 	Else 0 End),
@@ -130,12 +122,9 @@ Sum(case When	 publics 	> 0 Then 	 publics 	Else 0 End),Sum(case When	protecteds
 Sum(case When	totals  	> 0 Then 	totals  	Else 0 End),Sum(case When	len_params 	> 0 Then 	len_params 	Else 0 End),Sum(case When	sum_params 	> 0 Then 	sum_params 	Else 0 End),
 Sum(case When	mean_params 	> 0 Then 	mean_params 	Else 0 End),Sum(case When	median_params 	> 0 Then 	median_params 	Else 0 End),Sum(case When	var_params 	> 0 Then 	var_params 	Else 0 End),
 Sum(case When	max_params 	> 0 Then 	max_params 	Else 0 End),Sum(case When	min_params	> 0 Then 	min_params	Else 0 End)
-from checkStyleAnalyzeExtends,commits where  checkStyleAnalyzeExtends.commitid=commits.ID and commits.commiter_date>="''' + str(
-			prev_date) + '''"''' + '''  and commits.commiter_date<="''' + str(
-			start_date) + '''" group by checkStyleAnalyzeExtends.name'''
+from checkStyleAnalyzeExtends group by name'''
 		lst = [0, 1, 3, 6, 7, 9, 10, 13, 14, 15, 17, 18, 20, 21, 23, 24, 27, 28, 31, 41, 42, 45, 48,
 			   55, 59, 64]
-		lst = range(72)
 		self.convert_sql_query_to_attributes(["0" for x in lst], c, files_dict, analyze, lst)
 		analyze = '''select name , Sum(case When	NCSS 	< 0 Then 	NCSS 	Else 0 End),Sum(case When	FileLen 	< 0 Then 	FileLen 	Else 0 End),Sum(case When	sum_fors 	< 0 Then 	sum_fors 	Else 0 End),
 Sum(case When	sum_ifs 	< 0 Then 	sum_ifs 	Else 0 End),Sum(case When	sum_tries 	< 0 Then 	sum_tries 	Else 0 End),Sum(case When	len_mccab 	< 0 Then 	len_mccab 	Else 0 End),
@@ -161,12 +150,10 @@ Sum(case When	 publics 	< 0 Then 	 publics 	Else 0 End),Sum(case When	protecteds
 Sum(case When	totals  	< 0 Then 	totals  	Else 0 End),Sum(case When	len_params 	< 0 Then 	len_params 	Else 0 End),Sum(case When	sum_params 	< 0 Then 	sum_params 	Else 0 End),
 Sum(case When	mean_params 	< 0 Then 	mean_params 	Else 0 End),Sum(case When	median_params 	< 0 Then 	median_params 	Else 0 End),Sum(case When	var_params 	< 0 Then 	var_params 	Else 0 End),
 Sum(case When	max_params 	< 0 Then 	max_params 	Else 0 End),Sum(case When	min_params	< 0 Then 	min_params	Else 0 End)
-from checkStyleAnalyzeExtends,commits where  checkStyleAnalyzeExtends.commitid=commits.ID and commits.commiter_date>="''' + str(
-			prev_date) + '''"''' + '''  and commits.commiter_date<="''' + str(
-			start_date) + '''" group by checkStyleAnalyzeExtends.name'''
+from checkStyleAnalyzeExtends group by name'''
 		lst = [1, 6, 7, 9, 10, 13, 14, 15, 17, 18, 20, 21, 23, 24, 27, 28, 29, 30, 31, 41, 42, 43,
-			   45, 46, 48, 49, 51, 52, 55, 56, 57, 58, 59]
-		lst = range(72)
+			   45, 46, 48, 49, 51,
+			   52, 55, 56, 57, 58, 59]
 		self.convert_sql_query_to_attributes(["0" for x in lst], c, files_dict, analyze, lst)
 		analyze = '''select name , avg(case When	NCSS 	> 0 Then 	NCSS 	Else null End),avg(case When	FileLen 	> 0 Then 	FileLen 	Else null End),avg(case When	sum_fors 	> 0 Then 	sum_fors 	Else null End),
 avg(case When	sum_ifs 	> 0 Then 	sum_ifs 	Else null End),avg(case When	sum_tries 	> 0 Then 	sum_tries 	Else null End),avg(case When	len_mccab 	> 0 Then 	len_mccab 	Else null End),
@@ -192,12 +179,10 @@ avg(case When	min_lens 	> 0 Then 	min_lens 	Else null End),avg(case When	 public
 avg(case When	privates 	> 0 Then 	privates 	Else null End),avg(case When	totals  	> 0 Then 	totals  	Else null End),avg(case When	len_params 	> 0 Then 	len_params 	Else null End),
 avg(case When	sum_params 	> 0 Then 	sum_params 	Else null End),avg(case When	mean_params 	> 0 Then 	mean_params 	Else null End),avg(case When	median_params 	> 0 Then 	median_params 	Else null End),
 avg(case When	var_params 	> 0 Then 	var_params 	Else null End),avg(case When	max_params 	> 0 Then 	max_params 	Else null End),avg(case When	min_params	> 0 Then 	min_params	Else null End)
-from checkStyleAnalyzeExtends,commits where  checkStyleAnalyzeExtends.commitid=commits.ID and commits.commiter_date>="''' + str(
-			prev_date) + '''"''' + '''  and commits.commiter_date<="''' + str(
-			start_date) + '''" group by checkStyleAnalyzeExtends.name'''
+from checkStyleAnalyzeExtends group by name'''
 		lst = [3, 6, 7, 10, 13, 14, 15, 17, 18, 20, 21, 23, 24, 27, 28, 29, 31, 41, 42, 43, 45, 46,
-			   48, 49, 52, 55, 56, 57, 59]
-		lst = range(72)
+			   48, 49, 52, 55, 56,
+			   57, 59]
 		self.convert_sql_query_to_attributes(["0" for x in lst], c, files_dict, analyze, lst)
 		analyze = '''select name , avg(case When	NCSS 	< 0 Then 	NCSS 	Else null End),avg(case When	FileLen 	< 0 Then 	FileLen 	Else null End),avg(case When	sum_fors 	< 0 Then 	sum_fors 	Else null End),
 avg(case When	sum_ifs 	< 0 Then 	sum_ifs 	Else null End),avg(case When	sum_tries 	< 0 Then 	sum_tries 	Else null End),avg(case When	len_mccab 	< 0 Then 	len_mccab 	Else null End),
@@ -223,10 +208,7 @@ avg(case When	min_lens 	< 0 Then 	min_lens 	Else null End),avg(case When	 public
 avg(case When	privates 	< 0 Then 	privates 	Else null End),avg(case When	totals  	< 0 Then 	totals  	Else null End),avg(case When	len_params 	< 0 Then 	len_params 	Else null End),
 avg(case When	sum_params 	< 0 Then 	sum_params 	Else null End),avg(case When	mean_params 	< 0 Then 	mean_params 	Else null End),avg(case When	median_params 	< 0 Then 	median_params 	Else null End),
 avg(case When	var_params 	< 0 Then 	var_params 	Else null End),avg(case When	max_params 	< 0 Then 	max_params 	Else null End),avg(case When	min_params	< 0 Then 	min_params	Else null End)
-from checkStyleAnalyzeExtends,commits where  checkStyleAnalyzeExtends.commitid=commits.ID and commits.commiter_date>="''' + str(
-			prev_date) + '''"''' + '''  and commits.commiter_date<="''' + str(
-			start_date) + '''" group by checkStyleAnalyzeExtends.name'''
+from checkStyleAnalyzeExtends group by name'''
 		lst = [1, 6, 7, 9, 13, 14, 15, 17, 18, 20, 21, 23, 27, 28, 30, 41, 42, 45, 48, 49, 51, 55,
 			   56, 58]
-		lst = range(72)
 		self.convert_sql_query_to_attributes(["0" for x in lst], c, files_dict, analyze, lst)

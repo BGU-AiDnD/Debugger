@@ -1,6 +1,6 @@
 __author__ = 'amir'
 
-from wekaMethods.articles import *
+from feature_engineering.articles import *
 #from wekaMethods.articles import sqlToAttributes
 
 class process:

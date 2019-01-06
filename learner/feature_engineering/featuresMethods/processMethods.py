@@ -1,7 +1,7 @@
 __author__ = 'amir'
 
-from wekaMethods.articles import *
-import wekaMethods.articles
+from feature_engineering.articles import *
+import feature_engineering.articles
 import featureExtractorBase
 
 class processMethods(featureExtractorBase.FeatureExtractorBase):

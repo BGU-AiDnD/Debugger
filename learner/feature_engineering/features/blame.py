@@ -1,12 +1,11 @@
 __author__ = 'amir'
 
-from wekaMethods.articles import *
-import wekaMethods.articles
-import featureExtractorBase
-
+from feature_engineering.articles import *
+import feature_engineering.articles
+#from wekaMethods.articles import sqlToAttributes
 best_features=[1,3,5,6,7,8,12,14,15,17,21,22,23,27,32,34,36,37,43,44,45,47,49,50,52,56,57,58,62,64,67,69,71,72,78,88]
 
-class blameMethods(featureExtractorBase.FeatureExtractorBase):
+class blame:
     def get_attributesOld(self):
         return [("diff_commits" , "NUMERIC") ,("diff_commits_lastver" , "NUMERIC") ,("groups" , "NUMERIC") ,("committers" , "NUMERIC") ,
     ("avg_date" , "NUMERIC") ,("median_date" , "NUMERIC" ) ,("max_date" , "NUMERIC") ,("numBlobs" , "NUMERIC") ,("numPatchs" , "NUMERIC") ,("numCommits" , "NUMERIC" )
@@ -14,7 +13,7 @@ class blameMethods(featureExtractorBase.FeatureExtractorBase):
 
     def get_featuresOld(self, c, files_dict,prev_date,start_date,end_date):
         blame='select name ,diff_commits  ,diff_commits_lastver  ,groups   ,committers  ,julianday("'+ str(start_date)+'")-julianday(avg_date)  ,julianday("'+ str(start_date)+'")-julianday(median_date)   ,julianday("'+ str(start_date)+'")-julianday(max_date)  ,numBlobs  , numPatchs  ,numCommits    from blame group by name'
-        wekaMethods.articles.sqlToAttributes(["0","0","0","0","0","0","0","0","0","0"], c, files_dict, blame)
+        feature_engineering.articles.sqlToAttributes(["0", "0", "0", "0", "0", "0", "0", "0", "0", "0"], c, files_dict, blame)
 
     def get_attributes(self):
         all= [("diff_commits" ,"NUMERIC") ,("diff_commits_lastver" ,"NUMERIC") ,("diff_commitsApproved" ,"NUMERIC") ,("diff_commits_lastverApproved" ,"NUMERIC") ,("numBlobs" ,"NUMERIC") ,("numPatchs" ,"NUMERIC") ,("numCommits" ,"NUMERIC") ,
@@ -53,5 +52,5 @@ ones_difftimesApproved , twos_difftimesApproved ,less5_difftimesApproved ,less10
 len_committersApproved ,p01_committersApproved  ,p02_committersApproved  ,p05_committersApproved  ,mx1_committersApproved  ,
 len_groups ,mean_groups ,median_groups ,var_groups ,max_groups ,min_groups ,p01_groups  ,p02_groups  ,p05_groups  ,mx1_groups  ,
 len_groupsApproved ,mean_groupsApproved ,median_groupsApproved ,var_groupsApproved ,max_groupsApproved ,min_groupsApproved ,p01_groupsApproved  ,p02_groupsApproved  ,p05_groupsApproved  ,mx1_groupsApproved   from blameExtends group by name'''
-        wekaMethods.articles.sqlToAttributesBest(["0" for x in best_features], c, files_dict, blame,best_features)
+        feature_engineering.articles.sqlToAttributesBest(["0" for x in best_features], c, files_dict, blame, best_features)
 

@@ -1,21 +1,21 @@
-import wekaMethods.issuesExtract.csv_labels
-import wekaMethods.issuesExtract.github_import
-import wekaMethods.issuesExtract.google_code
-import wekaMethods.issuesExtract.jira_import
-import wekaMethods.issuesExtract.python_bugzilla
-import wekaMethods.issuesExtract.sourceforge
+import feature_engineering.issuesExtract.csv_labels
+import feature_engineering.issuesExtract.github_import
+import feature_engineering.issuesExtract.google_code
+import feature_engineering.issuesExtract.jira_import
+import feature_engineering.issuesExtract.python_bugzilla
+import feature_engineering.issuesExtract.sourceforge
 
 
 class BugManager(object):
 	"""Runs actions related to bugs issues."""
 
 	ISSUE_TRACKERS_DICT = {
-		"bugzilla": wekaMethods.issuesExtract.python_bugzilla.write_bugs_csv,
-		"jira": wekaMethods.issuesExtract.jira_import.jiraIssues,
-		"github": wekaMethods.issuesExtract.github_import.GithubIssues,
-		"sourceforge": wekaMethods.issuesExtract.sourceforge.write_bugs_csv,
-		"googlecode": wekaMethods.issuesExtract.google_code.write_bugs_csv,
-		"csv_file": wekaMethods.issuesExtract.csv_labels.write_bugs_csv
+		"bugzilla": feature_engineering.issuesExtract.python_bugzilla.write_bugs_csv,
+		"jira": feature_engineering.issuesExtract.jira_import.jiraIssues,
+		"github": feature_engineering.issuesExtract.github_import.GithubIssues,
+		"sourceforge": feature_engineering.issuesExtract.sourceforge.write_bugs_csv,
+		"googlecode": feature_engineering.issuesExtract.google_code.write_bugs_csv,
+		"csv_file": feature_engineering.issuesExtract.csv_labels.write_bugs_csv
 	}
 
 	def __init__(self, logger, configuration):
