@@ -88,7 +88,7 @@ COMPONENTS_QUERIES = {
 PACKAGES = {'Method': ["lastProcessMethods", "simpleProcessArticlesMethods", "simpleProcessAddedMethods"],
             'File': ["haelstead", "methodsArticles", "methodsAdded", "hirarcy", "fieldsArticles", "fieldsAdded",
                      "constructorsArticles", "constructorsAdded", "lastProcess", "simpleProcessArticles",
-                     "simpleProcessAdded", "bugs", "sourceMonitor", "checkStyle", "blame"]}
+                     "simpleProcessAdded", "bugs", "sourceMonitor", "checkStyle"]}
 
 
 def arff_build(attributes, data, description, relation):

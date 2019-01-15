@@ -26,9 +26,9 @@ class Commit(object):
         self._bug_id = bug_id
         self._commit_id = self._git_commit.hexsha
         self._files = get_renamed_files_for_commit(self._git_commit).keys()
-        if self._git_commit.parents:
-            self.commited_files = map(lambda d: (d.a_path, d.renamed, d.new_file, d.deleted_file),
-                                      self._git_commit.tree.diff(self._git_commit.parents[0].tree))
+        # if self._git_commit.parents:
+        #     self.commited_files = map(lambda d: (d.a_path, d.renamed, d.new_file, d.deleted_file),
+        #                               self._git_commit.tree.diff(self._git_commit.parents[0].tree))
 
     def to_list(self):
         return [self._commit_id, str(self._bug_id), ";".join(self._files)]
@@ -246,17 +246,17 @@ def BuildAllOneTimeCommits(git_path, dbPath, JavaDocPath, sourceMonitorFiles, so
         methodData = []
         fieldData = []
         consData = []
-        for doc in docXml.build(JavaDocPath, pathPackCsv.projectPathPacks(git_path)):
-            for classes, all_methods, all_fields, all_cons in doc:
-                classes_data.append(classes)
-                methodData.extend(all_methods)
-                fieldData.extend(all_fields)
-                consData.extend(all_cons)
+        # for doc in docXml.build(JavaDocPath, pathPackCsv.projectPathPacks(git_path)):
+        #     for classes, all_methods, all_fields, all_cons in doc:
+        #         classes_data.append(classes)
+        #         methodData.extend(all_methods)
+        #         fieldData.extend(all_fields)
+        #         consData.extend(all_cons)
         insert_values_into_table(conn, "classes", classes_data)
         insert_values_into_table(conn, "methods", methodData)
         insert_values_into_table(conn, "fields", fieldData)
         insert_values_into_table(conn, "constructors", consData)
-        insert_values_into_table(conn, "blameExtends", blameParse.blameBuild(blamePath, date))
+        # insert_values_into_table(conn, "blameExtends", blameParse.blameBuild(blamePath, date))
         insert_values_into_table(conn, "checkStyleExtends", checkReport.fileRead(checkStyle, False, CodeDir))
         insert_values_into_table(conn, "JAVAfilesFix", source_Monitor.source_files(sourceMonitorFiles))
         insert_values_into_table(conn, "SourcemethodsFix", source_Monitor.source_methods(sourceMonitorMethods))

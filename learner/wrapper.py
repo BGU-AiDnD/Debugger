@@ -174,8 +174,15 @@ def Extract_complexity_features():
         run_commands = ["java", "-jar", utilsConf.get_configuration().checkStyle57, "-c", utilsConf.get_configuration().allchecks,"-r",pathRepo,"-f","xml","-o","vers/checkAll/"+version_name+".xml"]
         proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().workingDir))
         processes.append((proc, run_commands))
+        # with open(os.path.join(version_path, "javaFiles.txt"), "wb") as f:
+        #     java_files = []
+        #     for root, _, files in os.walk(pathRepo):
+        #         java_files.extend(map(lambda file_name: utilsConf.to_short_path(os.path.join(root, file_name)) + "\n",
+        #                               filter(lambda file_name: file_name.endswith('.java'), files)))
+        #     f.writelines(java_files)
 
-        blameExecute(version_path, pathRepo, git_version)
+
+        # blameExecute(version_path, pathRepo, git_version)
     for proc, run_commands in processes:
         out, err = proc.communicate()
         if proc.returncode != 0:
@@ -185,7 +192,7 @@ def Extract_complexity_features():
 @utilsConf.marker_decorator(utilsConf.FEATURES_MARKER)
 def featuresExtract():
     Extract_complexity_features()
-    Extract_OO_features_OLD()
+    # Extract_OO_features_OLD()
     wekaMethods.commsSpaces.create(utilsConf.get_configuration().vers_dirs, os.path.join(utilsConf.get_configuration().workingDir, "vers"))
 
 
