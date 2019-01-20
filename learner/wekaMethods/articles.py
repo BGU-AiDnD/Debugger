@@ -446,22 +446,21 @@ class arffGenerator(object):
             return featuresMethodsPacksToClasses(packages)
         assert False
 
-    def BuildWekaModel(self, weka, training, testing, namesCsv, outCsv, name, wekaJar):
+    def BuildWekaModel(self, out_dir):
+        wekaJar = utilsConf.to_short_path(utilsConf.get_configuration().wekaJar)
+        trainingFile, testingFile, NamesFile, outCsv = self.get_files(out_dir)
+        name = "_{0}_{1}".format(self.buggedType, self.granularity)
         algorithm = "weka.classifiers.trees.RandomForest -I 1000 -K 0 -S 1 -num-slots 1 "
-        # os.system("cd /d  "+weka +" & java -Xmx2024m  -cp \"C:\\Program Files\\Weka-3-7\\weka.jar\" weka.Run " +algorithm+ " -x 10 -d .\\model.model -t "+training+" > training"+name+".txt")
         os.system("cd /d  " + utilsConf.to_short_path(
             utilsConf.get_configuration().weka_path) + " & java -Xmx2024m  -cp " + utilsConf.to_short_path(
-            wekaJar) + " weka.Run " + algorithm + " -x 10 -d .\\model.model -t " + training + " > training" + name + ".txt")
-        # run_commands = ['java', '-Xmx2024m',  '-cp', wekaJar, 'weka.Run', algorithm, '-x', '10', '-d', '.\\model.model', 't']
-        # proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(weka))
-        # proc.communicate()
+            wekaJar) + " weka.Run " + algorithm + " -x 10 -d .\\model.model -t " + trainingFile + " > training" + name + ".txt")
         algorithm = "weka.classifiers.trees.RandomForest "
         os.system("cd /d  " + utilsConf.to_short_path(
             utilsConf.get_configuration().weka_path) + " & java -Xmx2024m  -cp " + utilsConf.to_short_path(
-            wekaJar) + " weka.Run " + algorithm + " -l .\\model.model -T " + testing + " -classifications \"weka.classifiers.evaluation.output.prediction.CSV -file testing" + name + ".csv\" ")
+            wekaJar) + " weka.Run " + algorithm + " -l .\\model.model -T " + testingFile + " -classifications \"weka.classifiers.evaluation.output.prediction.CSV -file testing" + name + ".csv\" ")
         os.system("cd /d  " + utilsConf.to_short_path(
             utilsConf.get_configuration().weka_path) + " & java -Xmx2024m  -cp " + utilsConf.to_short_path(
-            wekaJar) + " weka.Run " + algorithm + " -l .\\model.model -T " + testing + " > testing" + name + ".txt ")
+            wekaJar) + " weka.Run " + algorithm + " -l .\\model.model -T " + testingFile + " > testing" + name + ".txt ")
         wekaCsv = os.path.join(utilsConf.to_short_path(utilsConf.get_configuration().weka_path),
                                "testing" + name + ".csv")
-        wekaAccuracy.priorsCreation(namesCsv, wekaCsv, outCsv, "")
+        wekaAccuracy.priorsCreation(NamesFile, wekaCsv, outCsv, "")

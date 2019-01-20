@@ -218,7 +218,12 @@ def createBuildMLModels():
             print buggedType, granularity
             generator = wekaMethods.articles.arffGenerator(buggedType, granularity)
             generator.generate_features(utilsConf.get_configuration().weka_path, packages)
+            generator.BuildWekaModel(utilsConf.get_configuration().weka_path)
     # generate all but one files
+    # ml_all_one()
+
+
+def ml_all_one():
     for granularity in wekaMethods.articles.BUG_QUERIES:
         packages = wekaMethods.articles.PACKAGES[granularity]
         for buggedType in wekaMethods.articles.BUG_QUERIES[granularity]:
@@ -230,7 +235,7 @@ def createBuildMLModels():
                 all_feature_dir = os.path.join(utilsConf.get_configuration().all_but_one_dir, packages[ind])
                 mkOneDir(all_feature_dir)
                 generator.generate_features(one_feature_dir, [packages[ind]])
-                generator.generate_features(all_feature_dir, packages[:ind] + packages[ind+1:])
+                generator.generate_features(all_feature_dir, packages[:ind] + packages[ind + 1:])
 
 
 def weka_csv_to_readable_csv(weka_csv, prediction_csv):
