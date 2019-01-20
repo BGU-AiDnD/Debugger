@@ -465,6 +465,7 @@ def create_experiment(test_runner, num_instances=50, tests_per_instance=50, bug_
 @utilsConf.marker_decorator(utilsConf.ALL_DONE_FILE)
 def wrapperAll():
     wrapperLearner()
+    executeTests()
     # create_experiment(executeTests())
 
 
