@@ -477,11 +477,13 @@ def wrapperAll():
 if __name__ == '__main__':
     csv.field_size_limit(sys.maxint)
     utilsConf.configure(sys.argv[1])
-    # if not os.path.exists(utilsConf.get_configuration().configuration_path):
-    #     shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
-    # check_distribution()
-    # if utilsConf.copy_from_cache() is not None:
-    #     exit()
+    if not os.path.exists(utilsConf.get_configuration().configuration_path):
+        try:
+            shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
+        except:
+            pass
+    if utilsConf.copy_from_cache() is not None:
+        exit()
     if len(sys.argv) == 2:
         wrapperAll()
         utilsConf.export_to_cache()
