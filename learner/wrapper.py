@@ -482,8 +482,7 @@ if __name__ == '__main__':
             shutil.copyfile(sys.argv[1], utilsConf.get_configuration().configuration_path)
         except:
             pass
-    if utilsConf.copy_from_cache() is not None:
-        exit()
+    utilsConf.copy_from_cache()
     if len(sys.argv) == 2:
         wrapperAll()
         utilsConf.export_to_cache()
