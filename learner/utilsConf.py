@@ -171,8 +171,11 @@ def configure(confFile):
     vers_dirs = map(version_to_dir_name, vers)
     vers_paths = map(lambda ver: os.path.join(versPath, ver), vers_dirs)
     LocalGitPath = to_short_path(os.path.join(workingDir, "repo"))
-    prediction_files = {'files': {'all': 'prediction_All_files.csv', 'most': 'prediction_Most_files.csv'},
-                   'methods': {'all': 'prediction_All_methods.csv', 'most': 'prediction_Most_methods.csv'}}
+    prediction_files = {}
+    for buggedType in ["Method", "File"]:
+        for granularity in ["All", "Most"]:
+            prediction_files[buggedType][granularity] = "prediction_{buggedType}_{GRANULARITY}.csv".format(buggedType=buggedType,
+                                                                                     GRANULARITY=granularity)
     mkOneDir(LocalGitPath)
     weka_path = to_short_path(os.path.join(workingDir, "weka"))
     web_prediction_results = to_short_path(os.path.join(workingDir, "web_prediction_results"))
