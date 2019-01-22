@@ -104,3 +104,4 @@ fabric.properties
 jcov_runner/result.xml
 jcov_runner/template.xml
 jcov_runner/report/
+learner/tmp_files/stdout_duplication/tmp_file.txt

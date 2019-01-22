@@ -8,7 +8,7 @@ import shutil
 import xml.etree.ElementTree
 import tempfile
 from contextlib import contextmanager
-from mvnpy import Repo
+from mvnpy.Repo import Repo
 
 SURFIRE_DIR_NAME = 'surefire-reports'
 OBSERVE_PATH = r"c:\temp\observe"
@@ -149,8 +149,8 @@ class TestRunner(object):
         import tempfile
         import shutil
         temp_dir = tempfile.mkdtemp()
-        self.traces = repo.run_under_jcov(temp_dir, False)
-        self.observations = repo.observe_tests()
+        self.traces = self.repo.run_under_jcov(temp_dir, False)
+        self.observations = self.repo.observe_tests()
         shutil.rmtree(temp_dir)
         # with self.tracer.trace():
         #     self.run_mvn()
