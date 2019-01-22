@@ -174,6 +174,7 @@ def configure(confFile):
     prediction_files = {}
     for buggedType in ["Method", "File"]:
         for granularity in ["All", "Most"]:
+            prediction_files.setdefault(buggedType, {})
             prediction_files[buggedType][granularity] = "prediction_{buggedType}_{GRANULARITY}.csv".format(buggedType=buggedType,
                                                                                      GRANULARITY=granularity)
     mkOneDir(LocalGitPath)
