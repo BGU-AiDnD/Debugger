@@ -175,7 +175,7 @@ def configure(confFile):
     for buggedType in ["Method", "File"]:
         for granularity in ["All", "Most"]:
             prediction_files.setdefault(buggedType, {})
-            prediction_files[buggedType][granularity] = "prediction_{buggedType}_{GRANULARITY}.csv".format(buggedType=buggedType,
+            prediction_files[buggedType][granularity] = "prediction_{GRANULARITY}_{buggedType}.csv".format(buggedType=buggedType,
                                                                                      GRANULARITY=granularity)
     mkOneDir(LocalGitPath)
     weka_path = to_short_path(os.path.join(workingDir, "weka"))
@@ -378,6 +378,7 @@ def marker_decorator(marker):
     """
     def decorator(func):
         def f(*args, **kwargs):
+            print "started {0}".format(func.func_name)
             ans = None
             if not get_configuration().get_marker(marker).is_done():
                 get_configuration().get_marker(marker).start()
