@@ -489,5 +489,6 @@ if __name__ == '__main__':
         utilsConf.export_to_cache()
     elif sys.argv[2] == "learn":
         wrapperLearner()
-    elif sys.argv[2] == "experiments":
+    elif sys.argv[2] == "executeTests":
+        executeTests()
         pass
