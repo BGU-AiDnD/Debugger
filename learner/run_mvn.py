@@ -8,6 +8,7 @@ import shutil
 import xml.etree.ElementTree
 import tempfile
 from contextlib import contextmanager
+from mvnpy import Repo
 
 SURFIRE_DIR_NAME = 'surefire-reports'
 OBSERVE_PATH = r"c:\temp\observe"
@@ -18,7 +19,7 @@ class Test(object):
         self.junit_test = junit_test
         self.classname = junit_test.classname
         self.name = junit_test.name
-        self.full_name = "{classname}@{name}".format(classname=self.classname, name=self.name).lower()
+        self.full_name = "{classname}.{name}".format(classname=self.classname, name=self.name).lower()
         result = 'pass'
         if type(junit_test.result) is Error:
             result = 'error'
@@ -137,16 +138,24 @@ class AmirTracer(Tracer):
 class TestRunner(object):
     def __init__(self, git_path, tracer=None):
         self.git_path = git_path
+        self.repo = Repo(self.git_path)
         if tracer is None:
             tracer = Tracer()
         self.tracer = tracer
         self.observations = {}
+        self.traces = {}
 
     def run(self):
-        with self.tracer.trace():
-            self.run_mvn()
-            pass
-        self.observations = self.observe_tests()
+        import tempfile
+        import shutil
+        temp_dir = tempfile.mkdtemp()
+        self.traces = repo.run_under_jcov(temp_dir, False)
+        self.observations = repo.observe_tests()
+        shutil.rmtree(temp_dir)
+        # with self.tracer.trace():
+        #     self.run_mvn()
+        #     pass
+        # self.observations = self.observe_tests()
 
     def run_mvn(self):
         os.system(r'mvn install -fn  -f {0}'.format(self.git_path))
@@ -171,7 +180,7 @@ class TestRunner(object):
         return surefire_files
 
     def get_tests(self):
-        return set(self.tracer.traces.keys()) & set(self.observations.keys())
+        return set(self.traces.keys()) & set(self.observations.keys())
 
     def get_packages_tests(self):
         packages_tests = {}

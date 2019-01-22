@@ -1,3 +1,6 @@
 [submodule "Debugger_cache"]
 	path = Debugger_cache
 	url = https://github.com/amir9979/Debugger_cache.git
+[submodule "learner/mvnpy"]
+	path = learner/mvnpy
+	url = https://github.com/rotba/mvnpy.git
