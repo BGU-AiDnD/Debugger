@@ -161,6 +161,7 @@ def get_arff_class(dbpath, start_date, end_date, bug_query, component_query):
 
 def arffCreateForTag(dbpath, prev_date, start_date, end_date, objects, bug_query, component_query):
     conn = sqlite3.connect(dbpath)
+    print dbpath
     conn.text_factory = str
     c = conn.cursor()
     files_dict = {}

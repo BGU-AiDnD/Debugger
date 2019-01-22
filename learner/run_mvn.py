@@ -63,8 +63,10 @@ class Tracer(object):
     def trace(self):
         yield
 
+
 class JcovTracer(object):
     pass
+
 
 class AmirTracer(Tracer):
     def __init__(self, git_path, tracer_path, copy_traces_to):
