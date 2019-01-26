@@ -9,6 +9,8 @@ import xml.etree.ElementTree
 import tempfile
 from contextlib import contextmanager
 from mvnpy.Repo import Repo
+from mvnpy.jcov_parser import JcovParser
+import utilsConf
 
 SURFIRE_DIR_NAME = 'surefire-reports'
 OBSERVE_PATH = r"c:\temp\observe"
@@ -135,13 +137,16 @@ class AmirTracer(Tracer):
                 self.traces[test_name] = Trace(test_name, map(lambda line: line.strip().split()[2].strip(), f.readlines()))
 
 
+# @utilsConf.marker_decorator(utilsConf.INSTRUMENTATION_MARKER)
+def instrument_running(mvn_repo, out_traces):
+    mvn_repo.run_under_jcov(out_traces, False)
+
+
 class TestRunner(object):
-    def __init__(self, git_path, tracer=None):
+    def __init__(self, git_path, out_traces):
         self.git_path = git_path
         self.repo = Repo(self.git_path)
-        if tracer is None:
-            tracer = Tracer()
-        self.tracer = tracer
+        self.out_traces = out_traces
         self.observations = {}
         self.traces = {}
 
@@ -149,35 +154,10 @@ class TestRunner(object):
         import tempfile
         import shutil
         temp_dir = tempfile.mkdtemp()
-        self.traces = self.repo.run_under_jcov(temp_dir, False)
+        instrument_running(self.repo, self.out_traces)
+        self.traces = JcovParser(self.out_traces).parse()
         self.observations = self.repo.observe_tests()
         shutil.rmtree(temp_dir)
-        # with self.tracer.trace():
-        #     self.run_mvn()
-        #     pass
-        # self.observations = self.observe_tests()
-
-    def run_mvn(self):
-        os.system(r'mvn install -fn  -f {0}'.format(self.git_path))
-
-    def observe_tests(self):
-        outcomes = {}
-        for report in self.get_surefire_files():
-            try:
-                for case in JUnitXml.fromfile(report):
-                    test = Test(case)
-                    outcomes[test.full_name] = test
-            except:
-                pass
-        return outcomes
-
-    def get_surefire_files(self):
-        surefire_files = []
-        for root, _, files in os.walk(self.git_path):
-            for name in files:
-                if name.endswith('.xml') and os.path.basename(root) == SURFIRE_DIR_NAME:
-                    surefire_files.append(os.path.join(root, name))
-        return surefire_files
 
     def get_tests(self):
         return set(self.traces.keys()) & set(self.observations.keys())

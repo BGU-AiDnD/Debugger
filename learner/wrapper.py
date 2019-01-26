@@ -293,10 +293,10 @@ def save_json_watchers(precidtion_csv):
         f.write(json.dumps([packges]))
 
 
-@utilsConf.marker_decorator(utilsConf.VERSION_TEST_MARKER)
+# @utilsConf.marker_decorator(utilsConf.VERSION_TEST_MARKER)
 def test_version_create():
     src = os.path.join(utilsConf.get_configuration().workingDir,"vers", utilsConf.get_configuration().vers_dirs[-2], "repo")
-    dst = os.path.join(utilsConf.get_configuration().workingDir,"testedVer", "repo")
+    dst = os.path.join(utilsConf.get_configuration().workingDir,"version_to_test_trace", "repo")
     if not os.path.exists(dst):
         shutil.copytree(src, dst)
 
@@ -307,11 +307,9 @@ def clean(versPath,LocalGitPath):
 
 
 def create_web_prediction_results():
-    for granularity in wekaMethods.articles.BUG_QUERIES:
-        for buggedType in wekaMethods.articles.BUG_QUERIES[granularity]:
+    for buggedType in utilsConf.get_configuration().prediction_files:
+        for granularity in utilsConf.get_configuration().prediction_files[buggedType]:
             weka_csv = os.path.join(utilsConf.get_configuration().weka_path, "{buggedType}_out_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
-            if not os.path.exists(weka_csv):
-                continue
             prediction_csv = os.path.join(utilsConf.get_configuration().web_prediction_results,
                                           utilsConf.get_configuration().prediction_files[buggedType][granularity])
             weka_csv_to_readable_csv(weka_csv, prediction_csv)
@@ -388,7 +386,7 @@ def check_distribution():
             writer.writerows(rows_all_versions)
 
 
-@utilsConf.marker_decorator(utilsConf.LEARNER_PHASE_FILE)
+# @utilsConf.marker_decorator(utilsConf.LEARNER_PHASE_FILE)
 def wrapperLearner():
     # NLP.commits.data_to_csv(os.path.join(workingDir, "NLP_data.csv"), gitPath, bugsPath)
     wekaMethods.patchsBuild.labeling()
@@ -409,15 +407,16 @@ def load_prediction_file(prediction_path):
     return predictions
 
 
-@utilsConf.marker_decorator(utilsConf.EXECUTE_TESTS)
+# @utilsConf.marker_decorator(utilsConf.EXECUTE_TESTS)
 def executeTests():
     web_prediction_results = utilsConf.get_configuration().web_prediction_results
     matrix_path = os.path.join(web_prediction_results, "matrix_{0}_{1}.matrix")
     outcomes_path = os.path.join(web_prediction_results, "outcomes.json")
     diagnoses_path = os.path.join(web_prediction_results, "diagnosis_{0}_{1}.matrix")
     diagnoses_json_path = os.path.join(web_prediction_results, "diagnosis_{0}_{1}.json")
-    tested_repo = utilsConf.to_short_path(os.path.join(utilsConf.get_configuration().workingDir, "testedVer", "repo"))
-    test_runner = TestRunner(tested_repo, AmirTracer(tested_repo, utilsConf.get_configuration().amir_tracer, utilsConf.get_configuration().DebuggerTests))
+    tested_repo = utilsConf.to_short_path(os.path.join(utilsConf.get_configuration().workingDir, "version_to_test_trace", "repo"))
+    utilsConf.open_subprocess(["git", "-C", tested_repo, 'checkout', '--', '.'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).communicate()
+    test_runner = TestRunner(tested_repo, utilsConf.get_configuration().traces_dir)
     test_runner.run()
     tests = test_runner.get_tests()
     json_observations = map(lambda test: test_runner.observations[test].as_dict(), tests)
@@ -468,7 +467,7 @@ def create_experiment(test_runner, num_instances=50, tests_per_instance=50, bug_
                 f.write(json.dumps(results))
 
 
-@utilsConf.marker_decorator(utilsConf.ALL_DONE_FILE)
+# @utilsConf.marker_decorator(utilsConf.ALL_DONE_FILE)
 def wrapperAll():
     wrapperLearner()
     executeTests()
@@ -484,6 +483,8 @@ if __name__ == '__main__':
         except:
             pass
     # utilsConf.copy_from_cache()
+    if len(utilsConf.get_configuration().vers) < 3 :
+        exit()
     if len(sys.argv) == 2:
         wrapperAll()
         utilsConf.export_to_cache()

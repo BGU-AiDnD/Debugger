@@ -23,6 +23,7 @@ FEATURES_MARKER = "features"
 DB_BUILD_MARKER = "db"
 DB_LABELS_MARKER = "labels"
 ML_MODELS_MARKER = "ml"
+INSTRUMENTATION_MARKER = "instrumentation"
 COMPLEXITY_FEATURES_MARKER = "complexity_features"
 OO_OLD_FEATURES_MARKER = "old_oo_features"
 OO_FEATURES_MARKER = "oo_features"
@@ -172,8 +173,8 @@ def configure(confFile):
     vers_paths = map(lambda ver: os.path.join(versPath, ver), vers_dirs)
     LocalGitPath = to_short_path(os.path.join(workingDir, "repo"))
     prediction_files = {}
-    for buggedType in ["Method", "File"]:
-        for granularity in ["All", "Most"]:
+    for granularity in ["Method", "File"]:
+        for buggedType in ["All", "Most"]:
             prediction_files.setdefault(buggedType, {})
             prediction_files[buggedType][granularity] = "prediction_{GRANULARITY}_{buggedType}.csv".format(buggedType=buggedType,
                                                                                      GRANULARITY=granularity)
@@ -186,6 +187,8 @@ def configure(confFile):
     MethodsParsed = to_short_path(os.path.join(os.path.join(workingDir, "commitsFiles"), "CheckStyle.txt"))
     changeFile = to_short_path(os.path.join(os.path.join(workingDir, "commitsFiles"), "Ins_dels.txt"))
     learning_dir = os.path.join(workingDir, "learning")
+    traces_dir = os.path.join(workingDir, "traces")
+    mkOneDir(traces_dir)
     all_but_one_dir = os.path.join(learning_dir, "AllbutOne")
     one_dir = os.path.join(learning_dir, "One")
     debugger_base_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -266,7 +269,7 @@ def mkOneDir(dir):
 def Mkdirs(workingDir):
     mkOneDir(workingDir)
     map(lambda dir_name: mkOneDir(os.path.join(workingDir, dir_name)), ["", "vers", "experiments", "experiments_known",
-                                                                        "dbAdd", "testedVer", "weka", "web_prediction_results", "markers", "DebuggerTests", "learning"])
+                                                                        "dbAdd", "version_to_test_trace", "weka", "web_prediction_results", "markers", "DebuggerTests", "learning"])
     versPath=os.path.join(workingDir,"vers")
     learning = os.path.join(workingDir,"learning")
     mkOneDir(os.path.join(learning, "AllbutOne"))
