@@ -417,7 +417,7 @@ def executeTests():
         for bugged_type in utilsConf.get_configuration().prediction_files[granularity]:
             components_priors = get_components_probabilities(bugged_type, granularity, test_runner, tests)
             tests_details = map(
-                lambda test_name: (test_name, list(set(test_runner.tracer.traces[test_name].get_trace(granularity)) & set(components_priors.keys())),
+                lambda test_name: (test_name, list(set(test_runner.traces[test_name].get_trace(granularity)) & set(components_priors.keys())),
                                    test_runner.observations[test_name].get_observation()),
                 tests)
             matrix = matrix_path.format(granularity, bugged_type)
