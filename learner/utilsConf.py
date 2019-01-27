@@ -116,9 +116,14 @@ def checkout_local_git(gitPath, workingDir):
     (out, err) = proc.communicate()
 
 
-def versionsCreate(gitPath, vers, versPath):
+def versionsCreate(gitPath, vers, versPath, workingDir, vers_dirs):
     CopyDirs(gitPath, versPath, vers)
     GitRevert(versPath, vers)
+    src = os.path.join(versPath, vers_dirs[-2], "repo")
+    dst = os.path.join(workingDir,"version_to_test_trace", "repo")
+    if not os.path.exists(dst):
+        shutil.copytree(src, dst)
+
 
 
 def git_file_path_to_java_name(file_path):
@@ -150,6 +155,14 @@ def download_bugs(bugsPath, issue_tracker_url, issue_tracker_product, issue_trac
         wekaMethods.issuesExtract.google_code.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
     elif issue_tracker == "csv_file":
         wekaMethods.issuesExtract.csv_labels.write_bugs_csv(bugsPath, issue_tracker_url, issue_tracker_product)
+
+
+def test_version_create():
+    src = os.path.join(get_configuration().workingDir,"vers", get_configuration().vers_dirs[-2], "repo")
+    dst = os.path.join(get_configuration().workingDir,"version_to_test_trace", "repo")
+    if not os.path.exists(dst):
+        shutil.copytree(src, dst)
+
 
 def configure(confFile):
     full_configure_file, gitPath, issue_tracker, issue_tracker_product, issue_tracker_url, versions, workingDir = read_configuration(confFile)
@@ -222,7 +235,7 @@ def configure(confFile):
     Mkdirs(workingDir)
     download_bugs(bugsPath, issue_tracker_url, issue_tracker_product, issue_tracker)
     checkout_local_git(gitPath,workingDir)
-    versionsCreate(gitPath, vers, versPath)
+    versionsCreate(gitPath, vers, versPath, workingDir, vers_dirs)
 
 def fix_renamed_file(file_name):
     return detect_renamed_files.fix_renamed_file(file_name, get_configuration().renamed_files)

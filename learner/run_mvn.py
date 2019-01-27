@@ -137,7 +137,7 @@ class AmirTracer(Tracer):
                 self.traces[test_name] = Trace(test_name, map(lambda line: line.strip().split()[2].strip(), f.readlines()))
 
 
-# @utilsConf.marker_decorator(utilsConf.INSTRUMENTATION_MARKER)
+@utilsConf.marker_decorator(utilsConf.INSTRUMENTATION_MARKER)
 def instrument_running(mvn_repo, out_traces):
     mvn_repo.run_under_jcov(out_traces, False)
 
