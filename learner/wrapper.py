@@ -441,7 +441,7 @@ def get_components_probabilities(bugged_type, granularity, test_runner, tests):
             map(lambda line: (line[0].replace(".java", "").replace(os.path.sep, ".").lower().replace('$', '@'), line[1]), lines))
     components_priors = {}
     for component in set(
-            reduce(list.__add__, map(lambda test_name: test_runner.tracer.traces[test_name].get_trace(granularity), tests), [])):
+            reduce(list.__add__, map(lambda test_name: test_runner.traces[test_name].get_trace(granularity), tests), [])):
         for prediction in predictions:
             if prediction.endswith(component):
                 components_priors[component] = max(float(predictions[prediction]), 0.01)
