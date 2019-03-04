@@ -91,7 +91,7 @@ class ExperimentGenerator(object):
     def get_components_probabilities(bugged_type, granularity, test_runner, tests):
         predictions = {}
         with open(os.path.join(utilsConf.get_configuration().web_prediction_results,
-                               utilsConf.get_configuration().prediction_files[granularity][bugged_type])) as f:
+                               utilsConf.get_configuration().prediction_files[bugged_type][granularity])) as f:
             lines = list(csv.reader(f))[1:]
             predictions = dict(
                 map(lambda line: (

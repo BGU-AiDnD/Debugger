@@ -46,30 +46,21 @@ def getRates(modelFile):
     return float(tp),float(fp)
 
 
-def priorsCreation(namesFile, wekaOutFile, outFile, modelFile):
+def priorsCreation(namesFile, wekaOutFile, outFile):
     names=[["FileName"]]+[x for x in csv.reader(open(namesFile,"r"))]
     weka=[x for x in csv.reader(open(wekaOutFile,"r"))]
     writer=csv.writer(open(outFile,"wb"))
     both=[]
-    if modelFile=="":
-        i=0
-        for a,b in zip(names,weka):
-            if(i==0):
-                both.append(a+b)
-            else:
-                if (b[2]=="2:no") or (b[2]=="2:valid"):
-                    both.append(a+b[:4]+[str(1-float(b[4]))])
-                else:
-                    both.append(a+b[:4]+[str(float(b[4]))])
-            i=i+1
-    else:
-        tp,fp=getRates(modelFile)
-        for a,b in  zip(names,weka):
-            if b[2]=="2:valid":
-                b[4]=fp
-            if b[2]=="1:bugged":
-                b[4]=tp
+    i=0
+    for a,b in zip(names,weka):
+        if(i==0):
             both.append(a+b)
+        else:
+            if (b[2]=="2:no") or (b[2]=="2:valid"):
+                both.append(a+b[:4]+[str(1-float(b[4]))])
+            else:
+                both.append(a+b[:4]+[str(float(b[4]))])
+        i=i+1
     writer.writerows(both)
 
 

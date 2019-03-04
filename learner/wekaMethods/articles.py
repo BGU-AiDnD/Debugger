@@ -464,4 +464,4 @@ class arffGenerator(object):
             wekaJar) + " weka.Run " + algorithm + " -l .\\model.model -T " + testingFile + " > testing" + name + ".txt ")
         wekaCsv = os.path.join(utilsConf.to_short_path(utilsConf.get_configuration().weka_path),
                                "testing" + name + ".csv")
-        wekaAccuracy.priorsCreation(NamesFile, wekaCsv, outCsv, "")
+        wekaAccuracy.priorsCreation(NamesFile, wekaCsv, outCsv)

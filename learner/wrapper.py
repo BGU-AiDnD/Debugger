@@ -207,7 +207,7 @@ def BuildWekaModel(weka, training, testing, namesCsv, outCsv, name, wekaJar):
     os.system("cd /d  "+ utilsConf.to_short_path(weka) +" & java -Xmx2024m  -cp "+ utilsConf.to_short_path(wekaJar) +" weka.Run " +algorithm+ " -l .\\model.model -T "+testing+" -classifications \"weka.classifiers.evaluation.output.prediction.CSV -file testing"+name+".csv\" ")
     os.system("cd /d  "+ utilsConf.to_short_path(weka) +" & java -Xmx2024m  -cp "+ utilsConf.to_short_path(wekaJar) +" weka.Run " +algorithm+ " -l .\\model.model -T "+testing+" > testing"+name+".txt ")
     wekaCsv = os.path.join(utilsConf.to_short_path(weka), "testing"+name+".csv")
-    wekaMethods.wekaAccuracy.priorsCreation(namesCsv, wekaCsv, outCsv, "")
+    wekaMethods.wekaAccuracy.priorsCreation(namesCsv, wekaCsv, outCsv)
 
 
 @utilsConf.marker_decorator(utilsConf.ML_MODELS_MARKER)
@@ -398,7 +398,7 @@ def load_prediction_file(prediction_path):
     return predictions
 
 
-@utilsConf.marker_decorator(utilsConf.EXECUTE_TESTS)
+# @utilsConf.marker_decorator(utilsConf.EXECUTE_TESTS)
 def executeTests():
     web_prediction_results = utilsConf.get_configuration().web_prediction_results
     matrix_path = os.path.join(web_prediction_results, "matrix_{0}_{1}.matrix")
@@ -413,8 +413,8 @@ def executeTests():
     json_observations = map(lambda test: test_runner.observations[test].as_dict(), tests)
     with open(outcomes_path, "wb") as f:
         f.write(json.dumps(json_observations))
-    for granularity in utilsConf.get_configuration().prediction_files:
-        for bugged_type in utilsConf.get_configuration().prediction_files[granularity]:
+    for bugged_type in utilsConf.get_configuration().prediction_files:
+        for granularity in utilsConf.get_configuration().prediction_files[bugged_type]:
             components_priors = get_components_probabilities(bugged_type, granularity, test_runner, tests)
             tests_details = map(
                 lambda test_name: (test_name, list(set(test_runner.traces[test_name].get_trace(granularity)) & set(components_priors.keys())),
@@ -435,30 +435,30 @@ def executeTests():
 
 def get_components_probabilities(bugged_type, granularity, test_runner, tests):
     predictions = {}
-    with open(os.path.join(utilsConf.get_configuration().web_prediction_results, utilsConf.get_configuration().prediction_files[granularity][bugged_type])) as f:
+    with open(os.path.join(utilsConf.get_configuration().web_prediction_results, utilsConf.get_configuration().prediction_files[bugged_type][granularity])) as f:
         lines = list(csv.reader(f))[1:]
         predictions = dict(
-            map(lambda line: (line[0].replace(".java", "").replace(os.path.sep, ".").lower().replace('$', '@'), line[1]), lines))
+            map(lambda line: (line[0].replace(".java", "").replace(os.path.sep, ".").lower().replace('$', '.'), line[1]), lines))
     components_priors = {}
     for component in set(
             reduce(list.__add__, map(lambda test_name: test_runner.traces[test_name].get_trace(granularity), tests), [])):
         for prediction in predictions:
-            if prediction.endswith(component):
+            if prediction.endswith(component.split('(')[0]):
                 components_priors[component] = max(float(predictions[prediction]), 0.01)
     return components_priors
 
 
 def create_experiment(test_runner, num_instances=50, tests_per_instance=50, bug_passing_probability=0.05):
     results_path = os.path.join(utilsConf.get_configuration().experiments, "{GRANULARITY}_{BUGGED_TYPE}")
-    for granularity in utilsConf.get_configuration().prediction_files:
-        for bugged_type in utilsConf.get_configuration().prediction_files[granularity]:
+    for bugged_type in utilsConf.get_configuration().prediction_files:
+        for granularity in utilsConf.get_configuration().prediction_files[bugged_type]:
             eg = ExperimentGenerator(test_runner, granularity, bugged_type, num_instances, tests_per_instance, bug_passing_probability)
             results = eg.create_instances()
             with open(results_path.format(GRANULARITY=granularity, BUGGED_TYPE=bugged_type), 'wb') as f:
                 f.write(json.dumps(results))
 
 
-@utilsConf.marker_decorator(utilsConf.ALL_DONE_FILE)
+# @utilsConf.marker_decorator(utilsConf.ALL_DONE_FILE)
 def wrapperAll():
     wrapperLearner()
     executeTests()
