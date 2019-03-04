@@ -273,7 +273,7 @@ def calc_all_probabilities(package, reduce_function):
     if '_probability' not in package:
         sub_probabilities = [0.0]
         if '_files' in package:
-            files_probabilities = map(lambda x: package['_files'][x]['_probability'], package['_files'].keys())
+            files_probabilities = map(lambda x: round(package['_files'][x]['_probability'], 2), package['_files'].keys())
             sub_probabilities.extend(files_probabilities)
         if '_sub_packages' in package:
             sub_packages_probabilites = map(lambda x: calc_all_probabilities(x, reduce_function), package['_sub_packages'])
@@ -425,7 +425,7 @@ def executeTests():
                                 priors=components_priors)
             inst = readPlanningFile(matrix)
             inst.diagnose()
-            named_diagnoses = sorted(inst.get_named_diagnoses(), key=lambda d: d.probability, reverse=True)
+            named_diagnoses = sorted(inst.get_named_diagnoses(), key=lambda d: round(d.probability, 2), reverse=True)
             with open(diagnoses_path.format(granularity, bugged_type), "wb") as diagnosis_file:
                 diagnosis_file.writelines("\n".join(map(lambda d: repr(d), named_diagnoses)))
             with open(diagnoses_json_path.format(granularity, bugged_type), "wb") as diagnosis_json:
