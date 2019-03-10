@@ -124,8 +124,8 @@ class CommentFilter:
         return ""
 
 
-def commLines(file="C:\GitHub\\try\org.eclipse.cdt\core\org.eclipse.cdt.core.linux\src\org\eclipse\cdt\internal\core\linux\ProcessList.java"):
-    with open(file, 'r') as f:
+def commLines(path):
+    with open(path, 'r') as f:
             source = f.read().splitlines()
             (regularLines, comments) = CommentFilter().filterComments(source)
             commentsLines=[]

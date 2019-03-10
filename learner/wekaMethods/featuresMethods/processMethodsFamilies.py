@@ -97,16 +97,21 @@ class processMethodsFamilies(featureExtractorBase.FeatureExtractorBase):
         return ret
 
 
-    def sqlToAttributes(self,basicAtt, c, files_dict, first):
-        Att_dict = {}
-        for f in files_dict.keys():
-            Att_dict[f] = list(basicAtt)
-        for row in c.execute(first):
+    def sqlToAttributes(self, basicAtt, c, files_dict, query):
+        Att_dict = {f: list(basicAtt) for f in files_dict}
+        for row in self.query_data(c, query):
             methodDir = row[0]
-            if (methodDir in Att_dict):
-                Att_dict[methodDir] = list([x if x!=None else 0 for x in row[1:]])
+            if methodDir in Att_dict:
+                Att_dict[methodDir] = map(lambda x: x or 0, row[1:])
+        self.append_values_to_file_dict(Att_dict, files_dict)
+
+    def query_data(self, c, query):
+        print query
+        return list(c.execute(query))
+
+    def append_values_to_file_dict(self, Att_dict, files_dict):
         for f in Att_dict:
-            files_dict[f] = files_dict[f] + Att_dict[f]
+            files_dict[f].extend(Att_dict[f])
 
     def simple_get_features(self, c, files_dict,prev_date,start_date,end_date):
         first='select methodDir, count(*),  sum(insertions),sum(deletions), Sum(case When insertions > 0 Then 1 Else 0 End),Sum(case When deletions > 0 Then 1 Else 0 End),avg(insertions),avg(deletions), avg(case When insertions > 0 Then insertions Else Null End),avg(case When deletions > 0 Then deletions Else Null End),(case When methodDir not like "%test%" Then count(distinct bugId)-1 Else 0 End)  from commitedMethods where commiter_date<="' + str(start_date)+ '"' + '  and commiter_date<="' + str(end_date) + '" group by methodDir'
@@ -232,11 +237,3 @@ class processMethodsFamilies(featureExtractorBase.FeatureExtractorBase):
             self.last_get_features(c, files_dict,prev_date,start_date,end_date)
         if self.family=="bugsMethods":
             self.bugs_get_features(c, files_dict,prev_date,start_date,end_date)
-
-
-
-
-
-
-
-

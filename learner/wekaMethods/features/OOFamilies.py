@@ -13,6 +13,7 @@ methods_features=[23,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54
 fields_features=[124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152]
 hirarcy_features=[1,2,3,4]
 constructors_features=[95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123]
+
 class OOFamilies:
 
 
@@ -128,7 +129,7 @@ class OOFamilies:
 
 
                 ( "len_params", "NUMERIC"),( "sum_params", "NUMERIC"),( "mean_params", "NUMERIC"),( "median_params", "NUMERIC"),
-    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( " ONE_elem_params", ['True','False'])]
+    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( "ONE_elem_params", ['True','False'])]
 
 
     def methodsArticles_attributes(self):
@@ -171,11 +172,11 @@ class OOFamilies:
                         ( "len_all_percent", "NUMERIC"),
     ( "len_all_set_percent", "NUMERIC"),
                 ( "len_params", "NUMERIC"),( "sum_params", "NUMERIC"),( "mean_params", "NUMERIC"),( "median_params", "NUMERIC"),
-    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( " ONE_elem_params", ['True','False'])]
+    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( "ONE_elem_params", ['True','False'])]
 
 
     def hirarcy_attributes(self):
-        return [('degs', 'NUMERIC'), ('degsIN', 'NUMERIC'), ('succ', 'NUMERIC'), ('depth', 'NUMERIC'),('IsInterface',['Interface','class']),('Parent',['Has parent','No parent']), ('exception', ['true', 'false']), ('externalizable', ['true', 'false']), ('abstract', ['true', 'false']), ('error', ['true', 'false']), ('scope', ['public', 'protected', 'private', 'default']),('serializable',['true','false'])]
+        return [('degs', 'NUMERIC'), ('degsIN', 'NUMERIC'), ('succ', 'NUMERIC'), ('depth', 'NUMERIC'),('IsInterface',['Interface','class']),('Parent',['Has_parent','No_parent']), ('exception', ['true', 'false']), ('externalizable', ['true', 'false']), ('abstract', ['true', 'false']), ('error', ['true', 'false']), ('scope', ['public', 'protected', 'private', 'default']),('serializable',['true','false'])]
 
     def fields_attributes(self):
         return [('fields_Count', 'NUMERIC'), ('fields_private_Count', 'NUMERIC'), ('fields_protected_Count', 'NUMERIC'), ('fields_public_Count', 'NUMERIC'), ('fields_not_public_Count', 'NUMERIC'), ('fields_static_Count', 'NUMERIC'), ('fields_final_Count', 'NUMERIC'), ('fields_type_primitive_Count', 'NUMERIC'), ('fields_type_void_Count', 'NUMERIC'), ('fields_type_java_Count', 'NUMERIC'), ('fields_type_all_Count', 'NUMERIC'), ('fields_type_distinct_primitive_Count', 'NUMERIC'), ('fields_type_distinct_void_Count', 'NUMERIC'), ('fields_type_distinct_java_Count', 'NUMERIC'), ('fields_type_distinct_all_Count', 'NUMERIC'), ('fields_percent_private_Count', 'NUMERIC'), ('fields_percent_protected_Count', 'NUMERIC'), ('fields_percent_public_Count', 'NUMERIC'), ('fields_percent_not_public_Count', 'NUMERIC'), ('fields_percent_static_Count', 'NUMERIC'), ('fields_percent_final_Count', 'NUMERIC'), ('fields_percent_type_primitive_Count', 'NUMERIC'), ('fields_percent_type_void_Count', 'NUMERIC'), ('fields_percent_type_java_Count', 'NUMERIC'), ('fields_percent_type_all_Count', 'NUMERIC'), ('fields_percent_type_distinct_primitive_Count', 'NUMERIC'), ('fields_percent_type_distinct_void_Count', 'NUMERIC'), ('fields_percent_type_distinct_java_Count', 'NUMERIC'), ('fields_percent_type_distinct_all_Count', 'NUMERIC')]
@@ -187,13 +188,13 @@ class OOFamilies:
         return  [ ('fields_type_primitive_Count', 'NUMERIC'), ('fields_type_void_Count', 'NUMERIC'), ('fields_type_java_Count', 'NUMERIC'), ('fields_type_all_Count', 'NUMERIC'), ('fields_type_distinct_primitive_Count', 'NUMERIC'), ('fields_type_distinct_void_Count', 'NUMERIC'), ('fields_type_distinct_java_Count', 'NUMERIC'), ('fields_type_distinct_all_Count', 'NUMERIC'), ('fields_percent_private_Count', 'NUMERIC'), ('fields_percent_protected_Count', 'NUMERIC'), ('fields_percent_public_Count', 'NUMERIC'), ('fields_percent_not_public_Count', 'NUMERIC'), ('fields_percent_static_Count', 'NUMERIC'), ('fields_percent_final_Count', 'NUMERIC'), ('fields_percent_type_primitive_Count', 'NUMERIC'), ('fields_percent_type_void_Count', 'NUMERIC'), ('fields_percent_type_java_Count', 'NUMERIC'), ('fields_percent_type_all_Count', 'NUMERIC'), ('fields_percent_type_distinct_primitive_Count', 'NUMERIC'), ('fields_percent_type_distinct_void_Count', 'NUMERIC'), ('fields_percent_type_distinct_java_Count', 'NUMERIC'), ('fields_percent_type_distinct_all_Count', 'NUMERIC')]
 
     def constructors_attributes(self):
-        return [('constructors_Count', 'NUMERIC'), ('constructors_private_Count', 'NUMERIC'), ('constructors_protected_Count', 'NUMERIC'), ('constructors_public_Count', 'NUMERIC'), ('constructors_not_public_Count', 'NUMERIC'), ('len_constructors__primitive', 'NUMERIC'), ('len_constructors__primitive_set', 'NUMERIC'), ('len_constructors__void', 'NUMERIC'), ('len_constructors__void_set', 'NUMERIC'), ('len_constructors__java', 'NUMERIC'), ('len_constructors__java_set', 'NUMERIC'), ('len_constructors__all', 'NUMERIC'), ('len_constructors__all_set', 'NUMERIC'), ('len_constructors__primitive_percent', 'NUMERIC'), ('len_constructors__primitive_set_percent', 'NUMERIC'), ('len_constructors__void_percent', 'NUMERIC'), ('len_constructors__void_set_percent', 'NUMERIC'), ('len_constructors__java_percent', 'NUMERIC'), ('len_constructors__java_set_percent', 'NUMERIC'), ('len_constructors__all_percent', 'NUMERIC'), ('len_constructors__all_set_percent', 'NUMERIC'), ('len_params_constructors', 'NUMERIC'), ('sum_params_constructors', 'NUMERIC'), ('mean_params_constructors', 'NUMERIC'), ('median_params_constructors', 'NUMERIC'), ('var_params_constructors', 'NUMERIC'), ('max_params_constructors', 'NUMERIC'), ('min_params_constructors', 'NUMERIC'), (' ONE_elem_params_constructors', ['True', 'False'])]
+        return [('constructors_Count', 'NUMERIC'), ('constructors_private_Count', 'NUMERIC'), ('constructors_protected_Count', 'NUMERIC'), ('constructors_public_Count', 'NUMERIC'), ('constructors_not_public_Count', 'NUMERIC'), ('len_constructors__primitive', 'NUMERIC'), ('len_constructors__primitive_set', 'NUMERIC'), ('len_constructors__void', 'NUMERIC'), ('len_constructors__void_set', 'NUMERIC'), ('len_constructors__java', 'NUMERIC'), ('len_constructors__java_set', 'NUMERIC'), ('len_constructors__all', 'NUMERIC'), ('len_constructors__all_set', 'NUMERIC'), ('len_constructors__primitive_percent', 'NUMERIC'), ('len_constructors__primitive_set_percent', 'NUMERIC'), ('len_constructors__void_percent', 'NUMERIC'), ('len_constructors__void_set_percent', 'NUMERIC'), ('len_constructors__java_percent', 'NUMERIC'), ('len_constructors__java_set_percent', 'NUMERIC'), ('len_constructors__all_percent', 'NUMERIC'), ('len_constructors__all_set_percent', 'NUMERIC'), ('len_params_constructors', 'NUMERIC'), ('sum_params_constructors', 'NUMERIC'), ('mean_params_constructors', 'NUMERIC'), ('median_params_constructors', 'NUMERIC'), ('var_params_constructors', 'NUMERIC'), ('max_params_constructors', 'NUMERIC'), ('min_params_constructors', 'NUMERIC'), ('ONE_elem_params_constructors', ['True', 'False'])]
 
     def constructorsArticles_attributes(self):
         return [('constructors_Count', 'NUMERIC'), ('constructors_private_Count', 'NUMERIC'), ('constructors_protected_Count', 'NUMERIC'), ('constructors_public_Count', 'NUMERIC'), ('constructors_not_public_Count', 'NUMERIC')]
 
     def constructorsAdded_attributes(self):
-        return [('len_constructors__primitive', 'NUMERIC'), ('len_constructors__primitive_set', 'NUMERIC'), ('len_constructors__void', 'NUMERIC'), ('len_constructors__void_set', 'NUMERIC'), ('len_constructors__java', 'NUMERIC'), ('len_constructors__java_set', 'NUMERIC'), ('len_constructors__all', 'NUMERIC'), ('len_constructors__all_set', 'NUMERIC'), ('len_constructors__primitive_percent', 'NUMERIC'), ('len_constructors__primitive_set_percent', 'NUMERIC'), ('len_constructors__void_percent', 'NUMERIC'), ('len_constructors__void_set_percent', 'NUMERIC'), ('len_constructors__java_percent', 'NUMERIC'), ('len_constructors__java_set_percent', 'NUMERIC'), ('len_constructors__all_percent', 'NUMERIC'), ('len_constructors__all_set_percent', 'NUMERIC'), ('len_params_constructors', 'NUMERIC'), ('sum_params_constructors', 'NUMERIC'), ('mean_params_constructors', 'NUMERIC'), ('median_params_constructors', 'NUMERIC'), ('var_params_constructors', 'NUMERIC'), ('max_params_constructors', 'NUMERIC'), ('min_params_constructors', 'NUMERIC'), (' ONE_elem_params_constructors', ['True', 'False'])]
+        return [('len_constructors__primitive', 'NUMERIC'), ('len_constructors__primitive_set', 'NUMERIC'), ('len_constructors__void', 'NUMERIC'), ('len_constructors__void_set', 'NUMERIC'), ('len_constructors__java', 'NUMERIC'), ('len_constructors__java_set', 'NUMERIC'), ('len_constructors__all', 'NUMERIC'), ('len_constructors__all_set', 'NUMERIC'), ('len_constructors__primitive_percent', 'NUMERIC'), ('len_constructors__primitive_set_percent', 'NUMERIC'), ('len_constructors__void_percent', 'NUMERIC'), ('len_constructors__void_set_percent', 'NUMERIC'), ('len_constructors__java_percent', 'NUMERIC'), ('len_constructors__java_set_percent', 'NUMERIC'), ('len_constructors__all_percent', 'NUMERIC'), ('len_constructors__all_set_percent', 'NUMERIC'), ('len_params_constructors', 'NUMERIC'), ('sum_params_constructors', 'NUMERIC'), ('mean_params_constructors', 'NUMERIC'), ('median_params_constructors', 'NUMERIC'), ('var_params_constructors', 'NUMERIC'), ('max_params_constructors', 'NUMERIC'), ('min_params_constructors', 'NUMERIC'), ('ONE_elem_params_constructors', ['True', 'False'])]
 
 
     def pathToNameClass(self,r0,ind):
@@ -221,6 +222,7 @@ class OOFamilies:
                     sup = nameSuper
                 edges.append((sup, nameClass))
         g = networkx.DiGraph()
+        g.add_node('root')
         g.add_edges_from(edges)
         methods={}
         for x in files_Names:
@@ -252,6 +254,7 @@ class OOFamilies:
 
 
         g2=networkx.DiGraph()
+        g2.add_node('root')
         g2.add_edges_from(sigsEdges)
         counts= Counter(sigsEdges)
         self.addFromDict(files_dict,g2.out_degree(),pathNames)
@@ -350,6 +353,7 @@ class OOFamilies:
                     sup = nameSuper
                 edges.append((sup, nameClass))
         g = networkx.DiGraph()
+        g.add_node('root')
         g.add_edges_from(edges)
         print g.nodes()
         paths = networkx.single_source_dijkstra_path(g, 'root')
@@ -386,6 +390,7 @@ class OOFamilies:
         counts= Counter(sigsEdges)
 
         g3=networkx.DiGraph()
+        g3.add_node('root')
         for e,w in counts.items():
             u,v=e
             g3.add_edge(u,v,weight=w)
@@ -412,6 +417,7 @@ class OOFamilies:
                     sup = nameSuper
                 edges.append((sup, nameClass))
         g = networkx.DiGraph()
+        g.add_node('root')
         g.add_edges_from(edges)
         paths = networkx.single_source_dijkstra_path(g, 'root')
 
@@ -452,6 +458,7 @@ class OOFamilies:
             dictOuts[a]=dictOuts[a]+1
 
         g4=networkx.DiGraph()
+        g4.add_node('root')
         for e,w in counts.items():
             u,v=e
             weigh=w/dictOuts[u]
@@ -480,6 +487,7 @@ class OOFamilies:
                     sup = nameSuper
                 edges.append((sup, nameClass))
         g = networkx.DiGraph()
+        g.add_node('root')
         g.add_edges_from(edges)
         degs = g.out_degree()
         degsIN = g.in_degree()
@@ -671,7 +679,7 @@ class OOFamilies:
 
 
     def get_attributesBest(self):
-        '''('IsInterface',['Interface','class']),('Parent',['Has parent','No parent']) ,
+        '''('IsInterface',['Interface','class']),('Parent',['Has_parent','No_parent']) ,
                 ('exception',['true','false']) ,('externalizable',['true','false']) ,('abstract',['true','false']) ,('error',['true','false']) ,('scope',['public','protected','private','default'])
             ,('serializable',['true','false']) ,'''
         all= [
@@ -740,7 +748,7 @@ class OOFamilies:
 
 
                 ( "len_params", "NUMERIC"),( "sum_params", "NUMERIC"),( "mean_params", "NUMERIC"),( "median_params", "NUMERIC"),
-    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( " ONE_elem_params", ['True','False'])]
+    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( "ONE_elem_params", ['True','False'])]
 
         all= [
 ("degs", "NUMERIC"),("degsIN", "NUMERIC"),("succ", "NUMERIC"),("depth", "NUMERIC"),
@@ -756,7 +764,7 @@ class OOFamilies:
 ("out_degree_all", "NUMERIC"),("katz_centrality(g2_all", "NUMERIC"),
 ("core_number(g2_all", "NUMERIC"),("closeness_centrality(g2_all", "NUMERIC"),("degree_centrality(g2_all", "NUMERIC"),("out_degree_centrality(g2_all", "NUMERIC"),
 ("out_degreeG3_all", "NUMERIC"),("core_number(g3_all", "NUMERIC"),("closeness_centrality(g3_all", "NUMERIC"),("degree_centrality(g3_all", "NUMERIC"),("out_degree_centrality(g3_all", "NUMERIC"),
-('IsInterface',['Interface','class']),('Parent',['Has parent','No parent']) ,
+('IsInterface',['Interface','class']),('Parent',['Has_parent','No_parent']) ,
                 ('exception',['true','false']) ,('externalizable',['true','false']) ,('abstract',['true','false']) ,('error',['true','false']) ,('scope',['public','protected','private','default'])
             ,('serializable',['true','false']) ,
                 ( "methods_Count", "NUMERIC"),
@@ -800,7 +808,7 @@ class OOFamilies:
 
 
                 ( "len_params", "NUMERIC"),( "sum_params", "NUMERIC"),( "mean_params", "NUMERIC"),( "median_params", "NUMERIC"),
-    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( " ONE_elem_params", ['True','False']),
+    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( "ONE_elem_params", ['True','False']),
      #constructors
 
                         ( "constructors_Count", "NUMERIC"),( "constructors_private_Count", "NUMERIC"),( "constructors_protected_Count", "NUMERIC"),( "constructors_public_Count", "NUMERIC"),( "constructors_not_public_Count", "NUMERIC"),
@@ -825,7 +833,7 @@ class OOFamilies:
                         #all
                         ( "len_constructors__all_percent", "NUMERIC"), ( "len_constructors__all_set_percent", "NUMERIC"),
     ( "len_params_constructors", "NUMERIC"),( "sum_params_constructors", "NUMERIC"),( "mean_params_constructors", "NUMERIC"),( "median_params_constructors", "NUMERIC"),
-( "var_params_constructors", "NUMERIC"),( "max_params_constructors", "NUMERIC"),( "min_params_constructors", "NUMERIC"),( " ONE_elem_params_constructors",['True','False']),
+( "var_params_constructors", "NUMERIC"),( "max_params_constructors", "NUMERIC"),( "min_params_constructors", "NUMERIC"),( "ONE_elem_params_constructors",['True','False']),
 
                 ( "fields_Count", "NUMERIC"),
 
@@ -858,8 +866,8 @@ class OOFamilies:
     def classes_features(self,c,files_dict):
         interfaces='select Dirpath, superClass from classes where superClass="Interface"'
         wekaMethods.articles.sqlToAttributes(["class"], c, files_dict, interfaces)
-        interfaces='select Dirpath, "No parent" from classes where superClass="java.lang.Object"'
-        wekaMethods.articles.sqlToAttributes(["Has parent"], c, files_dict, interfaces)
+        interfaces='select Dirpath, "No_parent" from classes where superClass="java.lang.Object"'
+        wekaMethods.articles.sqlToAttributes(["Has_parent"], c, files_dict, interfaces)
         interfaces='select Dirpath ,exception  ,externalizable  ,abstract   ,error  ,case when scope="" then "default" else scope end as b ,serializable from classes'
         wekaMethods.articles.sqlToAttributes(["false","false","false","false","public","false"], c, files_dict, interfaces)
 
@@ -910,13 +918,3 @@ class OOFamilies:
 
     def get_attributes(self):
         return self.attributes()
-
-
-elem=( "fields_Count", "NUMERIC")
-l=[]
-l.append(OOFamilies("g2"))
-l.append(OOFamilies("g3"))
-l.append(OOFamilies("methods"))
-l.append(OOFamilies("hirarcy"))
-l.append(OOFamilies("fields"))
-l.append(OOFamilies("constructors"))

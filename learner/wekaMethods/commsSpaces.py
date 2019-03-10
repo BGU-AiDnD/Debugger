@@ -24,15 +24,18 @@ def create(vers, Path):
         commsPath = os.path.join(vPath, "commentsSpaces")
         if not os.path.isdir(commsPath):
             os.mkdir(commsPath)
-        files = [utilsConf.to_long_path(x.split("\n")[0]) for x in open(os.path.join(vPath, "javaFiles.txt"), "r").readlines()]
-        for f in files:
+        java_files = []
+        for root, _, files in os.walk(os.path.join(vPath,"repo")):
+            java_files.extend(map(lambda file_name: utilsConf.to_short_path(os.path.join(root, file_name)),
+                                  filter(lambda file_name: file_name.endswith('.java'), files)))
+        for f in java_files:
+            if not os.path.isfile(f):
+                continue
             outPath = os.path.join(commsPath, os.path.basename(f) + ".txt")
             comm, spaces = commentsSpacesLines(f)
             with open(outPath, "w") as out:
                 out.writelines(["comments\n", str(comm), "\nspaces\n", str(spaces)])
 
-
-#create(('CDT_8_0_1', 'CDT_8_0_2', 'CDT_8_1_0', 'CDT_8_1_1', 'CDT_8_1_2' ),"C:\\GitHub\\vers\\" )
 
 def read(file):
     if not os.path.isfile(file):
@@ -42,5 +45,3 @@ def read(file):
         comms = eval(lines[1])
         spaces = eval(lines[3])
         return comms,spaces
-
-#print read("C:\GitHub\\vers\CDT_8_0_1\commentsSpaces\CaseBreakQuickFixTest.java.txt")

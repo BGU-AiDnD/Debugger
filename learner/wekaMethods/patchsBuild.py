@@ -1,13 +1,11 @@
 __author__ = 'amir'
 
 
-import sys
 import os
 import glob
 import re
 import subprocess
 import shutil
-import sqlite3
 import utilsConf
 
 # git format-patch --root origin
@@ -25,65 +23,6 @@ def mkDirs(outDir,commitID):
     o=outDir+"\\"+commitID+"\\parser"
     if not (os.path.isdir(o)):
         os.mkdir(o)
-
-
-def oneFileParser(methods,javaFile,inds,key):
-    if not ".java" in javaFile:
-        return
-    f=open(javaFile)
-    lines=f.readlines()
-    f.close()
-    if len([l for l in lines if l.lstrip()!=""])==0:
-        return
-    run_commands = ["java", "-jar", "C:\projs\checkstyle-6.8-SNAPSHOT-all.jar ", "-c", "C:\projs\methodNameLines.xml",
-             javaFile]
-    proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, shell=True,cwd=r'C:\projs')
-    (out, err) = proc.communicate()
-    out=out.replace("\n","").split("\r")[1:-3]
-    fileName=javaFile.split("\\")[-1]
-    fileName=fileName.replace("_","\\")
-    for o in  out:
-        if o=="":
-            continue
-        if not "@" in o:
-            continue
-        file,data=o.split(" ")
-        name,begin,end=data.split("@")
-        methodDir=fileName+"$"+name
-        if not methodDir in methods:
-            methods[methodDir]={}
-        if not "methodName" in methods[methodDir]:
-            methods[methodDir]["methodName"]=name
-        if not "fileName" in methods[methodDir]:
-            methods[methodDir]["fileName"]=fileName
-        rng=range(int(begin),int(end)+1)
-        if methodDir not in methods:
-            methods[methodDir]={}
-        methods[methodDir][key]=len(list(set(rng) & set(inds)))
-
-
-
-def FileToMethods(beforeFile,AfterFile,deletedInds,addedInds, outPath,commitID):
-    methods={}
-    oneFileParser(methods,beforeFile,deletedInds,"deleted")
-    oneFileParser(methods,AfterFile,addedInds,"inserted")
-    f=open(outPath,"w")
-    for methodDir  in methods:
-        dels=0
-        ins=0
-        fileName=""
-        methodName=""
-        if "deleted" in methods[methodDir]:
-            dels=methods[methodDir]["deleted"]
-        if "inserted" in methods[methodDir]:
-            ins=methods[methodDir]["inserted"]
-        if "fileName" in methods[methodDir]:
-            fileName=methods[methodDir]["fileName"]
-        if "methodName" in methods[methodDir]:
-            methodName=methods[methodDir]["methodName"]
-        row=[commitID,methodDir,fileName,methodName,str(dels),str(ins),str(dels+ins)]
-        f.write(",".join(row))
-    f.close()
 
 
 def fixEnum(l):
@@ -114,31 +53,39 @@ def fixAssert(l):
     return l
 
 
-def OneClass(lines, outPath,commitID,change):
-    if len(lines)==0:
-        return []
-    fileName=lines[0].split()
-    if len(fileName)<3:
-        return []
-    fileName = lines[0].split()[2]
-    fileName = fileName[2:]
-    fileName = os.path.normpath(fileName).replace(os.path.sep,"_")
-    if not ".java" in fileName:
-        return []
-    fileName = fileName.split('.java')[0] + '.java'
-    if len(lines) > 3:
-        # isNew="new file " in lines[1]
-        # isdeleted="deleted file " in lines[1]
-        # reducedFile=lines[3]
-        # addedFile=lines[4]
-        lines=lines[5:]
+def OneClass(diff_lines, outPath, commitID, change):
+    REMOVED = '---'
+    ADDED = '+++'
+    DEV_NULL = '/dev/null'
+    diff_files = diff_lines[0].split()
+    if len(diff_files) < 3:
+        assert False
+    if len(filter(lambda x: x.startswith(REMOVED), diff_lines)) != 1:
+        return
+    if len(filter(lambda x: x.startswith(ADDED), diff_lines)) != 1:
+        return
+    removed_file_name = filter(lambda x: x.startswith(REMOVED), diff_lines)[0].split()[1]
+    added_file_name = filter(lambda x: x.startswith(ADDED), diff_lines)[0].split()[1]
+    is_new_file = 1 if removed_file_name == DEV_NULL else 0
+    is_deleted_file = 1 if added_file_name == DEV_NULL else 0
+    is_renamed_file = 1 if not is_deleted_file and not is_new_file and added_file_name[2:] != removed_file_name[2:] else 0
+    is_removed_file = 1 if is_renamed_file or is_deleted_file else 0
+    file_names = [(added_file_name, 0)] + ([(removed_file_name, 1)] if is_removed_file else [])
+    for name, removed in file_names:
+        fileName = os.path.normpath(name[2:]).replace(os.path.sep, "_")
+        if not fileName.endswith('.java'):
+            continue
+        start_line = filter(lambda line: line[1].startswith('+++'), enumerate(diff_lines))
+        if len(start_line) != 1:
+            return # no file
+        diff_lines = diff_lines[start_line[0][0] + 1:]
         befLines=[]
         afterLines=[]
         deletedInds=[]
         addedInds=[]
         delind=0
         addind=0
-        for l in lines:
+        for l in diff_lines:
             if "\ No newline at end of file" in l:
                 continue
             if "1.9.4.msysgit.2" in l:
@@ -170,88 +117,38 @@ def OneClass(lines, outPath,commitID,change):
         with open(os.path.join(outPath, "after", fileName), "wb") as after:
             after.writelines(afterLines)
         with open(os.path.join(outPath, fileName + "_deletsIns.txt"), "wb") as f:
-            f.writelines(["deleted\n", str(deletedInds)+"\n","added\n", str(addedInds)])
-        change.write(fileName+"@"+str(commitID)+"@"+str(deletedInds)+"@"+str(addedInds)+"\n")
+            f.writelines('\n'.join(map(str, ["deleted", deletedInds, "added", addedInds, is_new_file, removed, is_renamed_file])))
+        change.write("@".join(map(str, [fileName, commitID, deletedInds, addedInds, is_new_file, removed, is_renamed_file])) + "\n")
 
 
-def oneFile(PatchFile, outDir,change):
-    f=open(PatchFile,'r')
-    lines=f.readlines()
-    if len(lines)==0:
-        return []
-    commitSha=lines[0].split()[1] # line 0 word 1
-    commitID=str(commitSha)
+def oneFile(PatchFile, outDir, change):
+    with open(PatchFile,'r') as f:
+        lines = f.readlines()[:-3]
+    if len(lines) == 0:
+        return
+    commitID = str(lines[0].split()[1]) # line 0 word 1
     mkDirs(outDir, commitID)
-    inds=[lines.index(l) for l in lines if "diff --git" in l]+[len(lines)] #lines that start with diff --git
-    shutil.copyfile(PatchFile, outDir+"\\"+commitID+"\\"+PatchFile.split("\\")[-1])
-    for i in range(len(inds)-1):
-        OneClass(lines[inds[i]:inds[i+1]],outDir+"\\"+commitID,commitID,change)
-    return commitSha
-
-
-
-
-
-def debugPatchs(Path,outFile):
-    lst= glob.glob(Path+"/*.patch")
-    i=0
-    allComms=[]
-    ou=open(outFile,"wt")
-    for doc in lst:
-        i=i+1
-        f=open(doc,'r')
-        lines=f.readlines()[:9]
-        ou.writelines(lines)
-    ou.close()
+    diffs = map(lambda x: x[0], filter(lambda x: x[1].startswith("diff --git"), enumerate(lines))) + [len(lines)]
+    diff_lines = map(lambda diff: lines[diff[0]: diff[1]], zip(diffs, diffs[1:]))
+    shutil.copyfile(PatchFile, os.path.join(outDir, commitID, os.path.basename(PatchFile)))
+    for diff in diff_lines:
+        if len(diff) == 0:
+            assert False
+        OneClass(diff, os.path.join(outDir, commitID), commitID, change)
 
 
 def buildPatchs(Path,outDir,changedFile):
-    lst= glob.glob(Path+"/*.patch")
-    i=0
-    if not os.path.isdir(outDir):
-        os.mkdir(outDir)
-    allComms=[]
-    change=open(changedFile,"wb")
-    for doc in lst:
-        i=i+1
-        print doc
-        comm=oneFile(doc,outDir,change)
-        allComms.append(comm)
+    with open(changedFile, "wb") as change:
+        for patch in glob.glob(os.path.join(Path,"*.patch")):
+            oneFile(patch, outDir, change)
 
 def mkdir(d):
     if not os.path.isdir(d):
         os.mkdir(d)
 
-
-def DbAdd(dbPath,allComms):
-    conn = sqlite3.connect(dbPath)
-    conn.text_factory = str
-    c = conn.cursor()
-    c.execute('''CREATE TABLE commitedMethods (commitID INT, methodDir text, fileName text, methodName text, deletions INT , insertions INT , lines INT )''')
-    for com in allComms:
-        c.execute("INSERT INTO commitedMethods VALUES (?,?,?,?,?,?,?)",com)
-    conn.commit()
-    conn.close()
-
-def RunCheckStyle(workingDir,outPath,checkStyle68,methodNameLines):
+def RunCheckStyle(workingDir, outPath, checkStyle68, methodNameLines):
     run_commands = ["java" ,"-jar" ,checkStyle68 ,"-c" ,methodNameLines ,"javaFile" ,"-o",outPath,workingDir]
-    proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    (out, err) = proc.communicate()
-
-def detectFromConf(lines,lineInd):
-    deleted = (lines[lineInd])
-    deleted = deleted.replace("[","").replace("]","").replace("\n","")
-    deleted = deleted.split(",")
-    return [x.lstrip() for x in deleted]
-
-
-def readDataFile(Dfile):
-    f=open(Dfile,"r")
-    lines=f.readlines()
-    f.close()
-    deleted=detectFromConf(lines,1)
-    insertions=detectFromConf(lines,3)
-    return deleted,insertions
+    utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).communicate()
 
 
 def checkStyleCreateDict(checkOut, changesDict):
@@ -259,14 +156,7 @@ def checkStyleCreateDict(checkOut, changesDict):
     lines = []
     with open(checkOut, "r") as f:
         lines = f.readlines()[1:-3]
-    for line in lines:
-        if line == "":
-            continue
-        if not "@" in line:
-            continue
-        if not len(line.split(" ")) == 2:
-            # case of error
-            continue
+    for line in filter(lambda line: "@" in line and len(line.split()) == 2, lines):
         file, data = line.split(" ")
         file = file.split(".java")[0]+".java"
         fileNameSplited = file.split(os.path.sep)
@@ -276,7 +166,7 @@ def checkStyleCreateDict(checkOut, changesDict):
             continue
         key = ""
         inds = []
-        deleted, insertions = changesDict[(fileName, commitID)]
+        deleted, insertions, is_new_file, is_deleted_file, is_renamed_file = changesDict[(fileName, commitID)]
         if "before" in file:
             key = "deletions"
             inds = deleted
@@ -284,8 +174,7 @@ def checkStyleCreateDict(checkOut, changesDict):
             key = "insertions"
             inds = insertions
         name, begin, end = data.split("@")
-        rng = map(str, range(int(begin)-1, int(end)))
-        both = filter(lambda x: x in rng, map(str, inds))
+        both = set(map(str, inds)) & set(map(str, range(int(begin)-1, int(end))))
         keyChange = len(both)
         if keyChange == 0:
             continue
@@ -294,12 +183,12 @@ def checkStyleCreateDict(checkOut, changesDict):
         if not tup in methods:
             methods[tup] = {}
         methods[tup][key] = keyChange
-        if not "methodName" in methods[tup]:
-            methods[tup]["methodName"] = name
-        if not "fileName" in methods[tup]:
-            methods[tup]["fileName"] = fileName
-        if not "commitID" in methods[tup]:
-            methods[tup]["commitID"] = commitID
+        methods[tup].setdefault("methodName", name)
+        methods[tup].setdefault("fileName", fileName)
+        methods[tup].setdefault("commitID", commitID)
+        methods[tup].setdefault("is_new_file", is_new_file)
+        methods[tup].setdefault("is_deleted_file", is_deleted_file)
+        methods[tup].setdefault("is_renamed_file", is_renamed_file)
     return methods
 
 
@@ -308,10 +197,10 @@ def readChangesFile(change):
     rows = []
     with open(change, "r") as f:
         for line in f:
-            fileName, commitSha, dels, Ins = line.strip().split("@")
+            fileName, commitSha, dels, Ins, is_new_file, is_deleted_file, is_renamed_file = line.strip().split("@")
             fileName = fileName.replace("_", os.path.sep)
-            dict[(fileName, commitSha)] = [eval(dels), eval(Ins)]
-            rows.append(map(str, [fileName,commitSha, len(dels), len(Ins), len(dels)+len(Ins)]))
+            dict[(fileName, commitSha)] = map(eval, [dels, Ins, is_new_file, is_deleted_file, is_renamed_file])
+            rows.append(map(str, [fileName,commitSha, len(dels), len(Ins), len(dels)+len(Ins), is_new_file, is_deleted_file, is_renamed_file]))
     return dict, rows
 
 
@@ -326,20 +215,29 @@ def analyzeCheckStyle(checkOut, changeFile):
         fileName = methods[tup].setdefault("fileName", "")
         methodName = methods[tup].setdefault("methodName", "")
         commitID = methods[tup].setdefault("commitID", "")
-        all_methods.append(map(str, [commitID, methodDir, fileName, methodName, dels, ins, dels+ins]))
+        is_new_file = methods[tup].setdefault("is_new_file", 0)
+        is_deleted_file = methods[tup].setdefault("is_deleted_file", 0)
+        is_renamed_file = methods[tup].setdefault("is_renamed_file", 0)
+        all_methods.append(map(str, [commitID, methodDir, fileName, methodName, dels, ins, dels+ins, is_new_file, is_deleted_file, is_renamed_file]))
     return all_methods, filesRows
 
 
-# @utilsConf.marker_decorator(utilsConf.PATCHS_FEATURES_MARKER)
-def do_all():
-    patchD = os.path.join(utilsConf.get_configuration().LocalGitPath, "patch")
-    commitsFiles = os.path.join(utilsConf.get_configuration().LocalGitPath, "commitsFiles")
-    changedFile = os.path.join(utilsConf.get_configuration().LocalGitPath, "commitsFiles", "Ins_dels.txt")
+@utilsConf.marker_decorator(utilsConf.PATCHS_FEATURES_MARKER)
+def labeling():
+    patchD = os.path.join(utilsConf.get_configuration().workingDir, "patch")
+    commitsFiles = os.path.join(utilsConf.get_configuration().workingDir, "commitsFiles")
     mkdir(patchD)
     mkdir(commitsFiles)
-    run_commands = "git format-patch --root -o patch --function-context --unified=9000".split()
+    run_commands = "git format-patch --root -o ..\patch --function-context --unified=900000".split()
     proc = utilsConf.open_subprocess(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(utilsConf.get_configuration().LocalGitPath))
     proc.communicate()
-    buildPatchs(patchD, commitsFiles, changedFile)
-    checkOut = os.path.join(commitsFiles, "CheckStyle.txt")
+    buildPatchs(patchD, commitsFiles, utilsConf.get_configuration().changeFile)
+    checkOut = utilsConf.get_configuration().MethodsParsed
     RunCheckStyle(commitsFiles, checkOut, utilsConf.get_configuration().checkStyle68, utilsConf.get_configuration().methodsNamesXML)
+
+if __name__ == "__main__":
+    with open(r"C:\Temp\amir.txt", "wb") as change:
+        for patch in glob.glob(os.path.join(r"C:\Users\eranhe\Fault_Predicition_Defect4J\good_model\out\tika_new\patch","*.patch")):
+            oneFile(patch, r"C:\Temp\79f7a7e", change)
+    dict, rows = readChangesFile(r"C:\Users\eranhe\Fault_Predicition_Defect4J\rss\math_3_amir3\commitsFiles\Ins_dels.txt")
+    pass

@@ -49,8 +49,8 @@ class OO:
     def classes_features(self,c,files_dict):
         interfaces='select path, superClass from classes where superClass="Interface"'
         sqlToAttributes(["class"], c, files_dict, interfaces)
-        interfaces='select path, "No parent" from classes where superClass="java.lang.Object"'
-        sqlToAttributes(["Has parent"], c, files_dict, interfaces)
+        interfaces='select path, "No_parent" from classes where superClass="java.lang.Object"'
+        sqlToAttributes(["Has_parent"], c, files_dict, interfaces)
         interfaces='select path ,exception  ,externalizable  ,abstract   ,error  ,case when scope="" then "default" else scope end as b ,serializable from classes'
         sqlToAttributes(["false","false","false","false","public","false"], c, files_dict, interfaces)
 
@@ -85,6 +85,7 @@ class OO:
                     sup = nameSuper
                 edges.append((sup, nameClass))
         g = networkx.DiGraph()
+        g.add_node('root')
         g.add_edges_from(edges)
         degs = g.out_degree()
         degsIN = g.in_degree()
@@ -118,6 +119,7 @@ class OO:
                     sup = nameSuper
                 edges.append((sup, nameClass))
         g = networkx.DiGraph()
+        g.add_node('root')
         g.add_edges_from(edges)
         paths = networkx.single_source_dijkstra_path(g, 'root')
 
@@ -152,10 +154,12 @@ class OO:
 
 
         g2=networkx.DiGraph()
+        g2.add_node('root')
         g2.add_edges_from(sigsEdges)
         counts= Counter(sigsEdges)
 
         g3=networkx.DiGraph()
+        g3.add_node('root')
         for e,w in counts.items():
             u,v=e
             g3.add_edge(u,v,weight=w)
@@ -308,7 +312,7 @@ class OO:
         #sqlToAttributes(["0"], c, files_dict, UsedThis)
 
     def get_attributesAll(self):
-        '''('IsInterface',['Interface','class']),('Parent',['Has parent','No parent']) ,
+        '''('IsInterface',['Interface','class']),('Parent',['Has_parent','No_parent']) ,
                 ('exception',['true','false']) ,('externalizable',['true','false']) ,('abstract',['true','false']) ,('error',['true','false']) ,('scope',['public','protected','private','default'])
             ,('serializable',['true','false']) ,'''
         all= [
@@ -326,7 +330,7 @@ class OO:
 ("out_degree_all", "NUMERIC"),("katz_centrality(g2_all", "NUMERIC"),
 ("core_number(g2_all", "NUMERIC"),("closeness_centrality(g2_all", "NUMERIC"),("degree_centrality(g2_all", "NUMERIC"),("out_degree_centrality(g2_all", "NUMERIC"),
 ("out_degreeG3_all", "NUMERIC"),("core_number(g3_all", "NUMERIC"),("closeness_centrality(g3_all", "NUMERIC"),("degree_centrality(g3_all", "NUMERIC"),("out_degree_centrality(g3_all", "NUMERIC"),
-('IsInterface',['Interface','class']),('Parent',['Has parent','No parent']) ,
+('IsInterface',['Interface','class']),('Parent',['Has_parent','No_parent']) ,
                 ('exception',['true','false']) ,('externalizable',['true','false']) ,('abstract',['true','false']) ,('error',['true','false']) ,('scope',['public','protected','private','default'])
             ,('serializable',['true','false']) ,
                 ( "methods_Count", "NUMERIC"),
@@ -370,7 +374,7 @@ class OO:
 
 
                 ( "len_params", "NUMERIC"),( "sum_params", "NUMERIC"),( "mean_params", "NUMERIC"),( "median_params", "NUMERIC"),
-    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( " ONE_elem_params", ['True','False']),
+    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( "ONE_elem_params", ['True','False']),
      #constructors
 
                         ( "constructors_Count", "NUMERIC"),( "constructors_private_Count", "NUMERIC"),( "constructors_protected_Count", "NUMERIC"),( "constructors_public_Count", "NUMERIC"),( "constructors_not_public_Count", "NUMERIC"),
@@ -395,7 +399,7 @@ class OO:
                         #all
                         ( "len_constructors__all_percent", "NUMERIC"), ( "len_constructors__all_set_percent", "NUMERIC"),
     ( "len_params_constructors", "NUMERIC"),( "sum_params_constructors", "NUMERIC"),( "mean_params_constructors", "NUMERIC"),( "median_params_constructors", "NUMERIC"),
-( "var_params_constructors", "NUMERIC"),( "max_params_constructors", "NUMERIC"),( "min_params_constructors", "NUMERIC"),( " ONE_elem_params_constructors",['True','False']),
+( "var_params_constructors", "NUMERIC"),( "max_params_constructors", "NUMERIC"),( "min_params_constructors", "NUMERIC"),( "ONE_elem_params_constructors",['True','False']),
 
                 ( "fields_Count", "NUMERIC"),
 
@@ -417,7 +421,7 @@ class OO:
 
 
     def get_attributesBest(self):
-        '''('IsInterface',['Interface','class']),('Parent',['Has parent','No parent']) ,
+        '''('IsInterface',['Interface','class']),('Parent',['Has_parent','No_parent']) ,
                 ('exception',['true','false']) ,('externalizable',['true','false']) ,('abstract',['true','false']) ,('error',['true','false']) ,('scope',['public','protected','private','default'])
             ,('serializable',['true','false']) ,'''
         all= [
@@ -488,7 +492,7 @@ class OO:
 
 
                 ( "len_params", "NUMERIC"),( "sum_params", "NUMERIC"),( "mean_params", "NUMERIC"),( "median_params", "NUMERIC"),
-    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( " ONE_elem_params", ['True','False'])]
+    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( "ONE_elem_params", ['True','False'])]
 
         ret=[]
         for i in range(len(all)):

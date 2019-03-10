@@ -4,7 +4,9 @@ __author__ = 'Amir-pc'
 
 from xml.dom import minidom
 import docXml
+import os
 import numpy
+import utilsConf
 from collections import Counter
 
 # for %%f in (CDT_8_0_1,CDT_8_0_2,CDT_8_0_3,CDT_8_1_0,CDT_8_1_1,CDT_8_1_2 ) do  java -jar checkstyle-5.7-all.jar -c cycl.xml -r ../%%f/org.eclipse.cdt/ -f xml -o ../mccabe/%%f.xml
@@ -123,6 +125,8 @@ def stat(lst):
 
 
 def fileRead(file_path, isAnalyze, CodeDir):
+    import gc
+    gc.collect()
     with open(file_path) as doc:
         lines=[]
         ans=[]
@@ -336,7 +340,7 @@ def fileRead(file_path, isAnalyze, CodeDir):
                 continue
         return ans
 
-def checkStyleCreateDict(lines, repoPath):
+def checkStyleCreateDict(lines):
     methods = {}
     for o in lines:
         if o == "":
@@ -345,10 +349,11 @@ def checkStyleCreateDict(lines, repoPath):
             continue
         file, data = o.split(" ")
         data=data.split("\n")[0]
-        file=file.split(".java")[0]+".java"
+        file = file.split(".java")[0]+".java"
+        splitted = utilsConf.to_short_path(file).split(os.path.sep)
+        fileName = os.path.sep.join(splitted[splitted.index('repo') + 1:])
         name, begin, end = data.split("@")
-        fileName = file[len(repoPath)+1:]
-        methodDir = fileName + "$" + name
+        methodDir = fileName + "@" + name
         methods.setdefault(methodDir, {})
         methods[methodDir].setdefault("methodName", name)
         methods[methodDir].setdefault("fileName", fileName)
@@ -357,12 +362,12 @@ def checkStyleCreateDict(lines, repoPath):
     return methods
 
 
-def analyzeCheckStyle(checkOut, repoPath):
+def analyzeCheckStyle(checkOut):
     lines = []
     with open(checkOut, 'r') as f:
         lines = f.readlines()[1:-3]
     ans = []
-    methods = checkStyleCreateDict(lines, repoPath)
+    methods = checkStyleCreateDict(lines)
     for methodDir in methods:
         fileName = methods[methodDir].get('fileName', '')
         methodName = methods[methodDir].get('methodName', '')
