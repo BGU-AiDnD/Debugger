@@ -543,6 +543,19 @@ def arff88PacksMethods(basicPath,i,max,outPath,name,buggedType, packs,names,path
 
 
 def arffCreate(basicPath, objects, names, dates, bugQ, wanted, trainingFile, testingFile, NamesFile):
+    """
+    input for weka
+    :param basicPath:
+    :param objects:
+    :param names:
+    :param dates:
+    :param bugQ:
+    :param wanted:
+    :param trainingFile:
+    :param testingFile:
+    :param NamesFile:
+    :return:
+    """
     data=[]
     i=0
     attr,lens=objectsAttr(objects)
