@@ -445,6 +445,8 @@ def get_components_probabilities(bugged_type, granularity, test_runner, tests):
         for prediction in predictions:
             if prediction.endswith(component.split('(')[0]):
                 components_priors[component] = max(float(predictions[prediction]), 0.01)
+            else:
+                components_priors[component] = 0.01
     return components_priors
 
 
