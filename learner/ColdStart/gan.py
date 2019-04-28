@@ -176,7 +176,7 @@ def predict_model(model, x_test):
     return pred
 
 
-def load_arffload_training_set(data_arff):
+def load_arff(data_arff):
     raw_data = loadarff(data_arff)
     df_data = pd.DataFrame(raw_data[0])
     return df_data
@@ -281,6 +281,7 @@ def change_start_of_arff_files():
     with open(arff_start_path) as start:
         start_lines = start.readlines()
         start_lines.append('\n')
+
 
     for key, saving_path in data_names.items():
         for filename in os.listdir(saving_path):

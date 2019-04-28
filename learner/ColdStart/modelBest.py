@@ -107,4 +107,4 @@ def runOnAllBestModel():
 
 buildAllModels()
 runOnAllBestModel()
-#runOnBestModel()
+runOnBestModel()

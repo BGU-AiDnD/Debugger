@@ -36,16 +36,15 @@ testing_file = "All_testing_File.arff"
 
 
 all_files ={
-    "BOOKKEEPER": "D:\Debbuger\GAN\BOOKKEEPER\weka"
-    # ,
-    # "DERBY": "D:\Debbuger\GAN\DERBY\weka",
-    # "FOP": "D:\Debbuger\GAN\FOP\weka",
-    # "KAFKA": "D:\Debbuger\GAN\KAFKA\weka",
-    # "OOZIE": "D:\Debbuger\GAN\OOZIE\weka",
-    # "OPENNLP": "D:\Debbuger\GAN\OPENNLP\weka",
-    # "SENTRY": "D:\Debbuger\GAN\SENTRY\weka",
-    # "TAJO": "D:\Debbuger\GAN\TAJO\weka",
-    # "TILES": "D:\Debbuger\GAN\TILES\weka"
+    "BOOKKEEPER": "D:\Debbuger\GAN\BOOKKEEPER\weka" ,
+    "DERBY": "D:\Debbuger\GAN\DERBY\weka",
+    "FOP": "D:\Debbuger\GAN\FOP\weka",
+    "KAFKA": "D:\Debbuger\GAN\KAFKA\weka",
+    "OOZIE": "D:\Debbuger\GAN\OOZIE\weka",
+    "OPENNLP": "D:\Debbuger\GAN\OPENNLP\weka",
+    "SENTRY": "D:\Debbuger\GAN\SENTRY\weka",
+    "TAJO": "D:\Debbuger\GAN\TAJO\weka",
+    "TILES": "D:\Debbuger\GAN\TILES\weka"
      }
 
 all_projects_training_selected_features = {}
@@ -156,18 +155,23 @@ def process_attributes(bugs):
 
 ###########
 def encode_categorial(data):
-    """
-    change the category data to numbers represent the value
-    :param data:
-    :return:
-    """
-    le = LabelEncoder()
+    true_false_att = ["ONE_elem_params","exception","externalizable",'abstract','error','serializable','ONE_elem_params_constructors']
     for col in data:
-        # categorial
-        if data[col].dtype == 'object':
-            data[col] = data[col].astype('category')
-            data[col] = data[col].cat.codes
-            data[col] = data[col].astype('category')
+        if col == 'IsInterface':
+            data[col] = data[col].map({'Interface': 0, 'class': 1})
+        elif col == 'Parent':
+            data[col] = data[col].map({'Has_parent': 0, 'No_parent': 1})
+        elif col == 'scope':
+            data[col] = data[col].map({'public': 0, 'protected': 1,'private':2,'default':3})
+        elif col in true_false_att:
+            data[col] = data[col].map({'true': 1, 'false': 0, 'True': 1, 'False': 0})
+    # le = LabelEncoder()
+    # for col in data:
+    #     # categorial
+    #     if data[col].dtype == 'object':
+    #         data[col] = data[col].astype('category')
+    #         data[col] = data[col].cat.codes
+    #         data[col] = data[col].astype('category')
     return data
 def convert_data(attributes, data):
     new_attributes = []
@@ -400,17 +404,47 @@ def create_all_eval_results(export,y_true, y_pred, key,result_type,features_type
     recall_bugged = metrics.recall_score(y_true,y_pred,pos_label=1,average='binary')
     f_measure_bugged = metrics.f1_score(y_true,y_pred,pos_label=1,average='binary')
     f2_measure_bugged = calculateF2(precision_bugged,recall_bugged)
-    roc_bugged = metrics.roc_auc_score(y_true,y_pred,average=None)
-    precision, recall, thresholds = metrics.precision_recall_curve(y_true, y_pred,pos_label=1)
-    prc_bugged = metrics.auc(precision, recall)
+
+    un_true,_ = np.unique(y_true, return_counts=True)
+    un_pred,_ = np.unique(y_pred, return_counts=True)
+    if len(un_true) ==1 or len(un_pred)==1:
+        roc_bugged = '?'
+        prc_bugged =  '?'
+        print("zero")
+    else:
+        try:
+            roc_bugged = metrics.roc_auc_score(y_true,y_pred,average=None)
+        except:
+            print("exception_roc")
+            roc_bugged = '?'
+        try:
+            precision, recall, thresholds = metrics.precision_recall_curve(y_true, y_pred,pos_label=1)
+            prc_bugged = metrics.auc(precision, recall)
+        except:
+            print("exception_prc")
+            prc_bugged = '?'
 
     precision_all = metrics.precision_score(y_true, y_pred, average='weighted')
     recall_all = metrics.recall_score(y_true, y_pred, average='weighted')
     f_measure_all = metrics.f1_score(y_true, y_pred,average='weighted')
     f2_measure_all = calculateF2(precision_all, recall_all)
-    roc_all = metrics.roc_auc_score(y_true, y_pred, average='weighted')
-    precision, recall, thresholds = metrics.precision_recall_curve(y_true, y_pred)
-    prc_all = metrics.auc(recall, precision)
+    if len(un_true) ==1 or len(un_pred)==1:
+        roc_all = 0
+        prc_all =  1
+        print("zero")
+    else:
+        try:
+            roc_all = metrics.roc_auc_score(y_true, y_pred, average='weighted')
+        except:
+            print("exception_roc")
+            roc_all = 0
+        try:
+            precision, recall, thresholds = metrics.precision_recall_curve(y_true, y_pred)
+            prc_all = metrics.auc(recall, precision)
+        except:
+            print("exception_prc")
+            prc_all = 1
+
 
     if export:
         global results_all_projects
@@ -509,10 +543,14 @@ def BuildWekaModel(weka, training, testing, name, wekaJar):
 
 #main:
 
-load_arff_from_dir_into_dataFrames_dictionery()
-# prep_train_and_test_to_arff()
-# build_Models_from_weka()
-# export_all_results_from_weka()
-prep_train_and_test_to_sklearn()
+# try:
+    # load_arff_from_dir_into_dataFrames_dictionery()
+    # prep_train_and_test_to_arff()
+    # build_Models_from_weka()
+    # export_all_results_from_weka()
+    # load_arff_from_dir_into_dataFrames_dictionery()
+    # prep_train_and_test_to_sklearn()
+    # results_all_projects.to_csv(r"D:\Debbuger\GAN\all_results.csv", index=False)
 
-results_all_projects.to_csv(r"D:\Debbuger\GAN\sklearn_results_balanced.csv", index=False)
+# except:
+    # results_all_projects.to_csv(r"D:\Debbuger\GAN\all_results.csv", index=False)
