@@ -253,11 +253,6 @@ def runOnAllBestModel(feature_chosen):
     export_best_of_breed_result(best_of_breed_project_name,"no_process",feature_chosen)
     global results_all_projects
     results_all_projects.to_csv(os.path.join(results_path, "best_of_breed_results"+feature_chosen+".csv"), index=False)
-    results_all_projects = pd.DataFrame(
-        columns=['cold_start_project', 'host_model', 'result_type', 'features_type', 'model_source',
-                 'precision_bug', 'recall_bug', 'F_bug', 'F2_bug', 'roc_area_bug', 'prc_area_bug', 'precision',
-                 'recall',
-                 'F1', 'F2', 'roc_area', 'prc_area', 'num_bugs', 'num_all_inst', 'precent_bugs'])
 
 
 load_arff_from_dir_into_dataFrames_dictionery()
