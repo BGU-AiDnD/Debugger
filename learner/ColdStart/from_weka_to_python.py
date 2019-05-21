@@ -165,13 +165,7 @@ def encode_categorial(data):
             data[col] = data[col].map({'public': 0, 'protected': 1,'private':2,'default':3})
         elif col in true_false_att:
             data[col] = data[col].map({'true': 1, 'false': 0, 'True': 1, 'False': 0})
-    # le = LabelEncoder()
-    # for col in data:
-    #     # categorial
-    #     if data[col].dtype == 'object':
-    #         data[col] = data[col].astype('category')
-    #         data[col] = data[col].cat.codes
-    #         data[col] = data[col].astype('category')
+
     return data
 def convert_data(attributes, data):
     new_attributes = []

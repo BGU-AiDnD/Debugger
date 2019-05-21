@@ -3,6 +3,7 @@ import numpy as np
 import arff
 import os
 import pandas as pd
+import random
 from scipy.io.arff import loadarff
 from sklearn.ensemble import RandomForestClassifier,GradientBoostingClassifier
 # xgboost
@@ -42,7 +43,7 @@ results_path = r'D:\Debbuger\GAN'
 
 all_files ={
     "1": "D:\Debbuger\GAN\BOOKKEEPER\weka" ,
-    "2": "D:\Debbuger\GAN\DERBY\weka",
+    # "2": "D:\Debbuger\GAN\DERBY\weka",
     "3": "D:\Debbuger\GAN\FOP\weka",
     "4": "D:\Debbuger\GAN\KAFKA\weka",
     "5": "D:\Debbuger\GAN\OOZIE\weka",
@@ -56,7 +57,7 @@ cold_start_index = -1
 
 data_names = {
     "1": r"D:\Debbuger\GAN\BOOKKEEPER",
-    "2": r"D:\Debbuger\GAN\DERBY",
+    # "2": r"D:\Debbuger\GAN\DERBY",
     "3": r"D:\Debbuger\GAN\FOP",
     "4": r"D:\Debbuger\GAN\KAFKA",
     "5": r"D:\Debbuger\GAN\OOZIE",
@@ -68,7 +69,7 @@ data_names = {
 
 system_metrics = {
     "1": r"D:\Debbuger\systemMetrics\SystemMetricsbookeeper.csv",
-    "2": r"D:\Debbuger\systemMetrics\SystemMetricsderby.csv",
+    # "2": r"D:\Debbuger\systemMetrics\SystemMetricsderby.csv",
     "3": r"D:\Debbuger\systemMetrics\SystemMetricsfop.csv",
     "4": r"D:\Debbuger\systemMetrics\SystemMetricskafka.csv",
     "5": r"D:\Debbuger\systemMetrics\SystemMetricsoozie.csv",
@@ -82,11 +83,11 @@ all_projects_data_selected_features = {}
 system_metrics_attributes = None
 # results = pd.DataFrame(columns=['cold_start_project', 'precision_bug', 'recall_bug','F2_bug','prc_area_bug', 'precision', 'recall','F2','prc_area'])
 results_all_projects = pd.DataFrame(
-        columns=['cold_start_project','host_model','result_type','features_type','model_source','system_features', 'precision_bug', 'recall_bug','F_bug', 'F2_bug','roc_area_bug', 'prc_area_bug', 'precision', 'recall',
-                 'F1', 'F2', 'roc_area','prc_area','num_bugs','num_all_inst','precent_bugs'])
+        columns=['cold_start_project','host_model','result_type','features_type','model_source', 'precision_bug', 'recall_bug','F_bug', 'F2_bug','roc_area_bug', 'prc_area_bug', 'precision', 'recall',
+                 'F1', 'F2', 'roc_area','prc_area','num_bugs','num_all_inst','precent_bugs','system_features','sampling','num_of_sampling'])
 
 gan_val = pd.DataFrame(
-    columns=['cold_start_project','model','system_features','features_type','precision_all', 'recall_all', 'f_measure_all', 'f2_measure_all','roc_all', 'prc_all','accuracy']
+    columns=['cold_start_project','model','system_features','features_type','sampling','num_of_sampling','precision_all', 'recall_all', 'f_measure_all', 'f2_measure_all','accuracy']
 )
 
 def g2_attributes():
@@ -158,22 +159,23 @@ def encode_categorial(data):
             data[col] = data[col].astype('category')
     return data
 
-def predict_model_kfold(name,model_details,model,system_features,features_type, x_train, y_train):
-    kfold = KFold(3, True)
+def predict_model_kfold(name,model_details,model,system_features,features_type, x_train, y_train,sampling,num_of_sampling):
+    kfold = KFold(5, True)
     # RandomForest -I 1000 -K 0 -S 1 -num-slots 1
-    # index = 0
-    # all_predictions = 0
-    # for train, test in kfold.split(x_train):
-    #     index += 1
-    #     prediction_train = model.fit(x_train.iloc[train], y_train.iloc[train]).predict(x_train.iloc[test])
-    #     all_predictions += create_all_eval_results_gan(y_train.iloc[test], prediction_train)
-    #
-    # all_predictions /= index
-    # start_list = [name, model_details, system_features, features_type]
-    # result_list = start_list + all_predictions.tolist()
-    #
-    # global gan_val
-    # gan_val.loc[len(gan_val)] = result_list
+    index = 0
+    all_predictions = 0
+    for train, test in kfold.split(x_train):
+        index += 1
+        prediction_train = model.fit(x_train.iloc[train], y_train.iloc[train]).predict(x_train.iloc[test])
+        all_predictions += create_all_eval_results_gan(y_train.iloc[test], prediction_train)
+
+    all_predictions /= index
+    start_list = [str(name), str(model_details), str(system_features), str(features_type), str(sampling),
+                  str(num_of_sampling)]
+    result_list = start_list + all_predictions.tolist()
+
+    global gan_val
+    gan_val.loc[len(gan_val)] = result_list
     model.fit(x_train, y_train)
     return model
 
@@ -208,12 +210,9 @@ def load_all_models():
     for key, weka_path in all_files.items():
         print("load models - "+str(weka_path))
         models_no_process[key] = pickle.load(open(os.path.join(weka_path, str(data_names[key]).split('\\')[-1] + end_file_no_process), 'rb'))
-        # models_no_bugs[key] = pickle.load(open(os.path.join(weka_path, str(data_names[key]).split('\\')[-1] + end_file_no_bugs), 'rb'))
+        models_no_bugs[key] = pickle.load(open(os.path.join(weka_path, str(data_names[key]).split('\\')[-1] + end_file_no_bugs), 'rb'))
         models_all[key] = pickle.load(open(os.path.join(weka_path, str(data_names[key]).split('\\')[-1] + end_file_all), 'rb'))
 
-models_no_process = {}
-models_no_bugs = {}
-models_all ={}
 
 def get_all_eval_based_on_model(separated,type):
     pred = np.array([])
@@ -229,10 +228,13 @@ def get_all_eval_based_on_model(separated,type):
         dic_models = models_no_process
     for key, data_to_test in separated.items():
         x_test = data_to_test.copy()
-        x_test = x_test.drop('hasBug', axis=1)
-        if x_test.shape[0]!= 0:
-            pred = np.concatenate((pred,  dic_models[key].predict(x_test)), axis=None)
-            real = np.concatenate((real,  data_to_test['hasBug']), axis=None)
+        try:
+            x_test = x_test.drop('hasBug', axis=1)
+            if x_test.shape[0] != 0:
+                pred = np.concatenate((pred,  dic_models[key].predict(x_test)), axis=None)
+                real = np.concatenate((real,  data_to_test['hasBug']), axis=None)
+        except:
+            print(list(x_test))
     return pred.tolist(),real.tolist()
 
 def load_arff_from_dir_into_dataFrames_dictionery(system_features):
@@ -252,29 +254,21 @@ def load_arff_from_dir_into_dataFrames_dictionery(system_features):
         all_projects_training_selected_features = from_weka_to_python.selectFeatures(all_projects_training_selected_features, False, False)
         all_projects_training_all[key] =all_projects_training_selected_features.copy()
         all_projects_training_selected_features = from_weka_to_python.selectFeatures(all_projects_training_selected_features, True, False)
-        # all_projects_training_no_bugs[key] = all_projects_training_selected_features.copy()
+        all_projects_training_no_bugs[key] = all_projects_training_selected_features.copy()
         all_projects_training_selected_features = from_weka_to_python.selectFeatures(all_projects_training_selected_features, True, True)
         all_projects_training_no_process[key] = all_projects_training_selected_features.copy()
 
         all_projects_testing_selected_features = from_weka_to_python.selectFeatures(all_projects_testing_selected_features, False, False)
         all_projects_testing_all[key] = all_projects_testing_selected_features.copy()
         all_projects_testing_selected_features = from_weka_to_python.selectFeatures(all_projects_testing_selected_features, True, False)
-        # all_projects_testing_no_bugs[key] = all_projects_testing_selected_features.copy()
+        all_projects_testing_no_bugs[key] = all_projects_testing_selected_features.copy()
         all_projects_testing_selected_features = from_weka_to_python.selectFeatures(all_projects_testing_selected_features, True, True)
         all_projects_testing_no_process[key] = all_projects_testing_selected_features.copy()
 
-
-all_projects_training_no_process= {}
-all_projects_training_no_bugs= {}
-all_projects_training_all= {}
-all_projects_testing_no_process= {}
-all_projects_testing_no_bugs= {}
-all_projects_testing_all = {}
-
 def load_training_set(sampling,num_of_samples = 100):
     training_by_model = {}
-    # for type in ['all','no_bugs','no_process']:
-    for type in ['all','no_process']:
+    for type in ['all','no_bugs','no_process']:
+    # for type in ['all','no_process']:
         if type == 'all':
             global all_projects_training_all
             dic_projects_data =all_projects_training_all
@@ -329,7 +323,43 @@ def separated_data_by_predicted_model(pred, x_test,system_features,type):
     return all_data_separated_dict
 
 
-def export_info_about_seperation(separated_dataframe,type,cold_start_proj,saving_path,sampling,model_details,number_of_sampling=0):
+def separated_data_randomly( x_test,system_features,type):
+    all_data_separated_dict = {}
+    if type == 'all':
+        global all_projects_training_all
+        dic_projects_data = all_projects_training_all
+    elif type == 'no_bugs':
+        global all_projects_training_no_bugs
+        dic_projects_data = all_projects_training_no_bugs
+    else:
+        global all_projects_training_no_process
+        dic_projects_data = all_projects_training_no_process
+
+    random = check_random_state(seed=None)
+    x_test_mat = x_test.copy()
+    for key, val in dic_projects_data.items():
+        if int(key) != int(cold_start_index):
+            num_of_recored_left = x_test_mat.shape[0]
+            if num_of_recored_left > 1:
+                try:
+                    num_of_record_to_take = random.randint(0, num_of_recored_left)
+                    indexes = sample_without_replacement(num_of_recored_left, num_of_record_to_take, random_state=random)
+                    all_data_separated_dict[key] = x_test_mat.iloc[indexes]
+                    x_test_mat = x_test_mat.drop(x_test_mat.index[indexes])
+                    if system_features and (not system_metrics_attributes is None):
+                        all_data_separated_dict[key] = all_data_separated_dict[key].drop(system_metrics_attributes, axis = 1)
+                except:
+                    all_data_separated_dict[key] = pd.DataFrame()
+            else:
+                all_data_separated_dict[key] = pd.DataFrame()
+
+    if x_test_mat.shape[0] != 0:
+        key_choosen = random.choice(all_data_separated_dict.keys())
+        all_data_separated_dict[key_choosen] = all_data_separated_dict[key_choosen].append(x_test_mat,ignore_index = True)
+
+    return all_data_separated_dict
+
+def export_info_about_seperation(separated_dataframe,type,cold_start_proj,saving_path,sampling,model_details,number_of_sampling,system_features):
     sep_results = pd.DataFrame(
         columns=['cold_start_project', 'model_chosen','model_details','number_of_records_in_train','number_of_records_to_the_model','features_type'])
 
@@ -338,22 +368,19 @@ def export_info_about_seperation(separated_dataframe,type,cold_start_proj,saving
             sep_results.loc[len(sep_results)] = [str(data_names[cold_start_proj]).split('\\')[-1], str(data_names[key]).split('\\')[-1],model_details,
                                                  number_of_sampling,val.shape[0],type]
         else:
-            # for type in ['all', 'no_bugs', 'no_process']:
-            for type in ['all', 'no_process']:
-                if type == 'all':
-                    global all_projects_training_all
-                    dic_projects_data = all_projects_training_all
-                elif type == 'no_bugs':
-                    global all_projects_training_no_bugs
-                    dic_projects_data = all_projects_training_no_bugs
-                else:
-                    global all_projects_training_no_process
-                    dic_projects_data = all_projects_training_no_process
+            if type == 'all':
+                global all_projects_training_all
+                dic_projects_data = all_projects_training_all
+            elif type == 'no_bugs':
+                global all_projects_training_no_bugs
+                dic_projects_data = all_projects_training_no_bugs
+            else:
+                global all_projects_training_no_process
+                dic_projects_data = all_projects_training_no_process
             sep_results.loc[len(sep_results)] = [str(data_names[cold_start_proj]).split('\\')[-1], str(data_names[key]).split('\\')[-1],model_details,
                                                  dic_projects_data[key].shape[0], val.shape[0],type]
 
-    sep_results.to_csv(os.path.join(saving_path, str(data_names[cold_start_proj]).split('\\')[-1]+"_"+str(sampling)+"_"+str(type)+"_"+str(model_details)+".csv"), index=False)
-
+    sep_results.to_csv(os.path.join(saving_path, str(data_names[cold_start_proj]).split('\\')[-1]+"_"+str(sampling)+"_"+str(system_features)+"_"+str(number_of_sampling)+"_"+str(type)+"_"+str(model_details)+".csv"), index=False)
 
 def get_eval(saving_path):
     datasets = pd.DataFrame()
@@ -377,6 +404,39 @@ def create_all_eval_results_gan(y_true, y_pred):
     f_measure_all = metrics.f1_score(y_true, y_pred,average='weighted')
     f2_measure_all = calculateF2(precision_all, recall_all)
     accuracy = metrics.accuracy_score(y_true,y_pred)
+
+    return np.array(list((precision_all, recall_all, f_measure_all, f2_measure_all,accuracy)))
+
+def create_all_eval_results(y_true, y_pred, key,result_type,features_type,num_of_bugs,num_of_all_instances,bugs_Precent,from_model,system_features):
+    precision_bugged = metrics.precision_score(y_true,y_pred,pos_label=1,average='binary')
+    recall_bugged = metrics.recall_score(y_true,y_pred,pos_label=1,average='binary')
+    f_measure_bugged = metrics.f1_score(y_true,y_pred,pos_label=1,average='binary')
+    f2_measure_bugged = calculateF2(precision_bugged,recall_bugged)
+
+    un_true,_ = np.unique(y_true, return_counts=True)
+    un_pred,_ = np.unique(y_pred, return_counts=True)
+    if len(un_true) ==1 or len(un_pred)==1:
+        y_true.append(0)
+        y_true.append(1)
+        y_pred.append(0)
+        y_pred.append(1)
+        print("zero or ones")
+    try:
+        roc_bugged = metrics.roc_auc_score(y_true,y_pred,average=None)
+    except:
+        print("exception_roc")
+        roc_bugged = '?'
+    try:
+        precision, recall, thresholds = metrics.precision_recall_curve(y_true, y_pred,pos_label=1)
+        prc_bugged = metrics.auc(precision, recall)
+    except:
+        print("exception_prc")
+        prc_bugged = '?'
+
+    precision_all = metrics.precision_score(y_true, y_pred, average='weighted')
+    recall_all = metrics.recall_score(y_true, y_pred, average='weighted')
+    f_measure_all = metrics.f1_score(y_true, y_pred,average='weighted')
+    f2_measure_all = calculateF2(precision_all, recall_all)
     try:
         roc_all = metrics.roc_auc_score(y_true, y_pred, average='weighted')
     except:
@@ -389,84 +449,36 @@ def create_all_eval_results_gan(y_true, y_pred):
         print("exception_prc")
         prc_all = 1
 
-    return np.array(list((precision_all, recall_all, f_measure_all, f2_measure_all,
-                                            roc_all, prc_all,accuracy)))
-
-def create_all_eval_results(y_true, y_pred, key,result_type,features_type,num_of_bugs,num_of_all_instances,bugs_Precent,from_model,system_features):
-    precision_bugged = metrics.precision_score(y_true,y_pred,pos_label=1,average='binary')
-    recall_bugged = metrics.recall_score(y_true,y_pred,pos_label=1,average='binary')
-    f_measure_bugged = metrics.f1_score(y_true,y_pred,pos_label=1,average='binary')
-    f2_measure_bugged = calculateF2(precision_bugged,recall_bugged)
-
-    un_true,_ = np.unique(y_true, return_counts=True)
-    un_pred,_ = np.unique(y_pred, return_counts=True)
-    if len(un_true) ==1 or len(un_pred)==1:
-        roc_bugged = '?'
-        prc_bugged =  '?'
-        print("zero")
-    else:
-        try:
-            roc_bugged = metrics.roc_auc_score(y_true,y_pred,average=None)
-        except:
-            print("exception_roc")
-            roc_bugged = '?'
-        try:
-            precision, recall, thresholds = metrics.precision_recall_curve(y_true, y_pred,pos_label=1)
-            prc_bugged = metrics.auc(precision, recall)
-        except:
-            print("exception_prc")
-            prc_bugged = '?'
-
-    precision_all = metrics.precision_score(y_true, y_pred, average='weighted')
-    recall_all = metrics.recall_score(y_true, y_pred, average='weighted')
-    f_measure_all = metrics.f1_score(y_true, y_pred,average='weighted')
-    f2_measure_all = calculateF2(precision_all, recall_all)
-    if len(un_true) ==1 or len(un_pred)==1:
-        roc_all = 0
-        prc_all =  1
-        print("zero")
-    else:
-        try:
-            roc_all = metrics.roc_auc_score(y_true, y_pred, average='weighted')
-        except:
-            print("exception_roc")
-            roc_all = 0
-        try:
-            precision, recall, thresholds = metrics.precision_recall_curve(y_true, y_pred)
-            prc_all = metrics.auc(recall, precision)
-        except:
-            print("exception_prc")
-            prc_all = 1
-
     global results_all_projects
-    results_all_projects.loc[len(results_all_projects)] = [key, from_model ,result_type, features_type, "record-sensitive",str(system_features), precision_bugged,
+    results_all_projects.loc[len(results_all_projects)] = [key, from_model, result_type, features_type,
+                                                           "record-sensitive", precision_bugged,
                                                            recall_bugged, f_measure_bugged,
                                                            f2_measure_bugged, roc_bugged, prc_bugged,
                                                            precision_all, recall_all, f_measure_all, f2_measure_all,
                                                            roc_all, prc_all, num_of_bugs, num_of_all_instances,
-                                                           bugs_Precent]
+                                                           bugs_Precent, str(system_features), str(sampling),
+                                                           str(num_of_samples)]
 
 def set_global_cold_start(number):
     global cold_start_index
     cold_start_index = number
 
 #main num.1
-def create_models_and_eval(system_features,sampling,model_details,model,num_of_samples= 100):
+def create_models_and_eval(system_features,sampling,model_details,model,num_of_samples):
     for key, saving_path in data_names.items():
         set_global_cold_start(int(key))
         training_by_models = load_training_set(sampling,num_of_samples)
-        # for type in ['all', 'no_bugs', 'no_process']:
-        for type in ['all', 'no_process']:
-        # for type in ['all']:
+        for type in ['all', 'no_bugs', 'no_process']:
             print("start process for: "+str(saving_path))
             tr_data_all = training_by_models[type].drop('label', axis=1)
-            my_model = predict_model_kfold(str(data_names[key]).split('\\')[-1],model_details,model,system_features,type,tr_data_all, training_by_models[type]['label'])
+            my_model = predict_model_kfold(str(data_names[key]).split('\\')[-1], model_details, model, system_features,
+                                       type, tr_data_all, training_by_models[type]['label'], sampling, num_of_samples)
             all_x_test = load_cold_start_testing(type)
             x_test = all_x_test.copy()
             x_test = x_test.drop('hasBug', axis=1)
             pred = my_model.predict(x_test)
             separated = separated_data_by_predicted_model(pred, all_x_test,system_features,type)
-            export_info_about_seperation(separated,type,key,saving_path,sampling,model_details,num_of_samples)
+            export_info_about_seperation(separated,type,key,saving_path,sampling,model_details,num_of_samples,system_features)
             pred,real = get_all_eval_based_on_model(separated,type)
             num_of_bugs = real.count(1)
             num_of_all_instances = len(real)
@@ -476,24 +488,68 @@ def create_models_and_eval(system_features,sampling,model_details,model,num_of_s
                 bug_precent = 0
             create_all_eval_results(real, pred,str(data_names[key]).split('\\')[-1],"testing",type,num_of_bugs,num_of_all_instances,bug_precent,model_details,system_features)
 
+
+
+def create_models_and_eval_all_random(system_features,sampling,model_details,model,num_of_samples):
+    for key, saving_path in data_names.items():
+        set_global_cold_start(int(key))
+        # training_by_models = load_training_set(sampling,num_of_samples)
+        for type in ['all', 'no_bugs', 'no_process']:
+            print("start process for: "+str(saving_path))
+            # tr_data_all = training_by_models[type].drop('label', axis=1)
+            # my_model = predict_model_kfold(str(data_names[key]).split('\\')[-1], model_details, model, system_features,
+            #                            type, tr_data_all, training_by_models[type]['label'], sampling, num_of_samples)
+            all_x_test = load_cold_start_testing(type)
+            # x_test = all_x_test.copy()
+            # x_test = x_test.drop('hasBug', axis=1)
+            # pred = my_model.predict(x_test)
+            separated = separated_data_randomly(all_x_test,system_features,type)
+            export_info_about_seperation(separated,type,key,saving_path,sampling,model_details,num_of_samples,system_features)
+            pred,real = get_all_eval_based_on_model(separated,type)
+            num_of_bugs = real.count(1)
+            num_of_all_instances = len(real)
+            try:
+                bug_precent = float(num_of_bugs) / float(num_of_all_instances)
+            except:
+                bug_precent = 0
+            create_all_eval_results(real, pred,str(data_names[key]).split('\\')[-1],"testing",type,num_of_bugs,num_of_all_instances,bug_precent,model_details,system_features)
+
+
+
 models ={
-        "random_forest_1000": RandomForestClassifier(n_estimators=100,max_depth=6)
+        "random_forest_100_random": RandomForestClassifier(n_estimators=100,max_depth=5)
         # "xgb": XGBClassifier(n_estimators=100, max_depth=6)
         # "gradient_boostong": GradientBoostingClassifier(learning_rate=0.01, max_depth=5,n_estimators=100)
     }
 
+print("load all models...")
 load_all_models()
+print("finished load all models...")
 
+index = 0
 for model_details, model in models.items():
-        # for system_features in [False,True]:
     for system_features in [False]:
         load_arff_from_dir_into_dataFrames_dictionery(system_features)
         for sampling in [True,False]:
             if(sampling):
-                for num_of_samples in [4000,10000]:
-                    create_models_and_eval(system_features, sampling,model_details,model,num_of_samples)
+                for num_of_samples in [10000]:
+                    index+=1
+                    print("start process_"+str(system_features)+"_"+str(sampling)+"_"+str(num_of_samples))
+                    # create_models_and_eval(system_features, sampling,model_details,model,num_of_samples)
+                    create_models_and_eval_all_random(system_features, sampling,model_details,model,num_of_samples)
+
+                    results_all_projects.to_csv(os.path.join(results_path, "gan_results_all_by_models_random" + str(index) + ".csv"), index=False)
+                    gan_val.to_csv(os.path.join(results_path, "gan_seperation_model_results_random" + str(index) + ".csv"),
+                                   index=False)
             else:
-                create_models_and_eval(system_features, sampling, model_details,model,"-")
+                index += 1
+                print("start process_" + str(system_features) + "_" + str(sampling))
+
+                # create_models_and_eval(system_features, sampling, model_details,model,"-")
+                create_models_and_eval_all_random(system_features, sampling, model_details,model,"-")
+                results_all_projects.to_csv(os.path.join(results_path, "gan_results_all_by_models_random"+str(index)+".csv"), index=False)
+                gan_val.to_csv(os.path.join(results_path, "gan_seperation_model_results_random" + str(index) + ".csv"),
+                               index=False)
 
         global all_projects_training_no_process
         global all_projects_training_no_bugs
@@ -508,7 +564,8 @@ for model_details, model in models.items():
         all_projects_testing_no_bugs = {}
         all_projects_testing_all = {}
 
-
-results_all_projects.to_csv(os.path.join(results_path, "gan_results_all_by_models.csv"), index=False)
+index+=1
+results_all_projects.to_csv(os.path.join(results_path, "gan_results_all_by_models_random" + str(index) + str(index) + ".csv"), index=False)
+gan_val.to_csv(os.path.join(results_path, "gan_seperation_model_results_random" + str(index) +  ".csv"), index=False)
 
 
