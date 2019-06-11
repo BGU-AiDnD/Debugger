@@ -229,8 +229,8 @@ def get_all_eval_based_on_model(separated,type):
     for key, data_to_test in separated.items():
         x_test = data_to_test.copy()
         try:
-            x_test = x_test.drop('hasBug', axis=1)
             if x_test.shape[0] != 0:
+                x_test = x_test.drop('hasBug', axis=1)
                 pred = np.concatenate((pred,  dic_models[key].predict(x_test)), axis=None)
                 real = np.concatenate((real,  data_to_test['hasBug']), axis=None)
         except:
