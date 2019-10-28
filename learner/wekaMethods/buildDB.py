@@ -66,12 +66,19 @@ def commTablelight(commits):
 
 
 def commits_and_Bugs(repo, bugsIds):
+    def replace(chars_to_replace, replacement, s):
+        temp_s = s
+        for c in chars_to_replace:
+            temp_s = temp_s.replace(c, replacement)
+        return temp_s
+
     def get_bug_num_from_commit_text(git_commit, bugsIds):
         if str(git_commit.hexsha) in bugsIds:
             return str(git_commit.hexsha)
-        commit_text = Commit.clean_commit_message(git_commit.message)
-        text = commit_text.split()
-        for word in text:
+        commit_text = Commit.clean_commit_message(git_commit.summary)
+        text = replace("[]?#,:", "", commit_text.lower())
+        text = replace("-_", " ", text)
+        for word in text.split():
             if word.isdigit():
                 if word in bugsIds:
                     return word
