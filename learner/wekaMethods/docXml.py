@@ -63,7 +63,15 @@ def classRead(class_data, packPath):
     extends = class_data.getElementsByTagName("class")
     if len(extends) > 0:
         superClass = extends[0].attributes.values()[0].value
-    vals = [Dirpath, superClass] + vals
+    vals2 = []
+    for v in vals:
+        if v == "true":
+            vals2.append("1")
+        elif v == "false":
+            vals2.append("0")
+        else:
+            vals2.append(v)
+    vals = [Dirpath, superClass] + vals2
     all_cons = map(lambda con: constructor(con, name, Dirpath), class_data.getElementsByTagName("constructor"))
     all_methods = map(lambda meth: method(meth, name, Dirpath), class_data.getElementsByTagName("method"))
     all_fields = map(lambda field_name: field(field_name, name, Dirpath), class_data.getElementsByTagName("field"))
@@ -114,7 +122,7 @@ def interfaceRead(c,packPath):
 
     #reshape ['superClass', u'included', u'scope', u'qualified', u'name'] to desired shape : superClass exception name externalizable abstract path error included scope serializable
     Dirpath,superClass,included  ,scope,path,name  =vals
-    exception,  externalizable, abstract ,error ,serializable=["false","false","true","false","false"]
+    exception,  externalizable, abstract ,error ,serializable=["0","0","1","0","0"]
 
     vals=[Dirpath,superClass ,exception ,name ,externalizable ,abstract ,path ,error ,included ,scope ,serializable]
     return (vals,all_methods,all_fields,all_cons)

@@ -63,9 +63,14 @@ def OO_features_error_analyze(err):
 @utilsConf.marker_decorator(utilsConf.OO_OLD_FEATURES_MARKER)
 def Extract_OO_features_OLD():
     for version in utilsConf.get_configuration().vers:
-        verPath = os.path.join(utilsConf.get_configuration().versPath, version_to_dir_name(version))
-        command = """cd /d  """ + utilsConf.to_short_path(verPath) + " & for /R .\\repo %f in (*.java) do (call javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath "+utilsConf.to_short_path(utilsConf.get_configuration().docletPath)+" -filename %~nxf.xml -private -d .\Jdoc2 %f >NUL 2>NUL)"
-        os.system(command)
+        verPath = os.path.join(utilsConf.get_configuration().versPath, version_to_dir_name(version), "repo")
+        from mvnpy.Repo import Repo
+        repo = Repo(verPath)
+        # repo.test_compile()
+        # repo.javadoc_command(os.path.join(utilsConf.get_configuration().versPath, version_to_dir_name(version), "javadoc.json"))
+
+        # command = """cd /d  """ + utilsConf.to_short_path(verPath) + " & for /R .\\repo %f in (*.java) do (call javadoc -doclet com.github.markusbernhardt.xmldoclet.XmlDoclet -docletpath "+utilsConf.to_short_path(utilsConf.get_configuration().docletPath)+" -filename %~nxf.xml -private -d .\Jdoc2 %f >NUL 2>NUL)"
+        # os.system(command)
 
 
 @utilsConf.marker_decorator(utilsConf.OO_FEATURES_MARKER)
@@ -196,29 +201,14 @@ def featuresExtract():
     wekaMethods.commsSpaces.create(utilsConf.get_configuration().vers_dirs, os.path.join(utilsConf.get_configuration().workingDir, "vers"))
 
 
-def BuildWekaModel(weka, training, testing, namesCsv, outCsv, name, wekaJar):
-    algorithm="weka.classifiers.trees.RandomForest -I 1000 -K 0 -S 1 -num-slots 1 "
-    #os.system("cd /d  "+weka +" & java -Xmx2024m  -cp \"C:\\Program Files\\Weka-3-7\\weka.jar\" weka.Run " +algorithm+ " -x 10 -d .\\model.model -t "+training+" > training"+name+".txt")
-    os.system("cd /d  "+ utilsConf.to_short_path(weka) +" & java -Xmx2024m  -cp "+utilsConf.to_short_path(wekaJar)+" weka.Run " +algorithm+ " -x 10 -d .\\model.model -t "+training+" > training"+name+".txt")
-    # run_commands = ['java', '-Xmx2024m',  '-cp', wekaJar, 'weka.Run', algorithm, '-x', '10', '-d', '.\\model.model', 't']
-    # proc = subprocess.Popen(run_commands, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=utilsConf.to_short_path(weka))
-    # proc.communicate()
-    algorithm="weka.classifiers.trees.RandomForest "
-    os.system("cd /d  "+ utilsConf.to_short_path(weka) +" & java -Xmx2024m  -cp "+ utilsConf.to_short_path(wekaJar) +" weka.Run " +algorithm+ " -l .\\model.model -T "+testing+" -classifications \"weka.classifiers.evaluation.output.prediction.CSV -file testing"+name+".csv\" ")
-    os.system("cd /d  "+ utilsConf.to_short_path(weka) +" & java -Xmx2024m  -cp "+ utilsConf.to_short_path(wekaJar) +" weka.Run " +algorithm+ " -l .\\model.model -T "+testing+" > testing"+name+".txt ")
-    wekaCsv = os.path.join(utilsConf.to_short_path(weka), "testing"+name+".csv")
-    wekaMethods.wekaAccuracy.priorsCreation(namesCsv, wekaCsv, outCsv)
-
-
 @utilsConf.marker_decorator(utilsConf.ML_MODELS_MARKER)
 def createBuildMLModels():
     for granularity in wekaMethods.articles.BUG_QUERIES:
         packages = wekaMethods.articles.PACKAGES[granularity]
         for buggedType in wekaMethods.articles.BUG_QUERIES[granularity]:
-            print buggedType, granularity
-            generator = wekaMethods.articles.arffGenerator(buggedType, granularity)
+            generator = wekaMethods.articles.ArffGenerator(buggedType, granularity)
             generator.generate_features(utilsConf.get_configuration().weka_path, packages)
-            generator.BuildWekaModel(utilsConf.get_configuration().weka_path)
+            # generator.build_ml_model(utilsConf.get_configuration().weka_path)
     # generate all but one files
     # ml_all_one()
 
@@ -227,7 +217,7 @@ def ml_all_one():
     for granularity in wekaMethods.articles.BUG_QUERIES:
         packages = wekaMethods.articles.PACKAGES[granularity]
         for buggedType in wekaMethods.articles.BUG_QUERIES[granularity]:
-            generator = wekaMethods.articles.arffGenerator(buggedType, granularity)
+            generator = wekaMethods.articles.ArffGenerator(buggedType, granularity)
             generator.generate_features(utilsConf.get_configuration().weka_path, packages)
             for ind in range(len(packages)):
                 one_feature_dir = os.path.join(utilsConf.get_configuration().one_dir, packages[ind])
@@ -304,8 +294,8 @@ def create_web_prediction_results():
             weka_csv = os.path.join(utilsConf.get_configuration().weka_path, "{buggedType}_out_{GRANULARITY}.csv".format(buggedType=buggedType, GRANULARITY=granularity))
             prediction_csv = os.path.join(utilsConf.get_configuration().web_prediction_results,
                                           utilsConf.get_configuration().prediction_files[buggedType][granularity])
-            weka_csv_to_readable_csv(weka_csv, prediction_csv)
-            save_json_watchers(prediction_csv)
+            # weka_csv_to_readable_csv(weka_csv, prediction_csv)
+            # save_json_watchers(prediction_csv)
 
 
 def get_versions_by_type(tags):

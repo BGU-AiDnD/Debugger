@@ -20,7 +20,6 @@ class processFamilies:
         if self.family=="bugs":
             self.best=bugs_features
 
-
     def get_attributes(self):
         all= [( "tot_changes", "NUMERIC"), ( "sum_insert", "NUMERIC"),
                 ( "sum_delets", "NUMERIC"),( "count_insert", "NUMERIC"),
@@ -101,7 +100,7 @@ class processFamilies:
             Att_dict[f] = list(basicAtt)
         for row in c.execute(first):
             name = row[0]
-            if (name in Att_dict):
+            if name in Att_dict:
                 Att_dict[name] = list([x if x!=None else 0 for x in row[1:]])
         for f in Att_dict:
             files_dict[f] = files_dict[f] + Att_dict[f]
@@ -172,7 +171,6 @@ class processFamilies:
             case=case+ " When Priority= "+p + " Then "+str(r)+"*metric "
         case=case+" Else 0.0 End)"
         first='select name, count('+case.replace('metric','1')+') ,  sum('+case.replace('metric','insertions')+') ,sum('+case.replace('metric','deletions')+') ,Sum(case When insertions > 0 Then '+case.replace('metric','1')+' Else 0 End) ,Sum(case When deletions > 0 Then '+case.replace('metric','1')+' Else 0 End) ,  avg('+case.replace('metric','insertions')+') ,avg('+case.replace('metric','deletions')+') , avg(case When insertions > 0 Then '+case.replace('metric','insertions')+' Else Null End) ,avg(case When deletions > 0 Then '+case.replace('metric','deletions')+' Else Null End) from commitedfiles,bugs where commitedfiles.bugId=bugs.id and name not like "%test%"  and commiter_date<="' + str(start_date)+ '"' + '  and commiter_date<="' + str(end_date) + '" group by name'
-        print first
         self.sqlToAttributes(["0", "0", "0", "0", "0", "0", "0", "0", "0"], c, files_dict, first)
 
         for p in ['"normal"','"enhancement"','"major"']:

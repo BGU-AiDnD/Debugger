@@ -129,7 +129,7 @@ class OOFamiliesMethods(featureExtractorBase.FeatureExtractorBase):
 
 
                 ( "len_params", "NUMERIC"),( "sum_params", "NUMERIC"),( "mean_params", "NUMERIC"),( "median_params", "NUMERIC"),
-    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( "ONE_elem_params", ['True','False'])]
+    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( "ONE_elem_params",  "NUMERIC")]
 
 
     def methodsArticles_attributes(self):
@@ -172,11 +172,11 @@ class OOFamiliesMethods(featureExtractorBase.FeatureExtractorBase):
                         ( "len_all_percent", "NUMERIC"),
     ( "len_all_set_percent", "NUMERIC"),
                 ( "len_params", "NUMERIC"),( "sum_params", "NUMERIC"),( "mean_params", "NUMERIC"),( "median_params", "NUMERIC"),
-    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( "ONE_elem_params", ['True','False'])]
+    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( "ONE_elem_params",  "NUMERIC")]
 
 
     def hirarcy_attributes(self):
-        return [('degs', 'NUMERIC'), ('degsIN', 'NUMERIC'), ('succ', 'NUMERIC'), ('depth', 'NUMERIC'),('IsInterface',['Interface','class']),('Parent',['Has_parent','No_parent']), ('exception', ['true', 'false']), ('externalizable', ['true', 'false']), ('abstract', ['true', 'false']), ('error', ['true', 'false']), ('scope', ['public', 'protected', 'private', 'default']),('serializable',['true','false'])]
+        return [('degs', 'NUMERIC'), ('degsIN', 'NUMERIC'), ('succ', 'NUMERIC'), ('depth', 'NUMERIC'),('IsInterface', "NUMERIC"),('Parent', "NUMERIC"), ('exception', "NUMERIC"), ('externalizable', "NUMERIC"), ('abstract', "NUMERIC"), ('error', "NUMERIC"), ('scope', ['public', 'protected', 'private', 'default']),('serializable', "NUMERIC")]
 
     def fields_attributes(self):
         return [('fields_Count', 'NUMERIC'), ('fields_private_Count', 'NUMERIC'), ('fields_protected_Count', 'NUMERIC'), ('fields_public_Count', 'NUMERIC'), ('fields_not_public_Count', 'NUMERIC'), ('fields_static_Count', 'NUMERIC'), ('fields_final_Count', 'NUMERIC'), ('fields_type_primitive_Count', 'NUMERIC'), ('fields_type_void_Count', 'NUMERIC'), ('fields_type_java_Count', 'NUMERIC'), ('fields_type_all_Count', 'NUMERIC'), ('fields_type_distinct_primitive_Count', 'NUMERIC'), ('fields_type_distinct_void_Count', 'NUMERIC'), ('fields_type_distinct_java_Count', 'NUMERIC'), ('fields_type_distinct_all_Count', 'NUMERIC'), ('fields_percent_private_Count', 'NUMERIC'), ('fields_percent_protected_Count', 'NUMERIC'), ('fields_percent_public_Count', 'NUMERIC'), ('fields_percent_not_public_Count', 'NUMERIC'), ('fields_percent_static_Count', 'NUMERIC'), ('fields_percent_final_Count', 'NUMERIC'), ('fields_percent_type_primitive_Count', 'NUMERIC'), ('fields_percent_type_void_Count', 'NUMERIC'), ('fields_percent_type_java_Count', 'NUMERIC'), ('fields_percent_type_all_Count', 'NUMERIC'), ('fields_percent_type_distinct_primitive_Count', 'NUMERIC'), ('fields_percent_type_distinct_void_Count', 'NUMERIC'), ('fields_percent_type_distinct_java_Count', 'NUMERIC'), ('fields_percent_type_distinct_all_Count', 'NUMERIC')]
@@ -188,13 +188,13 @@ class OOFamiliesMethods(featureExtractorBase.FeatureExtractorBase):
         return  [ ('fields_type_primitive_Count', 'NUMERIC'), ('fields_type_void_Count', 'NUMERIC'), ('fields_type_java_Count', 'NUMERIC'), ('fields_type_all_Count', 'NUMERIC'), ('fields_type_distinct_primitive_Count', 'NUMERIC'), ('fields_type_distinct_void_Count', 'NUMERIC'), ('fields_type_distinct_java_Count', 'NUMERIC'), ('fields_type_distinct_all_Count', 'NUMERIC'), ('fields_percent_private_Count', 'NUMERIC'), ('fields_percent_protected_Count', 'NUMERIC'), ('fields_percent_public_Count', 'NUMERIC'), ('fields_percent_not_public_Count', 'NUMERIC'), ('fields_percent_static_Count', 'NUMERIC'), ('fields_percent_final_Count', 'NUMERIC'), ('fields_percent_type_primitive_Count', 'NUMERIC'), ('fields_percent_type_void_Count', 'NUMERIC'), ('fields_percent_type_java_Count', 'NUMERIC'), ('fields_percent_type_all_Count', 'NUMERIC'), ('fields_percent_type_distinct_primitive_Count', 'NUMERIC'), ('fields_percent_type_distinct_void_Count', 'NUMERIC'), ('fields_percent_type_distinct_java_Count', 'NUMERIC'), ('fields_percent_type_distinct_all_Count', 'NUMERIC')]
 
     def constructors_attributes(self):
-        return [('constructors_Count', 'NUMERIC'), ('constructors_private_Count', 'NUMERIC'), ('constructors_protected_Count', 'NUMERIC'), ('constructors_public_Count', 'NUMERIC'), ('constructors_not_public_Count', 'NUMERIC'), ('len_constructors__primitive', 'NUMERIC'), ('len_constructors__primitive_set', 'NUMERIC'), ('len_constructors__void', 'NUMERIC'), ('len_constructors__void_set', 'NUMERIC'), ('len_constructors__java', 'NUMERIC'), ('len_constructors__java_set', 'NUMERIC'), ('len_constructors__all', 'NUMERIC'), ('len_constructors__all_set', 'NUMERIC'), ('len_constructors__primitive_percent', 'NUMERIC'), ('len_constructors__primitive_set_percent', 'NUMERIC'), ('len_constructors__void_percent', 'NUMERIC'), ('len_constructors__void_set_percent', 'NUMERIC'), ('len_constructors__java_percent', 'NUMERIC'), ('len_constructors__java_set_percent', 'NUMERIC'), ('len_constructors__all_percent', 'NUMERIC'), ('len_constructors__all_set_percent', 'NUMERIC'), ('len_params_constructors', 'NUMERIC'), ('sum_params_constructors', 'NUMERIC'), ('mean_params_constructors', 'NUMERIC'), ('median_params_constructors', 'NUMERIC'), ('var_params_constructors', 'NUMERIC'), ('max_params_constructors', 'NUMERIC'), ('min_params_constructors', 'NUMERIC'), ('ONE_elem_params_constructors', ['True', 'False'])]
+        return [('constructors_Count', 'NUMERIC'), ('constructors_private_Count', 'NUMERIC'), ('constructors_protected_Count', 'NUMERIC'), ('constructors_public_Count', 'NUMERIC'), ('constructors_not_public_Count', 'NUMERIC'), ('len_constructors__primitive', 'NUMERIC'), ('len_constructors__primitive_set', 'NUMERIC'), ('len_constructors__void', 'NUMERIC'), ('len_constructors__void_set', 'NUMERIC'), ('len_constructors__java', 'NUMERIC'), ('len_constructors__java_set', 'NUMERIC'), ('len_constructors__all', 'NUMERIC'), ('len_constructors__all_set', 'NUMERIC'), ('len_constructors__primitive_percent', 'NUMERIC'), ('len_constructors__primitive_set_percent', 'NUMERIC'), ('len_constructors__void_percent', 'NUMERIC'), ('len_constructors__void_set_percent', 'NUMERIC'), ('len_constructors__java_percent', 'NUMERIC'), ('len_constructors__java_set_percent', 'NUMERIC'), ('len_constructors__all_percent', 'NUMERIC'), ('len_constructors__all_set_percent', 'NUMERIC'), ('len_params_constructors', 'NUMERIC'), ('sum_params_constructors', 'NUMERIC'), ('mean_params_constructors', 'NUMERIC'), ('median_params_constructors', 'NUMERIC'), ('var_params_constructors', 'NUMERIC'), ('max_params_constructors', 'NUMERIC'), ('min_params_constructors', 'NUMERIC'), ('ONE_elem_params_constructors', "NUMERIC")]
 
     def constructorsArticles_attributes(self):
         return [('constructors_Count', 'NUMERIC'), ('constructors_private_Count', 'NUMERIC'), ('constructors_protected_Count', 'NUMERIC'), ('constructors_public_Count', 'NUMERIC'), ('constructors_not_public_Count', 'NUMERIC')]
 
     def constructorsAdded_attributes(self):
-        return [('len_constructors__primitive', 'NUMERIC'), ('len_constructors__primitive_set', 'NUMERIC'), ('len_constructors__void', 'NUMERIC'), ('len_constructors__void_set', 'NUMERIC'), ('len_constructors__java', 'NUMERIC'), ('len_constructors__java_set', 'NUMERIC'), ('len_constructors__all', 'NUMERIC'), ('len_constructors__all_set', 'NUMERIC'), ('len_constructors__primitive_percent', 'NUMERIC'), ('len_constructors__primitive_set_percent', 'NUMERIC'), ('len_constructors__void_percent', 'NUMERIC'), ('len_constructors__void_set_percent', 'NUMERIC'), ('len_constructors__java_percent', 'NUMERIC'), ('len_constructors__java_set_percent', 'NUMERIC'), ('len_constructors__all_percent', 'NUMERIC'), ('len_constructors__all_set_percent', 'NUMERIC'), ('len_params_constructors', 'NUMERIC'), ('sum_params_constructors', 'NUMERIC'), ('mean_params_constructors', 'NUMERIC'), ('median_params_constructors', 'NUMERIC'), ('var_params_constructors', 'NUMERIC'), ('max_params_constructors', 'NUMERIC'), ('min_params_constructors', 'NUMERIC'), ('ONE_elem_params_constructors', ['True', 'False'])]
+        return [('len_constructors__primitive', 'NUMERIC'), ('len_constructors__primitive_set', 'NUMERIC'), ('len_constructors__void', 'NUMERIC'), ('len_constructors__void_set', 'NUMERIC'), ('len_constructors__java', 'NUMERIC'), ('len_constructors__java_set', 'NUMERIC'), ('len_constructors__all', 'NUMERIC'), ('len_constructors__all_set', 'NUMERIC'), ('len_constructors__primitive_percent', 'NUMERIC'), ('len_constructors__primitive_set_percent', 'NUMERIC'), ('len_constructors__void_percent', 'NUMERIC'), ('len_constructors__void_set_percent', 'NUMERIC'), ('len_constructors__java_percent', 'NUMERIC'), ('len_constructors__java_set_percent', 'NUMERIC'), ('len_constructors__all_percent', 'NUMERIC'), ('len_constructors__all_set_percent', 'NUMERIC'), ('len_params_constructors', 'NUMERIC'), ('sum_params_constructors', 'NUMERIC'), ('mean_params_constructors', 'NUMERIC'), ('median_params_constructors', 'NUMERIC'), ('var_params_constructors', 'NUMERIC'), ('max_params_constructors', 'NUMERIC'), ('min_params_constructors', 'NUMERIC'), ('ONE_elem_params_constructors', "NUMERIC")]
 
 
     def pathToNameClass(self,r0,ind):
@@ -679,9 +679,9 @@ class OOFamiliesMethods(featureExtractorBase.FeatureExtractorBase):
 
 
     def get_attributesBest(self):
-        '''('IsInterface',['Interface','class']),('Parent',['Has_parent','No_parent']) ,
-                ('exception',['true','false']) ,('externalizable',['true','false']) ,('abstract',['true','false']) ,('error',['true','false']) ,('scope',['public','protected','private','default'])
-            ,('serializable',['true','false']) ,'''
+        '''('IsInterface', "NUMERIC"),('Parent', "NUMERIC") ,
+                ('exception', "NUMERIC") ,('externalizable', "NUMERIC") ,('abstract', "NUMERIC") ,('error', "NUMERIC")
+            ,('serializable', "NUMERIC") ,'''
         all= [
 
 ("degs", "NUMERIC"),("degsIN", "NUMERIC"),("succ", "NUMERIC"),("depth", "NUMERIC"),
@@ -748,7 +748,7 @@ class OOFamiliesMethods(featureExtractorBase.FeatureExtractorBase):
 
 
                 ( "len_params", "NUMERIC"),( "sum_params", "NUMERIC"),( "mean_params", "NUMERIC"),( "median_params", "NUMERIC"),
-    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( "ONE_elem_params", ['True','False'])]
+    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( "ONE_elem_params",  "NUMERIC")]
 
         all= [
 ("degs", "NUMERIC"),("degsIN", "NUMERIC"),("succ", "NUMERIC"),("depth", "NUMERIC"),
@@ -764,9 +764,9 @@ class OOFamiliesMethods(featureExtractorBase.FeatureExtractorBase):
 ("out_degree_all", "NUMERIC"),("katz_centrality(g2_all", "NUMERIC"),
 ("core_number(g2_all", "NUMERIC"),("closeness_centrality(g2_all", "NUMERIC"),("degree_centrality(g2_all", "NUMERIC"),("out_degree_centrality(g2_all", "NUMERIC"),
 ("out_degreeG3_all", "NUMERIC"),("core_number(g3_all", "NUMERIC"),("closeness_centrality(g3_all", "NUMERIC"),("degree_centrality(g3_all", "NUMERIC"),("out_degree_centrality(g3_all", "NUMERIC"),
-('IsInterface',['Interface','class']),('Parent',['Has_parent','No_parent']) ,
-                ('exception',['true','false']) ,('externalizable',['true','false']) ,('abstract',['true','false']) ,('error',['true','false']) ,('scope',['public','protected','private','default'])
-            ,('serializable',['true','false']) ,
+('IsInterface', "NUMERIC"),('Parent', "NUMERIC") ,
+                ('exception', "NUMERIC") ,('externalizable', "NUMERIC") ,('abstract', "NUMERIC") ,('error', "NUMERIC")
+            ,('serializable', "NUMERIC") ,
                 ( "methods_Count", "NUMERIC"),
 
                 ( "methods_private_Count", "NUMERIC"),( "methods_protected_Count", "NUMERIC"),( "methods_public_Count", "NUMERIC"),( "methods_not_public_Count", "NUMERIC"),
@@ -808,7 +808,7 @@ class OOFamiliesMethods(featureExtractorBase.FeatureExtractorBase):
 
 
                 ( "len_params", "NUMERIC"),( "sum_params", "NUMERIC"),( "mean_params", "NUMERIC"),( "median_params", "NUMERIC"),
-    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( "ONE_elem_params", ['True','False']),
+    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( "ONE_elem_params",  "NUMERIC"),
      #constructors
 
                         ( "constructors_Count", "NUMERIC"),( "constructors_private_Count", "NUMERIC"),( "constructors_protected_Count", "NUMERIC"),( "constructors_public_Count", "NUMERIC"),( "constructors_not_public_Count", "NUMERIC"),
@@ -833,7 +833,7 @@ class OOFamiliesMethods(featureExtractorBase.FeatureExtractorBase):
                         #all
                         ( "len_constructors__all_percent", "NUMERIC"), ( "len_constructors__all_set_percent", "NUMERIC"),
     ( "len_params_constructors", "NUMERIC"),( "sum_params_constructors", "NUMERIC"),( "mean_params_constructors", "NUMERIC"),( "median_params_constructors", "NUMERIC"),
-( "var_params_constructors", "NUMERIC"),( "max_params_constructors", "NUMERIC"),( "min_params_constructors", "NUMERIC"),( "ONE_elem_params_constructors",['True','False']),
+( "var_params_constructors", "NUMERIC"),( "max_params_constructors", "NUMERIC"),( "min_params_constructors", "NUMERIC"),( "ONE_elem_params_constructors", "NUMERIC"),
 
                 ( "fields_Count", "NUMERIC"),
 
@@ -859,17 +859,17 @@ class OOFamiliesMethods(featureExtractorBase.FeatureExtractorBase):
                 if i+1 in self.best:
                     ret.append(all[i])
         if self.family=="hirarcy":
-            ret.extend([('exception',['true','false']) ,('externalizable',['true','false']) ,('abstract',['true','false']) ,('error',['true','false']) ,('scope',['public','protected','private','default'])])
+            ret.extend([('exception', "NUMERIC") ,('externalizable', "NUMERIC") ,('abstract', "NUMERIC") ,('error', "NUMERIC")  ])
         return ret
 
 
     def classes_features(self,c,files_dict):
         interfaces='select Dirpath, superClass from classes where superClass="Interface"'
         wekaMethods.articles.sqlToAttributes(["class"], c, files_dict, interfaces)
-        interfaces='select Dirpath, "No_parent" from classes where superClass="java.lang.Object"'
-        wekaMethods.articles.sqlToAttributes(["Has_parent"], c, files_dict, interfaces)
-        interfaces='select Dirpath ,exception  ,externalizable  ,abstract   ,error  ,case when scope="" then "default" else scope end as b ,serializable from classes'
-        wekaMethods.articles.sqlToAttributes(["false","false","false","false","public","false"], c, files_dict, interfaces)
+        interfaces='select Dirpath, 0 from classes where superClass="java.lang.Object"'
+        wekaMethods.articles.sqlToAttributes(["1"], c, files_dict, interfaces)
+        interfaces='select Dirpath ,exception  ,externalizable  ,abstract ,error ,serializable from classes'
+        wekaMethods.articles.sqlToAttributes(["false","false","false","false","false"], c, files_dict, interfaces)
 
 
     def get_featuresBest(self, c, files_dict,prev_date,start_date,end_date):

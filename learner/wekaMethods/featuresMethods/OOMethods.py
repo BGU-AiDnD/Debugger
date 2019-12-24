@@ -10,7 +10,7 @@ import featureExtractorBase
 best_features=[9,10,11,12,15,17,19,20,21,24,26,53,54,55,56,59,61,63,64,65,68,70,75,76,77,78,81,83,85,86,87,90,92,93,94,96,97,103,113,114,115,116,117,118,119,120,130,132,133,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,152,153,72,134,151,155]
 class OOMethods(featureExtractorBase.FeatureExtractorBase):
     def get_attributesOLD(self):
-        return [('exception',['true','false']) ,('abstract',['true','false']) ,('serializable',['true','false']) ,
+        return [('exception', "NUMERIC") ,('abstract', "NUMERIC") ,('serializable', "NUMERIC") ,
                 ( "methods_Count", "NUMERIC"),( "methods_override", "NUMERIC"),( "methods_private_Count", "NUMERIC"),
                 ( "methods_avg_params", "NUMERIC"),( "fields_Count", "NUMERIC"),( "fields_private_Count", "NUMERIC"),( "fields_Objects_Count", "NUMERIC"),
                 ( "constructors_Count", "NUMERIC"),( "uses_Count", "NUMERIC")]
@@ -52,8 +52,8 @@ class OOMethods(featureExtractorBase.FeatureExtractorBase):
         wekaMethods.articles.sqlToAttributes(["class"], c, files_dict, interfaces)
         interfaces='select path, "No_parent" from classes where superClass="java.lang.Object"'
         wekaMethods.articles.sqlToAttributes(["Has_parent"], c, files_dict, interfaces)
-        interfaces='select path ,exception  ,externalizable  ,abstract   ,error  ,case when scope="" then "default" else scope end as b ,serializable from classes'
-        wekaMethods.articles.sqlToAttributes(["false","false","false","false","public","false"], c, files_dict, interfaces)
+        interfaces='select path ,exception  ,externalizable  ,abstract   ,error ,serializable from classes'
+        wekaMethods.articles.sqlToAttributes(["false","false","false","false","false"], c, files_dict, interfaces)
 
     def stat(self,lst):
         counts= Counter(lst)
@@ -313,9 +313,9 @@ class OOMethods(featureExtractorBase.FeatureExtractorBase):
         #wekaMethods.articles.sqlToAttributes(["0"], c, files_dict, UsedThis)
 
     def get_attributesAll(self):
-        '''('IsInterface',['Interface','class']),('Parent',['Has_parent','No_parent']) ,
-                ('exception',['true','false']) ,('externalizable',['true','false']) ,('abstract',['true','false']) ,('error',['true','false']) ,('scope',['public','protected','private','default'])
-            ,('serializable',['true','false']) ,'''
+        '''('IsInterface', "NUMERIC"),('Parent', "NUMERIC") ,
+                ('exception', "NUMERIC") ,('externalizable', "NUMERIC") ,('abstract', "NUMERIC") ,('error', "NUMERIC")
+            ,('serializable', "NUMERIC") ,'''
         all= [
 
 ("degs", "NUMERIC"),("degsIN", "NUMERIC"),("succ", "NUMERIC"),("depth", "NUMERIC"),
@@ -331,9 +331,9 @@ class OOMethods(featureExtractorBase.FeatureExtractorBase):
 ("out_degree_all", "NUMERIC"),("katz_centrality(g2_all", "NUMERIC"),
 ("core_number(g2_all", "NUMERIC"),("closeness_centrality(g2_all", "NUMERIC"),("degree_centrality(g2_all", "NUMERIC"),("out_degree_centrality(g2_all", "NUMERIC"),
 ("out_degreeG3_all", "NUMERIC"),("core_number(g3_all", "NUMERIC"),("closeness_centrality(g3_all", "NUMERIC"),("degree_centrality(g3_all", "NUMERIC"),("out_degree_centrality(g3_all", "NUMERIC"),
-('IsInterface',['Interface','class']),('Parent',['Has_parent','No_parent']) ,
-                ('exception',['true','false']) ,('externalizable',['true','false']) ,('abstract',['true','false']) ,('error',['true','false']) ,('scope',['public','protected','private','default'])
-            ,('serializable',['true','false']) ,
+('IsInterface', "NUMERIC"),('Parent', "NUMERIC") ,
+                ('exception', "NUMERIC") ,('externalizable', "NUMERIC") ,('abstract', "NUMERIC") ,('error', "NUMERIC")
+            ,('serializable', "NUMERIC") ,
                 ( "methods_Count", "NUMERIC"),
 
                 ( "methods_private_Count", "NUMERIC"),( "methods_protected_Count", "NUMERIC"),( "methods_public_Count", "NUMERIC"),( "methods_not_public_Count", "NUMERIC"),
@@ -375,7 +375,7 @@ class OOMethods(featureExtractorBase.FeatureExtractorBase):
 
 
                 ( "len_params", "NUMERIC"),( "sum_params", "NUMERIC"),( "mean_params", "NUMERIC"),( "median_params", "NUMERIC"),
-    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( "ONE_elem_params", ['True','False']),
+    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( "ONE_elem_params",  "NUMERIC"),
      #constructors
 
                         ( "constructors_Count", "NUMERIC"),( "constructors_private_Count", "NUMERIC"),( "constructors_protected_Count", "NUMERIC"),( "constructors_public_Count", "NUMERIC"),( "constructors_not_public_Count", "NUMERIC"),
@@ -400,7 +400,7 @@ class OOMethods(featureExtractorBase.FeatureExtractorBase):
                         #all
                         ( "len_constructors__all_percent", "NUMERIC"), ( "len_constructors__all_set_percent", "NUMERIC"),
     ( "len_params_constructors", "NUMERIC"),( "sum_params_constructors", "NUMERIC"),( "mean_params_constructors", "NUMERIC"),( "median_params_constructors", "NUMERIC"),
-( "var_params_constructors", "NUMERIC"),( "max_params_constructors", "NUMERIC"),( "min_params_constructors", "NUMERIC"),( "ONE_elem_params_constructors",['True','False']),
+( "var_params_constructors", "NUMERIC"),( "max_params_constructors", "NUMERIC"),( "min_params_constructors", "NUMERIC"),( "ONE_elem_params_constructors", "NUMERIC"),
 
                 ( "fields_Count", "NUMERIC"),
 
@@ -422,9 +422,9 @@ class OOMethods(featureExtractorBase.FeatureExtractorBase):
 
 
     def get_attributesBest(self):
-        '''('IsInterface',['Interface','class']),('Parent',['Has_parent','No_parent']) ,
-                ('exception',['true','false']) ,('externalizable',['true','false']) ,('abstract',['true','false']) ,('error',['true','false']) ,('scope',['public','protected','private','default'])
-            ,('serializable',['true','false']) ,'''
+        '''('IsInterface', "NUMERIC"),('Parent', "NUMERIC") ,
+                ('exception', "NUMERIC") ,('externalizable', "NUMERIC") ,('abstract', "NUMERIC") ,('error', "NUMERIC")
+            ,('serializable', "NUMERIC") ,'''
         all= [
 
 ("degs", "NUMERIC"),("degsIN", "NUMERIC"),("succ", "NUMERIC"),("depth", "NUMERIC"),
@@ -493,7 +493,7 @@ class OOMethods(featureExtractorBase.FeatureExtractorBase):
 
 
                 ( "len_params", "NUMERIC"),( "sum_params", "NUMERIC"),( "mean_params", "NUMERIC"),( "median_params", "NUMERIC"),
-    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( "ONE_elem_params", ['True','False'])]
+    ( "var_params", "NUMERIC"),( "max_params", "NUMERIC"),( "min_params", "NUMERIC"),( "ONE_elem_params",  "NUMERIC")]
 
         ret=[]
         for i in range(len(all)):

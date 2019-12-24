@@ -303,6 +303,19 @@ def createIndexes(dbPath):
         create_index('CREATE INDEX IF NOT EXISTS commitedMethods_methodName ON commitedMethods (methodName)')
         create_index('CREATE INDEX IF NOT EXISTS commitedMethods_bugId ON commitedMethods (bugId)')
         create_index('CREATE INDEX IF NOT EXISTS commitedMethods_commiter_date ON commitedMethods (commiter_date)')
+        map(create_index, ['CREATE INDEX IF NOT EXISTS commitedMethods_commit_sha ON commitedMethods (commit_sha)',
+                           'CREATE INDEX IF NOT EXISTS commitedMethods_methodDir ON commitedMethods (methodDir)',
+                           'CREATE INDEX IF NOT EXISTS commitedMethods_fileName ON commitedMethods (fileName)',
+                           'CREATE INDEX IF NOT EXISTS commitedMethods_methodName ON commitedMethods (methodName)',
+                           'CREATE INDEX IF NOT EXISTS commitedMethods_deletions ON commitedMethods (deletions)',
+                           'CREATE INDEX IF NOT EXISTS commitedMethods_insertions ON commitedMethods (insertions)',
+                           'CREATE INDEX IF NOT EXISTS commitedMethods_lines ON commitedMethods (lines)',
+                           'CREATE INDEX IF NOT EXISTS commitedMethods_is_new_file ON commitedMethods (is_new_file)',
+                           'CREATE INDEX IF NOT EXISTS commitedMethods_is_deleted_file ON commitedMethods (is_deleted_file)',
+                           'CREATE INDEX IF NOT EXISTS commitedMethods_is_renamed_file ON commitedMethods (is_renamed_file)',
+                           'CREATE INDEX IF NOT EXISTS commitedMethods_bugId ON commitedMethods (bugId)',
+                           'CREATE INDEX IF NOT EXISTS commitedMethods_commiter_date ON commitedMethods (commiter_date)',
+                           'CREATE INDEX IF NOT EXISTS commitedMethods_commitID ON commitedMethods (commitID)'])
 
 
 def buildBasicAllVers(vers, dates, dbsPath, bugsPath, MethodsParsed, changeFile):

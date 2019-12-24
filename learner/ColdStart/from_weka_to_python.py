@@ -350,7 +350,6 @@ def predict_model_kfold(name,path,features_type,label_name,data):
     #RandomForest -I 1000 -K 0 -S 1 -num-slots 1
     model = BalancedRandomForestClassifier(n_estimators=1000,max_depth=5)
     index = 0
-    size = data.shape[0]
     all_predictions = 0
     x = data.drop('hasBug', axis=1)
     y = data['hasBug']

@@ -86,7 +86,7 @@ COMPONENTS_QUERIES = {
             'group by name) '
             'where deleted=0'}
 PACKAGES = {'Method': ["lastProcessMethods", "simpleProcessArticlesMethods", "simpleProcessAddedMethods"],
-            'File': ["haelstead", "methodsArticles", "methodsAdded", "hirarcy", "fieldsArticles", "fieldsAdded",
+            'File': ["haelstead", "methodsArticles", "methodsAdded", "fieldsArticles", "fieldsAdded",
                      "constructorsArticles", "constructorsAdded", "lastProcess", "simpleProcessArticles",
                      "simpleProcessAdded", "bugs", "sourceMonitor", "checkStyle"]}
 
@@ -108,13 +108,6 @@ def write_to_arff(data, filename):
 def load_arff(filename):
     with open(filename, 'r') as f:
         return arff.loads(f.read())
-
-
-def GitVersInfo():
-    r = git.Repo(utilsConf.get_configuration().gitPath)
-    wanted = [x.commit for x in r.tags if x.name in utilsConf.get_configuration().vers]
-    dates = [datetime.datetime.fromtimestamp(x.committed_date).strftime('%Y-%m-%d %H:%M:%S') for x in wanted]
-    return dates
 
 
 def sqlToAttributes(basicAtt, c, files_dict, first):
@@ -151,20 +144,19 @@ def get_arff_class(dbpath, start_date, end_date, bug_query, component_query):
         c = conn.cursor()
         files_hasBug = {}
         for row in c.execute(component_query.replace("STARTDATE", str(start_date)).replace("ENDDATE", str(end_date))):
-            files_hasBug[Agent.pathTopack.pathToPack(row[0])] = ["valid"]
+            files_hasBug[Agent.pathTopack.pathToPack(row[0])] = ["0"]
         for row in c.execute(bug_query.replace("STARTDATE", str(start_date)).replace("ENDDATE", str(end_date))):
             name = Agent.pathTopack.pathToPack(row[0])
             if name in files_hasBug:
-                files_hasBug[name] = ["bugged"]
+                files_hasBug[name] = ["1"]
         return files_hasBug
 
 
 def arffCreateForTag(dbpath, prev_date, start_date, end_date, objects, bug_query, component_query):
     conn = sqlite3.connect(dbpath)
-    print dbpath
     conn.text_factory = str
     c = conn.cursor()
-    files_dict = {}
+    files_dict = dict()
     for row in c.execute(component_query.replace("STARTDATE", str(start_date)).replace("ENDDATE", str(end_date))):
         name = Agent.pathTopack.pathToPack(row[0])
         files_dict[name] = []
@@ -185,21 +177,8 @@ def objectsAttr(objects):
     attr = []
     for o in objects:
         attr.extend(o.get_attributes())
-    attr.append(("hasBug", ["bugged", "valid"]))
+    attr.append(("hasBug", "NUMERIC"))
     return attr
-
-
-def writeFile(allNames, arffExtension, namesFile, attr, data, name, outPath):
-    arff_data = arff_build(attr, data, str([]), "base")
-    path_join = os.path.join(outPath, str(name + arffExtension))
-    write_to_arff(arff_data, path_join)
-    if namesFile != "":
-        path_join = os.path.join(outPath, str(name + namesFile))
-        f = open(path_join, "wb")
-        writer = csv.writer(f)
-        writer.writerows([[a] for a in allNames])
-        f.close()
-    # f.writelines(allNames)
 
 
 def writeArff(allNames, arffName, namesFile, attr, data):
@@ -211,47 +190,37 @@ def writeArff(allNames, arffName, namesFile, attr, data):
             writer.writerows([[a] for a in allNames])
 
 
-def arffCreate(basicPath, objects, names, dates, bug_query, component_query, trainingFile, testingFile, NamesFile):
+def arff_create(basicPath, objects, names, dates, bug_query, component_query, trainingFile, testingFile, NamesFile):
     data = []
+    features_names = []
     i = 0
-    attr = objectsAttr(objects)
-    while (i + 1 < len(names)):
+    attributes = objectsAttr(objects)
+    attr_names = map(lambda x: x[0], attributes)
+    while i + 1 < len(names):
         dbpath = os.path.join(basicPath, str(names[i] + ".db"))
         prev_date, start_date, end_date = dates[i: i + 3]
         tag, allNames = arffCreateForTag(dbpath, prev_date, start_date, end_date, objects, bug_query, component_query)
+        csv_data = [["component_name"] + attr_names] + map(lambda x: [x[0]] + x[1], zip(allNames, tag))
         arff_names = "_{0}_{1}".format(names[i], names[i + 1])
+        with open(testingFile.replace(".arff", arff_names + ".csv"), "wb") as f:
+            writer = csv.writer(f)
+            writer.writerows(csv_data)
         writeArff(allNames, testingFile.replace(".arff", arff_names + ".arff"),
-                  NamesFile.replace(".csv", arff_names + ".csv"), attr, tag)
-        data = data + tag
+                  NamesFile.replace(".csv", arff_names + ".csv"), attributes, tag)
+        data.extend(tag)
+        features_names.extend(allNames)
         if i == len(names) - 3:
-            writeArff([], trainingFile, "", attr, data)
+            writeArff([], trainingFile, "", attributes, data)
+            with open(trainingFile.replace(".arff", ".csv"), "wb") as f:
+                writer = csv.writer(f)
+                writer.writerows([["component_name"] + attr_names] + map(lambda x: [x[0]] + x[1], zip(features_names, data)))
         if i == len(names) - 2:
-            writeArff(allNames, testingFile, NamesFile, attr, tag)
+            writeArff(allNames, testingFile, NamesFile, attributes, tag)
+            with open(testingFile.replace(".arff", ".csv"), "wb") as f:
+                writer = csv.writer(f)
+                writer.writerows(csv_data)
         i = i + 1
     return data
-
-
-def attributeSelect(sourceFile, outFile, inds):
-    source = load_arff(sourceFile)
-    attributes = []
-    ind = 0
-    last = len(source['attributes']) - 1
-    for x in source['attributes']:
-        if ind in inds or ind == last:
-            attributes.append(x)
-        ind = ind + 1
-    data = []
-    for x in source['data']:
-        ind = 0
-        d = []
-        for y in x:
-            if ind in inds or ind == last:
-                d.append(y)
-            ind = ind + 1
-        if (d != []):
-            data.append(d)
-    arff_data = arff_build(attributes, data, str([]), "selected")
-    write_to_arff(arff_data, outFile)
 
 
 def featuresMethodsPacksToClasses(packs):
@@ -416,7 +385,7 @@ def featuresPacksToClasses(packs):
     return l, names
 
 
-class arffGenerator(object):
+class ArffGenerator(object):
     def __init__(self, buggedType, granularity):
         self.buggedType = buggedType
         self.granularity = granularity
@@ -430,14 +399,23 @@ class arffGenerator(object):
         outCsv = os.path.join(out_dir, self.buggedType + "_out_" + self.granularity + ".csv")
         return trainingFile, testingFile, NamesFile, outCsv
 
+    def get_csv_files(self, out_dir):
+        trainingFile = os.path.join(out_dir, self.buggedType + "_training_" + self.granularity + ".csv")
+        testingFile = os.path.join(out_dir, self.buggedType + "_testing_" + self.granularity + ".csv")
+        training_describe = os.path.join(out_dir, self.buggedType + "_training_describe_" + self.granularity + ".csv")
+        testing_describe = os.path.join(out_dir, self.buggedType + "_testing_describe_" + self.granularity + ".csv")
+        cs_scores = os.path.join(out_dir, self.buggedType + "_cv_scores_" + self.granularity + "_")
+        prediction = os.path.join(out_dir, self.buggedType + "_prediction_" + self.granularity + "_")
+        return trainingFile, testingFile, training_describe, testing_describe, cs_scores, prediction
+
     def generate_features(self, out_dir, packages):
         trainingFile, testingFile, NamesFile, outCsv = self.get_files(out_dir)
         FeaturesClasses, Featuresnames = self.names_to_classes(packages)
-        arffCreate(utilsConf.get_configuration().db_dir, FeaturesClasses, utilsConf.get_configuration().vers_dirs,
-                   [datetime.datetime(1900, 1, 1, 0, 0).strftime(
+        arff_create(utilsConf.get_configuration().db_dir, FeaturesClasses, utilsConf.get_configuration().vers_dirs,
+                    [datetime.datetime(1900, 1, 1, 0, 0).strftime(
                        '%Y-%m-%d %H:%M:%S')] + utilsConf.get_configuration().dates, self.bug_query,
-                   self.component_query,
-                   trainingFile, testingFile, NamesFile)
+                    self.component_query,
+                    trainingFile, testingFile, NamesFile)
         return trainingFile, testingFile, NamesFile, outCsv
 
     def names_to_classes(self, packages):
@@ -447,21 +425,20 @@ class arffGenerator(object):
             return featuresMethodsPacksToClasses(packages)
         assert False
 
-    def BuildWekaModel(self, out_dir):
-        wekaJar = utilsConf.to_short_path(utilsConf.get_configuration().wekaJar)
-        trainingFile, testingFile, NamesFile, outCsv = self.get_files(out_dir)
-        name = "_{0}_{1}".format(self.buggedType, self.granularity)
-        algorithm = "weka.classifiers.trees.RandomForest -I 1000 -K 0 -S 1 -num-slots 1 "
-        os.system("cd /d  " + utilsConf.to_short_path(
-            utilsConf.get_configuration().weka_path) + " & java -Xmx2024m  -cp " + utilsConf.to_short_path(
-            wekaJar) + " weka.Run " + algorithm + " -x 10 -d .\\model.model -t " + trainingFile + " > training" + name + ".txt")
-        algorithm = "weka.classifiers.trees.RandomForest "
-        os.system("cd /d  " + utilsConf.to_short_path(
-            utilsConf.get_configuration().weka_path) + " & java -Xmx2024m  -cp " + utilsConf.to_short_path(
-            wekaJar) + " weka.Run " + algorithm + " -l .\\model.model -T " + testingFile + " -classifications \"weka.classifiers.evaluation.output.prediction.CSV -file testing" + name + ".csv\" ")
-        os.system("cd /d  " + utilsConf.to_short_path(
-            utilsConf.get_configuration().weka_path) + " & java -Xmx2024m  -cp " + utilsConf.to_short_path(
-            wekaJar) + " weka.Run " + algorithm + " -l .\\model.model -T " + testingFile + " > testing" + name + ".txt ")
-        wekaCsv = os.path.join(utilsConf.to_short_path(utilsConf.get_configuration().weka_path),
-                               "testing" + name + ".csv")
-        wekaAccuracy.priorsCreation(NamesFile, wekaCsv, outCsv)
+    def build_ml_model(self, out_dir):
+        from classification import LearningClassify
+        learning = LearningClassify.get_all_classifers(*self.get_csv_files(out_dir))
+        # algorithm = "weka.classifiers.trees.RandomForest -I 1000 -K 0 -S 1 -num-slots 1 "
+        # os.system("cd /d  " + utilsConf.to_short_path(
+        #     utilsConf.get_configuration().weka_path) + " & java -Xmx2024m  -cp " + utilsConf.to_short_path(
+        #     wekaJar) + " weka.Run " + algorithm + " -x 10 -d .\\model.model -t " + trainingFile + " > training" + name + ".txt")
+        # algorithm = "weka.classifiers.trees.RandomForest "
+        # os.system("cd /d  " + utilsConf.to_short_path(
+        #     utilsConf.get_configuration().weka_path) + " & java -Xmx2024m  -cp " + utilsConf.to_short_path(
+        #     wekaJar) + " weka.Run " + algorithm + " -l .\\model.model -T " + testingFile + " -classifications \"weka.classifiers.evaluation.output.prediction.CSV -file testing" + name + ".csv\" ")
+        # os.system("cd /d  " + utilsConf.to_short_path(
+        #     utilsConf.get_configuration().weka_path) + " & java -Xmx2024m  -cp " + utilsConf.to_short_path(
+        #     wekaJar) + " weka.Run " + algorithm + " -l .\\model.model -T " + testingFile + " > testing" + name + ".txt ")
+        # wekaCsv = os.path.join(utilsConf.to_short_path(utilsConf.get_configuration().weka_path),
+        #                        "testing" + name + ".csv")
+        # wekaAccuracy.priorsCreation(NamesFile, wekaCsv, outCsv)
