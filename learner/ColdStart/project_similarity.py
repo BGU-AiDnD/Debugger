@@ -1,6 +1,7 @@
 import csv
 import sys, os
-from numpy import dot
+import numpy.matlib
+import numpy as np
 from numpy.linalg import norm
 
 def extract_vectors(dir):
@@ -47,7 +48,7 @@ def project(vectors):
 def cosine(vec1, vec2):
     vec1 = list(vec1.values())
     vec2 = list(vec2.values())
-    return dot(vec1, vec2)/(norm(vec1)*norm(vec2))
+    return np.dot(vec1, vec2)/(norm(vec1)*norm(vec2))
 
 
 def similarity(vectors):
@@ -67,7 +68,8 @@ def export_csv(dir, sim, files):
 
 
 if __name__ == '__main__':
-    dir = sys.argv[1]
+    #dir = sys.argv[1]
+    dir = r'D:\Debbuger\PROMISE\System'
     vectors = extract_vectors(dir)
     to_project = len(sys.argv) > 2 and sys.argv[2] == '-p'
     if to_project:
