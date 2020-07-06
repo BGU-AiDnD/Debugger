@@ -359,11 +359,19 @@ def one_ELM(training_dic,testing_dic):
 pojects_training = pickle.load(open(r'D:\Debbuger\ELM\all_trainning_dfs.dic', "rb"))
 pojects_testing = pickle.load(open(r'D:\Debbuger\ELM\all_testing_dfs.dic', "rb"))
 
-one_ELM(pojects_training,pojects_testing)
+for proj_name, df in pojects_training.items():
+    df2  = pojects_testing[proj_name]
 
-results_all_projects.to_csv(r"D:\Debbuger\ELM\ALL_results.csv", index=False)
+    print( proj_name + " " + str(len(df['hasBug'])) +" " +str(len(df[df['hasBug']==1]['hasBug']))+" "+str((len(df[df['hasBug']==1]['hasBug']))/(len(df['hasBug']))) + " " + str(len(df2['hasBug'])) +" " +str(len(df2[df2['hasBug']==1]['hasBug']))+" "+str((len(df2[df2['hasBug']==1]['hasBug']))/(len(df2['hasBug']))))
 
-a = 3
+    #print("training instance: {}    training bugs: {}   bug percent: {}".format(len(df['hasBug']), len(df[df['hasBug']==1]['hasBug']), (len(df[df['hasBug']==1]['hasBug']))/(len(df['hasBug'])) ))
+    #print("testing instance: {}    testing bugs: {}   bug percent: {}".format(len(df2['hasBug']), len(df2[df2['hasBug']==1]['hasBug']), (len(df2[df2['hasBug']==1]['hasBug']))/(len(df2['hasBug'])) ))
+
+#one_ELM(pojects_training,pojects_testing)
+
+#results_all_projects.to_csv(r"D:\Debbuger\ELM\ALL_results.csv", index=False)
+
+#a = 3
 
 
 

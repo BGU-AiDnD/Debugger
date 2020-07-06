@@ -112,11 +112,11 @@ def selectFeatures(data):
     if all2_att_names[0] in data.columns:
         g3_f = g3_attributes()
         all3_att_names = [tup[0] for tup in g3_f]
-        print data.shape
+        print( data.shape)
         new_data = data.drop(all2_att_names, axis=1)
-        print new_data.shape
+        print (new_data.shape)
         new_data = new_data.drop(all3_att_names, axis=1)
-        print new_data.shape
+        print (new_data.shape)
         data = new_data
     return data
 
@@ -239,7 +239,7 @@ def get_all_eval_based_on_model(separated,type):
 
 def load_arff_from_dir_into_dataFrames_dictionery(system_features):
     for key, val in all_files.items():
-        print key, "=>", val
+        print (key, "=>", val)
         all_projects_training_selected_features = from_weka_to_python.load_arff(os.path.join(val,from_weka_to_python.training_file))
         all_projects_testing_selected_features = from_weka_to_python.load_arff(os.path.join(val,from_weka_to_python.testing_file))
 
@@ -363,7 +363,7 @@ def create_prediction_best_and_worse(x_test,type,pred_ours):
 
     same = 0
     for our_model_prediction , best_models_prediction in zip(pred_ours,best_model_to_predict) :
-       if long(our_model_prediction) in best_models_prediction[0]:
+       if int(our_model_prediction) in best_models_prediction[0]:
            same+=1
 
     precent_ours = float(same) / len(pred_ours)
@@ -582,7 +582,7 @@ def create_models_and_eval_all_random(system_features,sampling,model_details,mod
                 bug_precent = 0
             create_all_eval_results(real, pred,str(data_names[key]).split('\\')[-1],"testing",type,num_of_bugs,num_of_all_instances,bug_precent,model_details,system_features)
 
-
+create_models_and_eval
 
 models ={
         "random_forest_100": RandomForestClassifier(n_estimators=100,max_depth=5)

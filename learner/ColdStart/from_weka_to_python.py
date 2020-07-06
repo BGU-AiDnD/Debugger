@@ -2,7 +2,7 @@ from collections import Counter
 import numpy as np
 import arff
 import os
-import weka_parser
+import learner.ColdStart.weka_parser
 import pandas as pd
 from scipy.io.arff import loadarff
 from sklearn.ensemble import RandomForestClassifier
@@ -165,8 +165,8 @@ def encode_categorial(data):
             data[col] = data[col].map({'public': 0, 'protected': 1,'private':2,'default':3})
         elif col in true_false_att:
             data[col] = data[col].map({'true': 1, 'false': 0, 'True': 1, 'False': 0})
-
     return data
+
 def convert_data(attributes, data):
     new_attributes = []
     attributes_convert = []
@@ -266,11 +266,11 @@ def selectFeatures(data,remove_bugs,remove_process):
     if all2_att_names[0] in data.columns:
         g3_f = g3_attributes()
         all3_att_names = [tup[0] for tup in g3_f]
-        print data.shape
+        print (data.shape)
         new_data = data.drop(all2_att_names, axis=1)
-        print new_data.shape
+        print (new_data.shape)
         new_data = new_data.drop(all3_att_names, axis=1)
-        print new_data.shape
+        print (new_data.shape)
         data = new_data
     if remove_bugs and all_bugs_f_names[0] in data.columns:
         data = data.drop(all_bugs_f_names, axis=1)
@@ -280,12 +280,13 @@ def selectFeatures(data,remove_bugs,remove_process):
 #weka
 def prep_train_and_test_to_arff():
     for key, val in all_files.items():
-        print key, "=>", val
+        print (key, "=>", val)
         all_projects_training_selected_features[key] = selectFeatures(all_projects_training_selected_features[key],False,False)
         all_projects_testing_selected_features[key] = selectFeatures(all_projects_testing_selected_features[key],False,False)
         train_path = os.path.join(val, "All_training_files_with_bugs.arff")
         test_path = os.path.join(val, "All_testing_files_with_bugs.arff")
         create_arff_from_dataframe(all_projects_training_selected_features[key],train_path)
+        create_arff_from_dataframe(all_projects_testing_selected_features[key],test_path)
         create_arff_from_dataframe(all_projects_testing_selected_features[key],test_path)
         change_start_of_arff_file(arff_start_path_with_bugs,train_path)
         change_start_of_arff_file(arff_start_path_with_bugs,test_path)
@@ -310,7 +311,7 @@ def prep_train_and_test_to_arff():
 #python
 def prep_train_and_test_to_sklearn():
     for key, val in all_files.items():
-        print key, "=>", val
+        print (key, "=>", val)
         all_projects_training_selected_features[key] = selectFeatures(all_projects_training_selected_features[key],False,False)
         all_projects_testing_selected_features[key] = selectFeatures(all_projects_testing_selected_features[key],False,False)
         all_projects_training_selected_features[key]['hasBug'] = all_projects_training_selected_features[key]['hasBug'].map({'valid': 0, 'bugged': 1})
@@ -380,7 +381,7 @@ def load_arff(data_arff):
     return df_data
 def load_arff_from_dir_into_dataFrames_dictionery():
     for key, val in all_files.items():
-        print key, "=>", val
+        print (key, "=>", val)
         # all_projects_data[key] = load_arff(val)
         all_projects_training_selected_features[key] = load_arff(os.path.join(val,training_file))
         all_projects_testing_selected_features[key] = load_arff(os.path.join(val,testing_file))
@@ -458,7 +459,7 @@ def create_all_eval_results(export,y_true, y_pred, key,result_type,features_type
 #evaluate results - weka
 def export_all_results_from_weka():
     for key, val in all_files.items():
-        print key, "=>", val
+        print (key, "=>", val)
         dict_all_files = []
         dict_all_files.append(("training","no_process",os.path.join(val, "trainingfiles_All_no_process.txt")))
         dict_all_files.append(("test","no_process",os.path.join(val, "testingfiles_All_no_process.txt")))
@@ -515,7 +516,7 @@ def export_all_results_from_weka():
 def build_Models_from_weka():
     buggedType = "All"
     for key, val in all_files.items():
-        print key, "=>", val
+        print (key, "=>", val)
         trainingFile_with_bugs = os.path.join(val,'All_training_files_with_bugs.arff')
         trainingFile_no_bugs = os.path.join(val,'All_training_files_no_bugs.arff')
         trainingFile_no_process = os.path.join(val,'All_training_files_no_process.arff')
