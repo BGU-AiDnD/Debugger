@@ -65,16 +65,16 @@ def create_all_eval_results(export,y_true, y_pred, key,num_of_bugs_test,num_of_a
 
     un_true, _ = np.unique(y_true, return_counts=True)
     un_pred, _ = np.unique(y_pred, return_counts=True)
-    if len(un_true) == 1 or len(un_pred) == 1:
-        y_true.append(0)
-        y_true.append(1)
-        y_pred.append(0)
-        y_pred.append(1)
-        y_true.append(0)
-        y_true.append(1)
-        y_pred.append(1)
-        y_pred.append(0)
-        print("zero or ones")
+    #if len(un_true) == 1 or len(un_pred) == 1:
+    #    y_true.append(0)
+    #    y_true.append(1)
+    #    y_pred.append(0)
+    #    y_pred.append(1)
+    #    y_true.append(0)
+    #    y_true.append(1)
+    #    y_pred.append(1)
+    #    y_pred.append(0)
+    #    print("zero or ones")
 
     precision_bugged = metrics.precision_score(y_true, y_pred, pos_label=1, average='binary')
     recall_bugged = metrics.recall_score(y_true, y_pred, pos_label=1, average='binary')
@@ -580,11 +580,6 @@ promise_number_to_project = {
 
 
 
-
-
-
-
-
 best_F1 = {
 "camel1.4",
 "camel1.2",
@@ -877,7 +872,6 @@ def create_prediction_best_and_worse(CS_project,all_projects,pred_ours,x_test):
 
     return best_prediction,worse_prediction,precent_ours
 
-
 def separated_data_randomly(CS_project,all_projects,x_test):
     all_data_separated_dict = {}
     random = check_random_state(seed=None)
@@ -906,8 +900,6 @@ def separated_data_randomly(CS_project,all_projects,x_test):
         all_data_separated_dict[key_choosen] = all_data_separated_dict[key_choosen].append(x_test_mat,ignore_index = True)
 
     return all_data_separated_dict
-
-
 
 def create_models_and_eval_using_oracle_and_worse(all_projects,sampling,model_details,model,num_of_samples,within_model,percent_group=None,percent_group_name = None):
     for cold_start_project_name, ( cold_start_model,cold_start_training_set, cold_start_testing_set) in all_projects.items():
@@ -966,7 +958,7 @@ def OSCAR(all_projects,within_model,oracle = False):
                 #for num_of_samples in [4000, 10000, 15000]:
                 #for num_of_samples in [400,700,1000]:
                 #for num_of_samples in [700,1000,5000]:
-                for num_of_samples in [400,700,1000,10000]:
+                for num_of_samples in [400,1000]:
                     index += 1
                     print("start process_" + str(sampling) + "_" + str(num_of_samples))
                     if oracle:
@@ -987,8 +979,6 @@ def OSCAR(all_projects,within_model,oracle = False):
                 #results_all_projects.to_csv(
                 #os.path.join(results_path, "gan_results_all_belong" + str(index) + ".csv"), index=False)
                 # gan_val.to_csv(os.path.join(results_path, "gan_seperation_model_results_random" + str(index) + ".csv"),index=False)
-
-
 
 def OSCAR_PERCENT_TEST(all_projects,within_model):
     create_models_and_eval(all_projects, False, "random_forest_100",
@@ -1084,10 +1074,256 @@ def one_ELM(all_projects,use_everyone,within_model):
 #file_path_RF = os.path.join(directory_RF, 'all_data_with_models_NRF.sav')
 
 
+to_delete =["plc4x",
+"tomcat",
+"directory-kerby",
+"cocoon",
+"clerezza",
+"pulsar",
+"isis",
+"deltaspike",
+"tez",
+"directory-studio",
+"commons-math",
+"uima-ruta",
+"myfaces-tobago",
+"reef",
+"asterixdb",
+"giraph",
+"tinkerpop",
+"shiro",
+"commons-vfs",
+"karaf",
+"cxf",
+"myfaces",
+"directory-server",
+"flink",
+"servicecomb-java-chassis",
+"cayenne",
+"cassandra",
+"olingo-odata4",
+"santuario-java",
+"camel",
+"jackrabbit",
+"nifi",
+"opennlp",
+"wicket",
+"commons-cli"]
+
+
+
+##############################
+### only because memory problem ########
+metrics_traditional = ['WMC','DIT','NOCh','LCOM*','Ma','NPM','RTLOC','MIF']
+metrics_smells = ['GodClass',	'ClassDataShouldBePrivate',	'ComplexClass',	'LazyClass',	'RefusedBequest','SpaghettiCode','SpeculativeGenerality','DataClass','BrainClass','LargeClass','SwissArmyKnife','AntiSingleton']
+lable_metric = 'Bugged'
+metric_always_drop = ['NPathComplexity']
+
+directory_path = r'D:\Debbuger\to_inbal\to_inbal\fowler_traditional'
+folder_data = 'dataset'
+testing_file = 'testing.csv'
+training_file = 'training.csv'
+
+directory_path_all = r'D:\Debbuger\b_data\all'
+directory_path_fowler = r'D:\Debbuger\b_data\fowler'
+directory_path_trad = r'D:\Debbuger\b_data\trad'
+
+dict_name = 'dict_all_models_and_data'
+
+dict_trad = {}
+dict_fowler = {}
+dict_all = {}
+
+def fit_model(data):
+    model = BalancedRandomForestClassifier(n_estimators=1000, max_depth=5)
+    x = data.drop(lable_metric, axis=1)
+    y = data[lable_metric]
+    num_of_bugs = data.loc[data[lable_metric] == 1].shape[0]
+    if num_of_bugs == 0:
+        print("NO BUGS")
+        return None
+    model.fit(x, y)
+    return model
+
+def preper_fowler(training_set, testing_set):
+    training_set_f = training_set.copy()
+    training_set_f = training_set_f[metrics_smells]
+    training_set_f[lable_metric] = training_set[lable_metric]
+    testing_set_f = testing_set.copy()
+    testing_set_f = testing_set_f[metrics_smells]
+    testing_set_f[lable_metric] = testing_set[lable_metric]
+    testing_set_f = testing_set_f.dropna()
+    training_set_f = training_set_f.dropna()
+    for col in training_set_f:
+        training_set_f[col] = training_set_f[col].map(
+            {'true': 1, 'false': 0, 'True': 1, 'False': 0, 'TRUE': 1, 'FALSE': 0, False: 0, True: 1})
+        testing_set_f[col] = testing_set_f[col].map(
+            {'true': 1, 'false': 0, 'True': 1, 'False': 0, 'TRUE': 1, 'FALSE': 0, False: 0, True: 1})
+
+    cur_model = fit_model(training_set_f)
+    if cur_model is None:
+        return None, None, None
+
+    return training_set_f, testing_set_f, cur_model
+
+def preper_trad(training_set, testing_set):
+    training_set_f = training_set.copy()
+    testing_set_f = testing_set.copy()
+    training_set_f = training_set_f.replace([np.inf, -np.inf], np.nan)
+    testing_set_f = testing_set_f.replace([np.inf, -np.inf], np.nan)
+    testing_set_f = testing_set_f.dropna()
+    training_set_f = training_set_f.dropna()
+    training_set_f = training_set_f.drop(metrics_smells,axis = 1)
+    testing_set_f = testing_set_f.drop(metrics_smells,axis = 1)
+
+    training_set_f[lable_metric] = training_set_f[lable_metric].map(
+        {'true': 1, 'false': 0, 'True': 1, 'False': 0, 'TRUE': 1, 'FALSE': 0, False: 0, True: 1})
+    testing_set_f[lable_metric] = testing_set_f[lable_metric].map(
+        {'true': 1, 'false': 0, 'True': 1, 'False': 0, 'TRUE': 1, 'FALSE': 0, False: 0, True: 1})
+
+    cur_model = fit_model(training_set_f)
+    if cur_model is None:
+        return None, None, None
+
+    return training_set_f, testing_set_f, cur_model
+
+def preper_all_f(training_set, testing_set):
+    training_set_f = training_set.copy()
+    testing_set_f = testing_set.copy()
+    training_set_f = training_set_f.replace([np.inf, -np.inf], np.nan)
+    testing_set_f = testing_set_f.replace([np.inf, -np.inf], np.nan)
+    testing_set_f = testing_set_f.dropna()
+    training_set_f = training_set_f.dropna()
+    for col in training_set_f:
+        if col in metrics_smells:
+            training_set_f[col] = training_set_f[col].map(
+                {'true': 1, 'false': 0, 'True': 1, 'False': 0, 'TRUE': 1, 'FALSE': 0, False: 0, True: 1})
+            testing_set_f[col] = testing_set_f[col].map(
+                {'true': 1, 'false': 0, 'True': 1, 'False': 0, 'TRUE': 1, 'FALSE': 0, False: 0, True: 1})
+    training_set_f[lable_metric] = training_set_f[lable_metric].map(
+        {'true': 1, 'false': 0, 'True': 1, 'False': 0, 'TRUE': 1, 'FALSE': 0, False: 0, True: 1})
+    testing_set_f[lable_metric] = testing_set_f[lable_metric].map(
+        {'true': 1, 'false': 0, 'True': 1, 'False': 0, 'TRUE': 1, 'FALSE': 0, False: 0, True: 1})
+
+    cur_model = fit_model(training_set_f)
+    if cur_model is None:
+        return None, None, None
+
+    return training_set_f, testing_set_f, cur_model
+
+for project_name in os.listdir(directory_path):
+     folder = os.path.join(directory_path, project_name)
+     if os.path.isdir(folder):
+         testing_file_path = os.path.join(os.path.join(os.path.join(directory_path,folder),folder_data),testing_file)
+         training_file_path = os.path.join(os.path.join(os.path.join(directory_path,folder),folder_data),training_file)
+         if os.path.isfile(testing_file_path) and os.path.isfile(training_file_path):
+            print("start working on "+ folder)
+            train_data = pd.read_csv(training_file_path)
+            test_data = pd.read_csv(testing_file_path)
+            train_data = train_data.drop(metric_always_drop,axis = 1)
+            test_data = test_data.drop(metric_always_drop,axis = 1)
+            #print(test_data.columns)
+            #training_set_f, testing_set_f, cur_model_f = preper_fowler(train_data,test_data)
+            training_set_tr, testing_set_tr, cur_model_tr = preper_trad(train_data,test_data)
+            #training_set_a, testing_set_a, cur_model_a = preper_all_f(train_data,test_data)
+            if training_set_tr is not None:
+                #proj_name, (model,training_set, testing_set)
+                #dict_fowler[project_name] = (cur_model_f,training_set_f,testing_set_f)
+                dict_trad[project_name] = (cur_model_tr,training_set_tr,testing_set_tr)
+                #dict_all[project_name] = (cur_model_a,training_set_a,testing_set_a)
+                print("folder all done")
+
+label_bugs = 'Bugged'
+
+'''
+print("all")
+directory_RF = r'D:\Debbuger\b_data\all'
+for name in to_delete:
+    del dict_all[name]
+print("bob")
+best_of_breed(dict_all,"RF")
+print("oscar")
+OSCAR(dict_all,"RF",oracle=True)
+print("alm")
+one_ELM(dict_all,False,"RF")
+
+results_all_projects.to_csv(os.path.join(directory_RF,"all_results_all.csv"), index=False)
+
+results_all_projects = pd.DataFrame(
+        columns=['cold_start_project','model_source', 'precision_bug', 'recall_bug','F_bug', 'F2_bug','roc_area_bug', 'prc_area_bug', 'precision', 'recall',
+                 'F1', 'F2', 'roc_area','prc_area','num_bugs_test','num_all_inst_test','percent_bugs_test','num_bugs_train','num_all_inst_train','percent_bugs_train',"percent_group_training_set"])
+
+
+print("fowler")
+directory_RF = r'D:\Debbuger\b_data\fowler'
+for name in to_delete:
+    del dict_fowler[name]
+print("bob")
+best_of_breed(dict_fowler,"RF")
+print("oscar")
+OSCAR(dict_fowler,"RF",oracle=True)
+print("alm")
+one_ELM(dict_fowler,False,"RF")
+
+results_all_projects.to_csv(os.path.join(directory_RF,"all_results_all.csv"), index=False)
+
+results_all_projects = pd.DataFrame(
+        columns=['cold_start_project','model_source', 'precision_bug', 'recall_bug','F_bug', 'F2_bug','roc_area_bug', 'prc_area_bug', 'precision', 'recall',
+                 'F1', 'F2', 'roc_area','prc_area','num_bugs_test','num_all_inst_test','percent_bugs_test','num_bugs_train','num_all_inst_train','percent_bugs_train',"percent_group_training_set"])
+
+
+'''
+print("trad")
+directory_RF = r'D:\Debbuger\b_data\trad'
+for name in to_delete:
+    del dict_trad[name]
+print("bob")
+best_of_breed(dict_trad,"RF")
+print("oscar")
+OSCAR(dict_trad,"RF",oracle=True)
+print("alm")
+one_ELM(dict_trad,False,"RF")
+
+results_all_projects.to_csv(os.path.join(directory_RF,"all_results_all.csv"), index=False)
+
+results_all_projects = pd.DataFrame(
+        columns=['cold_start_project','model_source', 'precision_bug', 'recall_bug','F_bug', 'F2_bug','roc_area_bug', 'prc_area_bug', 'precision', 'recall',
+                 'F1', 'F2', 'roc_area','prc_area','num_bugs_test','num_all_inst_test','percent_bugs_test','num_bugs_train','num_all_inst_train','percent_bugs_train',"percent_group_training_set"])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''
+
 ##############################!!!!!!!!
 directory_RF = r'D:\Debbuger\b_data\all'
 all_data_with_models_name = 'dict_all_models_and_data'
-lable_metric = 'Bugged'
+label_bugs = 'Bugged'
 #dict_name = "by_projects.sav"
 file_path_RF = os.path.join(directory_RF, all_data_with_models_name)
 
@@ -1097,7 +1333,7 @@ file_path_RF = os.path.join(directory_RF, all_data_with_models_name)
 
 
 
-'''
+
 with open(file_path_RF, 'rb') as f:
     u = pickle._Unpickler(f)
     u.encoding = 'latin1'
@@ -1110,10 +1346,14 @@ with open(file_path_RF, 'rb') as f:
     OSCAR(data, "RF")
     one_ELM(data, False, "RF")
     one_ELM(data, True, "RF")
-'''
+
 
 print(file_path_RF)
 data = pickle.load(open(file_path_RF, "rb"))
+
+for name in to_delete:
+    del data[name]
+
 #del data['tiles']
 #del data['tiles_tiles-2.1.0']
 #del data['kafka_0.9.0.0']
@@ -1122,7 +1362,7 @@ for key, value in data.items():
     if(len(value) != 3):
         print(key)
 
-'''
+
 for cold_start_project_name, (cold_start_model, cold_start_testing_set) in data.items():
     if 'Class' in cold_start_testing_set.columns:
         data[cold_start_project_name] = (cold_start_model, cold_start_testing_set.drop(['Class', 'unique_name'], axis=1))
@@ -1131,7 +1371,7 @@ for cold_start_project_name, (cold_start_model, cold_start_testing_set) in data.
         del data[cold_start_project_name]
     #if cold_start_project_name in ['jEdit4.2','jEdit4.3']:
         #del data[cold_start_project_name]
-'''
+
 #del data['xerces1.4']
 #del data['jEdit4.3']
 #del data['jEdit3.2']
@@ -1168,6 +1408,10 @@ data = pickle.load(open(file_path_RF, "rb"))
 #del data['tiles_tiles-2.1.0']
 #del data['kafka_0.9.0.0']
 #del data['tajo_release-0.8.0']
+
+for name in to_delete:
+    del data[name]
+
 for key, value in data.items():
     if(len(value) != 3):
         print(key)
@@ -1200,6 +1444,10 @@ data = pickle.load(open(file_path_RF, "rb"))
 #del data['tiles_tiles-2.1.0']
 #del data['kafka_0.9.0.0']
 #del data['tajo_release-0.8.0']
+
+for name in to_delete:
+    del data[name]
+
 for key, value in data.items():
     if(len(value) != 3):
         print(key)
@@ -1225,7 +1473,7 @@ results_all_projects.to_csv(os.path.join(directory_RF,"all_results_trad.csv"), i
 
 #one_ELM(data,True,"RF")
 
-''''
+
 data = pickle.load(open(file_path_ELM, "rb"))
 for cold_start_project_name, (cold_start_model, cold_start_testing_set) in data.items():
     if 'Class' in cold_start_testing_set.columns:
@@ -1238,6 +1486,7 @@ best_of_breed(data,"ELM")
 OSCAR(data,"ELM")
 one_ELM(data,False,"ELM")
 one_ELM(data,True,"ELM")
+
 '''
 
 
