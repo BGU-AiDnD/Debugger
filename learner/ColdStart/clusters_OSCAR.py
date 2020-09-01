@@ -228,7 +228,7 @@ def separated_data_by_predicted_model(CS_project,all_projects,pred, x_test):
     for proj_name, (model,training_set, testing_set) in all_projects.items():
         #if CS_project[:-3] != proj_name[:-3]:
         #if CS_project != proj_name:
-        if CS_project.split('_')[0] != proj_name.split('_')[0]:
+        if CS_project!= proj_name:
             all_data_separated_dict[projects_to_number[proj_name]] = x_test.loc[np.where(pred == projects_to_number[proj_name])]
     return all_data_separated_dict
 
@@ -294,6 +294,68 @@ def get_all_eval_based_on_one_model_inside_cluster(all_clusters,cold_start_proje
     cur_model = BalancedRandomForestClassifier(n_estimators=1000, max_depth=5)
     one_ba_model = cur_model.fit(dataset.drop(label_bugs, axis=1), dataset[label_bugs])
     pred = one_ba_model.predict(x_test)
+
+    return pred.tolist(), real.tolist()
+
+def get_all_eval_based_on_one_model_inside_cluster_usingOSCAR(all_clusters,cold_start_project_name,all_projects,belong_model,sampling,num_of_samples):
+    #cluster_number = find_inside_cluster(all_clusters, cold_start_project_name)
+    #cluster_group = all_clusters[cluster_number]
+    #real = np.array([])
+    x_test = (all_projects[cold_start_project_name][2]).copy()
+    #real = np.concatenate((real, x_test[label_bugs]), axis=None)
+    x_test = x_test.drop(label_bugs, axis=1)
+    x_test.reset_index(drop=True, inplace=True)
+    models_per_cluster = {}
+
+    training_set= pd.DataFrame()
+    index_for_cluster=0
+    for cluster_group in all_clusters:
+        dataset = pd.DataFrame()
+        for project_number in cluster_group:
+            proj_name = number_to_project[project_number]
+            if cold_start_project_name != proj_name:
+                data = all_projects[proj_name][1].copy()
+                data.reset_index(drop=True, inplace=True)
+                dataset = dataset.append(data, ignore_index=True)
+                data_for_belong = data.rename(columns={label_bugs: 'label'})
+                data_for_belong.label = index_for_cluster
+                if sampling:
+                    training_set = training_set.append(data_sampling(data_for_belong, num_of_samples), ignore_index=True)
+                else:
+                    training_set = training_set.append(data_for_belong, ignore_index=True)
+        if len(list(set(dataset[label_bugs]))) > 1:
+            print("balanced")
+            cur_model = BalancedRandomForestClassifier(n_estimators=1000, max_depth=5)
+            cur_model_to_use = cur_model.fit(dataset.drop(label_bugs, axis=1),dataset[label_bugs])
+        else:
+            print("normal")
+            cur_model = RandomForestClassifier(n_estimators=1000, max_depth=5)
+            cur_model_to_use = cur_model.fit(dataset.drop(label_bugs, axis=1), dataset[label_bugs])
+
+        models_per_cluster[index_for_cluster] = (cur_model_to_use,dataset.copy())
+        index_for_cluster = index_for_cluster+1
+
+    tr_data_all = training_set.drop('label', axis=1)
+    belonging_model = belong_model.fit(tr_data_all, training_set['label'])
+    # pred_ours is the list of belongingness prediction by our models
+    pred = belonging_model.predict(x_test)
+
+    test_set = (all_projects[cold_start_project_name][2]).copy()
+    test_set.reset_index(drop=True, inplace=True)
+    all_data_separated_dict = {}
+    index_for_cluster = 0
+    for cluster_group in all_clusters:
+        all_data_separated_dict[index_for_cluster] = test_set.loc[np.where(pred == index_for_cluster)]
+        index_for_cluster= index_for_cluster+1
+
+    pred = np.array([])
+    real = np.array([])
+    for cluster_number, data_to_test in all_data_separated_dict.items():
+        x_test = data_to_test.copy()
+        if x_test.shape[0] != 0:
+            x_test = x_test.drop(label_bugs, axis=1)
+            pred = np.concatenate((pred, models_per_cluster[cluster_number][0].predict(x_test)), axis=None)
+            real = np.concatenate((real, data_to_test[label_bugs]), axis=None)
 
     return pred.tolist(), real.tolist()
 
@@ -385,6 +447,7 @@ def create_models_and_eval_inside_cluster(all_projects,sampling,model_details,mo
             kmeans,all_clusters = None,None
             precent_g = None
 
+
         training_by_models = load_training_set(all_clusters,cold_start_project_name,all_projects,sampling,num_of_samples)
         print("start process for: "+str(cold_start_project_name))
         tr_data_all = training_by_models.drop('label', axis=1)
@@ -420,8 +483,17 @@ def create_models_and_eval_inside_cluster(all_projects,sampling,model_details,mo
             pred_ours, real_ours = get_all_eval_based_on_one_model_inside_cluster(all_clusters,cold_start_project_name,all_projects)
             create_all_eval_results(True, real_ours, pred_ours, cold_start_project_name,
                                     num_of_bugs, num_of_all_instances, bug_precent, " ", " ", " ",
-                                    "cluster_baseline_oneModel" + str(model_details) + "_" + str(sampling) + "_" + str(
+                                    "cluster_baseline_oneModel_project" + str(model_details) + "_" + str(sampling) + "_" + str(
                                         num_of_samples) + "_within" + within_model, precent_g)
+            # create one model from training set and then using oscar
+            #def get_all_eval_based_on_one_model_inside_cluster_usingOSCAR(all_clusters,cold_start_project_name,all_projects,belong_model,sampling,num_of_samples):
+
+            pred_ours, real_ours = get_all_eval_based_on_one_model_inside_cluster_usingOSCAR(all_clusters, cold_start_project_name,
+                                                                                  all_projects,model,sampling,num_of_samples)
+            create_all_eval_results(True, real_ours, pred_ours, cold_start_project_name,
+                                    num_of_bugs, num_of_all_instances, bug_precent, " ", " ", " ",
+                                    "cluster_baseline_oneModel_usingOscar" + str(model_details) + "_" + str(sampling) + "_" + str(
+                                       num_of_samples) + "_within" + within_model, precent_g)
 
 
 def OSCAR(all_projects,within_model_kind,project_to = None,k_means_number = 2):
@@ -584,7 +656,6 @@ del data['tiles']
 
 #kmeans, all_clusters = create_all_clusters_with_describe(data,2)
 
-
 #def create_models_and_eval_ONE_model_cluster(all_projects,k_means_number = 2,sampling=True,num_of_samples = 100):
 print("oscar - using all the data")
 OSCAR(data,"RF")
@@ -609,5 +680,5 @@ print("cluster - using the describe data")
 OSCAR(data,"RF_clusters_describe_2",project_to = project_to_describe_f ,k_means_number = 2)
 OSCAR(data,"RF_clusters_describe_3",project_to = project_to_describe_f ,k_means_number = 3)
 
-results_all_projects.to_csv(os.path.join(directory_RF,"clusters_results_ALL_NO_T.csv"), index=False)
+results_all_projects.to_csv(os.path.join(directory_RF,"clusters_results_ALL_NO_T_withNew.csv"), index=False)
 
