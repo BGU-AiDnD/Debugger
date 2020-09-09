@@ -18,7 +18,7 @@ import itertools
 from sklearn.metrics import pairwise_distances_argmin_min
 import math
 import csv
-
+'''
 projects_to_number = {
 "bookkeeper" : 0,
 "fop" :         1,
@@ -55,6 +55,128 @@ project_to_systems_metrics={
 "tajo"  :     5#,
 #"tiles"  :      6
 }
+'''
+
+projects_to_number = {
+'Archiva' : 0 ,
+'Cassandra' : 1 ,
+'CommonsCodec' : 2 ,
+'CommonsDBCP' : 3 ,
+'CommonsEmail' : 4 ,
+'CommonsIO' : 5 ,
+'CommonsJexl' : 6 ,
+'commonslang' : 7 ,
+'CommonsValidator' : 8 ,
+'Continuum' : 9 ,
+'Crunch' : 10 ,
+'Curator' : 11 ,
+'DeltaSpike' : 12 ,
+'DirectoryServer' : 13 ,
+'Helix' : 14 ,
+'Juneau' : 15 ,
+'knox' : 16 ,
+'Metron' : 17 ,
+'MyFaces' : 18 ,
+'myfacestobago' : 19 ,
+'Nutch' : 20 ,
+'Parquet' : 21 ,
+'QpidJMS' : 22 ,
+'Samza' : 23 ,
+'Shiro' : 24 ,
+'Struts' : 25 ,
+'Surefire' : 26 ,
+'tapestry-5' : 27 ,
+'tika' : 28
+}
+number_to_project = {
+0: 'Archiva' ,
+1: 'Cassandra' ,
+2: 'CommonsCodec' ,
+3: 'CommonsDBCP' ,
+4: 'CommonsEmail' ,
+5: 'CommonsIO' ,
+6: 'CommonsJexl' ,
+7: 'commonslang' ,
+8: 'CommonsValidator' ,
+9: 'Continuum' ,
+10: 'Crunch' ,
+11: 'Curator' ,
+12: 'DeltaSpike' ,
+13: 'DirectoryServer' ,
+14: 'Helix' ,
+15: 'Juneau' ,
+16: 'knox' ,
+17: 'Metron' ,
+18: 'MyFaces' ,
+19: 'myfacestobago' ,
+20: 'Nutch' ,
+21: 'Parquet' ,
+22: 'QpidJMS' ,
+23: 'Samza' ,
+24: 'Shiro' ,
+25: 'Struts' ,
+26: 'Surefire' ,
+27: 'tapestry-5' ,
+28: 'tika'}
+project_to_describe_f ={'Archiva' : 0 ,
+'Cassandra' : 1 ,
+'CommonsCodec' : 2 ,
+'CommonsDBCP' : 3 ,
+'CommonsEmail' : 4 ,
+'CommonsIO' : 5 ,
+'CommonsJexl' : 6 ,
+'commonslang' : 7 ,
+'CommonsValidator' : 8 ,
+'Continuum' : 9 ,
+'Crunch' : 10 ,
+'Curator' : 11 ,
+'DeltaSpike' : 12 ,
+'DirectoryServer' : 13 ,
+'Helix' : 14 ,
+'Juneau' : 15 ,
+'knox' : 16 ,
+'Metron' : 17 ,
+'MyFaces' : 18 ,
+'myfacestobago' : 19 ,
+'Nutch' : 20 ,
+'Parquet' : 21 ,
+'QpidJMS' : 22 ,
+'Samza' : 23 ,
+'Shiro' : 24 ,
+'Struts' : 25 ,
+'Surefire' : 26 ,
+'tapestry-5' : 27 ,
+'tika' : 28}
+project_to_systems_metrics={'Archiva' : 0 ,
+'Cassandra' : 1 ,
+'CommonsCodec' : 2 ,
+'CommonsDBCP' : 3 ,
+'CommonsEmail' : 4 ,
+'CommonsIO' : 5 ,
+'CommonsJexl' : 6 ,
+'commonslang' : 7 ,
+'CommonsValidator' : 8 ,
+'Continuum' : 9 ,
+'Crunch' : 10 ,
+'Curator' : 11 ,
+'DeltaSpike' : 12 ,
+'DirectoryServer' : 13 ,
+'Helix' : 14 ,
+'Juneau' : 15 ,
+'knox' : 16 ,
+'Metron' : 17 ,
+'MyFaces' : 18 ,
+'myfacestobago' : 19 ,
+'Nutch' : 20 ,
+'Parquet' : 21 ,
+'QpidJMS' : 22 ,
+'Samza' : 23 ,
+'Shiro' : 24 ,
+'Struts' : 25 ,
+'Surefire' : 26 ,
+'tapestry-5' : 27 ,
+'tika' : 28}
+
 
 results_all_projects = pd.DataFrame(
         columns=['cold_start_project','model_source', 'precision_bug', 'recall_bug','F_bug', 'F2_bug','roc_area_bug', 'prc_area_bug', 'precision', 'recall',
@@ -78,9 +200,9 @@ def create_describe_data(all_projects,drop_bugs=True):
 
 def create_system_metrics_data(path):
     global project_to_systems_metrics
-    for roject_name in projects_to_number.keys():
-        project_metrics = pd.read_csv(os.path.join(path, start_file_system + roject_name + ".csv"))
-        project_to_systems_metrics[roject_name] = project_metrics.values.flatten()
+    for project_name in projects_to_number.keys():
+        project_metrics = pd.read_csv(os.path.join(path, start_file_system + project_name.lower() + ".csv"))
+        project_to_systems_metrics[project_name] = project_metrics.drop('name', axis=1).values.flatten()
 
 def create_training_cluster(cold_start_proj_num, k_means_number,project_to):
     all_classes = np.array([[]])
@@ -95,6 +217,7 @@ def create_training_cluster(cold_start_proj_num, k_means_number,project_to):
                 all_classes = np.append(all_classes, np.array([project_to[proj_name]]), axis=0)
 
     kmeans = KMeans(n_clusters=k_means_number, random_state=0)
+    #print(all_classes)
     kmeans.fit(all_classes)
     all_clusters = []
     for index in range(k_means_number):
@@ -477,13 +600,13 @@ def create_models_and_eval_inside_cluster(all_projects,sampling,model_details,mo
             pred_ours,real_ours = get_all_eval_based_on_ensamble_inside_cluster(all_clusters,cold_start_project_name,all_projects)
             create_all_eval_results(True, real_ours, pred_ours, cold_start_project_name,
                                     num_of_bugs, num_of_all_instances, bug_precent, " ", " ", " ",
-                                    "cluster_baseline_ensamble" + str(model_details) + "_" + str(sampling) + "_" + str(
+                                    "cluster_projects_ensamble" + str(model_details) + "_" + str(sampling) + "_" + str(
                                         num_of_samples) + "_within" + within_model, precent_g)
             # create one model from training set
             pred_ours, real_ours = get_all_eval_based_on_one_model_inside_cluster(all_clusters,cold_start_project_name,all_projects)
             create_all_eval_results(True, real_ours, pred_ours, cold_start_project_name,
                                     num_of_bugs, num_of_all_instances, bug_precent, " ", " ", " ",
-                                    "cluster_baseline_oneModel_project" + str(model_details) + "_" + str(sampling) + "_" + str(
+                                    "cluster_projects_oneModel" + str(model_details) + "_" + str(sampling) + "_" + str(
                                         num_of_samples) + "_within" + within_model, precent_g)
             # create one model from training set and then using oscar
             #def get_all_eval_based_on_one_model_inside_cluster_usingOSCAR(all_clusters,cold_start_project_name,all_projects,belong_model,sampling,num_of_samples):
@@ -492,7 +615,7 @@ def create_models_and_eval_inside_cluster(all_projects,sampling,model_details,mo
                                                                                   all_projects,model,sampling,num_of_samples)
             create_all_eval_results(True, real_ours, pred_ours, cold_start_project_name,
                                     num_of_bugs, num_of_all_instances, bug_precent, " ", " ", " ",
-                                    "cluster_baseline_oneModel_usingOscar" + str(model_details) + "_" + str(sampling) + "_" + str(
+                                    "cluster_projects_oneModel_usingOscar" + str(model_details) + "_" + str(sampling) + "_" + str(
                                        num_of_samples) + "_within" + within_model, precent_g)
 
 
@@ -623,18 +746,19 @@ def create_models_and_eval_ONE_model_cluster(all_projects,k_means_number = 2,sam
             bug_precent = 0
 
         create_all_eval_results(True, real_ours, pred_ours, cold_start_project_name,
-                                                   num_of_bugs, num_of_all_instances, bug_precent," "," "," ", "OSCAR_"+str(sampling)+"_"+str(num_of_samples)+"_oneModel_perCluster_"+str(k_means_number),precent_g)
+                                                   num_of_bugs, num_of_all_instances, bug_precent," "," "," ", "OSCAR_"+str(sampling)+"_"+str(num_of_samples)+"components_oneModel_perCluster_"+str(k_means_number),precent_g)
 
 
 
 
-label_bugs = 'hasBug'
+label_bugs = 'Bugged'
 ##############################!!!!!!!!
-directory_RF = r'D:\Debbuger\our projects style promise\within_models_full_ours_f'
-all_data_with_models_name = 'dict_all_models_and_data'
+directory_RF = r'D:\Debbuger\Cluster_projects\Z_DataSet'
+#all_data_with_models_name = 'dict_all_models_and_data'
 #file_path_RF = os.path.join(directory_RF, all_data_with_models_name)
-file_path_RF = r'D:\Debbuger\our projects style promise\within_models_full_ours_f\within_models_full_ours_f.sav'
-system_metrics = r'D:\Debbuger\systemMetrics'
+#file_path_RF = r'D:\Debbuger\our projects style promise\within_models_full_ours_f\within_models_full_ours_f.sav'
+file_path_RF = r'D:\Debbuger\Cluster_projects\Z_DataSet\all_data_with_models.sav'
+system_metrics = r'D:\Debbuger\Cluster_projects\z_system_features'
 start_file_system = 'SystemMetrics'
 
 #dict_name_path = os.path.join(r'D:\Debbuger\PROMISE', dict_name)
@@ -647,7 +771,7 @@ for proj_name, (model, training_set, testing_set) in data.items():
     training_set.reset_index(drop=True, inplace=True)
     testing_set.reset_index(drop=True, inplace=True)
 
-del data['tiles']
+#del data['tiles']
 
 #print("oscar")
 #OSCAR(data,"RF",oracle=True)
@@ -657,28 +781,79 @@ del data['tiles']
 #kmeans, all_clusters = create_all_clusters_with_describe(data,2)
 
 #def create_models_and_eval_ONE_model_cluster(all_projects,k_means_number = 2,sampling=True,num_of_samples = 100):
-print("oscar - using all the data")
-OSCAR(data,"RF")
-
-print("cluster - one - 4")
-create_models_and_eval_ONE_model_cluster(data,k_means_number = 4,sampling=False)
-create_models_and_eval_ONE_model_cluster(data,k_means_number = 4,sampling=True,num_of_samples = 1000)
-
-print("cluster - one - 3")
-create_models_and_eval_ONE_model_cluster(data,k_means_number = 3,sampling=False)
-create_models_and_eval_ONE_model_cluster(data,k_means_number = 3,sampling=True,num_of_samples = 1000)
-
+print("create describe")
 create_describe_data(data)
+print("create system metrics")
 create_system_metrics_data(system_metrics)
 
+
 print("cluster - using the system metrics")
-OSCAR(data,"RF_clusters_system_2",project_to = project_to_systems_metrics,k_means_number = 2)
 OSCAR(data,"RF_clusters_system_3",project_to = project_to_systems_metrics,k_means_number = 3)
+
+results_all_projects.to_csv(os.path.join(directory_RF,"clusters_results_ALL1.csv"), index=False)
+
+
+OSCAR(data,"RF_clusters_system_4",project_to = project_to_systems_metrics,k_means_number = 4)
+
+results_all_projects.to_csv(os.path.join(directory_RF,"clusters_results_ALL2.csv"), index=False)
 
 
 print("cluster - using the describe data")
-OSCAR(data,"RF_clusters_describe_2",project_to = project_to_describe_f ,k_means_number = 2)
 OSCAR(data,"RF_clusters_describe_3",project_to = project_to_describe_f ,k_means_number = 3)
 
-results_all_projects.to_csv(os.path.join(directory_RF,"clusters_results_ALL_NO_T_withNew.csv"), index=False)
+results_all_projects.to_csv(os.path.join(directory_RF,"clusters_results_ALL3.csv"), index=False)
+
+OSCAR(data,"RF_clusters_describe_4",project_to = project_to_describe_f ,k_means_number = 4)
+
+results_all_projects.to_csv(os.path.join(directory_RF,"clusters_results_ALL4.csv"), index=False)
+
+
+print("oscar - using all the data")
+OSCAR(data,"RF")
+
+results_all_projects.to_csv(os.path.join(directory_RF,"clusters_results_ALL5.csv"), index=False)
+
+
+print("cluster - one - 7")
+create_models_and_eval_ONE_model_cluster(data,k_means_number = 7,sampling=False)
+
+results_all_projects.to_csv(os.path.join(directory_RF,"clusters_results_ALL6.csv"), index=False)
+
+
+create_models_and_eval_ONE_model_cluster(data,k_means_number = 7,sampling=True,num_of_samples = 1000)
+
+results_all_projects.to_csv(os.path.join(directory_RF,"clusters_results_ALL7.csv"), index=False)
+
+
+print("cluster - one - 10")
+create_models_and_eval_ONE_model_cluster(data,k_means_number = 10,sampling=False)
+
+results_all_projects.to_csv(os.path.join(directory_RF,"clusters_results_ALL8.csv"), index=False)
+
+
+create_models_and_eval_ONE_model_cluster(data,k_means_number = 10,sampling=True,num_of_samples = 1000)
+
+results_all_projects.to_csv(os.path.join(directory_RF,"clusters_results_ALL9.csv"), index=False)
+
+
+print("cluster - one - 15")
+create_models_and_eval_ONE_model_cluster(data,k_means_number = 15,sampling=False)
+
+results_all_projects.to_csv(os.path.join(directory_RF,"clusters_results_ALL10.csv"), index=False)
+
+create_models_and_eval_ONE_model_cluster(data,k_means_number = 15,sampling=True,num_of_samples = 1000)
+
+results_all_projects.to_csv(os.path.join(directory_RF,"clusters_results_ALL11.csv"), index=False)
+
+
+print("cluster - using the system metrics")
+OSCAR(data,"RF_clusters_system_5",project_to = project_to_systems_metrics,k_means_number = 5)
+
+results_all_projects.to_csv(os.path.join(directory_RF,"clusters_results_ALL12.csv"), index=False)
+
+
+print("cluster - using the describe data")
+OSCAR(data,"RF_clusters_describe_5",project_to = project_to_describe_f ,k_means_number = 5)
+
+results_all_projects.to_csv(os.path.join(directory_RF,"clusters_results_ALL.csv"), index=False)
 
